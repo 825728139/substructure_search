@@ -48,7 +48,10 @@ pack [label="模型预测前的参考资料包
 model [label="此时才调用模型
 考虑局部修饰、支链组合与战略切断
 结合参考资料设计目标合成方案", fillcolor="#DBEAFE"];
-a -> b;
+input_scope [label="确认具体目标与组分范围
+显式编译每种查询的属性和实例约束
+通式或主体不明时保留边界，不拼接伪共存"];
+a -> input_scope -> b;
 b -> g; b -> c; b -> f;
 g -> g1 -> g2;
 c -> c1 -> c2;

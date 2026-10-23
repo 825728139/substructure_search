@@ -1,6 +1,4 @@
-"""Render the current three-tier design with three rounds of chemistry refinements.
-All retrieval and evidence aggregation precedes the prediction model.
-"""
+"""Render the five diagrams of the current pre-prediction retrieval design."""
 from pathlib import Path
 import subprocess
 
@@ -58,7 +56,8 @@ pack [label="模型预测前的参考资料包
 model [label="此时才调用模型
 考虑局部修饰、支链组合与战略切断
 结合参考资料设计目标合成方案", fillcolor="#DBEAFE"];
-a -> b;
+input_scope [label="确认具体目标与组分范围\n显式编译每种查询的属性和实例约束\n通式或主体不明时保留边界，不拼接伪共存"];
+a -> input_scope -> b;
 b -> g; b -> c; b -> f;
 g -> g1 -> g2;
 c -> c1 -> c2;
@@ -88,7 +87,8 @@ protect [label="可能的保护形式
 fg [label="限定官能团变化
 如环酮与环醇
 仅放宽规则指定的局部结构", fillcolor="#D6F0E5"];
-match [label="各视图独立执行相容的筛选与匹配
+match [label="逐视图显式编译电荷、氢数和组分约束
+独立执行相容的筛选、匹配与完整身份复核
 不能先用严格筛选排除扩展候选
 目标与参考在相同语义下比较"];
 back [label="映射回真实记录
@@ -263,19 +263,13 @@ combine -> context -> count -> out;
 
 
 if __name__ == '__main__':
-    diagrams = [
-        ('scaffold-search', MAIN),
-        ('chemical-recall', CHEMISTRY),
-        ('core-branch-combination', CORE),
-        ('fragment-retrieval', FRAGMENT),
-        ('reaction-reference-quality', QUALITY),
-    ]
+    diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
+                ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
+                ('reaction-reference-quality', QUALITY)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))
         for extension in ('svg', 'png'):
-            subprocess.run([
-                'dot', f'-T{extension}', '-Gdpi=130', str(source),
-                '-o', str(ROOT / f'{name}.{extension}'),
-            ], check=True)
-    print('Rendered five diagrams for the three-round pre-prediction design.')
+            subprocess.run(['dot', f'-T{extension}', '-Gdpi=130', str(source),
+                            '-o', str(ROOT / f'{name}.{extension}')], check=True)
+    print('Rendered five current design diagrams.')

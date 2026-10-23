@@ -9,3 +9,5 @@
 验证：[结构探针](probes/01_query_semantics.py)及[结果](probes/01_query_semantics.json)，3 项通过；文档完整性检查通过。探针不是检索引擎或完整查询编译器。
 
 剩余：实际预筛实现仍需与同语义全扫描对照；本轮不能证明所有 SMARTS 的正确性。
+
+第 5 轮整理后，本记录的化学章节号对应 [现行详细规范](../design/specification.md)。

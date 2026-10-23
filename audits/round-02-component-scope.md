@@ -9,3 +9,5 @@
 验证：[探针](probes/02_component_scope.py)和[结果](probes/02_component_scope.json)，3 项通过；文档与链接检查通过。
 
 剩余：具体盐/溶剂化及特殊配位体系的角色规则需要来源样例，不能靠“最大片段”覆盖所有情况。
+
+第 5 轮整理后，本记录的化学章节号对应 [现行详细规范](../design/specification.md)。
