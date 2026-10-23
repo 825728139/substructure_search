@@ -1,0 +1,52 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="反应证据解释：实际获得、阶段关系与局部确定性";
+a [label="检索命中的实际记录
+完整结构、参与组分、原文与目标位置", fillcolor="#DBEAFE"];
+stage [label="先定位实验与样品阶段
+投入 / 反应 / 后处理 / 分离 / 取样分析
+按原文允许分支或缺失；不补造中间体与分离节点
+衍生物、原产物、回收部分的测量分别关联"];
+result [label="核对实际结果与获得操作
+化学制备 / 拆分富集 / 普通回收 / 分析观察
+预期未得到 / 失败 / 信息不足
+富集可提供获得参考，普通回收不算本步制得", fillcolor="#EAE0F7"];
+mapcheck [label="每根关键键的映射证据
+形式有效性：编号、元素、标记、实例
+局部稳定性：已检候选一致还是冲突？
+化学支持：来源、示踪、规则推定或未知
+单一映射或检查截断保留范围", fillcolor="#D6F0E5"];
+instances [label="同结构的多份参与
+化合物身份可共用检索
+每份分子实例保留独立原子对应
+投料当量不等于进入产物的份数
+缺少份数不能只为配平而复制", fillcolor="#D6F0E5"];
+stereo [label="目标手性怎么获得
+从底物继承 / 本步建立 / 去对称化
+拆分富集 / 构型改变或会聚 / 未知
+ee/dr 绑定对象与阶段
+零重原子键变化也可有价值", fillcolor="#D6F0E5"];
+combine [label="局部结论与实际贡献分开返回
+有争议的键不计确定构筑；其他有据资料保留
+等价编号不产生新策略；多份底物不重复计独立来源
+获得目标不等于建立骨架或解决手性底物来源"];
+context [label="结合方向、环境、条件与已有关系
+实际正向 / 同向类比 / 仅反向 / 结构线索
+共同中间体核对样品组成与阶段相容性
+主反应条件与后处理、分析条件分开"];
+count [label="计数与代表实例
+制备、拆分富集、获得并集、使用和分析分别计
+关键键：来源支持 / 稳定推定 / 单一推定 / 争议 / 未评估
+保留不同构筑与获得途径，以及未解决前体要求", fillcolor="#EAE0F7"];
+out [label="然后交给模型预测
+明确每条资料贡献了什么、证据支持到哪里
+所有检索与已知事实整理均在模型调用前完成", fillcolor="#DBEAFE"];
+a -> stage -> result;
+result -> mapcheck; result -> instances; result -> stereo;
+mapcheck -> combine; instances -> combine; stereo -> combine;
+combine -> context -> count -> out;
+}

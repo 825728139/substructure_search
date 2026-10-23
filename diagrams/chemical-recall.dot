@@ -1,0 +1,49 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="化学召回：严格结构与相关形式分别处理";
+a [label="原始目标与原始参考分子
+保留组分、样品组成、立体/同位素与原子对应", fillcolor="#DBEAFE"];
+b [label="统一解析与芳香性表达
+按经校验规则生成比较视图
+每个视图记录适用范围、来源与被修改部分"];
+exact_view [label="严格结构
+元素、键、连接与身份条件
+指定立体与标记要求逐项检查", fillcolor="#D6F0E5"];
+state [label="互变异构 / 母体关系
+比较实际匹配的化学形式
+保留原有盐组分与电荷", fillcolor="#D6F0E5"];
+protect [label="可能的保护形式
+如 Cbz 导致额外芳环
+按连接环境生成兼容比较视图", fillcolor="#D6F0E5"];
+fg [label="限定官能团变化
+如环酮与环醇
+仅放宽规则指定的局部结构", fillcolor="#D6F0E5"];
+match [label="各视图独立执行相容的筛选与匹配
+不能先用严格筛选排除扩展候选
+目标与参考在相同语义下比较"];
+back [label="映射回真实记录
+原始分子 + 位点 + 样品阶段 + 实验结果与差异
+虚拟视图不冒充已报道分子或反应前体"];
+stereo [label="立体与同位素要求分别检查
+符合 / 冲突 / 部分缺失 / 未评估
+同时记录手性继承 / 建立 / 拆分富集 / 未知
+未知手性不等于外消旋；显式标记不能丢弃"];
+direction [label="结构相关之后再核对转化方向
+实际正向记录 / 同向类比 / 仅反向 / 结构线索
+虚拟视图不是已报道的可转化路线"];
+count [label="结果合并但语义保留
+一个父候选可有多个视图；分子与反应去重
+严格命中、扩展命中和各任务状态分别报告", fillcolor="#EAE0F7"];
+bound [label="自动处理边界
+不无条件删除所有苄基、酯或金属组分
+多点保护保留整体连接；组合视图受规则与预算限制
+转换关系不等于已有可行转换路线", fillcolor="#FFF3D6"];
+a -> b;
+b -> exact_view; b -> state; b -> protect; b -> fg;
+exact_view -> match; state -> match; protect -> match; fg -> match;
+match -> back -> stereo -> direction -> count -> bound;
+}

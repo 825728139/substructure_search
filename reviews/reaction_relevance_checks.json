@@ -1,0 +1,116 @@
+{
+  "rdkit_version": "2026.03.2",
+  "scope": "structure_and_atom_correspondence_only",
+  "cases": [
+    {
+      "case": "相同端口近邻并不描述完整芳环取代环境",
+      "examples": [
+        {
+          "position": "para",
+          "structure": "Clc1ccc([N+](=O)[O-])cc1",
+          "radius_1": "c(Cl)(c)c",
+          "ring_distance_to_nitro_site": 3,
+          "chlorobenzene_core_match": true
+        },
+        {
+          "position": "meta",
+          "structure": "Clc1cccc([N+](=O)[O-])c1",
+          "radius_1": "c(Cl)(c)c",
+          "ring_distance_to_nitro_site": 2,
+          "chlorobenzene_core_match": true
+        }
+      ],
+      "note": "No reaction rates or selectivity were calculated."
+    },
+    {
+      "case": "相同苯环子图可能对应单点取代或额外稠合环",
+      "examples": [
+        {
+          "name": "toluene",
+          "structure": "Cc1ccccc1",
+          "external_components": [
+            {
+              "outside_atom_count": 1,
+              "core_boundary_bonds": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "name": "naphthalene",
+          "structure": "c1ccc2ccccc2c1",
+          "external_components": [
+            {
+              "outside_atom_count": 4,
+              "core_boundary_bonds": [
+                [
+                  3,
+                  4
+                ],
+                [
+                  7,
+                  8
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "name": "biphenyl",
+          "structure": "c1ccccc1-c1ccccc1",
+          "external_components": [
+            {
+              "outside_atom_count": 6,
+              "core_boundary_bonds": [
+                [
+                  5,
+                  6
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "酰胺产物不必对应新形成C-N连接",
+      "illustration_only": true,
+      "mapped_reactants": "[CH3:1][N+:2]#[C-:3].[CH3:4][Br:5].[OH2:6]",
+      "mapped_product": "[CH3:1][NH:2][C:3](=[O:6])[CH3:4]",
+      "product_atom_sources": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 3
+      },
+      "formed_bonds": [
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "bond_order_changes": [
+        [
+          2,
+          3
+        ]
+      ],
+      "note": "Invented mapped graph illustrating alternative construction; not a literature record or tested reaction."
+    },
+    {
+      "case": "明确同位素查询与未指定查询语义不同",
+      "labelled_query_matches_unlabelled": false,
+      "unlabelled_query_matches_labelled": true
+    }
+  ]
+}

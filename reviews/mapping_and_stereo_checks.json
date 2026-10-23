@@ -1,0 +1,91 @@
+{
+  "rdkit_version": "2026.03.2",
+  "scope": "illustrative_graph_and_multiplicity_checks",
+  "cases": [
+    {
+      "case": "相同结构反应和相同编辑数可对应不同新成键位置",
+      "illustration_only": true,
+      "reactants": "[CH3:1][C:2](=[O:3])[OH:4].[CH3:5][OH:6]",
+      "products": [
+        "[CH3:1][C:2](=[O:3])[O:6][CH3:5].[OH2:4]",
+        "[CH3:1][C:2](=[O:3])[O:4][CH3:5].[OH2:6]"
+      ],
+      "unmapped_product": "COC(C)=O.O",
+      "alternative_changes": [
+        {
+          "formed": [
+            [
+              2,
+              6
+            ]
+          ],
+          "broken": [
+            [
+              2,
+              4
+            ]
+          ],
+          "order_changes": []
+        },
+        {
+          "formed": [
+            [
+              4,
+              5
+            ]
+          ],
+          "broken": [
+            [
+              5,
+              6
+            ]
+          ],
+          "order_changes": []
+        }
+      ],
+      "note": "Alternative assignments illustrate ambiguity, not two demonstrated mechanisms or pathways."
+    },
+    {
+      "case": "同一底物两份实例不能随结构去重丢掉",
+      "illustration_only": true,
+      "unique_structure_count": 1,
+      "molecular_instance_count": 2,
+      "instances_by_structure": {
+        "CC=O": 2
+      },
+      "mapped_reactants": "[CH3:1][CH:2]=[O:3].[CH3:4][CH:5]=[O:6]",
+      "mapped_product": "[CH2:1]([CH:2]=[O:3])[CH:5]([CH3:4])[OH:6]",
+      "changes": {
+        "formed": [
+          [
+            1,
+            5
+          ]
+        ],
+        "broken": [],
+        "order_changes": [
+          [
+            5,
+            6
+          ]
+        ]
+      },
+      "note": "Copy count in this illustration is explicit; missing stoichiometry must not be invented from atom balance alone."
+    },
+    {
+      "case": "零重原子键编辑不表示目标立体结构相同",
+      "illustration_only": true,
+      "structures": [
+        "CC[C@H](C)O",
+        "CC[C@@H](C)O"
+      ],
+      "heavy_atom_bond_changes": {
+        "formed": [],
+        "broken": [],
+        "order_changes": []
+      },
+      "strict_stereo_match": false,
+      "note": "This comparison does not establish an inversion, resolution or any actual reaction."
+    }
+  ]
+}

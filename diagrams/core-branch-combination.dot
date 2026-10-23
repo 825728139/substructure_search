@@ -1,0 +1,47 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="支链互补：位点证据与真实共同中间体";
+a [label="目标头部 — 共同核心 — 目标尾部
+位点由目标连接关系定义，支持多个位点", fillcolor="#DBEAFE"];
+b [label="自动核心候选与结构匹配
+完整环系、连接链、分支与完整官能团
+带明确上下文的小功能单元保留受控配额"];
+c [label="统一全核心映射
+对称位点一致对应；多点连接与骨架嵌入整体比较
+不能为每条支链分别挑选互相冲突的映射"];
+x [label="实例甲覆盖目标头部
+实际产物与底物、保护状态、立体信息
+头部是本步形成还是此前已经存在？", fillcolor="#D6F0E5"];
+y [label="实例乙覆盖目标尾部
+实际产物与底物、保护状态、立体信息
+形成尾部时是否已有头部并被保留？", fillcolor="#D6F0E5"];
+m [label="实例 × 目标位点的双层矩阵
+结构：严格相同 / 局部相近 / 不同 / 未知
+证据：产物存在 / 本步引入 / 他处反应时保留
+每格附实际结果、阶段及局部映射支持范围", fillcolor="#EAE0F7"];
+precursor [label="寻找实际共同中间体
+核对完整结构、样品组成、保护、立体与阶段
+共同底物 → 真实反应甲/乙 → 各参考产物
+不同位点 / 竞争同一位点 / 对称歧义分别标注", fillcolor="#EAE0F7"];
+co [label="联合位点与共存检查
+同一实例共存 / 不同实例分别覆盖 / 冲突 / 未知
+相同桥链或环状保护单元不能拆成独立支链
+同时比较共轭、邻位拥挤、竞争及条件差异
+手性符合目标，不等于本步建立了目标手性"];
+set [label="选择少量互补参考组合
+先检查映射与联合约束，再比较覆盖与多样性
+分别保留共存支持和仅独立覆盖的参考
+限制组合数量，未知证据不当作成功或失败"];
+out [label="交给模型的参考
+共同核心、位点覆盖、存在/引入/保留证据
+实际共同底物、位点环境、反应条件与已报道顺序
+组合是否可行及具体路线由模型进一步分析", fillcolor="#DBEAFE"];
+a -> b -> c;
+c -> x; c -> y;
+x -> m; y -> m;
+m -> precursor -> co -> set -> out;
+}

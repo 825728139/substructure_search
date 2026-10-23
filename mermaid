@@ -1,0 +1,51 @@
+flowchart TD
+    Start(["🎯 拿到目标分子"]) --> S1["① 数据库精确检索<br/>SciFinder / Reaxys<br/>以目标结构为产物检索"]
+    S1 --> Q1{"目标分子<br/>有合成报道?"}
+
+    Q1 -->|"有"| E1["评估文献路线<br/>步数 · 收率 · 条件 · 原料价格"]
+    E1 --> Q2{"可直接采用<br/>或微调即可?"}
+    Q2 -->|"是"| GO(["▶ 开工合成"])
+    Q2 -->|"否"| OPT["局部改良<br/>换廉价原料 / 简化保护基"]
+    OPT --> GO
+
+    Q1 -->|"没有"| S2["② 相似结构检索<br/>子结构 / 相似度 70~90%"]
+    S2 --> Q3{"骨架类似物<br/>有报道?"}
+    Q3 -->|"有"| BOR["借用类似物路线<br/>只改末端官能团化"]
+    BOR --> GO
+
+    subgraph RETRO["③ 逆合成分析 —— 核心递归循环"]
+        RT["R1 识别关键官能团<br/>羰基 / 胺 / 杂环 = 天然切断锚点"] --> R2["R2 战略键切断<br/>C–X键优先 · 支链点 · 环连接处<br/>利用对称性 · 切成两等块"]
+        R2 --> R3["R3 官能团互变 FGI<br/>换成更容易构建的形式"]
+        R3 --> R4["R4 合成子 → 合成等价物<br/>匹配真实试剂(格氏 / 有机锂…)"]
+        R4 --> Q4{"前体中间体<br/>可商品化购买?"}
+        Q4 -->|"能"| FWD["正向搭块<br/>商品原料 + 可靠反应<br/>Suzuki / 酰胺化 / 还原胺化…"]
+        Q4 -->|"不能"| Q5{"该中间体<br/>文献有报道?"}
+        Q5 -->|"有"| REF["文献路线接续<br/>(Reaxys Predictive 自动化的就是这一步)"]
+        Q5 -->|"无"| RT
+    end
+
+    Q3 -->|"没有"| RT
+    FWD --> ASM["④ 路线整合<br/>收敛式拼装 · 保护基策略<br/>官能团相容性检查"]
+    REF --> ASM
+
+    ASM --> EVAL{"⑤ 多维评估<br/>总步数 / 总收率 / 条件温和度<br/>试剂毒性 / 手性 / 可放大性"}
+    EVAL -->|"通过"| GO
+    EVAL -->|"不通过"| AI["⑥ 求助 CASP / AI 工具<br/>Synthia · AiZynthFinder<br/>CAS 逆合成预测"]
+    AI --> Q6{"AI 建议<br/>化学上合理?"}
+    Q6 -->|"合理"| ASM
+    Q6 -->|"不合理 / 仍卡壳"| INNO["⑦ 策略创新<br/>机理深度判断 · 换骨架策略<br/>重排反应 · 设计全新路线"]
+    INNO --> ASM
+
+    GO --> EXP["实验执行"]
+    EXP --> Q7{"成功?"}
+    Q7 -->|"是"| DONE(["✅ 得到目标分子"])
+    Q7 -->|"否"| DBG["失败归因<br/>选择性差 / 位阻 / 稳定性"]
+    DBG -->|"调条件重试"| EXP
+    DBG -->|"根本性失败,换策略"| RT
+
+    classDef ok fill:#d4edda,stroke:#2e7d32,color:#1b5e20
+    classDef warn fill:#fff3cd,stroke:#b8860b,color:#5d4a00
+    classDef ai fill:#e2d9f3,stroke:#6a3fb5,color:#3d2266
+    class GO,DONE ok
+    class AI,INNO ai
+    class DBG,OPT warn

@@ -1,0 +1,89 @@
+{
+  "rdkit_version": "2026.03.2",
+  "scope": "structure_and_matching_only",
+  "cases": [
+    {
+      "case": "Cbz保护导致Murcko身份变化",
+      "structures": [
+        "Nc1ccccc1",
+        "O=C(OCc1ccccc1)Nc1ccccc1"
+      ],
+      "scaffolds": [
+        "c1ccccc1",
+        "O=C(Nc1ccccc1)OCc1ccccc1"
+      ],
+      "equal": false
+    },
+    {
+      "case": "环酮与环醇导致Murcko身份变化",
+      "structures": [
+        "O=C1CCCCC1",
+        "OC1CCCCC1"
+      ],
+      "scaffolds": [
+        "O=C1CCCCC1",
+        "C1CCCCC1"
+      ],
+      "equal": false
+    },
+    {
+      "case": "互变异构导致Murcko身份变化",
+      "structures": [
+        "O=c1cccc[nH]1",
+        "Oc1ccccn1"
+      ],
+      "scaffolds": [
+        "O=c1cccc[nH]1",
+        "c1ccncc1"
+      ],
+      "equal": false
+    },
+    {
+      "case": "互变异构查询补回严格查询漏掉的匹配",
+      "ordinary_match": false,
+      "tautomer_aware_match": true
+    },
+    {
+      "case": "相同相反与未指定立体需分组",
+      "query": "C[C@H](O)C(=O)O",
+      "matches": [
+        {
+          "candidate": "C[C@H](O)C(=O)O",
+          "ignore_stereo": true,
+          "use_stereo": true
+        },
+        {
+          "candidate": "C[C@@H](O)C(=O)O",
+          "ignore_stereo": true,
+          "use_stereo": false
+        },
+        {
+          "candidate": "CC(O)C(=O)O",
+          "ignore_stereo": true,
+          "use_stereo": false
+        }
+      ]
+    },
+    {
+      "case": "大环开一根环内键后仍为一个连通分子",
+      "input": "O=C1CCCCCCCCCCN1",
+      "cut_atom_indices": [
+        1,
+        2
+      ],
+      "components": 1,
+      "opened_query": "[1*]NCCCCCCCCCCC([2*])=O"
+    },
+    {
+      "case": "分开覆盖两个环可覆盖所有原子却不覆盖连接键",
+      "input": "c1ccc(-c2ccccc2)cc1",
+      "covered_atoms": 12,
+      "total_heavy_atoms": 12,
+      "covered_bonds": 12,
+      "total_bonds": 13,
+      "missing_bonds": [
+        5
+      ]
+    }
+  ]
+}

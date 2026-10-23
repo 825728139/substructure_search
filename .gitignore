@@ -1,0 +1,6 @@
+.plan-history.git/
+.agents/
+.codex/
+__pycache__/
+*.py[cod]
+
