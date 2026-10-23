@@ -7,7 +7,7 @@ edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, 
 label="先完成三层化学检索，再交给模型预测";
 a [label="用户输入完整目标分子
 自动生成结构与检索任务", fillcolor="#DBEAFE"];
-b [label="原子对应、环系、连接链、官能团与立体/同位素要求
+b [label="生成三层候选及原子对应，识别环系和化学要求
 严格视图 + 有标签的化学扩展
 互变异构 / 母体 / 可能保护形式 / 限定官能团变化"];
 g [label="① 整体骨架与相关形式", fillcolor="#D6F0E5"];
@@ -49,10 +49,13 @@ model [label="此时才调用模型
 考虑局部修饰、支链组合与战略切断
 结合参考资料设计目标合成方案", fillcolor="#DBEAFE"];
 input_scope [label="确认具体目标与组分范围
-显式编译每种查询的属性和实例约束
-通式或主体不明时保留边界，不拼接伪共存"];
+具体结构、完整组分和通式分别处理
+主体不明时保留边界，不拼接伪共存"];
 a -> input_scope -> b;
-b -> g; b -> c; b -> f;
+compiled [label="逐视图显式编译查询
+元素、电荷、氢数、环系与实例约束
+明确保留/放开属性，按任务采用包含或身份判据"];
+b -> compiled; compiled -> g; compiled -> c; compiled -> f;
 g -> g1 -> g2;
 c -> c1 -> c2;
 f -> f1 -> f2;

@@ -92,7 +92,7 @@
 <title>match</title>
 <path fill="white" stroke="#cad5e2" d="M587.5,-600C587.5,-600 312.5,-600 312.5,-600 306.5,-600 300.5,-594 300.5,-588 300.5,-588 300.5,-532 300.5,-532 300.5,-526 306.5,-520 312.5,-520 312.5,-520 587.5,-520 587.5,-520 593.5,-520 599.5,-526 599.5,-532 599.5,-532 599.5,-588 599.5,-588 599.5,-594 593.5,-600 587.5,-600"/>
 <text text-anchor="middle" x="450" y="-578.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">逐视图显式编译电荷、氢数和组分约束</text>
-<text text-anchor="middle" x="450" y="-563.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">独立执行相容的筛选、匹配与完整身份复核</text>
+<text text-anchor="middle" x="450" y="-563.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">独立筛选，按任务复核核心包含或完整身份</text>
 <text text-anchor="middle" x="450" y="-548.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">不能先用严格筛选排除扩展候选</text>
 <text text-anchor="middle" x="450" y="-533.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">目标与参考在相同语义下比较</text>
 </g>

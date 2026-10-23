@@ -11,5 +11,8 @@
 | 3 | 证据与汇总契约 | audit-03 | [记录](round-03-evidence-contract.md) |
 | 4 | 调度、排名与评测可执行性 | audit-04 | [记录](round-04-scheduling.md) |
 | 5 | 主计划与详细规范整合 | audit-05 | [记录](round-05-document-consolidation.md) |
+| 6 | 对抗案例与最终一致性审查 | audit-06 | [记录](round-06-final-review.md) |
 
 仓库使用方式见 [Git 说明](../GIT_HISTORY.md)。设计与局部检查不代表完整引擎或真实召回效果已验证。
+
+本次完成 6 轮并结束，未使用全部 10 轮配额。设计状态及未实测事项见 [实施准备状态](../design/implementation_readiness.md)。
