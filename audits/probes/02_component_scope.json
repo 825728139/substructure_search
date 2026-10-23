@@ -1,0 +1,20 @@
+{
+  "rdkit_version": "2026.03.2",
+  "component_cases": [
+    {
+      "structure": "c1ccccc1.CN",
+      "component_count": 2,
+      "disconnected_query": true,
+      "connected_query": false
+    },
+    {
+      "structure": "Nc1ccccc1",
+      "component_count": 1,
+      "disconnected_query": true,
+      "connected_query": true
+    }
+  ],
+  "generic_smiles_parses": true,
+  "contains_unresolved_dummy": true,
+  "scope": "Representation checks only; no source product claim evaluated."
+}
