@@ -1,0 +1,22 @@
+{
+  "profile_id": "pilot-v0-unmeasured",
+  "status": "proposed_not_benchmarked",
+  "rule_set": "requires_reviewed_version",
+  "max_core_seeds": 12,
+  "max_cut_plans": 16,
+  "max_views_per_parent": 4,
+  "max_total_tasks": 40,
+  "initial_tasks_per_applicable_layer": 1,
+  "max_related_record_edges": 2,
+  "max_record_expansion_tasks": 6,
+  "max_unique_returned_records": 18,
+  "minimum_records_per_layer_if_available": 4,
+  "global_time_budget_ms": 10000,
+  "rules": [
+    "all_task_channels_share_the_global_budget",
+    "inapplicable_layers_do_not_generate_dummy_tasks",
+    "enumeration_truncation_is_not_exhaustive_no_hit",
+    "returned_record_limits_do_not_establish_global_top_k",
+    "no_prediction_model_before_reference_package"
+  ]
+}

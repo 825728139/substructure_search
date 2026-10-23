@@ -9,5 +9,6 @@
 | 1 | 查询编译语义 | audit-01 | [记录](round-01-query-semantics.md) |
 | 2 | 具体目标与组分边界 | audit-02 | [记录](round-02-component-scope.md) |
 | 3 | 证据与汇总契约 | audit-03 | [记录](round-03-evidence-contract.md) |
+| 4 | 调度、排名与评测可执行性 | audit-04 | [记录](round-04-scheduling.md) |
 
 仓库使用方式见 [Git 说明](../GIT_HISTORY.md)。设计与局部检查不代表完整引擎或真实召回效果已验证。
