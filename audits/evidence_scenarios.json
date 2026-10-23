@@ -1,0 +1,116 @@
+{
+  "purpose": "handwritten_contract_examples_not_experimental_data",
+  "not_yet_engine_tested": true,
+  "cases": [
+    {
+      "id": "planned_only",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": false,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "只有计划产物，未观察到"
+    },
+    {
+      "id": "analysis_only",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": false,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "身份可对应的分析观察，不宣称制备"
+    },
+    {
+      "id": "reported_product",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "found_complete"
+      },
+      "description": "明确报告由实际底物制得对应产物"
+    },
+    {
+      "id": "resolution",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "有据拆分富集；制备和获得分账"
+    },
+    {
+      "id": "ordinary_recovery",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": true,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "未变化起始物普通回收"
+    },
+    {
+      "id": "failed_attempt",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": true,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "实际投入后未得到该产物"
+    },
+    {
+      "id": "isolated_byproduct",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "found_complete"
+      },
+      "description": "身份可对应的实际制得副产物"
+    },
+    {
+      "id": "same_fact_conflict",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": true,
+        "preparation_state": "complete_without_qualified_record"
+      },
+      "description": "同实验同事实有未解冲突，无合格阳性见证"
+    },
+    {
+      "id": "independent_success_failure",
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "found_complete"
+      },
+      "description": "独立成功与失败记录并存"
+    },
+    {
+      "id": "hit_before_timeout",
+      "execution": "timed_out",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "found_incomplete"
+      },
+      "description": "已有合格见证，其他任务超时"
+    }
+  ]
+}
