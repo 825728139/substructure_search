@@ -1,4 +1,4 @@
-"""Render the current pre-prediction retrieval and attachment-method design."""
+"""Render the current pre-prediction retrieval and bounded reactant-transfer design."""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parent
@@ -71,7 +71,11 @@ attachment [label="必经：目标母核—支链连接方法判定
 实际反应类型、目标位点、边界键本步是否形成
 核心底物、支链供体、反应端与迁移差异
 完整接入 / 局部类比 / 支链转化 / 其他修饰 / 未知", fillcolor="#D6F0E5"];
-roles -> attachment -> quality -> stats -> pack -> model;
+transfer [label="有来源约束的单反应物替换类比
+目标差异 → 母核/支链底物槽位 → 拟替代结构
+原变化保持？完整目标能否回放？条件有什么依据？
+规则推定单独输出，不冒充已报道反应", fillcolor="#D6F0E5"];
+roles -> attachment -> quality -> transfer -> stats -> pack -> model;
 }
 '''
 
@@ -313,7 +317,59 @@ o [label="给模型的答案
 a -> b -> c -> d -> e;
 e -> formed; e -> elab; e -> other; e -> unknown;
 formed -> r; elab -> r; other -> r; unknown -> r;
-r -> o;
+adapt [label="类似物的小差异可否通过换一个底物解决？
+母核供体和支链供体均可检查
+单来源差异 → 保留反应角色 → 回放目标 → 条件支持
+作为具体类比建议，不计为目标已有制备", fillcolor="#EAE0F7"];
+r -> adapt -> o;
+}
+'''
+
+TRANSFER = '''digraph G {
+BASE
+label="单反应物替换：让已有反应更接近目标分子";
+a [label="实际参考反应 + 目标分子
+原底物甲 + 原底物乙 → 参考产物
+支链近似或整体骨架一致，都进入检查", fillcolor="#DBEAFE"];
+b [label="定位全部目标差异
+新增/删除基团、连接、位置、立体与同位素
+差异通过原子对应与连接锚点追溯来源"];
+c [label="差异是否能归到一个反应物槽位？
+保留其他组分、完整反应端与实例关系"];
+side [label="支链差异来自乙
+甲 + 替代乙
+例：乙胺换丙胺", fillcolor="#D6F0E5"];
+core [label="母核差异来自甲
+替代甲 + 乙
+例：苯甲酰端换对氟苯甲酰端", fillcolor="#D6F0E5"];
+unknown [label="两个来源都需改变 / 映射不清
+保持一般方法类比
+不声称只换一个底物", fillcolor="#FFF3D6"];
+d [label="构造或检索具体替代底物
+保留原功能团、离去部分、保护和必要反应角色
+已记录结构与仅推定结构分别标注
+重复底物份数与交叉选择性不能忽略"];
+e [label="按来源变化进行有限结构回放
+先复现原产物，再只换一个槽位
+核对完整目标、未变化结构、位置和立体要求
+多产物 / 匹配截断 / 未支持分别保留"];
+f [label="单槽位变化仍需比较化学环境
+新增竞争位点、位阻、电子、配位与保护差异
+已有目标实验 / 类似底物范围支持 / 未验证 / 冲突
+图回放成功不证明原条件可以直接复用"];
+g [label="给模型的具体建议
+哪个原反应？换谁？换成什么？其他组分是什么？
+哪些目标差异解决了，完整目标是否可对应？
+替代底物与条件还有哪些证据缺口？", fillcolor="#DBEAFE"];
+count [label="事实和推定分开统计
+原反应保留来源；替换建议标为未观察的推定
+不增加目标制备、已知成键或已有路线计数"];
+a -> b -> c;
+c -> side; c -> core; c -> unknown;
+side -> d; core -> d;
+d -> e -> f -> g;
+unknown -> g;
+g -> count;
 }
 '''
 
@@ -321,7 +377,8 @@ r -> o;
 if __name__ == '__main__':
     diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
                 ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
-                ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT)]
+                ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT),
+                ('single-reactant-transfer', TRANSFER)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))

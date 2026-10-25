@@ -42,5 +42,9 @@ o [label="给模型的答案
 a -> b -> c -> d -> e;
 e -> formed; e -> elab; e -> other; e -> unknown;
 formed -> r; elab -> r; other -> r; unknown -> r;
-r -> o;
+adapt [label="类似物的小差异可否通过换一个底物解决？
+母核供体和支链供体均可检查
+单来源差异 → 保留反应角色 → 回放目标 → 条件支持
+作为具体类比建议，不计为目标已有制备", fillcolor="#EAE0F7"];
+r -> adapt -> o;
 }

@@ -64,5 +64,9 @@ attachment [label="必经：目标母核—支链连接方法判定
 实际反应类型、目标位点、边界键本步是否形成
 核心底物、支链供体、反应端与迁移差异
 完整接入 / 局部类比 / 支链转化 / 其他修饰 / 未知", fillcolor="#D6F0E5"];
-roles -> attachment -> quality -> stats -> pack -> model;
+transfer [label="有来源约束的单反应物替换类比
+目标差异 → 母核/支链底物槽位 → 拟替代结构
+原变化保持？完整目标能否回放？条件有什么依据？
+规则推定单独输出，不冒充已报道反应", fillcolor="#D6F0E5"];
+roles -> attachment -> quality -> transfer -> stats -> pack -> model;
 }

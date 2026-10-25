@@ -18,5 +18,13 @@
     "enumeration_truncation_is_not_exhaustive_no_hit",
     "returned_record_limits_do_not_establish_global_top_k",
     "no_prediction_model_before_reference_package"
-  ]
+  ],
+  "single_reactant_transfer": {
+    "status": "proposed_not_benchmarked",
+    "max_source_reactions": 6,
+    "max_candidates_per_source": 2,
+    "max_replay_mappings_per_candidate": 16,
+    "max_recursive_transfers": 0,
+    "shares_global_time_budget": true
+  }
 }

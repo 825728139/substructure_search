@@ -1,0 +1,107 @@
+{
+  "scope": "invented structural replay examples only; no experimental evidence or condition prediction",
+  "rdkit_version": "2026.03.2",
+  "rule": "[C:1](=[O:2])([Cl])-[c:5].[N;H2;+0;!$(N-C=O):3]-[C:4]>>[C:1](=[O:2])(-[NH:3]-[C:4])-[c:5]",
+  "cases": [
+    {
+      "id": "source_replay",
+      "reactants": [
+        "O=C(Cl)c1ccccc1",
+        "CCN"
+      ],
+      "result": {
+        "raw_count": 1,
+        "unique_products": [
+          "CCNC(=O)c1ccccc1"
+        ]
+      },
+      "target": "CCNC(=O)c1ccccc1",
+      "exact_graph_match": true
+    },
+    {
+      "id": "replace_sidechain_donor",
+      "reactants": [
+        "O=C(Cl)c1ccccc1",
+        "CCCN"
+      ],
+      "changed_reactant_slots": [
+        1
+      ],
+      "result": {
+        "raw_count": 1,
+        "unique_products": [
+          "CCCNC(=O)c1ccccc1"
+        ]
+      },
+      "target": "CCCNC(=O)c1ccccc1",
+      "exact_graph_match": true
+    },
+    {
+      "id": "replace_core_donor",
+      "reactants": [
+        "O=C(Cl)c1ccc(F)cc1",
+        "CCN"
+      ],
+      "changed_reactant_slots": [
+        0
+      ],
+      "result": {
+        "raw_count": 1,
+        "unique_products": [
+          "CCNC(=O)c1ccc(F)cc1"
+        ]
+      },
+      "target": "CCNC(=O)c1ccc(F)cc1",
+      "exact_graph_match": true
+    },
+    {
+      "id": "two_source_changes_not_single",
+      "target": "CCCNC(=O)c1ccc(F)cc1",
+      "side_only_matches": false,
+      "core_only_matches": false,
+      "both_result": {
+        "raw_count": 1,
+        "unique_products": [
+          "CCCNC(=O)c1ccc(F)cc1"
+        ]
+      },
+      "changed_reactant_slots": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "extra_reactive_site_despite_exact_graph",
+      "reactants": [
+        "O=C(Cl)c1ccccc1",
+        "NCCN"
+      ],
+      "result": {
+        "raw_count": 2,
+        "unique_products": [
+          "NCCNC(=O)c1ccccc1"
+        ]
+      },
+      "note": "Equivalent first-acylation matches do not prove monoacylation selectivity, conditions or absence of further reaction."
+    },
+    {
+      "id": "amine_role_changed_to_amide",
+      "result": {
+        "raw_count": 0,
+        "unique_products": []
+      },
+      "note": "Excluded by this illustrative rule; no claim of general chemical impossibility."
+    },
+    {
+      "id": "same_formula_wrong_ring_position",
+      "result": {
+        "raw_count": 1,
+        "unique_products": [
+          "CCNC(=O)c1ccccc1F"
+        ]
+      },
+      "target": "CCNC(=O)c1ccc(F)cc1",
+      "exact_graph_match": false
+    }
+  ]
+}
