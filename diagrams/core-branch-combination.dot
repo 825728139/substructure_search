@@ -43,5 +43,9 @@ out [label="交给模型的参考
 a -> b -> c;
 c -> x; c -> y;
 x -> m; y -> m;
-m -> precursor -> co -> set -> out;
+methods [label="逐位点判断引入方法
+目标支链是否在本步接到对应母核位置？
+边界新形成还是已有？实际用了哪些母核与支链底物？
+连接方法资格先于整体相似度排序", fillcolor="#D6F0E5"];
+m -> methods -> precursor -> co -> set -> out;
 }

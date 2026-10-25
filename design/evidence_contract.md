@@ -11,6 +11,9 @@
   actual_structure / original_role / material_state / stage_id
   matched_target_atoms_and_bonds / view_relation
   result_observations[]
+  reaction_class / class_basis / target_attachment_id
+  core_and_branch_matches / boundary_event / reactant_roles
+  attachment_method_assessment / applicability_gaps
   chemical_change_claims[]
   obtainment_claims[]
   source_locations[]
@@ -52,3 +55,9 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 所有计数携带 `scope_id`：输入目标、候选集合、规则/匹配版本、来源快照及本轮任务集合。补查新增任务后生成新的汇总版本，不把旧范围的总数和新范围命中混合。
 
 [验收场景](../audits/evidence_scenarios.json)是人工编写的逻辑样例，不是文献数据。现阶段仅验证其格式和定义一致性，行为需由未来实现执行并与期望比对。
+
+## 目标连接方法的资格
+
+结构见证与连接方法见证分开。每条候选按 [连接方法规范](attachment_methods.md)输出实际反应类型、目标位点、边界变化及底物角色。支链本来已接在核心上而本步只作其他修饰时，不是本连接目标的方法见证。缺少两侧或局部映射支持可返回未知，但不升级为阳性方法。
+
+方法计数按连接目标与实验汇总，替代边界单独记录，分区改变不制造同一边界的新证据。对精确/局部核心与支链的覆盖、反应类别依据、观察结果和迁移差异分别报告，不输出可迁移性的伪概率。

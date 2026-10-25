@@ -60,5 +60,9 @@ g -> g1 -> g2;
 c -> c1 -> c2;
 f -> f1 -> f2;
 g2 -> roles; c2 -> roles; f2 -> roles;
-roles -> quality -> stats -> pack -> model;
+attachment [label="必经：目标母核—支链连接方法判定
+实际反应类型、目标位点、边界键本步是否形成
+核心底物、支链供体、反应端与迁移差异
+完整接入 / 局部类比 / 支链转化 / 其他修饰 / 未知", fillcolor="#D6F0E5"];
+roles -> attachment -> quality -> stats -> pack -> model;
 }

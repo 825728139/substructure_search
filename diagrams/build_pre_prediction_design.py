@@ -1,7 +1,6 @@
-"""Render the five diagrams of the current pre-prediction retrieval design."""
+"""Render the current pre-prediction retrieval and attachment-method design."""
 from pathlib import Path
 import subprocess
-
 ROOT = Path(__file__).resolve().parent
 
 BASE = '''
@@ -56,15 +55,23 @@ pack [label="模型预测前的参考资料包
 model [label="此时才调用模型
 考虑局部修饰、支链组合与战略切断
 结合参考资料设计目标合成方案", fillcolor="#DBEAFE"];
-input_scope [label="确认具体目标与组分范围\n具体结构、完整组分和通式分别处理\n主体不明时保留边界，不拼接伪共存"];
+input_scope [label="确认具体目标与组分范围
+具体结构、完整组分和通式分别处理
+主体不明时保留边界，不拼接伪共存"];
 a -> input_scope -> b;
-compiled [label="逐视图显式编译查询\n元素、电荷、氢数、环系与实例约束\n明确保留/放开属性，按任务采用包含或身份判据"];
+compiled [label="逐视图显式编译查询
+元素、电荷、氢数、环系与实例约束
+明确保留/放开属性，按任务采用包含或身份判据"];
 b -> compiled; compiled -> g; compiled -> c; compiled -> f;
 g -> g1 -> g2;
 c -> c1 -> c2;
 f -> f1 -> f2;
 g2 -> roles; c2 -> roles; f2 -> roles;
-roles -> quality -> stats -> pack -> model;
+attachment [label="必经：目标母核—支链连接方法判定
+实际反应类型、目标位点、边界键本步是否形成
+核心底物、支链供体、反应端与迁移差异
+完整接入 / 局部类比 / 支链转化 / 其他修饰 / 未知", fillcolor="#D6F0E5"];
+roles -> attachment -> quality -> stats -> pack -> model;
 }
 '''
 
@@ -157,7 +164,11 @@ out [label="交给模型的参考
 a -> b -> c;
 c -> x; c -> y;
 x -> m; y -> m;
-m -> precursor -> co -> set -> out;
+methods [label="逐位点判断引入方法
+目标支链是否在本步接到对应母核位置？
+边界新形成还是已有？实际用了哪些母核与支链底物？
+连接方法资格先于整体相似度排序", fillcolor="#D6F0E5"];
+m -> methods -> precursor -> co -> set -> out;
 }
 '''
 
@@ -262,15 +273,59 @@ combine -> context -> count -> out;
 }
 '''
 
+ATTACHMENT = '''digraph G {
+BASE
+label="子结构命中之后：这条反应提供了所需连接方法吗？";
+a [label="目标自动分区
+母核 + 期望支链/基团 + 目标连接位点与边界键
+合法替代边界分别编号，无需模型先预测", fillcolor="#DBEAFE"];
+b [label="召回产物与全部相关反应
+母核、支链和边界在同一实际产物中匹配
+产物相同，也可能对应完全不同的反应步骤"];
+c [label="识别实际反应类型与变化
+两侧底物、成键/断键/键型变化、来源条件
+反应名称仅为辅助，不能代替目标位点核验"];
+d [label="回溯母核与支链来源
+母核是否此前已有？支链完整带入还是本步构筑？
+哪个真实底物、哪个端基提供目标连接？
+实际结果、映射争议与未知分别保留"];
+e [label="判定当前目标边界", fillcolor="#EAE0F7"];
+formed [label="边界本步形成
+母核与支链完整/局部覆盖
+对应连接方法 / 方法类比", fillcolor="#D6F0E5"];
+elab [label="边界此前已存在
+本步延长支链或转换基团
+支链构筑/修饰参考"];
+other [label="变化在其他位置
+或母核后构筑 / 替代边界
+分配到相应任务，不能冒充当前连接"];
+unknown [label="反应信息或映射不足
+连接贡献未知
+保留结构线索，不计有据方法", fillcolor="#FFF3D6"];
+r [label="目标连接方法区排序
+先检查相关变化和位点，再比较真实底物与环境
+精确产物的无关修饰不占连接方法名额
+不同类型可以提供同一连接；同类型也可能无关"];
+o [label="给模型的答案
+哪类反应、用哪些母核与支链底物、在何处形成哪根键
+支链覆盖了多少、实际端基和条件是什么、还有哪些差异
+所有判定在模型预测前完成", fillcolor="#DBEAFE"];
+a -> b -> c -> d -> e;
+e -> formed; e -> elab; e -> other; e -> unknown;
+formed -> r; elab -> r; other -> r; unknown -> r;
+r -> o;
+}
+'''
+
 
 if __name__ == '__main__':
     diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
                 ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
-                ('reaction-reference-quality', QUALITY)]
+                ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))
-        for extension in ('svg', 'png'):
-            subprocess.run(['dot', f'-T{extension}', '-Gdpi=130', str(source),
-                            '-o', str(ROOT / f'{name}.{extension}')], check=True)
-    print('Rendered five current design diagrams.')
+        for ext in ('svg', 'png'):
+            subprocess.run(['dot', f'-T{ext}', '-Gdpi=130', str(source),
+                            '-o', str(ROOT / f'{name}.{ext}')], check=True)
+    print(f'Rendered {len(diagrams)} current design diagrams.')

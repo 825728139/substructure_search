@@ -1,0 +1,101 @@
+{
+  "rdkit_version": "2026.03.2",
+  "scope": "invented graph-only examples; classifications are expected labels, not classifier output",
+  "product_without_maps": "COc1ccc(OCCN(C)C)cc1",
+  "primary_core": "Ar-O (Ar = 4-methoxyphenyl)",
+  "primary_sidechain": "CH2-CH2-N(CH3)2",
+  "primary_interface": [
+    7,
+    8
+  ],
+  "alternative_interface": [
+    6,
+    7
+  ],
+  "cases": [
+    {
+      "id": "attach_sidechain",
+      "reactants": "[CH2:8]([CH2:9][N:10]([CH3:11])[CH3:12])[Cl:100].[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([OH:7])[cH:13][cH:14]1",
+      "product": "[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12])[cH:13][cH:14]1",
+      "reactants_without_maps": "CN(C)CCCl.COc1ccc(O)cc1",
+      "formed": [
+        [
+          7,
+          8
+        ]
+      ],
+      "broken": [
+        [
+          8,
+          100
+        ]
+      ],
+      "primary_interface_new": true,
+      "alternative_interface_new": false,
+      "expected_relative_label": "expected_interface_new"
+    },
+    {
+      "id": "elaborate_sidechain",
+      "reactants": "[CH3:11][I:101].[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][NH:10][CH3:12])[cH:13][cH:14]1",
+      "product": "[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12])[cH:13][cH:14]1",
+      "reactants_without_maps": "CI.CNCCOc1ccc(OC)cc1",
+      "formed": [
+        [
+          10,
+          11
+        ]
+      ],
+      "broken": [
+        [
+          11,
+          101
+        ]
+      ],
+      "primary_interface_new": false,
+      "alternative_interface_new": false,
+      "expected_relative_label": "existing_interface_sidechain_elaboration"
+    },
+    {
+      "id": "modify_other_group",
+      "reactants": "[CH3:1][I:102].[OH:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12])[cH:13][cH:14]1",
+      "product": "[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12])[cH:13][cH:14]1",
+      "reactants_without_maps": "CI.CN(C)CCOc1ccc(O)cc1",
+      "formed": [
+        [
+          1,
+          2
+        ]
+      ],
+      "broken": [
+        [
+          1,
+          102
+        ]
+      ],
+      "primary_interface_new": false,
+      "alternative_interface_new": false,
+      "expected_relative_label": "existing_interface_other_site_modification"
+    },
+    {
+      "id": "alternative_attachment",
+      "reactants": "[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([Br:103])[cH:13][cH:14]1.[OH:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12]",
+      "product": "[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([O:7][CH2:8][CH2:9][N:10]([CH3:11])[CH3:12])[cH:13][cH:14]1",
+      "reactants_without_maps": "CN(C)CCO.COc1ccc(Br)cc1",
+      "formed": [
+        [
+          6,
+          7
+        ]
+      ],
+      "broken": [
+        [
+          6,
+          103
+        ]
+      ],
+      "primary_interface_new": false,
+      "alternative_interface_new": true,
+      "expected_relative_label": "alternative_boundary_new"
+    }
+  ]
+}

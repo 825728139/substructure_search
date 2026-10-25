@@ -1,0 +1,46 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="子结构命中之后：这条反应提供了所需连接方法吗？";
+a [label="目标自动分区
+母核 + 期望支链/基团 + 目标连接位点与边界键
+合法替代边界分别编号，无需模型先预测", fillcolor="#DBEAFE"];
+b [label="召回产物与全部相关反应
+母核、支链和边界在同一实际产物中匹配
+产物相同，也可能对应完全不同的反应步骤"];
+c [label="识别实际反应类型与变化
+两侧底物、成键/断键/键型变化、来源条件
+反应名称仅为辅助，不能代替目标位点核验"];
+d [label="回溯母核与支链来源
+母核是否此前已有？支链完整带入还是本步构筑？
+哪个真实底物、哪个端基提供目标连接？
+实际结果、映射争议与未知分别保留"];
+e [label="判定当前目标边界", fillcolor="#EAE0F7"];
+formed [label="边界本步形成
+母核与支链完整/局部覆盖
+对应连接方法 / 方法类比", fillcolor="#D6F0E5"];
+elab [label="边界此前已存在
+本步延长支链或转换基团
+支链构筑/修饰参考"];
+other [label="变化在其他位置
+或母核后构筑 / 替代边界
+分配到相应任务，不能冒充当前连接"];
+unknown [label="反应信息或映射不足
+连接贡献未知
+保留结构线索，不计有据方法", fillcolor="#FFF3D6"];
+r [label="目标连接方法区排序
+先检查相关变化和位点，再比较真实底物与环境
+精确产物的无关修饰不占连接方法名额
+不同类型可以提供同一连接；同类型也可能无关"];
+o [label="给模型的答案
+哪类反应、用哪些母核与支链底物、在何处形成哪根键
+支链覆盖了多少、实际端基和条件是什么、还有哪些差异
+所有判定在模型预测前完成", fillcolor="#DBEAFE"];
+a -> b -> c -> d -> e;
+e -> formed; e -> elab; e -> other; e -> unknown;
+formed -> r; elab -> r; other -> r; unknown -> r;
+r -> o;
+}

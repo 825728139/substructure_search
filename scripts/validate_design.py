@@ -19,5 +19,6 @@ sections=re.findall(r'^### (\d+\.\d+) ',text,re.M)
 assert len(sections)==len(set(sections)), 'Duplicate detailed section number'
 for ref in re.findall(r'第 (\d+\.\d+) 节',text):
     assert ref in sections, f'Missing section {ref}'
-for svg in (root/'diagrams').glob('*.svg'): ET.parse(svg)
-print(f'Integrity checked: {len(files)} Markdown files and 5 diagram SVGs. No engine claims validated.')
+svgs = list((root/'diagrams').glob('*.svg'))
+for svg in svgs: ET.parse(svg)
+print(f'Integrity checked: {len(files)} Markdown files and {len(svgs)} diagram SVGs. No engine claims validated.')
