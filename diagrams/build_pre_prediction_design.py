@@ -1,4 +1,4 @@
-"""Render structure-first retrieval and observed-reaction reranking diagrams."""
+"""Render retrieval, reaction-evidence and reference-ranking design diagrams."""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parent
@@ -81,7 +81,11 @@ topology_assessment [label="已有反应分析后重排
 核验源反应的开环 / 闭环 / 重组 / 环保留
 变化是否对应目标相关区域？其他位置变化不冒充方法
 三层命中都参与，排序不能找回未召回记录", fillcolor="#D6F0E5"];
-roles -> attachment -> topology_assessment -> quality -> transfer -> stats -> pack -> model;
+ranking [label="独立过滤与双视角重排
+方法参考价值：贡献、证据、迁移与目标覆盖
+实验适配：材料、操作、危险信息、分离与规模
+未知不能当低负担；明确限制不能被高收率抵消", fillcolor="#EAE0F7"];
+roles -> attachment -> topology_assessment -> quality -> transfer -> stats -> ranking -> pack -> model;
 }
 '''
 
@@ -414,12 +418,118 @@ r -> f -> end_result;
 }
 '''
 
+RANKING = '''digraph G {
+BASE
+label="子结构检索后的过滤与排序：参考价值和实验适配分别回答";
+a [label="三层命中反应 + 有来源的替换类比
+排序单位：目标任务 × 实际实验或明确推定建议
+同产物的不同反应和条件分别保留", fillcolor="#DBEAFE"];
+b [label="方法与证据资格核对
+是否在对应位置提供所需连接/转化？
+实际制得、观察、预期、失败、未知分别标记
+事实与推定、执行完整与截断分开"];
+good [label="有据方法 / 明确类比
+进入对应任务的比较组", fillcolor="#D6F0E5"];
+other [label="其他步骤或位置的参考
+保留其作用，不冒充当前方法"];
+unknown [label="信息不足或冲突
+保留待核查资料
+不默认成功、简单或安全", fillcolor="#FFF3D6"];
+feat [label="提取九方向特征及来源
+方法相关性 · 迁移负担 · 反应性/选择性 · 证据
+材料供应 · 操作设备 · 危险/监管 · 产出分离 · 放大资源
+每项绑定材料、阶段、规模、单位、日期和未知状态"];
+ref [label="默认：合成参考价值
+目标贡献 → 证据 → 迁移与环境 → 覆盖
+同类且信息可比时比较操作和资源负担
+特殊设备方法仍可有很高启发价值", fillcolor="#D6F0E5"];
+lab [label="可选：按明确配置的实验适配
+设备/温压/规模/材料限制四态匹配
+通过 / 不符合 / 未知 / 不适用
+未配置能力时不声称已适配", fillcolor="#D6F0E5"];
+compare [label="组内比较与权衡
+只有可比且有资料的维度才建立优势关系
+按偏好顺序选择，保留未知与不同构筑策略
+不用未经校准的成功率或安全总分"];
+select [label="结果组织
+真实实验去重 + 目标缺口覆盖 + 方法/来源多样性
+稳定分页；重要缺失可在共同预算内补查
+截断只代表已分析候选中的排序"];
+result [label="输出理由与代价，再交给模型
+解决哪一步？需替换什么？材料和设备要求？
+温压/后处理、危险信息及条件迁移缺口在哪里？
+参考排序不是实验执行许可", fillcolor="#DBEAFE"];
+a -> b;
+b -> good; b -> other; b -> unknown;
+good -> feat; other -> feat; unknown -> feat;
+feat -> ref; feat -> lab;
+ref -> compare; lab -> compare;
+compare -> select -> result;
+}
+'''
+
+DIMENSIONS = '''digraph G {
+BASE
+label="九个排序方向：先看对目标有何帮助，再看执行代价";
+a [label="① 目标方法相关性
+实际反应类型与目标位点
+连接、转化、开闭环或获得贡献
+结构像不等于方法相关", fillcolor="#DBEAFE"];
+b [label="② 类比迁移负担
+换几个反应物、改变哪些结构
+反应端、位置、立体与保护差异
+单槽位替换也有条件缺口", fillcolor="#DBEAFE"];
+c [label="③ 反应性与选择性
+电子、位阻、共轭、配位环境
+竞争位点、基团相容性证据
+没有通用的官能团活性总分", fillcolor="#DBEAFE"];
+d [label="④ 证据与可重复性
+实际产物、分离/分析、真实来源
+独立实验、失败与冲突、映射范围
+重复公开记录不等于复现", fillcolor="#D6F0E5"];
+e [label="⑤ 原料与供应负担
+底物、催化剂、活化与保护准备
+规格、纯度、日期、价格单位
+分子量小不等于廉价可得", fillcolor="#D6F0E5"];
+f [label="⑥ 操作与设备
+各阶段高低温、压力与时长
+惰性/无水、气体、光电及值守
+后处理和分析阶段不能混用", fillcolor="#D6F0E5"];
+g [label="⑦ 危险性与监管
+具体材料 SDS/GHS 与来源版本
+过程放热/气体/压力及规模信息
+未查到信息不等于无危险", fillcolor="#FFF3D6"];
+h [label="⑧ 产出与分离
+分离收率、分析收率分别比较
+纯度、选择性、回收及纯化步骤
+不能只按百分比高低选择", fillcolor="#FFF3D6"];
+i [label="⑨ 放大与资源
+已有规模、传热/传质相关证据
+材料、溶剂/水、洗脱与废物
+资料不足不计算虚假的 PMI", fillcolor="#FFF3D6"];
+note [shape=plaintext,label="分子量：区分目标、参考产物与实际投料材料；结合结构覆盖、用量与盐形解释
+温度：结合所有阶段、设备、材料和时间；室温并不自动代表低过程风险
+输出：合成参考价值 + 实验适配状态 + 可追溯理由 + 未知信息", fontsize=14];
+{rank=same; a; b; c;}
+{rank=same; d; e; f;}
+{rank=same; g; h; i;}
+a -> b -> c [style=invis];
+d -> e -> f [style=invis];
+g -> h -> i [style=invis];
+a -> d -> g [style=invis];
+b -> e -> h [style=invis];
+c -> f -> i [style=invis];
+h -> note [style=invis];
+}
+'''
+
 
 if __name__ == '__main__':
     diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
                 ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
                 ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT),
-                ('single-reactant-transfer', TRANSFER), ('topology-search', TOPOLOGY)]
+                ('single-reactant-transfer', TRANSFER), ('topology-search', TOPOLOGY),
+                ('result-ranking', RANKING), ('ranking-dimensions', DIMENSIONS)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))

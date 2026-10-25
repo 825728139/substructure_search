@@ -74,5 +74,9 @@ topology_assessment [label="已有反应分析后重排
 核验源反应的开环 / 闭环 / 重组 / 环保留
 变化是否对应目标相关区域？其他位置变化不冒充方法
 三层命中都参与，排序不能找回未召回记录", fillcolor="#D6F0E5"];
-roles -> attachment -> topology_assessment -> quality -> transfer -> stats -> pack -> model;
+ranking [label="独立过滤与双视角重排
+方法参考价值：贡献、证据、迁移与目标覆盖
+实验适配：材料、操作、危险信息、分离与规模
+未知不能当低负担；明确限制不能被高收率抵消", fillcolor="#EAE0F7"];
+roles -> attachment -> topology_assessment -> quality -> transfer -> stats -> ranking -> pack -> model;
 }

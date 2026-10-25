@@ -1,0 +1,52 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="子结构检索后的过滤与排序：参考价值和实验适配分别回答";
+a [label="三层命中反应 + 有来源的替换类比
+排序单位：目标任务 × 实际实验或明确推定建议
+同产物的不同反应和条件分别保留", fillcolor="#DBEAFE"];
+b [label="方法与证据资格核对
+是否在对应位置提供所需连接/转化？
+实际制得、观察、预期、失败、未知分别标记
+事实与推定、执行完整与截断分开"];
+good [label="有据方法 / 明确类比
+进入对应任务的比较组", fillcolor="#D6F0E5"];
+other [label="其他步骤或位置的参考
+保留其作用，不冒充当前方法"];
+unknown [label="信息不足或冲突
+保留待核查资料
+不默认成功、简单或安全", fillcolor="#FFF3D6"];
+feat [label="提取九方向特征及来源
+方法相关性 · 迁移负担 · 反应性/选择性 · 证据
+材料供应 · 操作设备 · 危险/监管 · 产出分离 · 放大资源
+每项绑定材料、阶段、规模、单位、日期和未知状态"];
+ref [label="默认：合成参考价值
+目标贡献 → 证据 → 迁移与环境 → 覆盖
+同类且信息可比时比较操作和资源负担
+特殊设备方法仍可有很高启发价值", fillcolor="#D6F0E5"];
+lab [label="可选：按明确配置的实验适配
+设备/温压/规模/材料限制四态匹配
+通过 / 不符合 / 未知 / 不适用
+未配置能力时不声称已适配", fillcolor="#D6F0E5"];
+compare [label="组内比较与权衡
+只有可比且有资料的维度才建立优势关系
+按偏好顺序选择，保留未知与不同构筑策略
+不用未经校准的成功率或安全总分"];
+select [label="结果组织
+真实实验去重 + 目标缺口覆盖 + 方法/来源多样性
+稳定分页；重要缺失可在共同预算内补查
+截断只代表已分析候选中的排序"];
+result [label="输出理由与代价，再交给模型
+解决哪一步？需替换什么？材料和设备要求？
+温压/后处理、危险信息及条件迁移缺口在哪里？
+参考排序不是实验执行许可", fillcolor="#DBEAFE"];
+a -> b;
+b -> good; b -> other; b -> unknown;
+good -> feat; other -> feat; unknown -> feat;
+feat -> ref; feat -> lab;
+ref -> compare; lab -> compare;
+compare -> select -> result;
+}

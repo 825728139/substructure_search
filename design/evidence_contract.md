@@ -19,6 +19,9 @@
   obtainment_claims[]
   source_locations[]
   unresolved_fields[]
+  ranking_profile / reference_rank / lab_fit_state
+  explicit_constraints / ranking_reasons / tradeoffs
+  material_identity_and_hazard_sources / operation_stage_requirements
 ```
 
 每项 claim 包括类型、目标位置、支持的原文/测量、依赖的结构对应、支持层级与适用范围。原子映射是推断依据之一，不替代观察证据；虚拟视图不充当 actual_structure。缺失为未知，不能默认成功、失败或零收率。
@@ -72,3 +75,7 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 结构范围先决定召回，环变化标签来自实际候选反应分析，见 [专项规范](acyclic_and_topology_search.md)。默认不预先枚举目标环变化位置或生成虚拟前体。每个阳性标签需要源反应两侧证据、实际方向和目标相关位置对应；仅环数差或支链相似度不足以成立。
 
 源开环断键不在目标产物中时，保留其源键及保留原子对应，不伪造目标中已有该键。反应分析完成状态、结构召回完整状态和化学未知状态分开。来源之后的替换类比继续单列为推定，不回流到事实计数。
+
+## 排序证据与实验适配
+
+按 [独立排序规划](../ranking_plan.md)，实际条件、危险信息、分子量、价格等特征带材料/阶段/规模/日期与来源。能力限制匹配采用通过/不符合/未知/不适用；没有实验配置不声称适配，未知危害不等于低风险。类比建议不继承来源反应的收率或安全/可行性结论。高参考价值与适合当前实验条件分别输出，证据本身不因切换排序偏好而改变。

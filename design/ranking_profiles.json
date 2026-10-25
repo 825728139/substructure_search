@@ -1,0 +1,73 @@
+{
+  "status": "proposed_uncalibrated_design",
+  "default_profile": "reference_first",
+  "probability_or_safety_score": null,
+  "hard_constraints_default": [],
+  "unknown_is_safe": false,
+  "constraint_states": [
+    "pass",
+    "fail",
+    "unknown",
+    "not_applicable"
+  ],
+  "feature_provenance_required": [
+    "entity",
+    "stage",
+    "scope",
+    "source",
+    "source_date",
+    "known_or_unknown"
+  ],
+  "profiles": [
+    {
+      "id": "reference_first",
+      "purpose": "方法参考",
+      "view": "reference",
+      "preference_order": [
+        "target_contribution",
+        "evidence_scope",
+        "migration_and_context_gap",
+        "incremental_target_coverage",
+        "reported_operational_burden",
+        "resource_burden"
+      ],
+      "capabilities_required": false
+    },
+    {
+      "id": "lab_fit",
+      "purpose": "按明确能力比较实验适配",
+      "view": "lab_fit",
+      "preference_order": [
+        "explicit_constraint_state",
+        "target_contribution",
+        "evidence_scope",
+        "migration_and_context_gap",
+        "profile_specific_operation_preference",
+        "materials_and_isolation"
+      ],
+      "capabilities_required_for_pass_claim": true
+    },
+    {
+      "id": "process_reference",
+      "purpose": "工艺与放大资料比较",
+      "view": "lab_fit",
+      "preference_order": [
+        "explicit_constraint_state",
+        "target_contribution",
+        "evidence_scope",
+        "reported_scale_and_process_information",
+        "isolation_and_material_burden"
+      ],
+      "capabilities_required_for_pass_claim": true
+    }
+  ],
+  "comparison_policy": {
+    "no_universal_weighted_sum": true,
+    "dominance_requires_comparable_known_fields": true,
+    "missing_critical_data": "retain_as_unverified_no_optimistic_imputation",
+    "proposal_measurements": "do_not_inherit_source_results",
+    "unknown_values": "not_eligible_for_confirmed_fit",
+    "stable_tie_breaker": "record_id",
+    "uses_existing_global_query_and_time_budget": true
+  }
+}

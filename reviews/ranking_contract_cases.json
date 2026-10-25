@@ -1,0 +1,126 @@
+{
+  "status": "handwritten_design_scenarios_not_engine_tests",
+  "scope": "synthetic decision examples; no real reactions or risk assessments",
+  "cases": [
+    {
+      "id": "method_before_product_similarity",
+      "given": "当前任务是形成指定母核—支链连接；甲产物精确但只脱保护，乙产物相近且形成对应连接。",
+      "view": "reference",
+      "expected_behavior": "甲不能因产品精确而进入当前连接方法区；乙在该区优先，甲保留为其他步骤参考。"
+    },
+    {
+      "id": "burden_does_not_create_method",
+      "given": "甲有对应成键证据且需要专用条件，乙条件简单但反应位置无关。",
+      "view": "reference",
+      "expected_behavior": "操作便利不能使乙变成有据连接方法。"
+    },
+    {
+      "id": "unknown_is_not_easy",
+      "given": "甲的温度和后处理未知，乙明确记录加热及多步后处理。",
+      "view": "both",
+      "expected_behavior": "甲缺失不被当作室温或无需纯化，不能据此证明比乙简单。"
+    },
+    {
+      "id": "no_profile_no_lab_claim",
+      "given": "用户只给目标，没有设备、规模或材料限制。",
+      "view": "both",
+      "expected_behavior": "仍输出参考排序；实验适配标未配置，不能默认为已适配。"
+    },
+    {
+      "id": "temperature_cap_explicit",
+      "given": "用户明确温度能力上限为120°C，来源反应明确需要150°C。",
+      "view": "lab_fit",
+      "expected_behavior": "当前设备条件不符合；来源反应仍可在方法参考区保留。"
+    },
+    {
+      "id": "temperature_type",
+      "given": "一个来源只写回流，溶剂/压力资料不足。",
+      "view": "lab_fit",
+      "expected_behavior": "温度范围未知，不推为常压沸点或判为满足温度限制。"
+    },
+    {
+      "id": "yield_types",
+      "given": "甲为95%分析收率，乙为75%分离收率。",
+      "view": "both",
+      "expected_behavior": "不可只按百分比选甲；保留类别、身份与其他实际负担。"
+    },
+    {
+      "id": "molecular_weight",
+      "given": "甲因重卤素材料质量更高，但乙需要更多结构修改。",
+      "view": "reference",
+      "expected_behavior": "分子量不覆盖结构迁移差距，必须结合对应原子与材料形式。"
+    },
+    {
+      "id": "target_mass_constant",
+      "given": "所有候选服务同一个完整目标。",
+      "view": "reference",
+      "expected_behavior": "目标质量是常量，不作为独立区分候选的奖励。"
+    },
+    {
+      "id": "sds_absent",
+      "given": "某实际材料无可匹配SDS或已核对范围无名录条目。",
+      "view": "both",
+      "expected_behavior": "标资料未知或限定范围查无匹配，不输出无危害或普遍未受管制。"
+    },
+    {
+      "id": "hazard_is_not_ban",
+      "given": "来源材料有危险性分类，但没有用户或机构明确排除规则。",
+      "view": "reference",
+      "expected_behavior": "保留方法与危险信息，不将材料危险性直接等同于无参考价值或法律禁用。"
+    },
+    {
+      "id": "explicit_material_exclusion",
+      "given": "用户明确排除某种已确认材料，来源方法使用该材料。",
+      "view": "lab_fit",
+      "expected_behavior": "实验视角不符合并显示理由；不得由高收率抵消明确排除。"
+    },
+    {
+      "id": "unknown_constraint",
+      "given": "用户只看确认不含指定类材料，候选关键组分身份不清。",
+      "view": "lab_fit",
+      "expected_behavior": "待核查而非通过；可在独立资料区保留。"
+    },
+    {
+      "id": "proposal_is_not_source_measurement",
+      "given": "新单底物替换建议图回放符合目标，来源记录产率高。",
+      "view": "both",
+      "expected_behavior": "新建议不继承来源收率、SDS或条件迁移成功结论。"
+    },
+    {
+      "id": "extra_competitor",
+      "given": "替代底物多一个游离胺，保持原反应角色。",
+      "view": "reference",
+      "expected_behavior": "报告选择性缺口；单槽位不等于简单沿用。"
+    },
+    {
+      "id": "stages",
+      "given": "主反应室温，但后处理需要额外低温/气体操作或分离。",
+      "view": "lab_fit",
+      "expected_behavior": "按完整阶段说明设备和操作，不只展示主反应室温。"
+    },
+    {
+      "id": "scale_gap",
+      "given": "来源毫克级，用户关注更大规模。",
+      "view": "lab_fit",
+      "expected_behavior": "报告规模依据不足，不从相同温度和收率外推可放大。"
+    },
+    {
+      "id": "pareto_unknown",
+      "given": "候选甲缺一个重要风险维度，乙所有比较维度都有可比信息。",
+      "view": "both",
+      "expected_behavior": "未知不得赋最佳/最差数值建立支配关系；按未核查状态保留。"
+    },
+    {
+      "id": "experimental_duplicates",
+      "given": "同一个净反应有不同条件和选择性结果。",
+      "view": "both",
+      "expected_behavior": "按实验关系保留，不能仅按反应式去重到最高收率。"
+    },
+    {
+      "id": "incomplete_candidate_pool",
+      "given": "预算只分析了部分真实反应。",
+      "view": "both",
+      "expected_behavior": "只声明已分析范围内的排序，显示未分析与截断，不称全局Top-K。"
+    }
+  ]
+}

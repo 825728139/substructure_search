@@ -34,7 +34,7 @@
 
 ![前置检索总览](diagrams/scaffold-search.png)
 
-[高清总览](diagrams/scaffold-search.svg) · [化学召回](diagrams/chemical-recall.svg) · [支链与共同中间体](diagrams/core-branch-combination.svg) · [分片与来源实例](diagrams/fragment-retrieval.svg) · [阶段和证据](diagrams/reaction-reference-quality.svg) · [连接方法判定](diagrams/attachment-methods.svg) · [单反应物替换](diagrams/single-reactant-transfer.svg) · [无环与环变化](diagrams/topology-search.svg)
+[高清总览](diagrams/scaffold-search.svg) · [化学召回](diagrams/chemical-recall.svg) · [支链与共同中间体](diagrams/core-branch-combination.svg) · [分片与来源实例](diagrams/fragment-retrieval.svg) · [阶段和证据](diagrams/reaction-reference-quality.svg) · [连接方法判定](diagrams/attachment-methods.svg) · [单反应物替换](diagrams/single-reactant-transfer.svg) · [无环与环变化](diagrams/topology-search.svg) · [结果排序](diagrams/result-ranking.svg)
 
 ## 4. 现行规则与实施边界
 
@@ -48,6 +48,8 @@
 | 多少结果交给模型？ | 按三层配额与策略多样性选代表实例，数量上限不代表全局最优 | 调度与评测约定 |
 
 完整规范：[详细化学与检索规则](design/specification.md)。另有 [证据契约](design/evidence_contract.md)、[查询调度与首轮评测](design/scheduling_and_pilot.md)及 [未实测原型配置](design/pilot_profile.json)。它们是同一套现行设计的不同视角；不再复制一套竞争性的旧计划。
+
+结果过滤与排序单独见 [排序规划](ranking_plan.md)：九方向特征、参考价值与实验适配双视角、明确约束/未知处理、危险信息与温压操作、分子量、原料、收率/分离和放大资源比较。它沿用目标方法资格，不能用温和条件抵消任务不相关，也不将缺失信息评为简单安全。
 
 ## 5. 输出资料包
 
@@ -75,7 +77,7 @@
 | 证据增强 | 支链、端口、成环、局部映射、阶段、原子来源与手性贡献 | 结论逐项有见证，争议不会变成确定构筑 |
 | 单反应物替换类比 | 对整体/支链差异回溯一个底物槽位，按来源变化回放，报告条件证据 | 推定与事实分账；新增竞争位点、多个来源或反应角色变化不能称简单沿用 |
 | 有限资料补查 | 共同中间体和最多两条已记录反应关系 | 严格身份与组分依赖核对，无虚构反应边 |
-| 排序与模型交付 | 分层代表实例、覆盖和缺口、结果范围 | 人工相关性评测及固定模型对照 |
+| 排序与模型交付 | 九方向解释、方法参考与实验适配分列、约束与未知状态、多样性和范围 | 按独立排序规划核对人工比较与反例，再做固定模型对照 |
 
 泛化骨架编辑、复杂三维比较等属于后续受控扩展，默认不作为首版完整能力承诺。初始阶段允许返回未知；不能靠简化标签制造虚假的确定结论。
 

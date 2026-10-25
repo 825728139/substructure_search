@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 root=Path(__file__).resolve().parents[1]
-files=[root/'plan.md',root/'chemical_review.md',root/'GIT_HISTORY.md']
+files=[root/'plan.md',root/'chemical_review.md',root/'GIT_HISTORY.md',root/'ranking_plan.md']
 for directory in ('reviews','audits','design'):
     files.extend((root/directory).glob('**/*.md'))
 for p in files:

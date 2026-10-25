@@ -1,0 +1,57 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="九个排序方向：先看对目标有何帮助，再看执行代价";
+a [label="① 目标方法相关性
+实际反应类型与目标位点
+连接、转化、开闭环或获得贡献
+结构像不等于方法相关", fillcolor="#DBEAFE"];
+b [label="② 类比迁移负担
+换几个反应物、改变哪些结构
+反应端、位置、立体与保护差异
+单槽位替换也有条件缺口", fillcolor="#DBEAFE"];
+c [label="③ 反应性与选择性
+电子、位阻、共轭、配位环境
+竞争位点、基团相容性证据
+没有通用的官能团活性总分", fillcolor="#DBEAFE"];
+d [label="④ 证据与可重复性
+实际产物、分离/分析、真实来源
+独立实验、失败与冲突、映射范围
+重复公开记录不等于复现", fillcolor="#D6F0E5"];
+e [label="⑤ 原料与供应负担
+底物、催化剂、活化与保护准备
+规格、纯度、日期、价格单位
+分子量小不等于廉价可得", fillcolor="#D6F0E5"];
+f [label="⑥ 操作与设备
+各阶段高低温、压力与时长
+惰性/无水、气体、光电及值守
+后处理和分析阶段不能混用", fillcolor="#D6F0E5"];
+g [label="⑦ 危险性与监管
+具体材料 SDS/GHS 与来源版本
+过程放热/气体/压力及规模信息
+未查到信息不等于无危险", fillcolor="#FFF3D6"];
+h [label="⑧ 产出与分离
+分离收率、分析收率分别比较
+纯度、选择性、回收及纯化步骤
+不能只按百分比高低选择", fillcolor="#FFF3D6"];
+i [label="⑨ 放大与资源
+已有规模、传热/传质相关证据
+材料、溶剂/水、洗脱与废物
+资料不足不计算虚假的 PMI", fillcolor="#FFF3D6"];
+note [shape=plaintext,label="分子量：区分目标、参考产物与实际投料材料；结合结构覆盖、用量与盐形解释
+温度：结合所有阶段、设备、材料和时间；室温并不自动代表低过程风险
+输出：合成参考价值 + 实验适配状态 + 可追溯理由 + 未知信息", fontsize=14];
+{rank=same; a; b; c;}
+{rank=same; d; e; f;}
+{rank=same; g; h; i;}
+a -> b -> c [style=invis];
+d -> e -> f [style=invis];
+g -> h -> i [style=invis];
+a -> d -> g [style=invis];
+b -> e -> h [style=invis];
+c -> f -> i [style=invis];
+h -> note [style=invis];
+}
