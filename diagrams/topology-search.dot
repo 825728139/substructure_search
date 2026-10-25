@@ -1,0 +1,45 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="三层表示看多大范围；开环闭环表示反应做了什么";
+a [label="用户输入完整目标分子
+可无环、有环或混合", fillcolor="#DBEAFE"];
+s [label="结构维度：整体 → 关键核心 → 局部片段
+三层都可保留链式结构和功能单元"];
+acyclic [label="无环目标
+完整链图 + 官能团/分支/立体锚点
+保留链长、顺序、位置及所有原子对应
+Murcko 为空不等于没有核心", fillcolor="#D6F0E5"];
+cyclic [label="有环或混合目标
+完整环系 + 环间/环外链 + 关键功能单元
+普通结构召回保留环，专项查询允许规则剪环
+不同目标区域分别组织", fillcolor="#D6F0E5"];
+channels [label="反应维度：与三层交叉执行
+片间连接 / 官能团转化 / 实际开环 / 实际闭环
+环扩缩或其他重组 / 环已存在 / 未知", fillcolor="#EAE0F7"];
+open [label="目标是无环氨基醇，也可找开环先例
+结构示意：含氧环 + 含氮组分 → 开放链产物
+同样目标还可能由开链取代制得
+检查两侧变化，保留不同方法"];
+close [label="目标是内酰胺环，可找闭环先例
+结构示意：开链对应结构 → 环状产物
+已有相同环再作局部转化的记录
+不能冒充本步建立该环"];
+review [label="两侧结构、实际方向及局部变化核验
+目标有没有环不能决定原反应有没有开/闭环
+为查询剪开的环只是查询图，不是实验开环
+只比较环数或组分数不够"];
+output [label="每条参考返回双标签
+结构层级 + 实际反应贡献
+具体底物、变化位置、区域/立体差异和证据
+先完成检索资料包，再交给模型", fillcolor="#DBEAFE"];
+a -> s;
+s -> acyclic; s -> cyclic;
+acyclic -> channels; cyclic -> channels;
+channels -> open; channels -> close;
+open -> review; close -> review;
+review -> output;
+}

@@ -1,4 +1,4 @@
-"""Render the current pre-prediction retrieval and bounded reactant-transfer design."""
+"""Render the current multiscale pre-prediction chemistry retrieval design."""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parent
@@ -17,18 +17,18 @@ a [label="用户输入完整目标分子
 b [label="生成三层候选及原子对应，识别环系和化学要求
 严格视图 + 有标签的化学扩展
 互变异构 / 母体 / 可能保护形式 / 限定官能团变化"];
-g [label="① 整体骨架与相关形式", fillcolor="#D6F0E5"];
-c [label="② 核心骨架与支链互补", fillcolor="#D6F0E5"];
-f [label="③ 分片骨架与成环参考", fillcolor="#D6F0E5"];
+g [label="① 整体结构/骨架与相关形式", fillcolor="#D6F0E5"];
+c [label="② 环系或链式核心与支链", fillcolor="#D6F0E5"];
+f [label="③ 局部结构与片段参考", fillcolor="#D6F0E5"];
 g1 [label="严格完整骨架身份复核
 相关形式通过独立视图召回
 原结构与差异保留，区分实际/类比/反向证据"];
 c1 [label="完整核心与所有位点一致对齐
 头尾及多点连接共同比较
 位点存在 / 引入 / 保留及共同中间体"];
-f1 [label="片间连接：逐分支与端口查询
-单分子成环：双端同一实例匹配
-多键成环及不同原子来源的构筑方式"];
+f1 [label="片间连接、实际开环与闭环独立查询
+开环产物可能无环；闭环前体可能仅一个分子
+多键变化和不同来源构筑方式分别核验"];
 g2 [label="整体类似物与实际底物
 结构关系、转化方向与位点环境分组
 真实正向关系不由反向记录代替"];
@@ -59,7 +59,9 @@ input_scope [label="确认具体目标与组分范围
 具体结构、完整组分和通式分别处理
 主体不明时保留边界，不拼接伪共存"];
 a -> input_scope -> b;
-compiled [label="逐视图显式编译查询
+compiled [label="每个任务 = 结构范围 × 反应通道
+链连接 / 转化 / 实际开环 / 闭环 / 其他拓扑变化
+逐视图显式编译查询
 元素、电荷、氢数、环系与实例约束
 明确保留/放开属性，按任务采用包含或身份判据"];
 b -> compiled; compiled -> g; compiled -> c; compiled -> f;
@@ -178,52 +180,43 @@ m -> methods -> precursor -> co -> set -> out;
 
 FRAGMENT = '''digraph G {
 BASE
-label="分片与成环：端口、原子来源和完整参与组分";
-a [label="目标结构与规则候选
-普通连接边界 + 独立成环规则入口
-不依赖模型先预测断键", fillcolor="#DBEAFE"];
-multi [label="片间连接
-单键或受限二键切片
-保留全部分支与各自连接端口", fillcolor="#D6F0E5"];
-ring [label="单分子成环
-开环后仍可能只有一个连通结构
-保留两个或多个端口", fillcolor="#D6F0E5"];
-complex [label="多键成环
-明确局部规则及变化签名
-可能包含多根键和键型变化", fillcolor="#D6F0E5"];
-m1 [label="逐片检索参考分子
-每个分支都有制备/获得/使用/未知状态
-不能因一侧容易命中就跳过另一侧"];
-r1 [label="在同一真实分子中匹配多个端口
-检查端间路径、相对位置与立体信息
-两条独立单端记录不算双端共存"];
-c1 [label="受控开环或局部环境查询
-已有可靠成环记录可补充有出处的任务
-无适用规则时明确未评估"];
-port [label="每个端口的实际化学信息
-目标位置 → 参考位置 → 实际端基与保护状态
-结构类似 / 相关功能团 / 已有该位置连接实例
-不能用分子其他位置的基团冒充端口支持"];
-evidence [label="制备、分析与使用资料分别标记
-核对样品阶段、实际结果、身份与各键证据
-推定不当作确认；富集获得不当作新成键", fillcolor="#EAE0F7"];
-origins [label="按实际变化与来源实例组织参考
-化合物身份 / 分子实例 / 投料当量 / 来源份数
-相同底物两份进入产物时，原子实例不能去重丢失
-未知份数不靠配平复制；完整参与组合一起返回"];
-coverage [label="按任务类型评价整个方案
-所有分支、所有端口、最弱分支与双端共存
-原子、键结构与各键变化证据分开计算
-映射争议仅影响对应局部，不虚增构筑方式
-原子全部覆盖不等于连接有形成证据"];
-out [label="输出给模型的战略切断参考
-真实分子、实际端基、底物/产物、反应与出处
-切片或成环位置及仍待解决的连接/立体问题
-查询图不自动成为已验证前体", fillcolor="#DBEAFE"];
-a -> multi; a -> ring; a -> complex;
-multi -> m1; ring -> r1; complex -> c1;
-m1 -> port; r1 -> port; c1 -> port;
-port -> evidence -> origins -> coverage -> out;
+label="局部查询与环变化：先分清结构范围和反应方向";
+a [label="目标可以无环、有环或链环混合
+生成局部功能单元、原连接和规则候选
+不以空 Murcko 或目标无环跳过检索", fillcolor="#DBEAFE"];
+connect [label="片间连接
+全部片段与真实端口
+每个分支均有参考状态", fillcolor="#D6F0E5"];
+opening [label="实际开环先例
+环状底物 → 目标链/局部结构
+产物局部模式独立触发", fillcolor="#D6F0E5"];
+closing [label="实际闭环先例
+链或多个组分 → 目标环
+双端同实例或多键规则", fillcolor="#D6F0E5"];
+ct [label="逐片查询完整参考分子
+内部结构 + 连接端环境
+不能因一个小片段命中就跳过其他分支"];
+op [label="检查原环连接在哪里消失
+同时检查新键、开裂位点及区域/立体信息
+虚拟环前体只作线索，真实方法需落到实际记录"];
+cl [label="查询剪开目标环，只为寻找闭环参考
+剪开后仍可是一段链带两个端口
+这不是实际反应已经发生开环"];
+verify [label="核对目标相关区域的实际拓扑变化
+新键、断键、键型、环路径、来源与局部映射证据
+净环数不变仍可能扩缩环；组分合并不必成环
+环上键型变化不自动等于打开/闭合", fillcolor="#EAE0F7"];
+classify [label="按贡献分类，而非按产物是否有环分类
+片间连接 / 开环 / 闭环 / 环重组 / 环已存在 / 未知
+多个变化可并存，不反转来源方向"];
+result [label="给模型的参考
+实际底物、产物、端口、变化位置、条件和出处
+目标各区域覆盖及未支持规则 / 未完成查询
+推定结构不计已有方法", fillcolor="#DBEAFE"];
+a -> connect; a -> opening; a -> closing;
+connect -> ct; opening -> op; closing -> cl;
+ct -> verify; op -> verify; cl -> verify;
+verify -> classify -> result;
 }
 '''
 
@@ -373,12 +366,55 @@ g -> count;
 }
 '''
 
+TOPOLOGY = '''digraph G {
+BASE
+label="三层表示看多大范围；开环闭环表示反应做了什么";
+a [label="用户输入完整目标分子
+可无环、有环或混合", fillcolor="#DBEAFE"];
+s [label="结构维度：整体 → 关键核心 → 局部片段
+三层都可保留链式结构和功能单元"];
+acyclic [label="无环目标
+完整链图 + 官能团/分支/立体锚点
+保留链长、顺序、位置及所有原子对应
+Murcko 为空不等于没有核心", fillcolor="#D6F0E5"];
+cyclic [label="有环或混合目标
+完整环系 + 环间/环外链 + 关键功能单元
+普通结构召回保留环，专项查询允许规则剪环
+不同目标区域分别组织", fillcolor="#D6F0E5"];
+channels [label="反应维度：与三层交叉执行
+片间连接 / 官能团转化 / 实际开环 / 实际闭环
+环扩缩或其他重组 / 环已存在 / 未知", fillcolor="#EAE0F7"];
+open [label="目标是无环氨基醇，也可找开环先例
+结构示意：含氧环 + 含氮组分 → 开放链产物
+同样目标还可能由开链取代制得
+检查两侧变化，保留不同方法"];
+close [label="目标是内酰胺环，可找闭环先例
+结构示意：开链对应结构 → 环状产物
+已有相同环再作局部转化的记录
+不能冒充本步建立该环"];
+review [label="两侧结构、实际方向及局部变化核验
+目标有没有环不能决定原反应有没有开/闭环
+为查询剪开的环只是查询图，不是实验开环
+只比较环数或组分数不够"];
+output [label="每条参考返回双标签
+结构层级 + 实际反应贡献
+具体底物、变化位置、区域/立体差异和证据
+先完成检索资料包，再交给模型", fillcolor="#DBEAFE"];
+a -> s;
+s -> acyclic; s -> cyclic;
+acyclic -> channels; cyclic -> channels;
+channels -> open; channels -> close;
+open -> review; close -> review;
+review -> output;
+}
+'''
+
 
 if __name__ == '__main__':
     diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
                 ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
                 ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT),
-                ('single-reactant-transfer', TRANSFER)]
+                ('single-reactant-transfer', TRANSFER), ('topology-search', TOPOLOGY)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))
