@@ -7,7 +7,7 @@
 ```text
 参考实例
   candidate_id / view_id / target_occurrence_id
-  structure_level / topology_task / actual_reaction_direction
+  structure_level / source_reaction_topology_assessment / actual_reaction_direction
   source_record_id / experiment_id / component_instance_id
   actual_structure / original_role / material_state / stage_id
   matched_target_atoms_and_bonds / view_relation
@@ -67,6 +67,8 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 
 按 [替换类比规范](single_reactant_transfer.md)生成的建议携带来源反应、原/替代槽位、目标差异、回放及条件状态。原反应是事实，替代底物和新转化是规则推定；二者不共享实验身份，也不将虚拟产物计入制备或连接方法命中。推定建议可引用真实底物资料，但来源资料不证明新组合已经成功。
 
-## 开闭环证据与查询操作
+## 已有反应的开闭环证据
 
-任务保留结构范围及反应通道两个维度，见 [环变化规范](acyclic_and_topology_search.md)。虚拟剪环视图不计真实开环，实际记录不能反向当作已知闭环。闭环/开环阳性标签要求目标对应区域的两侧连接变化有证据；仅环数或组分数量变化不足以确立。未支持规则、映射未知、预算截断与完整无命中分别返回。
+结构范围先决定召回，环变化标签来自实际候选反应分析，见 [专项规范](acyclic_and_topology_search.md)。默认不预先枚举目标环变化位置或生成虚拟前体。每个阳性标签需要源反应两侧证据、实际方向和目标相关位置对应；仅环数差或支链相似度不足以成立。
+
+源开环断键不在目标产物中时，保留其源键及保留原子对应，不伪造目标中已有该键。反应分析完成状态、结构召回完整状态和化学未知状态分开。来源之后的替换类比继续单列为推定，不回流到事实计数。

@@ -27,15 +27,13 @@
     "max_recursive_transfers": 0,
     "shares_global_time_budget": true
   },
-  "topology_channels": {
+  "topology_analysis": {
     "status": "proposed_not_benchmarked",
-    "initial_task_opportunities_per_applicable_channel": 2,
-    "max_tasks_per_channel": 6,
-    "shares_total_task_and_time_budget": true,
-    "channels": [
-      "ring_opening",
-      "ring_closure"
-    ],
-    "trigger": "reviewed_product_side_motif_not_target_ring_presence"
+    "mode": "post_retrieval_observed_reactions",
+    "generate_virtual_ring_precursors_before_hit": false,
+    "max_reaction_records_analyzed": 60,
+    "candidate_sampling": "round_robin_across_products_and_structure_levels",
+    "source_anchored_followups_only": true,
+    "shares_total_time_budget": true
   }
 }

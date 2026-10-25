@@ -4,42 +4,43 @@ graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46",
 node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
 edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
 
-label="三层表示看多大范围；开环闭环表示反应做了什么";
-a [label="用户输入完整目标分子
-可无环、有环或混合", fillcolor="#DBEAFE"];
-s [label="结构维度：整体 → 关键核心 → 局部片段
-三层都可保留链式结构和功能单元"];
-acyclic [label="无环目标
-完整链图 + 官能团/分支/立体锚点
-保留链长、顺序、位置及所有原子对应
-Murcko 为空不等于没有核心", fillcolor="#D6F0E5"];
-cyclic [label="有环或混合目标
-完整环系 + 环间/环外链 + 关键功能单元
-普通结构召回保留环，专项查询允许规则剪环
-不同目标区域分别组织", fillcolor="#D6F0E5"];
-channels [label="反应维度：与三层交叉执行
-片间连接 / 官能团转化 / 实际开环 / 实际闭环
-环扩缩或其他重组 / 环已存在 / 未知", fillcolor="#EAE0F7"];
-open [label="目标是无环氨基醇，也可找开环先例
-结构示意：含氧环 + 含氮组分 → 开放链产物
-同样目标还可能由开链取代制得
-检查两侧变化，保留不同方法"];
-close [label="目标是内酰胺环，可找闭环先例
-结构示意：开链对应结构 → 环状产物
-已有相同环再作局部转化的记录
-不能冒充本步建立该环"];
-review [label="两侧结构、实际方向及局部变化核验
-目标有没有环不能决定原反应有没有开/闭环
-为查询剪开的环只是查询图，不是实验开环
-只比较环数或组分数不够"];
-output [label="每条参考返回双标签
-结构层级 + 实际反应贡献
-具体底物、变化位置、区域/立体差异和证据
-先完成检索资料包，再交给模型", fillcolor="#DBEAFE"];
-a -> s;
-s -> acyclic; s -> cyclic;
-acyclic -> channels; cyclic -> channels;
-channels -> open; channels -> close;
-open -> review; close -> review;
-review -> output;
+label="开环闭环的参考位置，从已检索反应中识别";
+a [label="目标：无环 / 有环 / 链环混合
+三层表示整体、关键核心和局部结构", fillcolor="#DBEAFE"];
+b [label="先进行结构与支链召回
+无环目标使用链式功能单元和连接路径
+不剪目标环猜前体，不向目标链加键猜环"];
+c [label="命中产物 → 关联实际反应集合
+整体和核心命中也参与分析
+一个产物保留不同来源反应"];
+d [label="核验实际两侧结构与变化
+先查发生了什么，再判断与目标哪里相关
+阶段、方向、原子来源及映射争议明确保留", fillcolor="#EAE0F7"];
+o [label="实际开环
+源底物环键消失，生成对应链段
+断键可能不在目标产物中
+返回源键及保留原子对应", fillcolor="#D6F0E5"];
+cl [label="实际闭环
+源产物环连接在反应前不存在
+前体可是一条链或多个组分
+投影到目标中有据的相关位置", fillcolor="#D6F0E5"];
+x [label="其他情况
+环保留 / 环重组 / 局部转化 / 未知
+净环数或产物形状不能单独分类
+不反转来源记录当另一方向的证据"];
+r [label="目标相关性重排
+当前目标片段的构筑证据优先
+同类名称或无关位置的环变化不够
+环变化不是天然高于局部修饰的万能标签"];
+f [label="召回边界
+排序不能找回根本没召回的先例
+预算内扩大真实结构或关联反应范围
+未找到与未完成分别报告", fillcolor="#FFF3D6"];
+end_result [label="之后才交给模型
+这是某已知反应的可参考位置与差异
+不是预先断言目标必须在这里开/闭环", fillcolor="#DBEAFE"];
+a -> b -> c -> d;
+d -> o; d -> cl; d -> x;
+o -> r; cl -> r; x -> r;
+r -> f -> end_result;
 }
