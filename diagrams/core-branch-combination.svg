@@ -20,10 +20,10 @@
 <!-- b -->
 <g id="node2" class="node">
 <title>b</title>
-<path fill="white" stroke="#cad5e2" d="M416,-954C416,-954 155,-954 155,-954 149,-954 143,-948 143,-942 143,-942 143,-901 143,-901 143,-895 149,-889 155,-889 155,-889 416,-889 416,-889 422,-889 428,-895 428,-901 428,-901 428,-942 428,-942 428,-948 422,-954 416,-954"/>
-<text text-anchor="middle" x="285.5" y="-932.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">自动核心候选与结构匹配</text>
-<text text-anchor="middle" x="285.5" y="-917.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">完整环系、连接链、分支与完整官能团</text>
-<text text-anchor="middle" x="285.5" y="-902.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">带明确上下文的小功能单元保留受控配额</text>
+<path fill="white" stroke="#cad5e2" d="M430.5,-954C430.5,-954 140.5,-954 140.5,-954 134.5,-954 128.5,-948 128.5,-942 128.5,-942 128.5,-901 128.5,-901 128.5,-895 134.5,-889 140.5,-889 140.5,-889 430.5,-889 430.5,-889 436.5,-889 442.5,-895 442.5,-901 442.5,-901 442.5,-942 442.5,-942 442.5,-948 436.5,-954 430.5,-954"/>
+<text text-anchor="middle" x="285.5" y="-932.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">自动生成多位点 Markush 家族</text>
+<text text-anchor="middle" x="285.5" y="-917.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">必要核心/官能团固定，非关键外围作为 R</text>
+<text text-anchor="middle" x="285.5" y="-902.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">一次检索多种实际支链与组合，避免全量枚举</text>
 </g>
 <!-- a&#45;&gt;b -->
 <g id="edge1" class="edge">
@@ -34,9 +34,9 @@
 <!-- c -->
 <g id="node3" class="node">
 <title>c</title>
-<path fill="white" stroke="#cad5e2" d="M444.5,-856C444.5,-856 126.5,-856 126.5,-856 120.5,-856 114.5,-850 114.5,-844 114.5,-844 114.5,-803 114.5,-803 114.5,-797 120.5,-791 126.5,-791 126.5,-791 444.5,-791 444.5,-791 450.5,-791 456.5,-797 456.5,-803 456.5,-803 456.5,-844 456.5,-844 456.5,-850 450.5,-856 444.5,-856"/>
-<text text-anchor="middle" x="285.5" y="-834.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">统一全核心映射</text>
-<text text-anchor="middle" x="285.5" y="-819.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">对称位点一致对应；多点连接与骨架嵌入整体比较</text>
+<path fill="white" stroke="#cad5e2" d="M423,-856C423,-856 148,-856 148,-856 142,-856 136,-850 136,-844 136,-844 136,-803 136,-803 136,-797 142,-791 148,-791 148,-791 423,-791 423,-791 429,-791 435,-797 435,-803 435,-803 435,-844 435,-844 435,-850 429,-856 423,-856"/>
+<text text-anchor="middle" x="285.5" y="-834.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">统一全核心映射与完整 R 谓词核验</text>
+<text text-anchor="middle" x="285.5" y="-819.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">对称位点一致对应；多点连接按联合块比较</text>
 <text text-anchor="middle" x="285.5" y="-804.8" font-family="Noto Sans CJK SC" font-size="14.00" fill="#172d45">不能为每条支链分别挑选互相冲突的映射</text>
 </g>
 <!-- b&#45;&gt;c -->

@@ -1,0 +1,43 @@
+digraph G {
+
+graph [rankdir=TB, bgcolor="#F8FAFC", pad="0.4", nodesep="0.40", ranksep="0.46", fontname="Noto Sans CJK SC", fontsize=22, labelloc=t];
+node [shape=box, style="rounded,filled", fillcolor="white", color="#CAD5E2", fontcolor="#172D45", fontname="Noto Sans CJK SC", fontsize=14, margin="0.20,0.14"];
+edge [color="#72849B", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=11, fontcolor="#526477"];
+
+label="默认 Markush：限制关键化学特征，联合检索可变支链";
+a [label="输入完整目标
+自动确定三层核心/锚点、连接位点与必要功能单元
+无需用户逐个指定重要或非重要支链", fillcolor="#DBEAFE"];
+fixed [label="固定必要要素
+定义任务的核心连接、功能团类别和位置
+必要氢数、电荷、键语义与联合关系", fillcolor="#D6F0E5"];
+variable [label="非关键外围设为 R
+不逐原子固定目标取代基
+允许不同实际支链和未锁定位置的额外取代", fillcolor="#D6F0E5"];
+family [label="生成有限的 Markush 家族
+固定框架 + R1、R2… + 必要约束
+示意：对位 R1–C6H4–O–R2
+具体片段 / 基团类别 / 可选 H / 无额外类别限制"];
+relations [label="核验查询的完整含义
+多个位点在同一具体分子、同一核心映射成立
+完整支链类别不只检查第一原子
+桥接或回环 R 整体约束；可变连接段必须语义明确"];
+search [label="家族召回与完整匹配
+安全的固定核心预筛 → 各 R 和联合谓词核验
+工具不支持或预算耗尽时标未评估/截断
+不能把单个通配原子当作无限长可选支链"];
+result [label="提取实际 R 分配与共存组合
+每个位点出现过什么？哪些 R 在同一分子中共存？
+只有分别见过的 R，不能拼成全部已知组合", fillcolor="#EAE0F7"];
+reaction [label="再分析真实反应与目标迁移
+哪个 R 本步引入、延长或保留？
+能否换一个实际反应物得到目标？
+被放宽的基团是否带来位阻、竞争或条件差异？"];
+out [label="返回给排序与模型
+具体分子、各 R 和真实联合实例、实际反应与出处
+目标覆盖、放宽依据、未解决差异与检索范围
+查询通式不等于具体目标已经合成", fillcolor="#DBEAFE"];
+a -> fixed; a -> variable;
+fixed -> family; variable -> family;
+family -> relations -> search -> result -> reaction -> out;
+}

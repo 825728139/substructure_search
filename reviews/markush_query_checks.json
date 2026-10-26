@@ -1,0 +1,193 @@
+{
+  "scope": "illustrative query checks only; no generalized compiler, reaction evidence or exhaustive sidechain space tested",
+  "rdkit_version": "2026.03.2",
+  "query": "[F,Cl,Br]-[c:1]1[c:2][c:3][c:4](-[OX2+0]-[#6])[c:5][c:6]1",
+  "generic_group_cases": [
+    {
+      "structure": "c1ccccc1CO",
+      "default_match": true,
+      "generic_ARY_match": true
+    },
+    {
+      "structure": "C1CCCCC1CO",
+      "default_match": true,
+      "generic_ARY_match": false
+    },
+    {
+      "structure": "c1ccncc1CO",
+      "default_match": true,
+      "generic_ARY_match": false
+    }
+  ],
+  "joint_family_cases": [
+    {
+      "case": "F_methoxy",
+      "structure": "COc1ccc(F)cc1",
+      "raw_skeleton_match": true,
+      "family_match": true,
+      "witnesses": [
+        {
+          "R1": "F",
+          "R2_carbon_count": 1,
+          "R2_atoms": [
+            0
+          ],
+          "core_atoms": [
+            5,
+            4,
+            3,
+            2,
+            8,
+            7
+          ],
+          "source_structure": "COc1ccc(F)cc1"
+        }
+      ]
+    },
+    {
+      "case": "Cl_ethoxy",
+      "structure": "CCOc1ccc(Cl)cc1",
+      "raw_skeleton_match": true,
+      "family_match": true,
+      "witnesses": [
+        {
+          "R1": "Cl",
+          "R2_carbon_count": 2,
+          "R2_atoms": [
+            0,
+            1
+          ],
+          "core_atoms": [
+            6,
+            5,
+            4,
+            3,
+            9,
+            8
+          ],
+          "source_structure": "CCOc1ccc(Cl)cc1"
+        }
+      ]
+    },
+    {
+      "case": "Br_propoxy",
+      "structure": "CCCOc1ccc(Br)cc1",
+      "raw_skeleton_match": true,
+      "family_match": true,
+      "witnesses": [
+        {
+          "R1": "Br",
+          "R2_carbon_count": 3,
+          "R2_atoms": [
+            0,
+            1,
+            2
+          ],
+          "core_atoms": [
+            7,
+            6,
+            5,
+            4,
+            10,
+            9
+          ],
+          "source_structure": "CCCOc1ccc(Br)cc1"
+        }
+      ]
+    },
+    {
+      "case": "branched_C3",
+      "structure": "CC(C)Oc1ccc(F)cc1",
+      "raw_skeleton_match": true,
+      "family_match": true,
+      "witnesses": [
+        {
+          "R1": "F",
+          "R2_carbon_count": 3,
+          "R2_atoms": [
+            0,
+            1,
+            2
+          ],
+          "core_atoms": [
+            7,
+            6,
+            5,
+            4,
+            10,
+            9
+          ],
+          "source_structure": "CC(C)Oc1ccc(F)cc1"
+        }
+      ]
+    },
+    {
+      "case": "H_requires_explicit_option",
+      "structure": "Oc1ccc(F)cc1",
+      "raw_skeleton_match": false,
+      "family_match": false,
+      "witnesses": []
+    },
+    {
+      "case": "wrong_relative_position",
+      "structure": "COc1cccc(F)c1",
+      "raw_skeleton_match": false,
+      "family_match": false,
+      "witnesses": []
+    },
+    {
+      "case": "heteroatom_inside_R2",
+      "structure": "COCCOc1ccc(F)cc1",
+      "raw_skeleton_match": true,
+      "family_match": false,
+      "witnesses": []
+    },
+    {
+      "case": "motifs_split_across_molecules",
+      "structure": "COc1ccccc1.Fc1ccccc1",
+      "raw_skeleton_match": false,
+      "family_match": false,
+      "witnesses": []
+    },
+    {
+      "case": "additional_unlocked_substituent",
+      "structure": "COc1ccc(F)c(C)c1",
+      "raw_skeleton_match": true,
+      "family_match": true,
+      "witnesses": [
+        {
+          "R1": "F",
+          "R2_carbon_count": 1,
+          "R2_atoms": [
+            0
+          ],
+          "core_atoms": [
+            5,
+            4,
+            3,
+            2,
+            9,
+            7
+          ],
+          "source_structure": "COc1ccc(F)c(C)c1"
+        }
+      ]
+    },
+    {
+      "case": "aryl_not_alkyl",
+      "structure": "c1ccc(Oc2ccc(F)cc2)cc1",
+      "raw_skeleton_match": true,
+      "family_match": false,
+      "witnesses": []
+    },
+    {
+      "case": "outside_C3_limit",
+      "structure": "CCCCOc1ccc(F)cc1",
+      "raw_skeleton_match": true,
+      "family_match": false,
+      "witnesses": []
+    }
+  ],
+  "explicit_optional_H_check": true,
+  "explicit_extra_site_lock_check": true
+}

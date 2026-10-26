@@ -1,4 +1,4 @@
-"""Render retrieval, reaction-evidence and reference-ranking design diagrams."""
+"""Render the current Markush-first retrieval and reference-evaluation design."""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parent
@@ -14,18 +14,18 @@ BASE
 label="先完成三层化学检索，再交给模型预测";
 a [label="用户输入完整目标分子
 自动生成结构与检索任务", fillcolor="#DBEAFE"];
-b [label="生成三层候选及原子对应，识别环系和化学要求
-严格视图 + 有标签的化学扩展
+b [label="三层默认生成 Markush 家族与目标位点对应
+固定重要结构/官能团 + 可变 R；完整身份并行补查
 互变异构 / 母体 / 可能保护形式 / 限定官能团变化"];
 g [label="① 整体结构/骨架与相关形式", fillcolor="#D6F0E5"];
 c [label="② 环系或链式核心与支链", fillcolor="#D6F0E5"];
 f [label="③ 局部结构与片段参考", fillcolor="#D6F0E5"];
-g1 [label="严格完整骨架身份复核
-相关形式通过独立视图召回
-原结构与差异保留，区分实际/类比/反向证据"];
-c1 [label="完整核心与所有位点一致对齐
-头尾及多点连接共同比较
-位点存在 / 引入 / 保留及共同中间体"];
+g1 [label="固定主要框架与必要功能单元
+外围多 R 家族召回，严格身份另核验
+真实支链组合与目标差异保留"];
+c1 [label="固定核心、多 R 位点联合匹配
+必要约束硬核验，其他支链保持可变
+位点存在 / 引入 / 保留与真实共存"];
 f1 [label="真实局部片段与连接环境召回
 关联不同实际产物及其反应集合
 不因目标无环跳过链式结构查询"];
@@ -59,10 +59,10 @@ input_scope [label="确认具体目标与组分范围
 具体结构、完整组分和通式分别处理
 主体不明时保留边界，不拼接伪共存"];
 a -> input_scope -> b;
-compiled [label="先按实际目标结构生成查询
+compiled [label="优先采用 Markush 多位点联合查询
 不预设目标开/闭环位置，不枚举虚拟环前体
 逐视图显式编译查询
-元素、电荷、氢数、环系与实例约束
+只固定必要元素/功能单元/位置，非关键支链放宽
 明确保留/放开属性，按任务采用包含或身份判据"];
 b -> compiled; compiled -> g; compiled -> c; compiled -> f;
 g -> g1 -> g2;
@@ -142,11 +142,11 @@ BASE
 label="支链互补：位点证据与真实共同中间体";
 a [label="目标头部 — 共同核心 — 目标尾部
 位点由目标连接关系定义，支持多个位点", fillcolor="#DBEAFE"];
-b [label="自动核心候选与结构匹配
-完整环系、连接链、分支与完整官能团
-带明确上下文的小功能单元保留受控配额"];
-c [label="统一全核心映射
-对称位点一致对应；多点连接与骨架嵌入整体比较
+b [label="自动生成多位点 Markush 家族
+必要核心/官能团固定，非关键外围作为 R
+一次检索多种实际支链与组合，避免全量枚举"];
+c [label="统一全核心映射与完整 R 谓词核验
+对称位点一致对应；多点连接按联合块比较
 不能为每条支链分别挑选互相冲突的映射"];
 x [label="实例甲覆盖目标头部
 实际产物与底物、保护状态、立体信息
@@ -523,13 +523,55 @@ h -> note [style=invis];
 }
 '''
 
+MARKUSH = '''digraph G {
+BASE
+label="默认 Markush：限制关键化学特征，联合检索可变支链";
+a [label="输入完整目标
+自动确定三层核心/锚点、连接位点与必要功能单元
+无需用户逐个指定重要或非重要支链", fillcolor="#DBEAFE"];
+fixed [label="固定必要要素
+定义任务的核心连接、功能团类别和位置
+必要氢数、电荷、键语义与联合关系", fillcolor="#D6F0E5"];
+variable [label="非关键外围设为 R
+不逐原子固定目标取代基
+允许不同实际支链和未锁定位置的额外取代", fillcolor="#D6F0E5"];
+family [label="生成有限的 Markush 家族
+固定框架 + R1、R2… + 必要约束
+示意：对位 R1–C6H4–O–R2
+具体片段 / 基团类别 / 可选 H / 无额外类别限制"];
+relations [label="核验查询的完整含义
+多个位点在同一具体分子、同一核心映射成立
+完整支链类别不只检查第一原子
+桥接或回环 R 整体约束；可变连接段必须语义明确"];
+search [label="家族召回与完整匹配
+安全的固定核心预筛 → 各 R 和联合谓词核验
+工具不支持或预算耗尽时标未评估/截断
+不能把单个通配原子当作无限长可选支链"];
+result [label="提取实际 R 分配与共存组合
+每个位点出现过什么？哪些 R 在同一分子中共存？
+只有分别见过的 R，不能拼成全部已知组合", fillcolor="#EAE0F7"];
+reaction [label="再分析真实反应与目标迁移
+哪个 R 本步引入、延长或保留？
+能否换一个实际反应物得到目标？
+被放宽的基团是否带来位阻、竞争或条件差异？"];
+out [label="返回给排序与模型
+具体分子、各 R 和真实联合实例、实际反应与出处
+目标覆盖、放宽依据、未解决差异与检索范围
+查询通式不等于具体目标已经合成", fillcolor="#DBEAFE"];
+a -> fixed; a -> variable;
+fixed -> family; variable -> family;
+family -> relations -> search -> result -> reaction -> out;
+}
+'''
+
 
 if __name__ == '__main__':
     diagrams = [('scaffold-search', MAIN), ('chemical-recall', CHEMISTRY),
                 ('core-branch-combination', CORE), ('fragment-retrieval', FRAGMENT),
                 ('reaction-reference-quality', QUALITY), ('attachment-methods', ATTACHMENT),
                 ('single-reactant-transfer', TRANSFER), ('topology-search', TOPOLOGY),
-                ('result-ranking', RANKING), ('ranking-dimensions', DIMENSIONS)]
+                ('result-ranking', RANKING), ('ranking-dimensions', DIMENSIONS),
+                ('markush-query', MARKUSH)]
     for name, body in diagrams:
         source = ROOT / f'{name}.dot'
         source.write_text(body.replace('BASE', BASE))

@@ -6,7 +6,9 @@
 
 ```text
 参考实例
-  candidate_id / view_id / target_occurrence_id
+  candidate_id / family_id / view_id / target_occurrence_id
+  fixed_query_features / R_site_constraints / joint_constraints
+  concrete_R_assignments / observed_joint_combination / matching_completeness
   structure_level / source_reaction_topology_assessment / actual_reaction_direction
   source_record_id / experiment_id / component_instance_id
   actual_structure / original_role / material_state / stage_id
@@ -79,3 +81,7 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 ## 排序证据与实验适配
 
 按 [独立排序规划](../ranking_plan.md)，实际条件、危险信息、分子量、价格等特征带材料/阶段/规模/日期与来源。能力限制匹配采用通过/不符合/未知/不适用；没有实验配置不声称适配，未知危害不等于低风险。类比建议不继承来源反应的收率或安全/可行性结论。高参考价值与适合当前实验条件分别输出，证据本身不因切换排序偏好而改变。
+
+## Markush 家族见证
+
+按 [家族查询规范](markush_queries.md)，家族是查询表达，具体分子与实验是证据。多个 R 条件须由同一实际分子和一致核心映射见证；单个位点取值曾出现不支持其任意组合已被制备。来源通式命中只说明有结构范围线索，具体获得/方法计数仍需具体实例。家族宽松性、未支持约束和遍历截断分别返回，不能静默当作全部条件成立。
