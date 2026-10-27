@@ -3,4 +3,16 @@
 .codex/
 __pycache__/
 *.py[cod]
-
+.venv/
+.runtime/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+var/
+dist/
+build/
+*.egg-info/

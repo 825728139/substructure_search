@@ -1,0 +1,49 @@
+[project]
+name = "reaction-reference"
+version = "0.1.0"
+description = "Target-oriented Markush and reaction precedent retrieval"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "rdkit==2026.3.2",
+    "fastapi>=0.128,<1",
+    "pydantic>=2.13.2,<3",
+    "pydantic-settings>=2,<3",
+    "uvicorn>=0.40,<1",
+    "httpx>=0.28,<1",
+    "pillow>=11,<13",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<10",
+    "pytest-cov>=6,<8",
+    "pytest-asyncio>=1,<2",
+    "ruff>=0.14,<1",
+    "mypy>=1.18,<2",
+    "hypothesis>=6,<7",
+    "import-linter>=2,<3",
+    "jsonschema>=4,<5",
+    "build>=1,<2",
+    "hatchling>=1,<2",
+]
+
+[tool.uv]
+# No installable business package exists yet. Environment bootstrap only.
+package = false
+
+[[tool.uv.index]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+asyncio_mode = "strict"

@@ -1,6 +1,6 @@
 # 项目实现计划：模块化的目标导向反应先例检索系统
 
-日期：2026-10-27。状态：工程设计，尚未创建业务代码、部署服务或完成真实召回验证。
+日期：2026-10-27。状态：工程设计；M0 的独立开发环境已安装并验证，尚未创建业务代码、部署服务或完成真实召回验证。
 
 ## 1. 工程目标与固定边界
 
@@ -28,26 +28,28 @@
 
 仓库已有主计划、详细化学规则、排序规范、审查记录、示意图和若干 RDKit 探针。它们是需求与局部行为依据，不是完整检索引擎或现成可复用的通用算法。
 
-本次只读核对的本地环境：Python 3.10.20、RDKit 2026.03.2、FastAPI 0.128.0、Pydantic 2.13.2、Uvicorn 0.40.0、HTTPX 0.28.1；该环境中没有 pytest、Ruff。项目目前没有 `pyproject.toml`、生产业务包或完整自动测试。
+制定计划时只读核对的旧环境为 Python 3.10.20、RDKit 2026.03.2、FastAPI 0.128.0、Pydantic 2.13.2、Uvicorn 0.40.0、HTTPX 0.28.1，其中没有 pytest、Ruff。这是历史参考，不是项目的安装目标。
+
+现已建立 `pyproject.toml`、`uv.lock`、项目专用 Python 3.12.12 和 `.venv`，安装运行与开发依赖，并通过 9 个现有探针、API 本地调用、图表生成及依赖一致性检查。环境位置、复现命令、锁定版本及验证范围统一记录在 [开发环境文档](ENVIRONMENT.md)。项目仍没有生产业务包或完整引擎测试；环境就绪仅完成 M0 的环境部分，不代表领域模型、配置 schema、导入边界或 CI 已完成。
 
 ### 2.2 技术基线
 
 | 决策 | 初始方案 | 原因与落地要求 |
 |---|---|---|
 | 架构 | 单仓库、模块化单体；化学计算独立进程 | 先保证端到端可运行与模块隔离，按实测瓶颈决定是否拆服务 |
-| 语言 | 新项目拟用 Python 3.12；M0 核对依赖后冻结 | 现有探针在 3.10 已运行不代表 3.12 自动兼容；M0 在隔离环境重跑并记录差异 |
-| 化学工具 | RDKit；第一候选基线 2026.03.2 | 与现有探针对齐，升级必须做查询语义和原子对应回归，不使用浮动 latest |
+| 语言 | Python 3.12.12，已安装并固定 | 已在隔离环境重跑现有探针；业务模块仍需各自的兼容性和行为测试 |
+| 化学工具 | RDKit 固定为 2026.03.2 | 已通过现有探针；升级必须做查询语义和原子对应回归，不使用浮动 latest |
 | 数据契约 | Pydantic v2 的受约束模型及 JSON Schema | 必须字段、枚举、未知状态、版本和来源可验证；化学对象不直接暴露给 API |
 | 入口 | Python SDK、CLI、FastAPI `/v1` | 三种入口复用应用服务，避免 CLI 与 HTTP 存在两套化学逻辑 |
 | I/O | 异步且有超时；独立适配器 | 外部资料不可用不阻塞所有核心计算 |
 | CPU 工作 | 受监督子进程与全局并发上限 | Markush 枚举等原生调用可能长时间运行，不能仅靠协程超时释放资源 |
 | 配置 | 类型化环境设置 + 版本化 JSON 规则/策略 | 沿用现有 JSON 配置，在 M0 迁为统一 schema；未知字段和非法预算拒绝启动 |
-| 依赖与构建 | `pyproject.toml` + 锁文件，拟采用 uv | 运行、开发、可选连接器依赖分组；锁具体版本，CI 与镜像使用同一锁 |
-| 质量工具 | pytest、Ruff、mypy、Hypothesis、import-linter | 测试行为、性质和依赖边界；具体版本在 M0 核对并冻结 |
+| 依赖与构建 | `pyproject.toml` + `uv.lock`，已采用 uv | 运行与开发依赖已锁定；可选连接器按需加入；未来 CI 与镜像使用同一锁 |
+| 质量工具 | pytest、Ruff、mypy、Hypothesis、import-linter，已安装并锁定 | 行为/性质测试、业务类型检查和导入边界随 M0/M1 的真实模块落地 |
 | 可观测性 | 结构化日志、阶段指标、可选 OpenTelemetry 导出 | 先有统一事件模型，再接观测后端，核心代码不绑定监控平台 |
 | 运行封装 | 单机 CLI/容器 API 为首版；后续可接队列 | 不默认引入分布式调度、消息总线或微服务数量负担 |
 
-所有版本均需在新环境中解析锁定，以上不是已完成安装声明。FastAPI 的响应后后台任务不承担关键计算作业；其文档对重计算有专门说明。[框架文档](https://fastapi.tiangolo.com/tutorial/background-tasks/)
+依赖的实际安装版本和验证范围以环境文档及锁文件为准；API、任务调度和业务包仍为待实现项。FastAPI 的响应后后台任务不承担关键计算作业；其文档对重计算有专门说明。[框架文档](https://fastapi.tiangolo.com/tutorial/background-tasks/)
 
 ## 3. 逻辑架构与依赖方向
 
@@ -83,7 +85,8 @@ flowchart TD
 
 ```text
 substructure_search/
-├── README.md                         # 产品定位、安装、快速运行、已支持能力
+├── README.md                         # 产品定位、文档入口；业务实现后补快速运行
+├── ENVIRONMENT.md                    # 环境复现命令与检查范围
 ├── pyproject.toml                    # 构建、依赖组、CLI、质量工具设置
 ├── uv.lock                           # M0 解析验证后的锁文件
 ├── .python-version
@@ -235,6 +238,8 @@ substructure_search/
 ├── scripts/
 │   ├── validate_design.py           # 已有文档检查
 │   ├── plan-git                     # 当前工作区 Git 入口
+│   ├── project-uv                   # 项目专用解释器、环境与缓存入口
+│   ├── verify_environment.py        # 依赖协作、历史探针和图表验证
 │   ├── export_schemas.py
 │   ├── validate_rules.py
 │   └── smoke.py
@@ -545,7 +550,7 @@ M3/M4 顺序可按交付需求微调，但 CPU 超时与全局上限的基础从
 
 ### 第一批：把语义固定在类型和样例上
 
-1. 建立 `pyproject.toml`、隔离环境、锁文件和基础质量命令。
+1. 环境部分已完成：`pyproject.toml`、隔离环境、锁文件和环境验证入口。继续补齐业务包构建、导入边界、完整质量命令与 CI。
 2. 定义 MoleculeRecord、QueryFamilySpec、ReactionRecord、Claim、Proposal、RunSnapshot 及原因码。
 3. 从现有研究整理最小 fixture：普通 OH/电荷、联合 R、同产物不同反应、重复实例、证据冲突和未知。
 4. 实现 `JsonlSource`、单机 executor 与只读快照契约。
