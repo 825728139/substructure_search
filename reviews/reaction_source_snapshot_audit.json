@@ -1,0 +1,205 @@
+{
+  "scope": "representation_audit_only_not_experiment_or_mapping_validation",
+  "checked_at": "2026-10-27T09:23:12.179680+00:00",
+  "rdkit_version": "2026.03.2",
+  "snapshot_sha256": "a1533a8b52ec7a1f4d34785cb1139fcaed1cbfa681d9ea7ac90b03cb30b75955",
+  "counts": {
+    "records": 427,
+    "parseable_reaction_smiles": 427,
+    "reaction_smiles_with_atom_maps": 0
+  },
+  "roles": {
+    "product": {
+      "smiles_entries": 427,
+      "parseable_smiles": 427,
+      "detail_entries": 427,
+      "details_with_id": 0
+    },
+    "reactant": {
+      "smiles_entries": 809,
+      "parseable_smiles": 809,
+      "detail_entries": 809,
+      "details_with_id": 0,
+      "disconnected_entries": 49
+    },
+    "reagent": {
+      "smiles_entries": 616,
+      "parseable_smiles": 616,
+      "detail_entries": 616,
+      "details_with_id": 0,
+      "disconnected_entries": 175
+    },
+    "solvent": {
+      "smiles_entries": 396,
+      "parseable_smiles": 396,
+      "detail_entries": 396,
+      "details_with_id": 0
+    },
+    "catalyst": {
+      "smiles_entries": 7,
+      "parseable_smiles": 7,
+      "detail_entries": 7,
+      "details_with_id": 0,
+      "disconnected_entries": 1
+    }
+  },
+  "templates": {
+    "1": {
+      "parseable": 427,
+      "single_product_template": 423,
+      "source_product_match_connectivity": 427,
+      "source_product_match_strict_stereo": 425
+    },
+    "2": {
+      "parseable": 427,
+      "single_product_template": 425,
+      "source_product_match_connectivity": 427,
+      "source_product_match_strict_stereo": 425
+    },
+    "3": {
+      "parseable": 427,
+      "single_product_template": 426,
+      "source_product_match_connectivity": 427,
+      "source_product_match_strict_stereo": 427
+    },
+    "4": {
+      "parseable": 427,
+      "single_product_template": 427,
+      "source_product_match_connectivity": 427,
+      "source_product_match_strict_stereo": 425
+    }
+  },
+  "unique_product_arrays": 417,
+  "unique_reaction_smiles": 421,
+  "repeated_product_groups": [
+    [
+      17,
+      22
+    ],
+    [
+      19,
+      233
+    ],
+    [
+      51,
+      55
+    ],
+    [
+      74,
+      95
+    ],
+    [
+      162,
+      181
+    ],
+    [
+      234,
+      306
+    ],
+    [
+      286,
+      295
+    ],
+    [
+      345,
+      415
+    ],
+    [
+      346,
+      414
+    ],
+    [
+      404,
+      417
+    ]
+  ],
+  "repeated_reaction_groups": [
+    [
+      17,
+      22
+    ],
+    [
+      51,
+      55
+    ],
+    [
+      74,
+      95
+    ],
+    [
+      162,
+      181
+    ],
+    [
+      286,
+      295
+    ],
+    [
+      345,
+      415
+    ]
+  ],
+  "issues": {
+    "disconnected_catalyst_entry": {
+      "records": 1,
+      "example_ids": [
+        391
+      ]
+    },
+    "disconnected_reactant_entry": {
+      "records": 49,
+      "example_ids": [
+        2,
+        28,
+        37,
+        60,
+        63,
+        64,
+        152,
+        154,
+        156,
+        158,
+        160,
+        162
+      ]
+    },
+    "disconnected_reagent_entry": {
+      "records": 153,
+      "example_ids": [
+        2,
+        3,
+        4,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    "r1_source_product_strict_stereo_mismatch": {
+      "records": 2,
+      "example_ids": [
+        7,
+        360
+      ]
+    },
+    "r2_source_product_strict_stereo_mismatch": {
+      "records": 2,
+      "example_ids": [
+        360,
+        365
+      ]
+    },
+    "r4_source_product_strict_stereo_mismatch": {
+      "records": 2,
+      "example_ids": [
+        7,
+        360
+      ]
+    }
+  }
+}
