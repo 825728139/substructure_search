@@ -168,7 +168,7 @@ substructure_search/
 │   │   └── coverage.py              # 家族/位置/反应和结构覆盖
 │   ├── reaction_analysis/
 │   │   ├── mapping_quality.py       # 形式、局部稳定性、来源支持
-│   │   ├── changes.py               # 已记录两侧的变化
+│   │   ├── changes.py               # 原始差异、表示差异核验及保留变化
 │   │   ├── classify.py              # 类型依据与未知，不按名字猜中心
 │   │   ├── attachment.py            # 目标母核—支链边界贡献
 │   │   ├── topology.py              # 来源开闭环/重组/环保留
@@ -287,7 +287,7 @@ substructure_search/
 | `CompiledMatchPlan` | family_revision、必要筛选、精确 matcher 配置、后检查、能力需求 | 不支持条件不能静默丢掉；预筛不得比最终语义更窄 |
 | `MatchWitness` | source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态、直接目标关系（如适用） | 区分严格记录身份与满足目标要求；纯核心预筛通过不算完整见证 |
 | `ReactionRecord` | experiment_id、真实组分实例、阶段、观察、条件、来源、映射来源 | 未知反应物不能由默认值补出；净变化不自动拆为多步 |
-| `AttachmentAssessment` | attachment_id、源反应变化、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；缺失副产物不制造虚假断键，类型名与目标贡献分开 |
+| `AttachmentAssessment` | attachment_id、原始/表示/保留变化、表示规则与核验状态、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；遗漏副产物与共振写法不制造虚假变化，类型名与目标贡献分开 |
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
 | `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放组合与目标产物位置、枚举/校验状态、条件缺口、proposal_not_observed | 组合内逐产物核验，保留原子追踪；图回放不混入实验事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
@@ -586,7 +586,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 123 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 126 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 
@@ -665,12 +665,12 @@ M3/M4 顺序可按交付需求微调，但 CPU/来源查询超时与全局上限
 2. 定义 MoleculeRecord、QueryFamilySpec、ReactionRecord、Claim、Proposal、RunSnapshot 及原因码。
 3. 从现有研究整理最小 fixture：普通 OH/电荷、联合 R、同产物不同反应、重复实例、证据冲突和未知。
 4. 实现 `JsonlSource`、实际来源只读适配、单机 executor 与来源快照契约；以小型固定导出作对照。
-5. 实现目标原子引用和 Markush 初级编译/完整匹配，建立 oracle 对照。
+5. 实现目标原子引用、有限共振/芳香性统一表示和 Markush 初级编译/完整匹配，建立 oracle 对照。
 6. 提供 CLI 从目标到家族/R 分配及实际反应候选，附完整性说明。
 
 ### 第二批：让“参考反应”有明确化学含义
 
-1. 把现有映射数据转换为可核查的实例对应，逐关键键给出支持层级。
+1. 把现有映射数据转换为可核查的实例对应，逐关键键给出支持层级；有限共振规则与芳香性处理保留原始差异、表示判定和未确定状态，避免伪反应中心。
 2. 实现实际观察结果与阶段解析契约；不支持的原文结构由适配器标未知，不让核心临时调用合成模型猜测。
 3. 实现母核—支链贡献、环变化分类和证据聚合，确保反应名称不覆盖实际变化。
 4. 输出 ReferencePackage；接入基础排序和单元/端到端测试。

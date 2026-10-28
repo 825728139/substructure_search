@@ -149,6 +149,270 @@
       "actual_local_bond_count": 3,
       "naive_map_key_count": 1,
       "note": "Use local atom references; absent mapping is not a cross-side correspondence."
+    },
+    {
+      "case": "硝基和带同位素羧酸根的共振写法不代表化学转化",
+      "illustration_only": true,
+      "examples": [
+        {
+          "case": "nitro",
+          "mapped_forms": [
+            "[CH3:1][N+:2](=[O:3])[O-:4]",
+            "[CH3:1][N+:2]([O-:3])=[O:4]"
+          ],
+          "raw_changes": {
+            "formed": [],
+            "broken": [],
+            "order_changes": [
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          "raw_charge_changes": [
+            {
+              "map": 3,
+              "before": 0,
+              "after": -1
+            },
+            {
+              "map": 4,
+              "before": -1,
+              "after": 0
+            }
+          ],
+          "common_mapped_contributors": [
+            "[CH3:1][N+:2](=[O:3])[O-:4]",
+            "[CH3:1][N+:2]([O-:3])=[O:4]"
+          ],
+          "atom_and_isotope_identity_preserved": true
+        },
+        {
+          "case": "isotope_labeled_carboxylate",
+          "mapped_forms": [
+            "[CH3:1][C:2](=[18O:3])[O-:4]",
+            "[CH3:1][C:2]([18O-:3])=[O:4]"
+          ],
+          "raw_changes": {
+            "formed": [],
+            "broken": [],
+            "order_changes": [
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          "raw_charge_changes": [
+            {
+              "map": 3,
+              "before": 0,
+              "after": -1
+            },
+            {
+              "map": 4,
+              "before": -1,
+              "after": 0
+            }
+          ],
+          "common_mapped_contributors": [
+            "[CH3:1][C:2](=[18O:3])[O-:4]",
+            "[CH3:1][C:2]([18O-:3])=[O:4]"
+          ],
+          "atom_and_isotope_identity_preserved": true
+        }
+      ],
+      "note": "A common contributor witnesses these representation relationships; no atom-map or isotope permutation is used."
+    },
+    {
+      "case": "硝基共振写法不应扩大实际O甲基化的变化区域",
+      "illustration_only": true,
+      "mapped_reactants": "[CH3:11][I:12].[O-:1][c:2]1[cH:3][cH:4][c:5]([N+:6](=[O:7])[O-:8])[cH:9][cH:10]1",
+      "mapped_products": "[I-:12].[O:1]([c:2]1[cH:3][cH:4][c:5]([N+:6]([O-:7])=[O:8])[cH:9][cH:10]1)[CH3:11]",
+      "raw_changes": {
+        "formed": [
+          [
+            1,
+            11
+          ]
+        ],
+        "broken": [
+          [
+            11,
+            12
+          ]
+        ],
+        "order_changes": [
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            8
+          ]
+        ]
+      },
+      "consistent_reactant_contributor": "[CH3:11][I:12].[O-:1][c:2]1[cH:3][cH:4][c:5]([N+:6]([O-:7])=[O:8])[cH:9][cH:10]1",
+      "tool_contributor_before_aromatic_normalization": {
+        "formed": [
+          [
+            1,
+            11
+          ]
+        ],
+        "broken": [
+          [
+            11,
+            12
+          ]
+        ],
+        "order_changes": [
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            10
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      },
+      "changes_in_consistent_representation": {
+        "formed": [
+          [
+            1,
+            11
+          ]
+        ],
+        "broken": [
+          [
+            11,
+            12
+          ]
+        ],
+        "order_changes": []
+      },
+      "raw_charge_changes": [
+        {
+          "map": 1,
+          "before": -1,
+          "after": 0
+        },
+        {
+          "map": 7,
+          "before": 0,
+          "after": -1
+        },
+        {
+          "map": 8,
+          "before": -1,
+          "after": 0
+        },
+        {
+          "map": 12,
+          "before": 0,
+          "after": -1
+        }
+      ],
+      "retained_charge_changes": [
+        {
+          "map": 1,
+          "before": -1,
+          "after": 0
+        },
+        {
+          "map": 12,
+          "before": 0,
+          "after": -1
+        }
+      ],
+      "note": "A supplied graph illustration, not an experiment or a minimum-edit classification algorithm. The O-C formation and C-I loss remain."
+    },
+    {
+      "case": "互变异构质子化和加氢不因同重原子连接而消除",
+      "illustration_only": true,
+      "examples": [
+        {
+          "case": "keto_enol",
+          "mapped_forms": [
+            "[CH3:1][CH:2]=[O:3]",
+            "[CH2:1]=[CH:2][OH:3]"
+          ],
+          "same_fixed_atom_H_charge_connectivity": false,
+          "raw_changes": {
+            "formed": [],
+            "broken": [],
+            "order_changes": [
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          }
+        },
+        {
+          "case": "protonation",
+          "mapped_forms": [
+            "[CH3:1][C:2](=[O:3])[O-:4]",
+            "[CH3:1][C:2](=[O:3])[OH:4]"
+          ],
+          "same_fixed_atom_H_charge_connectivity": false,
+          "raw_changes": {
+            "formed": [],
+            "broken": [],
+            "order_changes": []
+          }
+        },
+        {
+          "case": "hydrogenation",
+          "mapped_forms": [
+            "[CH2:1]=[CH:2][CH3:3]",
+            "[CH3:1][CH2:2][CH3:3]"
+          ],
+          "same_fixed_atom_H_charge_connectivity": false,
+          "raw_changes": {
+            "formed": [],
+            "broken": [],
+            "order_changes": [
+              [
+                1,
+                2
+              ]
+            ]
+          }
+        }
+      ],
+      "note": "These distinct structures remain distinct; the graph pairs alone do not establish observed reactions."
     }
   ]
 }
