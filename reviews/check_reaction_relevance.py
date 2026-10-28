@@ -1,9 +1,10 @@
-"""Second-round structural checks. No experimental feasibility is asserted.
+"""Structural relevance checks. No experimental feasibility is asserted.
 The atom-mapped multicomponent example is an invented graph illustration.
 """
 from pathlib import Path
 import json
-from rdkit import Chem, rdBase
+from rdkit import Chem, DataStructs, rdBase
+from rdkit.Chem import Descriptors, rdFingerprintGenerator
 
 report={'rdkit_version':rdBase.rdkitVersion,'scope':'structure_and_atom_correspondence_only','cases':[]}
 def mol(smiles):
@@ -77,6 +78,41 @@ strict=unlabelled.HasSubstructMatch(labelled)
 broad=labelled.HasSubstructMatch(unlabelled)
 assert not strict and broad
 report['cases'].append({'case':'明确同位素查询与未指定查询语义不同','labelled_query_matches_unlabelled':strict,'unlabelled_query_matches_labelled':broad})
+
+# Near-sized candidates can be biased toward one R position under a global
+# fingerprint ranking. These are invented structures, not reaction precedents.
+target_smiles = 'CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1OCCN(C)C'
+target = mol(target_smiles)
+generator = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
+target_fp = generator.GetFingerprint(target)
+head_query = Chem.MolFromSmarts('CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1O')
+tail_query = Chem.MolFromSmarts('CCOC(=O)c1cc(N)ccc1[O]-[CH2]-[CH2]-[NX3]([CH3])[CH3]')
+candidates = []
+for label, smiles in [
+    ('head_1', 'CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1OCCN(C)CC'),
+    ('head_2', 'CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1OCCN(CC)CC'),
+    ('head_3', 'CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1OCCC'),
+    ('tail_1', 'CCOC(=O)c1cc(NC(=O)C2CCCCC2)ccc1OCCN(C)C'),
+]:
+    molecule = mol(smiles)
+    ratio = Descriptors.MolWt(molecule) / Descriptors.MolWt(target)
+    assert abs(ratio - 1) < 0.08  # describes this example, not a runtime cutoff
+    candidates.append({
+        'id': label, 'smiles': smiles, 'molecular_weight_ratio': ratio,
+        'similarity': DataStructs.TanimotoSimilarity(target_fp, generator.GetFingerprint(molecule)),
+        'head_at_declared_core_position': molecule.HasSubstructMatch(head_query),
+        'tail_at_declared_core_position': molecule.HasSubstructMatch(tail_query),
+    })
+ordered = sorted(candidates, key=lambda row: (-row['similarity'], row['id']))
+assert all(row['head_at_declared_core_position'] for row in ordered[:3])
+assert not any(row['tail_at_declared_core_position'] for row in ordered[:3])
+assert [row['id'] for row in candidates if row['tail_at_declared_core_position']] == ['tail_1']
+report['cases'].append({
+    'case': '近体量的整体相似前列可能遗漏另一目标支链', 'illustration_only': True,
+    'target': target_smiles, 'candidates': ordered, 'illustrative_top_k': 3,
+    'top_k_tail_coverage': False, 'declared_tail_query_finds_reference_structure': True,
+    'note': 'Only structural coverage is checked; no reaction evidence, child-family compiler or scheduler tested.',
+})
 
 out=Path(__file__).with_name('reaction_relevance_checks.json')
 out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

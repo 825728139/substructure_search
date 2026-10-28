@@ -102,6 +102,21 @@ selected_similarity = DataStructs.TanimotoSimilarity(
 assert aggregate_similarity < selected_similarity == 1.0
 assert Descriptors.MolWt(aggregate) > 2 * Descriptors.MolWt(selected)
 
+# A cached tuple of local atom indices cannot be copied to another ordering.
+cache_query = Chem.MolFromSmarts("[CX3](=[OX1])-[NX3]")
+cache_target = Chem.MolFromSmiles("CCNC(=O)c1ccccc1")
+old_match = cache_target.GetSubstructMatch(cache_query)
+new_order = list(reversed(range(cache_target.GetNumAtoms())))
+renumbered = Chem.RenumberAtoms(cache_target, new_order)
+new_match = renumbered.GetSubstructMatch(cache_query)
+old_to_new = {old: new for new, old in enumerate(new_order)}
+rebound = tuple(old_to_new[index] for index in old_match)
+assert Chem.MolToSmiles(cache_target) == Chem.MolToSmiles(renumbered)
+assert old_match != new_match and rebound == new_match
+stale_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in old_match]
+correct_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in rebound]
+assert stale_symbols != ["C", "O", "N"] and correct_symbols == ["C", "O", "N"]
+
 result = {
     "rdkit_version": rdBase.rdkitVersion,
     "scope": "illustrative_query_and_screening_semantics_not_performance_benchmark",
@@ -113,6 +128,16 @@ result = {
     "illustrative_similarity_threshold": 0.5,
     "screening_examples": screening,
     "reaction_reference_value_assessed": False,
+    "cached_index_rebinding_example": {
+        "query": Chem.MolToSmarts(cache_query),
+        "same_canonical_structure": True,
+        "old_match": old_match,
+        "new_match": new_match,
+        "rebound_match": rebound,
+        "stale_symbols": stale_symbols,
+        "correct_symbols": correct_symbols,
+        "scope": "Atom-order counterexample only; no production cache implementation tested.",
+    },
     "selection_order_example": {
         "scope": "illustrative_not_runtime_thresholds",
         "target_smiles": selected_smiles,
@@ -137,5 +162,5 @@ Path(__file__).with_name("query_semantics_checks.json").write_text(
     json.dumps(result, ensure_ascii=False, indent=2) + "\n"
 )
 print(
-    "Query predicates, 5 screening cases, selection order and representation examples verified; no performance benchmark."
+    "Query predicates, screening, selection order, representations and cached-index rebinding verified; no performance benchmark."
 )

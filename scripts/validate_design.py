@@ -70,6 +70,14 @@ assert (
     <= pilot["max_total_tasks"]
 )
 assert pilot["reaction_analysis_batch_size"] <= pilot["max_reaction_records_analyzed"]
+assert (
+    3 * pilot["minimum_records_per_layer_if_available"] + 1 <= pilot["max_display_items_per_view"]
+)
+assert (
+    pilot["directed_R_followups"]["max_child_families"]
+    <= pilot["markush_queries"]["max_families_per_target"]
+)
+assert pilot["directed_R_followups"]["shares_existing_budgets"]
 assert 0 < pilot["input_usage"]["max_task_attempts"] <= pilot["max_total_tasks"]
 assert pilot["input_usage"]["shares_global_budget"]
 assert pilot["procedure_references"]["shares_record_expansion_budget"]

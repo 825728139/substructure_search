@@ -59,5 +59,8 @@ scope -> index -> search;
 scope -> similar;
 similar -> search;
 search -> result -> reaction -> out;
-reaction -> scope [style=dashed,label="当前范围方法不足且有预算时放宽"];
+result:w -> family:w [style=dashed,constraint=false,label="位点缺口
+预算内定向补查"];
+reaction:e -> scope:e [style=dashed,constraint=false,label="当前范围方法不足
+预算内放宽"];
 }

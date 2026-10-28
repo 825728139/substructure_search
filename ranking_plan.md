@@ -233,6 +233,10 @@ for 每个目标任务:
 
 `candidate_key` 至少区分结果种类、来源命名空间与记录、来源版本、目标任务、匹配见证及推定 ID。同一源反应的两个替换建议不能共用一个排序键；无来源记录 ID 的推定使用固定结构、规则及来源派生的 ID。键用于展示与游标稳定性，不代表化学优先级。
 
+任务内候选合并为展示卡片后，卡片使用快照内稳定的 `display_item_id`，保存全部 member_candidate_keys 和任务标签。来源卡片按有据来源关系聚合，推定卡片按具体 Proposal 区分；分页使用卡片序号/ID，不拿重复出现的源反应 ID 充当唯一游标。
+
+卡片合并不合并化学结论：它对目标位点甲的成键支持、对位点乙的仅结构匹配分别显示，不能把最强贡献标签传播到所有关联任务。
+
 首版不输出一个未经校准的“综合可合成率/安全分”。未来若引入学习排序，用专家成对比较和固定测试集训练，仍需保留上述硬边界、证据标签和原因解释。文献已有 EcoScale 等多参数方法可作为维度参考，但不能未经校准把其分数等同于本任务价值。[EcoScale 原始研究](https://www.beilstein-journals.org/bjoc/articles/2/3)
 
 ### 10.3 缺失信息与重复惩罚
@@ -250,6 +254,8 @@ for 每个目标任务:
 一个产物关联大量脱保护反应时，应继续有预算地分析其他反应；不能让最早返回的记录决定最终方法集。尚未分析的反应不视为差或无用，统计分析覆盖率和截断原因。
 
 去重按真实实验/来源关系，而非仅按反应 SMILES。不同条件下的不同选择性结果保留；相同实例跨层展示不增加独立支持。最终结果兼顾不同构筑方式、目标位点、关键未覆盖片段及证据来源，不因一次高分把结果全塞成同一种偶联或同一篇文献。
+
+整体相似度集中在某一侧支链时，可通过受控定向家族补另一个目标位点的参考；补回的结构仍需核验实际反应贡献。展示去重按“来源记录卡片或具体 Proposal”计项，实验与分子计数另报。同一源反应的两个不同替换建议占两个建议名额，但不变成两个新实验，也不用于补足某层的有据方法数量。
 
 ## 12. 几个必须符合的比较结果
 
@@ -284,6 +290,7 @@ for 每个目标任务:
   contribution_group / evidence_group / actual_or_inferred
   reference_rank + profile/version + scope
   comparison_group / priority_band / display_position / candidate_key
+  display_item_id / member_candidate_keys[] / source_or_proposal
   lab_fit_state + explicit_constraints + unresolved_requirements
   features[]: value, unit, entity, stage, scale, source, date, known/unknown
   reaction_material_hazards[] + regulatory_lookup_scope

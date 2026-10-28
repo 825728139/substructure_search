@@ -66,6 +66,36 @@
     }
   ],
   "reaction_reference_value_assessed": false,
+  "cached_index_rebinding_example": {
+    "query": "[C&X3](=[O&X1])-[N&X3]",
+    "same_canonical_structure": true,
+    "old_match": [
+      3,
+      4,
+      2
+    ],
+    "new_match": [
+      7,
+      6,
+      8
+    ],
+    "rebound_match": [
+      7,
+      6,
+      8
+    ],
+    "stale_symbols": [
+      "C",
+      "C",
+      "C"
+    ],
+    "correct_symbols": [
+      "C",
+      "O",
+      "N"
+    ],
+    "scope": "Atom-order counterexample only; no production cache implementation tested."
+  },
   "selection_order_example": {
     "scope": "illustrative_not_runtime_thresholds",
     "target_smiles": "CCNC(=O)c1ccccc1",

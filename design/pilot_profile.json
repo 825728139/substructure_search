@@ -14,7 +14,7 @@
   "reserved_reaction_analysis_tasks": 4,
   "max_related_record_edges": 2,
   "max_record_expansion_tasks": 6,
-  "max_unique_returned_records": 18,
+  "max_display_items_per_view": 18,
   "minimum_records_per_layer_if_available": 4,
   "global_time_budget_ms": 10000,
   "rules": [
@@ -118,5 +118,11 @@
     "shares_record_expansion_budget": true,
     "inherit_example_outcomes": false,
     "on_ambiguous_or_cyclic_reference": "unresolved"
+  },
+  "directed_R_followups": {
+    "activation": "uncovered_target_site_after_initial_joint_matching",
+    "max_child_families": 2,
+    "shares_existing_budgets": true,
+    "new_family_identity_required": true
   }
 }

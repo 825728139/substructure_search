@@ -181,6 +181,18 @@
       "given": "甲有明确实验从保护前体制得完整目标，只做脱保护；乙通过偶联制得相近类似物并支持某个局部连接。",
       "view": "reference",
       "expected_behavior": "甲在完整目标已有取得记录中优先保留，仍标其所需前体；乙可在该局部连接方法区优先，甲不能被误算作该键形成，也不能被全局摘要挤掉。"
+    },
+    {
+      "id": "complementary_site_candidate_bias",
+      "given": "体量接近的整体相似前列都保留目标头部，却没有目标尾部的同位点参考。",
+      "view": "reference",
+      "expected_behavior": "按未覆盖位点在原预算内生成定向子家族，其他R保持可变；取得的结构仍需真实反应贡献核验，不将跨实例分别覆盖算作共存。"
+    },
+    {
+      "id": "display_items_vs_source_experiments",
+      "given": "一个源反应卡片及依附它的两个不同单底物替换建议进入摘要。",
+      "view": "both",
+      "expected_behavior": "计3个展示条目、1个被引用实验和2个建议；分页ID区分卡片，建议不增加制备或方法成功计数。"
     }
   ]
 }
