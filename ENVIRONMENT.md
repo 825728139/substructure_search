@@ -23,7 +23,7 @@
 
 首次安装需要联网；已安装且缓存完整时，可以在 uv 命令中加入 `--offline`。缺少缓存会明确失败，不会更换依赖版本。
 
-当前默认 Python 包索引为清华 TUNA 的 PyPI 镜像，已在 `pyproject.toml` 显式配置，锁文件记录具体下载地址和内容哈希。本机访问 PyPI 官方下载较慢，因此选用实测可用的镜像。更换索引时需要重新生成并审阅锁文件，不能带着另一来源的锁文件假定 `--locked` 会自动切换来源。
+当前默认 Python 包索引为清华 TUNA 的 PyPI 镜像，已在 `pyproject.toml` 显式配置，锁文件记录具体下载地址和内容哈希。更换索引时需要重新生成并审阅锁文件。
 
 [scripts/project-uv](scripts/project-uv) 将解释器、虚拟环境和下载缓存限定在项目目录：
 
@@ -40,7 +40,7 @@
 
 ### 当前机器的解释器来源
 
-本机访问 GitHub 的 Python 独立发行版下载很慢并触发重试，因此改用已有 Conda，从官方 `repo.anaconda.com/pkgs/main` 获取同版本 Python。Conda 仅提供独立解释器；项目依赖全部安装在 uv 管理的 `.venv` 中。重建本机环境可使用：
+本机通过 Conda 安装 Python 解释器，项目依赖由 uv 管理。重建本机环境可使用：
 
 ```bash
 CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
@@ -64,13 +64,13 @@ CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
 | pytest / Ruff / mypy | 9.1.1 / 0.17.3 / 1.20.2 |
 | Hypothesis / import-linter | 6.170.12 / 2.15 |
 
-52 个已安装第三方包通过依赖一致性检查；`sync --locked --offline --check` 确认无需变更。新环境中 9 个现有化学探针通过、11 张设计图重新生成成功、31 份 Markdown 和 11 个 SVG 的完整性检查通过。新增环境脚本通过 Ruff 检查。
+环境依赖检查、9 个局部化学探针和 11 张设计图生成已通过。每次验证的版本、输出与时间保存在本地报告中；文档与数据文件数量由检查脚本动态统计。
 
 [环境检查脚本](scripts/verify_environment.py) 验证：
 
 1. Python 3.12 及声明的主要依赖可以导入，并记录版本。
 2. FastAPI、Pydantic 与 HTTPX 的本地异步 ASGI 调用协同正常；严格字段校验拒绝类型错误输入，调用有整体时间上限。
-3. RDKit 能解析结构、生成分子图片；已有 `reviews/check_*.py` 和 `audits/probes/*.py` 探针成功执行。
+3. RDKit 能解析结构、生成分子图片；`reviews/check_*.py` 中的 9 个探针成功执行，范围见 [验证说明](reviews/README.md)。
 4. Graphviz 能重新生成现有设计图；Markdown 链接和 SVG 文件通过完整性检查。
 
 探针和图表在临时目录执行，避免验证时重写已经提交的研究结果。完整报告保存在本地 `.cache/environment-check/latest.json`。
@@ -86,3 +86,7 @@ CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
 RDKit 暂固定为 `2026.3.2`（其运行时显示为 `2026.03.2`）。升级需额外审查匹配语义、芳香性、立体与原子对应行为，不能只验证导入成功。
 
 目前 `tool.uv.package = false`：环境包含第三方依赖，尚不发布或安装一个空的 `reaction_reference` 业务包。到 M0 创建真实业务包时，再补齐构建后端、包发现、CLI 入口和包安装检查。
+
+## 本机 Git 入口
+
+当前工作区的 `.git` 只读，仓库元数据存放在 `.plan-history.git/`。本机使用 `./scripts/plan-git status`、`./scripts/plan-git log --oneline` 或 `./scripts/plan-git show <commit>` 查看状态和修订；正常克隆使用标准 Git。`.plan-history.git/` 是本机实际仓库元数据，需要保留，不提交到自身。

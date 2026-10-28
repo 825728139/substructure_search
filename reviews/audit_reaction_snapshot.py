@@ -1,14 +1,12 @@
-"""Audit a local, read-only reaction export; no database connection or credentials.
+"""Check a bounded export of the JSONB reaction schema without connecting to a source.
 
-Input is JSONL containing reaction fields plus details and stored_*_smiles.
-This checks representations, not experimental validity or synthetic feasibility.
+Checks representation and traceability only, not experimental or mechanistic validity.
 """
 
 import argparse
 import hashlib
 import json
 from collections import Counter, defaultdict
-from datetime import UTC, datetime
 from pathlib import Path
 
 from rdkit import Chem, RDLogger, rdBase
@@ -18,128 +16,147 @@ from rdkit.Chem import rdChemReactions
 def audit(path: Path) -> dict:
     RDLogger.DisableLog("rdApp.warning")
     RDLogger.DisableLog("rdApp.error")
-    raw = path.read_bytes()
-    rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
-    stats = Counter(
-        {"records": 0, "parseable_reaction_smiles": 0, "reaction_smiles_with_atom_maps": 0}
-    )
-    issues = defaultdict(set)
-    templates = {str(radius): Counter() for radius in range(1, 5)}
-    role_stats = defaultdict(Counter)
-    products = defaultdict(list)
-    reactions = defaultdict(list)
+    payload = path.read_bytes()
+    rows = [json.loads(line) for line in payload.splitlines() if line.strip()]
+    counts = Counter()
+    issues = defaultdict(list)
+    role_entries = Counter()
+    template_counts = {str(radius): Counter() for radius in range(1, 5)}
 
-    def canonical(smiles):
-        molecule = Chem.MolFromSmiles(smiles)
-        if molecule is None:
-            raise ValueError("SMILES parse failed")
-        for atom in molecule.GetAtoms():
+    def record(name, ok, rid):
+        counts[name] += bool(ok)
+        if not ok:
+            issues[name].append(rid)
+
+    def canon(smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            raise ValueError("Unparseable SMILES")
+        for atom in mol.GetAtoms():
             atom.SetAtomMapNum(0)
-        return Chem.MolToSmiles(molecule, isomericSmiles=True)
+        return Chem.MolToSmiles(mol, isomericSmiles=True)
 
-    roles = ("product", "reactant", "reagent", "catalyst", "solvent")
     for row in rows:
         rid = row["id"]
-        stats["records"] += 1
-        for role in roles:
-            structures = row[f"{role}_smiles"]
-            for smiles in structures:
-                role_stats[role]["smiles_entries"] += 1
-                molecule = Chem.MolFromSmiles(smiles)
-                if molecule is None:
-                    role_stats[role]["invalid_smiles"] += 1
-                    issues[f"invalid_{role}_smiles"].add(rid)
-                    continue
-                role_stats[role]["parseable_smiles"] += 1
-                if len(Chem.GetMolFrags(molecule)) > 1:
-                    role_stats[role]["disconnected_entries"] += 1
-                    issues[f"disconnected_{role}_entry"].add(rid)
-                if any(atom.GetAtomicNum() == 0 for atom in molecule.GetAtoms()):
-                    issues[f"wildcard_{role}_entry"].add(rid)
-            details = (row.get("details") or {}).get(role + "s", [])
-            detail_canons = []
-            for detail in details:
-                role_stats[role]["detail_entries"] += 1
-                role_stats[role]["details_with_id"] += bool(detail[1])
-                if not detail[2]:
-                    role_stats[role]["details_missing_smiles"] += 1
-                    issues[f"details_missing_{role}_smiles"].add(rid)
-                    continue
-                try:
-                    detail_canons.append(canonical(detail[2]))
-                except ValueError:
-                    role_stats[role]["invalid_detail_smiles"] += 1
-                    issues[f"invalid_detail_{role}_smiles"].add(rid)
-            try:
-                if Counter(detail_canons) != Counter(canonical(s) for s in structures):
-                    issues[f"detail_{role}_multiplicity_or_identity_difference"].add(rid)
-            except ValueError:
-                pass
+        details = row.get("details") or {}
+        aam = details.get("aam_result") or {}
+        role_resolution = details.get("role_resolution") or {}
+        record("details_present", bool(details), rid)
+        for field in ("raw_reaction", "aam_result", "role_resolution"):
+            record(f"{field}_present", bool(details.get(field)), rid)
+        counts["records_with_role_promotions"] += bool(role_resolution.get("promotions"))
+        counts["records_with_mapping_multiplicity"] += bool(
+            role_resolution.get("mapped_input_multiplicity")
+        )
+        record(
+            "no_balancing_copies_materialized",
+            role_resolution.get("added_balancing_copies_materialized") == 0,
+            rid,
+        )
+        record("final_score_matches_aam", row["final_score"] == aam.get("final_score"), rid)
+        for field in ("temperature_text", "time_text", "pressure_text"):
+            counts[f"nonempty_{field}"] += bool(details.get(field))
+        for field in ("temperature", "time", "pressure"):
+            counts[f"nonempty_raw_{field}"] += bool(details.get("raw_reaction", {}).get(field))
 
-        for role in ("product", "reactant"):
+        for role in ("product", "reactant", "reagent", "catalyst", "solvent"):
+            entries = details.get(role + "s", [])
+            role_entries[role] += len(entries)
             try:
-                expected = canonical(".".join(row[f"{role}_smiles"]))
-                actual = canonical(row[f"stored_{role}_smiles"])
-                if actual != expected:
-                    issues[f"stored_{role}_mol_difference"].add(rid)
-            except (ValueError, TypeError):
-                issues[f"stored_{role}_mol_uncheckable"].add(rid)
+                canonical_entries = [canon(e["smiles"]) for e in entries if e.get("smiles")]
+                record(
+                    f"{role}_detail_identity_and_multiplicity_match",
+                    Counter(canonical_entries) == Counter(canon(s) for s in row[role + "_smiles"]),
+                    rid,
+                )
+            except (ValueError, TypeError, AttributeError):
+                record(f"{role}_detail_identity_and_multiplicity_match", False, rid)
 
-        products[tuple(sorted(row["product_smiles"]))].append(rid)
-        reactions[row["reaction_smiles"]].append(rid)
+        mapped = row.get("mapped_reaction_smiles")
         try:
-            reaction = rdChemReactions.ReactionFromSmarts(row["reaction_smiles"], useSmiles=True)
-            assert reaction is not None
-            stats["parseable_reaction_smiles"] += 1
-            molecules = list(reaction.GetReactants()) + list(reaction.GetProducts())
-            if any(a.GetAtomMapNum() for m in molecules for a in m.GetAtoms()):
-                stats["reaction_smiles_with_atom_maps"] += 1
-        except (ValueError, RuntimeError, AssertionError):
-            issues["unparseable_reaction_smiles"].add(rid)
+            left, _, right = mapped.split(">")
+            left_mol, right_mol = Chem.MolFromSmiles(left), Chem.MolFromSmiles(right)
+            if left_mol is None or right_mol is None:
+                raise ValueError("Mapped reaction is not parseable")
+            counts["mapped_reaction_parseable"] += 1
+            left_maps = [a.GetAtomMapNum() for a in left_mol.GetAtoms() if a.GetAtomMapNum()]
+            right_maps = [a.GetAtomMapNum() for a in right_mol.GetAtoms() if a.GetAtomMapNum()]
+            record(
+                "map_labels_unique_per_side",
+                len(left_maps) == len(set(left_maps)) and len(right_maps) == len(set(right_maps)),
+                rid,
+            )
+            record("all_product_atoms_mapped", len(right_maps) == right_mol.GetNumAtoms(), rid)
+            record("product_maps_present_on_input", set(right_maps) <= set(left_maps), rid)
+            identity = {
+                a.GetAtomMapNum(): (a.GetAtomicNum(), a.GetIsotope())
+                for a in left_mol.GetAtoms()
+                if a.GetAtomMapNum()
+            }
+            record(
+                "mapped_element_and_isotope_consistent",
+                all(
+                    identity.get(a.GetAtomMapNum()) == (a.GetAtomicNum(), a.GetIsotope())
+                    for a in right_mol.GetAtoms()
+                ),
+                rid,
+            )
+            record(
+                "mapped_product_matches_product_array",
+                canon(right) == canon(".".join(row["product_smiles"])),
+                rid,
+            )
+            selected = aam.get("aam_filter", {}).get("aam", {}).get("rxnmapper_v2", {})
+            record(
+                "mapped_string_matches_stored_rxnmapper_v2",
+                mapped == selected.get("mapped_reaction"),
+                rid,
+            )
+        except (ValueError, TypeError, AttributeError):
+            record("mapped_reaction_parseable", False, rid)
 
-        candidates = [Chem.MolFromSmiles(s) for s in row["product_smiles"]]
+        # A source reaction template may describe multiple observed products.
+        # This is a whole-side self-check, not a same-molecule Markush witness.
+        molecules = [Chem.MolFromSmiles(".".join(row["product_smiles"]))]
         for radius in range(1, 5):
-            counts = templates[str(radius)]
             try:
                 template = rdChemReactions.ReactionFromSmarts(row[f"reaction_center_r{radius}"])
-                assert template is not None
-                counts["parseable"] += 1
-                queries = list(
-                    template.GetReactants()
-                )  # Stored direction is products >> reactants.
-                counts["single_product_template"] += len(queries) == 1
-                # Multiple template components can be disjoint regions of the same product.
-                # Combine them for this representation check, preserving all query atoms.
+                queries = list(template.GetReactants())
                 query = queries[0]
                 for fragment in queries[1:]:
                     query = Chem.CombineMols(query, fragment)
-                for chirality, label in ((False, "connectivity"), (True, "strict_stereo")):
-                    if any(
-                        m is not None and m.HasSubstructMatch(query, useChirality=chirality)
-                        for m in candidates
-                    ):
-                        counts[f"source_product_match_{label}"] += 1
-                    else:
-                        issues[f"r{radius}_source_product_{label}_mismatch"].add(rid)
-            except (ValueError, RuntimeError, AssertionError, TypeError):
-                issues[f"r{radius}_unparseable_template"].add(rid)
+                template_counts[str(radius)]["parseable"] += 1
+                for stereo, name in ((False, "connectivity_match"), (True, "strict_stereo_match")):
+                    matched = any(
+                        m is not None and m.HasSubstructMatch(query, useChirality=stereo)
+                        for m in molecules
+                    )
+                    template_counts[str(radius)][name] += matched
+                    if not matched:
+                        issues[f"radius_{radius}_{name}"].append(rid)
+            except (ValueError, TypeError, AttributeError, IndexError, RuntimeError):
+                issues[f"radius_{radius}_parseable"].append(rid)
 
     return {
-        "scope": "representation_audit_only_not_experiment_or_mapping_validation",
-        "checked_at": datetime.now(UTC).isoformat(),
+        "scope": "bounded_early_and_recent_sample_during_import_not_population_estimate",
         "rdkit_version": rdBase.rdkitVersion,
-        "snapshot_sha256": hashlib.sha256(raw).hexdigest(),
-        "counts": dict(stats),
-        "roles": dict(role_stats),
-        "templates": templates,
-        "unique_product_arrays": len(products),
-        "unique_reaction_smiles": len(reactions),
-        "repeated_product_groups": [ids for ids in products.values() if len(ids) > 1],
-        "repeated_reaction_groups": [ids for ids in reactions.values() if len(ids) > 1],
-        "issues": {
-            name: {"records": len(ids), "example_ids": sorted(ids)[:12]}
-            for name, ids in sorted(issues.items())
-        },
+        "snapshot_sha256": hashlib.sha256(payload).hexdigest(),
+        "sampled_at": rows[0]["sampled_at"],
+        "sample_size": len(rows),
+        "sample_windows": dict(Counter(r["sample_window"] for r in rows)),
+        "sources": dict(Counter(r["source_namespace"] for r in rows)),
+        "document_count": len({(r["source_namespace"], r["document_id"]) for r in rows}),
+        "counts": dict(counts),
+        "role_entry_counts": dict(role_entries),
+        "templates": template_counts,
+        "source_aam_status": dict(Counter(r["details"]["aam_result"].get("status") for r in rows)),
+        "source_inner_classification": dict(
+            Counter(
+                r["details"]["aam_result"]["aam_filter"].get("score", {}).get("classification")
+                for r in rows
+            )
+        ),
+        "issues": {k: {"count": len(v), "example_ids": v[:10]} for k, v in issues.items()},
     }
 
 

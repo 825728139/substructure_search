@@ -92,7 +92,6 @@ def main() -> None:
         Draw.MolToImage(Chem.MolFromSmiles("CCO")).save(scratch_path / "rdkit.png")
         assert (scratch_path / "rdkit.png").stat().st_size > 0
         probes = sorted((ROOT / "reviews").glob("check_*.py"))
-        probes += sorted((ROOT / "audits" / "probes").glob("*.py"))
         for index, probe in enumerate(probes):
             work = scratch_path / f"probe-{index}"
             work.mkdir()

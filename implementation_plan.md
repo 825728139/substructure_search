@@ -1,6 +1,6 @@
 # 项目实现计划：模块化的目标导向反应先例检索系统
 
-日期：2026-10-27。状态：工程设计；M0 的独立开发环境已安装并验证，尚未创建业务代码、部署服务或完成真实召回验证。
+日期：2026-10-28。状态：工程设计；M0 的独立开发环境已安装并验证，尚未创建业务代码、部署服务或完成真实召回验证。
 
 ## 1. 工程目标与固定边界
 
@@ -26,9 +26,7 @@
 
 ### 2.1 已有基础
 
-仓库已有主计划、详细化学规则、排序规范、审查记录、示意图和若干 RDKit 探针。它们是需求与局部行为依据，不是完整检索引擎或现成可复用的通用算法。
-
-制定计划时只读核对的旧环境为 Python 3.10.20、RDKit 2026.03.2、FastAPI 0.128.0、Pydantic 2.13.2、Uvicorn 0.40.0、HTTPX 0.28.1，其中没有 pytest、Ruff。这是历史参考，不是项目的安装目标。
+仓库已有主计划、详细化学规则、排序规范、示意图和 9 个 RDKit 探针。它们是需求与局部行为依据，不是完整检索引擎或现成可复用的通用算法。
 
 现已建立 `pyproject.toml`、`uv.lock`、项目专用 Python 3.12.12 和 `.venv`，安装运行与开发依赖，并通过 9 个现有探针、API 本地调用、图表生成及依赖一致性检查。环境位置、复现命令、锁定版本及验证范围统一记录在 [开发环境文档](ENVIRONMENT.md)。项目仍没有生产业务包或完整引擎测试；环境就绪仅完成 M0 的环境部分，不代表领域模型、配置 schema、导入边界或 CI 已完成。
 
@@ -81,7 +79,7 @@ flowchart TD
 
 ## 4. 拟议项目目录
 
-以下是**实施后的目标结构**，本次不创建空业务骨架。现有规划文件保留原路径，避免再次搬迁导致历史链接失效。
+以下是**实施后的目标结构**。业务模块按阶段实现；当前文件入口见 README。
 
 ```text
 substructure_search/
@@ -96,13 +94,13 @@ substructure_search/
 ├── plan.md                           # 现行产品计划
 ├── implementation_plan.md             # 本工程实施计划
 ├── ranking_plan.md                    # 独立过滤排序语义
-├── GIT_HISTORY.md
 ├── design/                           # 已有详细化学规范与契约
 │   ├── specification.md
 │   ├── markush_queries.md
 │   ├── attachment_methods.md
 │   ├── evidence_contract.md
 │   ├── single_reactant_transfer.md
+│   ├── source_reference.md          # 当前来源字段与接入约定
 │   ├── ...
 │   └── adr/                          # 架构决策：选择、替代方案和适用条件
 ├── configs/
@@ -239,7 +237,7 @@ substructure_search/
 │   ├── validate_design.py           # 已有文档检查
 │   ├── plan-git                     # 当前工作区 Git 入口
 │   ├── project-uv                   # 项目专用解释器、环境与缓存入口
-│   ├── verify_environment.py        # 依赖协作、历史探针和图表验证
+│   ├── verify_environment.py        # 依赖协作、化学探针和图表验证
 │   ├── export_schemas.py
 │   ├── validate_rules.py
 │   └── smoke.py
@@ -248,8 +246,7 @@ substructure_search/
 │   └── compose.example.yml          # 单实例 API + 受控进程执行配置
 ├── .github/workflows/ci.yml
 ├── diagrams/                         # 已有设计图和生成器
-├── reviews/                          # 已有研究探针，暂不改成生产算法
-├── audits/                           # 历史审查记录
+├── reviews/                          # 可运行探针、验收场景和来源样本摘要
 └── var/                              # 未跟踪：runs/cache/logs/exports
 ```
 
@@ -481,7 +478,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 | 端到端 | 同一 fixture 经 SDK/CLI/API 得到等价语义；未评估/截断如实输出 |
 | 排序评测 | 目标方法资格先于表面相似和操作便利；未知信息不获得低风险优势；偏好改变不篡改事实 |
 
-探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 和 `audits/probes/` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。
+探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
 详细规范的 99 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
@@ -577,7 +574,7 @@ M3/M4 顺序可按交付需求微调，但 CPU 超时与全局上限的基础从
 | 排序完成 | 方法资格、未知与证据分账不被偏好覆盖；有真实标注效果报告 |
 | 发布就绪 | 关键验收、来源范围、版本回滚和性能/资源报告明确；不承诺未经测量的完整召回 |
 
-本次实际完成的是工程规划文件、架构图和与现有设计的入口衔接。目录树、命令、API、类名和工期均是拟实施内容；现阶段仍没有业务服务、运行队列或生产排序器。
+已完成设计、独立开发环境和局部来源核验。目录树中的业务模块、命令、API 和运行队列仍需实施；模块验收及真实目标评测按以上标准执行。
 
 ## 18. 依据与待实施时核对的文档
 
