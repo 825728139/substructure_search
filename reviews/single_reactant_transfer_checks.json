@@ -11,6 +11,20 @@
       ],
       "result": {
         "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CCNC(=O)c1ccccc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCNC(=O)c1ccccc1"
+          ]
+        ],
         "unique_products": [
           "CCNC(=O)c1ccccc1"
         ]
@@ -29,6 +43,20 @@
       ],
       "result": {
         "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CCCNC(=O)c1ccccc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCCNC(=O)c1ccccc1"
+          ]
+        ],
         "unique_products": [
           "CCCNC(=O)c1ccccc1"
         ]
@@ -47,6 +75,20 @@
       ],
       "result": {
         "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CCNC(=O)c1ccc(F)cc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCNC(=O)c1ccc(F)cc1"
+          ]
+        ],
         "unique_products": [
           "CCNC(=O)c1ccc(F)cc1"
         ]
@@ -61,6 +103,20 @@
       "core_only_matches": false,
       "both_result": {
         "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CCCNC(=O)c1ccc(F)cc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCCNC(=O)c1ccc(F)cc1"
+          ]
+        ],
         "unique_products": [
           "CCCNC(=O)c1ccc(F)cc1"
         ]
@@ -78,6 +134,26 @@
       ],
       "result": {
         "raw_count": 2,
+        "evaluated_set_count": 2,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "NCCNC(=O)c1ccccc1"
+          ],
+          [
+            "NCCNC(=O)c1ccccc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "NCCNC(=O)c1ccccc1"
+          ],
+          [
+            "NCCNC(=O)c1ccccc1"
+          ]
+        ],
         "unique_products": [
           "NCCNC(=O)c1ccccc1"
         ]
@@ -88,6 +164,12 @@
       "id": "amine_role_changed_to_amide",
       "result": {
         "raw_count": 0,
+        "evaluated_set_count": 0,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [],
+        "product_sets": [],
         "unique_products": []
       },
       "note": "Excluded by this illustrative rule; no claim of general chemical impossibility."
@@ -96,12 +178,134 @@
       "id": "same_formula_wrong_ring_position",
       "result": {
         "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CCNC(=O)c1ccccc1F"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCNC(=O)c1ccccc1F"
+          ]
+        ],
         "unique_products": [
           "CCNC(=O)c1ccccc1F"
         ]
       },
       "target": "CCNC(=O)c1ccc(F)cc1",
       "exact_graph_match": false
+    },
+    {
+      "id": "target_is_second_product",
+      "rule": "[C:1](=[O:2])[O:3][CH2:4][c:5].[OH2:6]>>[C:1](=[O:2])[OH:6].[OH:3][CH2:4][c:5]",
+      "target": "OCc1ccccc1",
+      "result": {
+        "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "CC(=O)O",
+            "OCc1ccccc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CC(=O)O",
+            "OCc1ccccc1"
+          ]
+        ],
+        "unique_products": [
+          "CC(=O)O",
+          "OCc1ccccc1"
+        ]
+      },
+      "reordered_result": {
+        "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "OCc1ccccc1",
+            "CC(=O)O"
+          ]
+        ],
+        "product_sets": [
+          [
+            "OCc1ccccc1",
+            "CC(=O)O"
+          ]
+        ],
+        "unique_products": [
+          "CC(=O)O",
+          "OCc1ccccc1"
+        ]
+      },
+      "native_max_products_1_returned_sets": 1,
+      "molecules_in_that_set": 2,
+      "note": "Product ordering is not a main-product label; the water is a reagent, not a synthesis target."
+    },
+    {
+      "id": "mapped_input_identity_comparison",
+      "mapped_inputs": [
+        "[O:100]=[C:101]([Cl:102])[c:103]1[cH:104][cH:105][cH:106][cH:107][cH:108]1",
+        "[CH3:200][CH2:201][NH2:202]"
+      ],
+      "target": "CCNC(=O)c1ccccc1",
+      "result": {
+        "raw_count": 1,
+        "evaluated_set_count": 1,
+        "enumeration_complete": true,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "O=C(NC[CH3:200])c1[cH:104][cH:105][cH:106][cH:107][cH:108]1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "CCNC(=O)c1ccccc1"
+          ]
+        ],
+        "unique_products": [
+          "CCNC(=O)c1ccccc1"
+        ]
+      },
+      "note": "Mapped inputs and raw product strings are retained; full atom provenance projection is not implemented by this probe."
+    },
+    {
+      "id": "duplicate_results_do_not_remove_truncation",
+      "evaluated_limit": 1,
+      "result": {
+        "raw_count": 2,
+        "evaluated_set_count": 1,
+        "enumeration_complete": false,
+        "validation_complete": true,
+        "validation_scope": "evaluated_product_sets",
+        "raw_product_sets": [
+          [
+            "NCCNC(=O)c1ccccc1"
+          ]
+        ],
+        "product_sets": [
+          [
+            "NCCNC(=O)c1ccccc1"
+          ]
+        ],
+        "unique_products": [
+          "NCCNC(=O)c1ccccc1"
+        ]
+      },
+      "note": "A target witness exists in checked output; duplicate output identities do not prove enumeration complete."
     }
   ]
 }

@@ -12,17 +12,32 @@ rxn=rdChemReactions.ReactionFromSmarts(rule)
 acid='O=C(Cl)c1ccccc1'
 amine='CCN'
 source='CCNC(=O)c1ccccc1'
-def canonical(smiles):
- m=Chem.MolFromSmiles(smiles)
+def as_mol(value):
+ m=Chem.MolFromSmiles(value) if isinstance(value,str) else Chem.Mol(value)
  assert m is not None
+ return m
+def canonical(value):
+ m=as_mol(value)
+ for atom in m.GetAtoms(): atom.SetAtomMapNum(0)
  return Chem.MolToSmiles(m,isomericSmiles=True)
-def replay(a,b):
- products=[]
- for group in rxn.RunReactants((Chem.MolFromSmiles(a),Chem.MolFromSmiles(b))):
-  product=group[0];Chem.SanitizeMol(product)
-  products.append(Chem.MolToSmiles(product,isomericSmiles=True))
- return {'raw_count':len(products),'unique_products':sorted(set(products))}
-def contains(result,target):return canonical(target) in result['unique_products']
+def replay(a,b,reaction=rxn,product_set_limit=16):
+ assert product_set_limit>0
+ groups=reaction.RunReactants((as_mol(a),as_mol(b)),maxProducts=product_set_limit+1)
+ product_sets=[];raw_sets=[]
+ # These controlled examples expect valid products. A production executor
+ # must record failed validation per group, rather than silently skip it.
+ for group in groups[:product_set_limit]:
+  for product in group: Chem.SanitizeMol(product)
+  raw_sets.append([Chem.MolToSmiles(product,isomericSmiles=True) for product in group])
+  product_sets.append([canonical(product) for product in group])
+ return {'raw_count':len(groups),'evaluated_set_count':len(product_sets),
+         'enumeration_complete':len(groups)<=product_set_limit,
+         'validation_complete':True,'validation_scope':'evaluated_product_sets',
+         'raw_product_sets':raw_sets,'product_sets':product_sets,
+         'unique_products':sorted({p for group in product_sets for p in group})}
+def contains(result,target):
+ # Membership of one concrete target only; never combine different groups.
+ return any(canonical(target) in group for group in result['product_sets'])
 rows=[]
 baseline=replay(acid,amine)
 assert contains(baseline,source)
@@ -46,6 +61,41 @@ rows.append({'id':'amine_role_changed_to_amide','result':wrong_handle,'note':'Ex
 wrong_position=replay('O=C(Cl)c1ccccc1F',amine)
 assert not contains(wrong_position,core_target)
 rows.append({'id':'same_formula_wrong_ring_position','result':wrong_position,'target':core_target,'exact_graph_match':False})
+hydrolysis_rule='[C:1](=[O:2])[O:3][CH2:4][c:5].[OH2:6]>>[C:1](=[O:2])[OH:6].[OH:3][CH2:4][c:5]'
+hydrolysis=rdChemReactions.ReactionFromSmarts(hydrolysis_rule)
+alcohol_target='OCc1ccccc1'
+multi=replay('CC(=O)OCc1ccccc1','O',reaction=hydrolysis)
+assert len(multi['product_sets'])==1 and len(multi['product_sets'][0])==2
+native_one=hydrolysis.RunReactants((as_mol('CC(=O)OCc1ccccc1'),as_mol('O')),maxProducts=1)
+assert len(native_one)==1 and len(native_one[0])==2
+assert multi['product_sets'][0][0]!=canonical(alcohol_target) and contains(multi,alcohol_target)
+reordered_rule='[C:1](=[O:2])[O:3][CH2:4][c:5].[OH2:6]>>[OH:3][CH2:4][c:5].[C:1](=[O:2])[OH:6]'
+reordered=replay('CC(=O)OCc1ccccc1','O',reaction=rdChemReactions.ReactionFromSmarts(reordered_rule))
+assert contains(reordered,alcohol_target)
+assert sorted(multi['product_sets'][0])==sorted(reordered['product_sets'][0])
+rows.append({'id':'target_is_second_product','rule':hydrolysis_rule,'target':alcohol_target,
+             'result':multi,'reordered_result':reordered,
+             'native_max_products_1_returned_sets':len(native_one),
+             'molecules_in_that_set':len(native_one[0]),
+             'note':'Product ordering is not a main-product label; the water is a reagent, not a synthesis target.'})
+
+mapped_acid,mapped_amine=as_mol(acid),as_mol(amine)
+for offset,molecule in enumerate((mapped_acid,mapped_amine),start=1):
+ for atom in molecule.GetAtoms(): atom.SetAtomMapNum(offset*100+atom.GetIdx())
+mapped=replay(mapped_acid,mapped_amine)
+assert any(a.GetAtomMapNum() for a in Chem.MolFromSmiles(mapped['raw_product_sets'][0][0]).GetAtoms())
+assert mapped['raw_product_sets'][0][0]!=canonical(source) and contains(mapped,source)
+assert all(a.GetAtomMapNum()>0 for m in (mapped_acid,mapped_amine) for a in m.GetAtoms())
+rows.append({'id':'mapped_input_identity_comparison','mapped_inputs':[Chem.MolToSmiles(mapped_acid),Chem.MolToSmiles(mapped_amine)],
+             'target':source,'result':mapped,'note':'Mapped inputs and raw product strings are retained; full atom provenance projection is not implemented by this probe.'})
+
+limited=replay(acid,'NCCN',product_set_limit=1)
+assert limited['raw_count']==2 and limited['evaluated_set_count']==1
+assert len(limited['unique_products'])==1 and not limited['enumeration_complete']
+assert contains(limited,'NCCNC(=O)c1ccccc1')
+rows.append({'id':'duplicate_results_do_not_remove_truncation','evaluated_limit':1,'result':limited,
+             'note':'A target witness exists in checked output; duplicate output identities do not prove enumeration complete.'})
+
 report={'scope':'invented structural replay examples only; no experimental evidence or condition prediction','rdkit_version':rdBase.rdkitVersion,'rule':rule,'cases':rows}
 Path(__file__).with_name('single_reactant_transfer_checks.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(f'{len(rows)} illustrative replay cases checked; no experimental success or general precursor generator tested.')

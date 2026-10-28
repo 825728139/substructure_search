@@ -28,9 +28,10 @@
     "status": "proposed_not_benchmarked",
     "max_source_reactions": 6,
     "max_candidates_per_source": 2,
-    "max_replay_mappings_per_candidate": 16,
     "max_recursive_transfers": 0,
-    "shares_global_time_budget": true
+    "shares_global_time_budget": true,
+    "max_replay_product_sets_per_candidate": 16,
+    "replay_overflow_detection_extra": 1
   },
   "topology_analysis": {
     "status": "proposed_not_benchmarked",

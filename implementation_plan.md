@@ -289,7 +289,7 @@ substructure_search/
 | `ReactionRecord` | experiment_id、真实组分实例、阶段、观察、条件、来源、映射来源 | 未知反应物不能由默认值补出；净变化不自动拆为多步 |
 | `AttachmentAssessment` | attachment_id、源反应变化、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；缺失副产物不制造虚假断键，类型名与目标贡献分开 |
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
-| `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放、条件缺口、proposal_not_observed | 与反应事实为不同类型，不能靠 flag 默认值混入事实 |
+| `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放组合与目标产物位置、枚举/校验状态、条件缺口、proposal_not_observed | 组合内逐产物核验，保留原子追踪；图回放不混入实验事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
 | `ReferencePackage` | 完整目标取得记录、局部方法/其他线索分区、证据/建议引用、双视角列表、覆盖、快照、feature_status、summary_status | 检索完整性与摘要裁剪分开；缩短摘要不提升结论强度 |
 
@@ -584,7 +584,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 118 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 121 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 

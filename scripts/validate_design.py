@@ -70,6 +70,8 @@ assert (
     <= pilot["max_total_tasks"]
 )
 assert pilot["reaction_analysis_batch_size"] <= pilot["max_reaction_records_analyzed"]
+assert pilot["single_reactant_transfer"]["max_replay_product_sets_per_candidate"] > 0
+assert pilot["single_reactant_transfer"]["replay_overflow_detection_extra"] == 1
 assert (
     3 * pilot["minimum_records_per_layer_if_available"] + 1 <= pilot["max_display_items_per_view"]
 )

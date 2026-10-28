@@ -10,7 +10,7 @@
 | 反应环境、原子来源、同位素与互补位点选择 | [脚本](check_reaction_relevance.py) | [结果](reaction_relevance_checks.json) |
 | 映射歧义、未映射标签、遗漏副产物、份数和手性 | [脚本](check_mapping_and_stereo.py) | [结果](mapping_and_stereo_checks.json) |
 | 目标母核—支链连接贡献 | [脚本](check_attachment_methods.py) | [结果](attachment_method_checks.json) |
-| 单反应物替换的图回放 | [脚本](check_single_reactant_transfer.py) | [结果](single_reactant_transfer_checks.json) |
+| 单底物替换回放、多产物、映射编号与组合截断 | [脚本](check_single_reactant_transfer.py) | [结果](single_reactant_transfer_checks.json) |
 | 无环、开闭环与图连通性 | [脚本](check_acyclic_and_ring_changes.py) | [结果](acyclic_and_ring_change_checks.json) |
 | Markush 联合位点、核心额外键、对称映射与截断 | [脚本](check_markush_queries.py) | [结果](markush_query_checks.json) |
 | 官能团、预筛、Top-K、属性表示与缓存索引重绑定 | [脚本](check_query_semantics.py) | [结果](query_semantics_checks.json) |
@@ -26,7 +26,7 @@
 
 ## 待实现的验收要求
 
-- [详细规范第 13.1 节](../design/specification.md#131-化学验收案例)：118 项化学验收要求。
+- [详细规范第 13.1 节](../design/specification.md#131-化学验收案例)：121 项化学验收要求。
 - [证据契约场景](evidence_contract_cases.json)：15 个结果状态与计数案例。
 - [排序契约场景](ranking_contract_cases.json)：34 个资格、约束与未知信息案例。
 
