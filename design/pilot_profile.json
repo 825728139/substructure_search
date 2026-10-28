@@ -121,7 +121,7 @@
     "on_ambiguous_or_cyclic_reference": "unresolved"
   },
   "directed_R_followups": {
-    "activation": "uncovered_target_site_after_initial_joint_matching",
+    "activation": "uncovered_target_sites_or_joint_assignment_after_initial_matching",
     "max_child_families": 2,
     "shares_existing_budgets": true,
     "new_family_identity_required": true

@@ -52,7 +52,9 @@ report['cases'].append({'case':'相同端口近邻并不描述完整芳环取代
 values=[]
 q=Chem.MolFromSmarts('c1ccccc1')
 for label,s in [('toluene','Cc1ccccc1'),('naphthalene','c1ccc2ccccc2c1'),('biphenyl','c1ccccc1-c1ccccc1')]:
-    m=mol(s); match=m.GetSubstructMatch(q); assert match
+    m=mol(s)
+    match=m.GetSubstructMatch(q)
+    assert match
     external=boundary_components(m,set(match))
     values.append({'name':label,'structure':s,'external_components':external})
 assert [len(x['external_components'][0]['core_boundary_bonds']) for x in values]==[1,2,1]
@@ -112,6 +114,72 @@ report['cases'].append({
     'target': target_smiles, 'candidates': ordered, 'illustrative_top_k': 3,
     'top_k_tail_coverage': False, 'declared_tail_query_finds_reference_structure': True,
     'note': 'Only structural coverage is checked; no reaction evidence, child-family compiler or scheduler tested.',
+})
+
+# Alternative embeddings may each cover a different target R site. Their union
+# is not a joint witness, even when all embeddings come from one source molecule.
+coverage_target = mol('COc1cc(OC)cc(OC)c1')
+coverage_core = Chem.MolFromSmarts('c1ccccc1')
+methoxy_query = Chem.MolFromSmarts('[c]-[O;X2;+0]-[C;H3;X4;+0]')
+target_core = coverage_target.GetSubstructMatch(coverage_core)
+target_branches = {match[0]: match[1:] for match in coverage_target.GetSubstructMatches(methoxy_query)}
+target_sites = {position + 1 for position, atom in enumerate(target_core) if atom in target_branches}
+assert target_sites == {1, 3, 5}
+coverage_examples = []
+for name, smiles, expected_joint_sites in [
+    ('one_methoxy', 'COc1ccccc1', 1),
+    ('two_meta_methoxy', 'COc1cccc(OC)c1', 2),
+    ('three_alternating_methoxy', 'COc1cc(OC)cc(OC)c1', 3),
+]:
+    molecule = mol(smiles)
+    branches = {match[0]: match[1:] for match in molecule.GetSubstructMatches(methoxy_query)}
+    embeddings = molecule.GetSubstructMatches(coverage_core, uniquify=False, maxMatches=129)
+    assert len(embeddings) == 12  # all embeddings of this controlled six-membered core
+    witnesses = []
+    for embedding in embeddings:
+        atom_mapping = dict(zip(target_core, embedding))
+        covered_sites = set()
+        for position, target_atom in enumerate(target_core, 1):
+            source_atom = atom_mapping[target_atom]
+            if target_atom in target_branches and source_atom in branches:
+                covered_sites.add(position)
+                atom_mapping.update(zip(target_branches[target_atom], branches[source_atom]))
+        assert len(atom_mapping) == len(set(atom_mapping.values()))
+        assert len(atom_mapping) == 6 + 2 * len(covered_sites)
+        witnesses.append({'sites': covered_sites, 'atom_mapping': atom_mapping})
+    site_union = set().union(*(w['sites'] for w in witnesses))
+    atom_union = set().union(*(set(w['atom_mapping']) for w in witnesses))
+    best = max(witnesses, key=lambda w: (len(w['sites']), tuple(sorted(w['sites']))))
+    assert site_union == target_sites
+    assert len(atom_union) == coverage_target.GetNumHeavyAtoms() == 12
+    assert len(best['sites']) == expected_joint_sites
+    assert len(best['atom_mapping']) == 6 + 2 * expected_joint_sites
+    # Renumbering changes local indices, not the attainable coverage counts.
+    renumbered = Chem.RenumberAtoms(molecule, list(reversed(range(molecule.GetNumAtoms()))))
+    renumbered_sites = {match[0] for match in renumbered.GetSubstructMatches(methoxy_query)}
+    renumbered_masks = [
+        {position + 1 for position, atom in enumerate(match)
+         if position + 1 in target_sites and atom in renumbered_sites}
+        for match in renumbered.GetSubstructMatches(coverage_core, uniquify=False, maxMatches=129)
+    ]
+    assert max(map(len, renumbered_masks)) == expected_joint_sites
+    coverage_examples.append({
+        'id': name, 'source_smiles': smiles, 'source_heavy_atoms': molecule.GetNumHeavyAtoms(),
+        'core_embedding_count': len(embeddings),
+        'alternative_site_sets': sorted({tuple(sorted(w['sites'])) for w in witnesses}),
+        'sitewise_union_count': len(site_union), 'site_denominator': len(target_sites),
+        'joint_site_count_best_found': len(best['sites']),
+        'atom_union_count': len(atom_union), 'atom_denominator': 12,
+        'joint_atom_count_best_found': len(best['atom_mapping']),
+        'best_found_target_to_source_atoms': sorted(best['atom_mapping'].items()),
+        'all_core_embeddings_checked_in_this_fixture': True,
+        'renumbering_preserves_joint_count': True,
+    })
+report['cases'].append({
+    'case': '同一来源的替代映射并集不能当作单实例联合覆盖',
+    'illustration_only': True, 'target': Chem.MolToSmiles(coverage_target),
+    'target_R_sites_in_fixed_core_order': sorted(target_sites), 'examples': coverage_examples,
+    'note': 'All three sources give a sitewise union of 3/3, but a single embedding covers 1/3, 2/3 or 3/3. No experimental evidence or production ranking engine is tested.',
 })
 
 out=Path(__file__).with_name('reaction_relevance_checks.json')

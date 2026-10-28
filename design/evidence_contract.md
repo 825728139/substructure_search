@@ -13,6 +13,7 @@
   source_record_id / experiment_id / component_instance_id
   actual_structure / original_role / material_state / stage_id
   matched_target_atoms_and_bonds / view_relation
+  coverage_summaries[]: aggregation_scope / witness_ids / checked_mapping_scope
   result_observations[]
   reaction_class / class_basis / target_attachment_id
   core_and_branch_matches / boundary_event / reactant_roles
@@ -71,6 +72,8 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 有见证且任务未完：显示“已命中，结果不完整”，分子/反应数量为已找到数量或下界。证据未知/冲突但任务完成：显示“未找到合格见证，并有待核实资料”，不能显示“该分子不可合成”。
 
 所有计数携带 `scope_id`：输入目标、候选集合、规则/匹配版本、来源快照及本轮任务集合。补查新增任务后生成新的汇总版本，不把旧范围的总数和新范围命中混合。
+
+覆盖汇总还要携带 `aggregation_scope` 与见证引用：`joint_witness` 表示同一完整对应下能够同时成立，`sitewise_union` 表示分别有参考，并注明跨映射/跨实例。相同源分子的替代对应不能合成虚假的共存见证；最大已找到联合覆盖附所用映射及枚举状态，截断时不能声称完整最优。实际结果、引入/保留等证据仍依各自见证，不由结构并集推导。
 
 候选流读完、选择范围穷尽、整个家族穷尽分别记录。相似 Top-K 列表读完只表示该列表结束；不能使尚未搜索的质量窗口或家族范围变为完整。来源行读取完成但存在未能解析/关联的相关记录时，注明验证缺口；坏记录既不作为合格见证，也不作为阴性实验。
 
