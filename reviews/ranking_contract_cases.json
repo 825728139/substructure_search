@@ -139,6 +139,18 @@
       "given": "同一来源反应、同一任务产生两个不同替代底物建议。",
       "view": "both",
       "expected_behavior": "candidate_key区分推定ID及见证；稳定分页不会漏项或重复，排序键不作为化学优先级。"
+    },
+    {
+      "id": "size_prioritized_reference_selection",
+      "given": "小目标的整体/核心查询命中很多较大分子，其中大量记录仅含所需的小核心，实际变化发生在远端。",
+      "view": "reference",
+      "expected_behavior": "优先检查体量接近的相似候选，结合重原子数和覆盖核验相关反应；不足时扩大选择范围，不把阶段外记录称为结构不匹配。"
+    },
+    {
+      "id": "fragment_mass_scope",
+      "given": "一个较大的参考产物在目标片段对应位置发生有据连接，但其总分子量远大于该片段。",
+      "view": "reference",
+      "expected_behavior": "按局部覆盖、额外结构及反应位置比较；不能因完整分子与小片段的质量比超出整体层窗口而删除相关局部方法。"
     }
   ]
 }

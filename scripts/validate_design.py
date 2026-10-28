@@ -48,8 +48,15 @@ for block in re.findall(
         assert example["ranking_profile"] in profile_ids, "Unknown example ranking profile"
 
 assert pilot["task_budget_unit"] == "dispatched_attempt"
-assert pilot["candidate_page_size"] <= pilot["max_candidate_records_scanned"]
-assert pilot["matching_batch_size"] <= pilot["max_candidate_records_scanned"]
+assert pilot["candidate_page_size"] <= pilot["max_candidate_records_received"]
+assert pilot["matching_batch_size"] <= pilot["max_candidate_records_received"]
+assert pilot["source_execution"]["primary_recall"] == "indexed_substructure"
+assert not pilot["source_execution"]["require_morgan_similarity_threshold"]
+assert pilot["source_execution"]["similarity_priority"]["merge_with_primary"] == "union"
+assert pilot["source_execution"]["similarity_priority"]["activation"] == "whole_core_or_broad_query"
+assert pilot["source_execution"]["molecular_size_priority"]["enabled"]
+assert pilot["source_execution"]["source_query_timeout_ms"] <= pilot["global_time_budget_ms"]
+assert not pilot["source_execution"]["broad_query"]["exact_count_before_first_page"]
 initial_read_and_match_tasks = 2 * 3 * pilot["initial_families_per_applicable_layer"]
 assert (
     initial_read_and_match_tasks + pilot["reserved_reaction_analysis_tasks"]

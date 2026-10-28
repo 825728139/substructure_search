@@ -1,6 +1,6 @@
 {
   "rdkit_version": "2026.03.2",
-  "scope": "oxygen_predicate_example_only",
+  "scope": "illustrative_query_and_screening_semantics_not_performance_benchmark",
   "query": "[C]-[C]-[OX2H1+0]",
   "checks": [
     {
@@ -18,5 +18,53 @@
       "plain_molecule_query": true,
       "explicit_oh_query": false
     }
-  ]
+  ],
+  "screening_query": "[OX2H1+0]-c1ccccc1",
+  "screening_fingerprint_bits": 2048,
+  "morgan_radius": 2,
+  "illustrative_similarity_threshold": 0.5,
+  "screening_examples": [
+    {
+      "case": "same_structure",
+      "smiles": "Oc1ccccc1",
+      "exact_substructure_match": true,
+      "morgan_tanimoto": 1.0,
+      "morgan_bit_containment": true,
+      "pattern_screen_pass": true
+    },
+    {
+      "case": "larger_molecule",
+      "smiles": "Oc1ccc(CCNC(=O)CCOCCOCC)cc1",
+      "exact_substructure_match": true,
+      "morgan_tanimoto": 0.175,
+      "morgan_bit_containment": false,
+      "pattern_screen_pass": true
+    },
+    {
+      "case": "bulky_substituents",
+      "smiles": "CC(C)(C)c1cc(O)cc(C(C)(C)C)c1OCCOCCOCC",
+      "exact_substructure_match": true,
+      "morgan_tanimoto": 0.1388888888888889,
+      "morgan_bit_containment": false,
+      "pattern_screen_pass": true
+    },
+    {
+      "case": "ether_is_not_phenol",
+      "smiles": "COc1ccccc1",
+      "exact_substructure_match": false,
+      "morgan_tanimoto": 0.3157894736842105,
+      "morgan_bit_containment": false,
+      "pattern_screen_pass": true
+    },
+    {
+      "case": "missing_aromatic_core",
+      "smiles": "CCO",
+      "exact_substructure_match": false,
+      "morgan_tanimoto": 0.0625,
+      "morgan_bit_containment": false,
+      "pattern_screen_pass": false
+    }
+  ],
+  "reaction_reference_value_assessed": false,
+  "limitation": "These cases do not prove prefilter safety for every SMARTS, Markush or chemical view."
 }

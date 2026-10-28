@@ -544,12 +544,22 @@ relations [label="核验查询的完整含义
 多个位点在同一具体分子、同一核心映射成立
 完整支链类别不只检查第一原子
 桥接或回环 R 整体约束；可变连接段必须语义明确"];
-search [label="家族召回与完整匹配
-安全的固定核心预筛 → 各 R 和联合谓词核验
+scope [label="优先选择有参考价值的体量范围
+整体/核心：分子量与重原子数接近目标
+分片：按局部覆盖和实际反应位置比较
+候选过少或方法不足时，再按层放宽", fillcolor="#D6F0E5"];
+index [label="当前范围内的子结构索引
+筛选家族必需特征，再匹配固定结构
+限时分批取数，不先全量计数或排序"];
+similar [label="整体/核心和宽查询：相似优先
+相似索引取少量候选，再做严格匹配
+与索引通道取并集；保留当前选择范围", fillcolor="#FFF3D6"];
+search [label="完整 R 与联合条件核验
+同一具体分子、同一映射下检查全部要求
 对称核心在完整 R 核验后去重
 工具不支持或预算耗尽时标未评估/截断
 存在命中与分配枚举完整性分别报告
-不能把单个通配原子当作无限长可选支链"];
+宽查询先返回参考，完整枚举独立后台执行"];
 result [label="提取实际 R 分配与共存组合
 每个位点出现过什么？哪些 R 在同一分子中共存？
 只有分别见过的 R，不能拼成全部已知组合", fillcolor="#EAE0F7"];
@@ -563,7 +573,12 @@ out [label="返回给排序与模型
 查询通式不等于具体目标已经合成", fillcolor="#DBEAFE"];
 a -> fixed; a -> variable;
 fixed -> family; variable -> family;
-family -> relations -> search -> result -> reaction -> out;
+family -> relations -> scope;
+scope -> index -> search;
+scope -> similar;
+similar -> search;
+search -> result -> reaction -> out;
+reaction -> scope [style=dashed,label="有预算且参考不足时放宽"];
 }
 '''
 
