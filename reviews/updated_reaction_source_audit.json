@@ -1,0 +1,113 @@
+{
+  "scope": "bounded_early_and_recent_sample_during_import_not_population_estimate",
+  "rdkit_version": "2026.03.2",
+  "snapshot_sha256": "2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
+  "sampled_at": "2026-10-28T14:28:10.714605+08:00",
+  "sample_size": 300,
+  "sample_windows": {
+    "early": 120,
+    "recent": 180
+  },
+  "sources": {
+    "epo": 181,
+    "uspto": 119
+  },
+  "document_count": 15,
+  "counts": {
+    "details_present": 300,
+    "raw_reaction_present": 300,
+    "aam_result_present": 300,
+    "role_resolution_present": 300,
+    "records_with_role_promotions": 81,
+    "records_with_mapping_multiplicity": 123,
+    "no_balancing_copies_materialized": 300,
+    "final_score_matches_aam": 300,
+    "nonempty_temperature_text": 0,
+    "nonempty_time_text": 0,
+    "nonempty_pressure_text": 0,
+    "nonempty_raw_temperature": 0,
+    "nonempty_raw_time": 0,
+    "nonempty_raw_pressure": 0,
+    "product_detail_identity_and_multiplicity_match": 300,
+    "reactant_detail_identity_and_multiplicity_match": 300,
+    "reagent_detail_identity_and_multiplicity_match": 300,
+    "catalyst_detail_identity_and_multiplicity_match": 300,
+    "solvent_detail_identity_and_multiplicity_match": 300,
+    "mapped_reaction_parseable": 300,
+    "map_labels_unique_per_side": 300,
+    "all_product_atoms_mapped": 300,
+    "product_maps_present_on_input": 300,
+    "mapped_element_and_isotope_consistent": 300,
+    "mapped_product_matches_product_array": 300,
+    "mapped_string_matches_stored_rxnmapper_v2": 300
+  },
+  "role_entry_counts": {
+    "product": 303,
+    "reactant": 591,
+    "reagent": 288,
+    "catalyst": 26,
+    "solvent": 283
+  },
+  "templates": {
+    "1": {
+      "parseable": 300,
+      "connectivity_match": 300,
+      "strict_stereo_match": 298
+    },
+    "2": {
+      "parseable": 300,
+      "connectivity_match": 300,
+      "strict_stereo_match": 298
+    },
+    "3": {
+      "parseable": 300,
+      "connectivity_match": 300,
+      "strict_stereo_match": 297
+    },
+    "4": {
+      "parseable": 300,
+      "connectivity_match": 300,
+      "strict_stereo_match": 297
+    }
+  },
+  "source_aam_status": {
+    "pass": 276,
+    "filtered": 24
+  },
+  "source_inner_classification": {
+    "pass": 262,
+    "review": 38
+  },
+  "issues": {
+    "radius_1_strict_stereo_match": {
+      "count": 2,
+      "example_ids": [
+        7,
+        106433
+      ]
+    },
+    "radius_4_strict_stereo_match": {
+      "count": 3,
+      "example_ids": [
+        7,
+        106430,
+        106433
+      ]
+    },
+    "radius_2_strict_stereo_match": {
+      "count": 2,
+      "example_ids": [
+        106419,
+        106433
+      ]
+    },
+    "radius_3_strict_stereo_match": {
+      "count": 3,
+      "example_ids": [
+        106419,
+        106430,
+        106433
+      ]
+    }
+  }
+}
