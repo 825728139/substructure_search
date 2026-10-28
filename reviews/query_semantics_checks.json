@@ -66,6 +66,86 @@
     }
   ],
   "reaction_reference_value_assessed": false,
+  "generic_query_transport_example": {
+    "families": [
+      {
+        "generic_group": "ARY",
+        "ordinary_smarts": "OC*",
+        "cxsmarts": "OC* |$;;ARY_p$|",
+        "candidates": [
+          "c1ccccc1CO",
+          "C1CCCCC1CO",
+          "CCO",
+          "c1ccncc1CO"
+        ],
+        "stage_matches": {
+          "original": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "plain_smarts_restored": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "cxsmarts_without_activation": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "cxsmarts_fully_restored": [
+            true,
+            false,
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "generic_group": "ALK",
+        "ordinary_smarts": "OC*",
+        "cxsmarts": "OC* |$;;ALK_p$|",
+        "candidates": [
+          "c1ccccc1CO",
+          "C1CCCCC1CO",
+          "CCO",
+          "c1ccncc1CO"
+        ],
+        "stage_matches": {
+          "original": [
+            false,
+            false,
+            true,
+            false
+          ],
+          "plain_smarts_restored": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "cxsmarts_without_activation": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "cxsmarts_fully_restored": [
+            false,
+            false,
+            true,
+            false
+          ]
+        }
+      }
+    ],
+    "plain_smarts_collides_across_different_families": true,
+    "scope": "Pinned RDKit serialization counterexamples; no production IR or worker transport tested."
+  },
   "cached_index_rebinding_example": {
     "query": "[C&X3](=[O&X1])-[N&X3]",
     "same_canonical_structure": true,

@@ -117,6 +117,50 @@ stale_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in old_m
 correct_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in rebound]
 assert stale_symbols != ["C", "O", "N"] and correct_symbols == ["C", "O", "N"]
 
+# Generic group labels are not part of ordinary SMARTS. A round trip must
+# restore both properties and matcher settings; parsing CXSMARTS alone is not enough.
+generic_parameters = Chem.SubstructMatchParameters()
+generic_parameters.useGenericMatchers = True
+transport_examples = []
+for group, expected in [("ARY", [True, False, False, False]), ("ALK", [False, False, True, False])]:
+    original_query = Chem.MolFromSmarts(f"OC* |$;;{group}$|")
+    Chem.SetGenericQueriesFromProperties(original_query)
+    ordinary_smarts = Chem.MolToSmarts(original_query)
+    cxsmarts = Chem.MolToCXSmarts(original_query)
+    plain_restored = Chem.MolFromSmarts(ordinary_smarts)
+    Chem.SetGenericQueriesFromProperties(plain_restored)
+    properties_only = Chem.MolFromSmarts(cxsmarts)
+    restored = Chem.MolFromSmarts(cxsmarts)
+    Chem.SetGenericQueriesFromProperties(restored)
+    candidates = ["c1ccccc1CO", "C1CCCCC1CO", "CCO", "c1ccncc1CO"]
+    stages = {
+        "original": original_query,
+        "plain_smarts_restored": plain_restored,
+        "cxsmarts_without_activation": properties_only,
+        "cxsmarts_fully_restored": restored,
+    }
+    stage_matches = {
+        name: [
+            Chem.MolFromSmiles(s).HasSubstructMatch(query, generic_parameters) for s in candidates
+        ]
+        for name, query in stages.items()
+    }
+    assert stage_matches["original"] == expected
+    assert stage_matches["cxsmarts_fully_restored"] == expected
+    assert all(stage_matches["plain_smarts_restored"])
+    assert all(stage_matches["cxsmarts_without_activation"])
+    transport_examples.append(
+        {
+            "generic_group": group,
+            "ordinary_smarts": ordinary_smarts,
+            "cxsmarts": cxsmarts,
+            "candidates": candidates,
+            "stage_matches": stage_matches,
+        }
+    )
+assert transport_examples[0]["ordinary_smarts"] == transport_examples[1]["ordinary_smarts"]
+assert transport_examples[0]["cxsmarts"] != transport_examples[1]["cxsmarts"]
+
 result = {
     "rdkit_version": rdBase.rdkitVersion,
     "scope": "illustrative_query_and_screening_semantics_not_performance_benchmark",
@@ -128,6 +172,11 @@ result = {
     "illustrative_similarity_threshold": 0.5,
     "screening_examples": screening,
     "reaction_reference_value_assessed": False,
+    "generic_query_transport_example": {
+        "families": transport_examples,
+        "plain_smarts_collides_across_different_families": True,
+        "scope": "Pinned RDKit serialization counterexamples; no production IR or worker transport tested.",
+    },
     "cached_index_rebinding_example": {
         "query": Chem.MolToSmarts(cache_query),
         "same_canonical_structure": True,
@@ -162,5 +211,5 @@ Path(__file__).with_name("query_semantics_checks.json").write_text(
     json.dumps(result, ensure_ascii=False, indent=2) + "\n"
 )
 print(
-    "Query predicates, screening, selection order, representations and cached-index rebinding verified; no performance benchmark."
+    "Query predicates, screening, selection order, representations, cached-index rebinding and generic-query transport verified; no performance benchmark."
 )

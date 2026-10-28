@@ -21,8 +21,14 @@ family [label="生成有限的 Markush 家族
 relations [label="核验查询的完整含义
 多个位点在同一具体分子、同一核心映射成立
 完整支链类别不只检查第一原子
+重原子支链不计氢；H 数和同位素另核验
 检查核心内额外键；包含与保拓扑分开
 桥接或回环 R 整体约束；可变连接段必须语义明确"];
+transport [label="编译、任务传递与缓存恢复
+完整查询约束保留类别、位点和后检查
+普通 SMARTS 会丢失部分通用组限制
+恢复属性并启用匹配参数；缺条件则停止完整判定
+传递前后用正反例检查语义一致"];
 scope [label="优先选择有参考价值的体量范围
 整体/核心：分子量与重原子数接近目标
 分片：按局部覆盖和实际反应位置比较
@@ -54,7 +60,7 @@ out [label="返回给排序与模型
 查询通式不等于具体目标已经合成", fillcolor="#DBEAFE"];
 a -> fixed; a -> variable;
 fixed -> family; variable -> family;
-family -> relations -> scope;
+family -> relations -> transport -> scope;
 scope -> index -> search;
 scope -> similar;
 similar -> search;

@@ -30,7 +30,7 @@ oxygen_position=next(a.GetIdx() for a in q.GetAtoms() if a.GetAtomicNum()==8)
 carbon_position=oxygen_position+1
 
 def evaluate(s):
- m=mol(s); witnesses=[]
+ m=mol(s) if isinstance(s,str) else Chem.Mol(s); witnesses=[]
  for match in m.GetSubstructMatches(q):
   core={match[i] for i in core_positions}
   oxygen,carbon=match[oxygen_position],match[carbon_position]
@@ -46,6 +46,9 @@ def evaluate(s):
     valid=False
    for b in a.GetBonds():
     j=b.GetOtherAtomIdx(i)
+    # Alkyl composition/length is defined on heavy atoms. H/D remain in the
+    # original molecule for separate isotope and target-requirement checks.
+    if m.GetAtomWithIdx(j).GetAtomicNum()==1:continue
     if j==oxygen:
      if i!=carbon:valid=False
      continue
@@ -84,6 +87,45 @@ assert not evaluate('Oc1ccc(F)cc1')['family_match']
 locked=Chem.MolFromSmarts('[F,Cl,Br]-c1[cH][cH]c(-[OX2+0]-[#6])[cH][cH]1')
 assert not mol('COc1ccc(F)c(C)c1').HasSubstructMatch(locked)
 assert evaluate('COc1ccc(F)c(C)c1')['family_match']
+
+# Ordinary hydrogen notation must not change this family's classification.
+# Include negatives so that skipping H does not relax heteroatom/ring/size rules.
+hydrogen_representation_cases=[]
+for name,smiles,want in family_cases:
+ implicit=mol(smiles)
+ explicit=Chem.AddHs(implicit)
+ implicit_result=evaluate(implicit)
+ explicit_result=evaluate(explicit)
+ assert implicit_result['family_match']==explicit_result['family_match']==want,name
+ assert {w['R2_carbon_count'] for w in implicit_result['witnesses']}=={
+     w['R2_carbon_count'] for w in explicit_result['witnesses']},name
+ hydrogen_representation_cases.append({
+     'case':name,'implicit_H_match':implicit_result['family_match'],
+     'explicit_H_match':explicit_result['family_match']})
+
+# This family leaves isotopes unrestricted. D is not a non-carbon heavy atom;
+# accepting the alkyl category does not prove a separately requested isotope pattern.
+deuterated=mol('[2H]COc1ccc(F)cc1')
+deuterated_result=evaluate(deuterated)
+assert deuterated_result['family_match']
+assert {w['R2_carbon_count'] for w in deuterated_result['witnesses']}=={1}
+assert any(a.GetAtomicNum()==1 and a.GetIsotope()==2 for a in deuterated.GetAtoms())
+assert all('[2H]' in w['source_structure'] for w in deuterated_result['witnesses'])
+
+hydroxyl_representation_cases=[]
+for smiles,want in [('Oc1ccc(F)cc1',1),('COc1ccc(F)cc1',0)]:
+ default_counts=[];neighbor_inclusive_counts=[];oh_matches=[]
+ for molecule in (mol(smiles),Chem.AddHs(mol(smiles))):
+  oxygen=next(a for a in molecule.GetAtoms() if a.GetAtomicNum()==8)
+  default_counts.append(oxygen.GetTotalNumHs())
+  neighbor_inclusive_counts.append(oxygen.GetTotalNumHs(includeNeighbors=True))
+  oh_matches.append(molecule.HasSubstructMatch(oh))
+ assert neighbor_inclusive_counts==[want,want]
+ assert oh_matches==[bool(want),bool(want)]
+ hydroxyl_representation_cases.append({
+     'smiles':smiles,'default_H_counts':default_counts,
+     'neighbor_inclusive_H_counts':neighbor_inclusive_counts,'OH_query_matches':oh_matches})
+assert hydroxyl_representation_cases[0]['default_H_counts']==[1,0]
 
 # Symmetric core embeddings are not interchangeable once labeled R predicates
 # are checked outside the core query. Demonstrate an actual false negative
@@ -153,8 +195,12 @@ for smiles, expected_extra in [('CCC', 0), ('C1CC1', 1), ('CC(C)C', 0)]:
     })
 result={'scope':'illustrative query checks only; no generalized compiler, reaction evidence or exhaustive sidechain space tested',
         'rdkit_version':rdBase.rdkitVersion,'query':qtext,'generic_group_cases':generic,
+        'hydrogen_representation_cases':hydrogen_representation_cases,
+        'hydroxyl_representation_cases':hydroxyl_representation_cases,
+        'deuterated_alkyl_example':{'structure':Chem.MolToSmiles(deuterated),
+            'family_match':True,'R2_carbon_count':1,'isotope_requirement_assessed':False},
         'symmetry_postcheck_cases':symmetry_cases,'bounded_enumeration_check':enumeration_check,
         'internal_core_edge_cases':core_topology_cases,
         'joint_family_cases':rows,'explicit_optional_H_check':True,'explicit_extra_site_lock_check':True}
 Path(__file__).with_name('markush_query_checks.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
-print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks; symmetry, enumeration and core-edge checks passed.')
+print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks; symmetry, enumeration, core-edge and hydrogen-representation checks passed.')

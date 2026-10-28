@@ -19,6 +19,101 @@
       "generic_ARY_match": false
     }
   ],
+  "hydrogen_representation_cases": [
+    {
+      "case": "F_methoxy",
+      "implicit_H_match": true,
+      "explicit_H_match": true
+    },
+    {
+      "case": "Cl_ethoxy",
+      "implicit_H_match": true,
+      "explicit_H_match": true
+    },
+    {
+      "case": "Br_propoxy",
+      "implicit_H_match": true,
+      "explicit_H_match": true
+    },
+    {
+      "case": "branched_C3",
+      "implicit_H_match": true,
+      "explicit_H_match": true
+    },
+    {
+      "case": "H_requires_explicit_option",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    },
+    {
+      "case": "wrong_relative_position",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    },
+    {
+      "case": "heteroatom_inside_R2",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    },
+    {
+      "case": "motifs_split_across_molecules",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    },
+    {
+      "case": "additional_unlocked_substituent",
+      "implicit_H_match": true,
+      "explicit_H_match": true
+    },
+    {
+      "case": "aryl_not_alkyl",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    },
+    {
+      "case": "outside_C3_limit",
+      "implicit_H_match": false,
+      "explicit_H_match": false
+    }
+  ],
+  "hydroxyl_representation_cases": [
+    {
+      "smiles": "Oc1ccc(F)cc1",
+      "default_H_counts": [
+        1,
+        0
+      ],
+      "neighbor_inclusive_H_counts": [
+        1,
+        1
+      ],
+      "OH_query_matches": [
+        true,
+        true
+      ]
+    },
+    {
+      "smiles": "COc1ccc(F)cc1",
+      "default_H_counts": [
+        0,
+        0
+      ],
+      "neighbor_inclusive_H_counts": [
+        0,
+        0
+      ],
+      "OH_query_matches": [
+        false,
+        false
+      ]
+    }
+  ],
+  "deuterated_alkyl_example": {
+    "structure": "[2H]COc1ccc(F)cc1",
+    "family_match": true,
+    "R2_carbon_count": 1,
+    "isotope_requirement_assessed": false
+  },
   "symmetry_postcheck_cases": [
     {
       "smiles": "Fc1ccc(Cl)cc1",
