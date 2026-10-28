@@ -78,6 +78,7 @@ assert not pilot["markush_queries"]["mapping_enumeration_uniquify"]
 assert pilot["markush_queries"]["mapping_overflow_detection_extra"] == 1
 assert not ranking["comparison_policy"]["pairwise_missing_field_skipping"]
 assert not ranking["comparison_policy"]["display_selection_deletes_evidence"]
+assert ranking["comparison_policy"]["preserve_reported_target_outcome"]
 
 case_counts = {}
 for name in ("evidence", "ranking"):

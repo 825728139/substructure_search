@@ -287,15 +287,17 @@ substructure_search/
 | `CompiledMatchPlan` | family_revision、必要筛选、精确 matcher 配置、后检查、能力需求 | 不支持条件不能静默丢掉；预筛不得比最终语义更窄 |
 | `MatchWitness` | source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态 | 同一实例同一映射联合满足；纯核心预筛通过不算完整见证 |
 | `ReactionRecord` | experiment_id、真实组分实例、阶段、观察、条件、来源、映射来源 | 未知反应物不能由默认值补出；净变化不自动拆为多步 |
-| `AttachmentAssessment` | attachment_id、源反应变化、母核/支链覆盖、边界事件、支持范围、未知原因 | 每个候选有类别或未评估，类型名与目标贡献分开 |
+| `AttachmentAssessment` | attachment_id、源反应变化、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；缺失副产物不制造虚假断键，类型名与目标贡献分开 |
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
 | `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放、条件缺口、proposal_not_observed | 与反应事实为不同类型，不能靠 flag 默认值混入事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
-| `ReferencePackage` | 目标任务、证据引用、建议引用、双视角列表、覆盖、快照、feature_status 和未完成项 | 区分能力未实现、未请求、截断和完成后无候选 |
+| `ReferencePackage` | 完整目标取得记录、局部方法/其他线索分区、目标任务、证据/建议引用、双视角列表、覆盖、快照、feature_status | 区分全局目标与局部任务；区分未支持、未评估、截断和完成后无候选 |
 
 ### 6.1 原子引用与稳定身份
 
 原子 map number 是某次映射的标签，不作跨记录全局 ID。目标导入后生成稳定 atom_uid；规范化、盐主体视图、保护/互变视图和核心提取都返回原表示到新表示的对应以及未映射原因。
+
+未映射原子的 map=0 只表示标签缺失，仍通过各自 AtomRef 区分；正标签的唯一性和元素/同位素对应通过后才用于跨侧连接比较。净键变化按已报告产物范围计算，来源缺少副产物时保留未追踪片段，不把消失片段内部所有键计作断裂。
 
 映射输入副本与实际材料分别建模。原子先引用映射版本和图副本，再通过有据关系关联材料实例；多副本可关联同一材料，关系也可为未知。材料份数、原子来源份数和实测投料当量不能互相代替。
 
@@ -570,7 +572,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 112 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 114 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 

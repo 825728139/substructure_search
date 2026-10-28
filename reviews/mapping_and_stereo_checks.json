@@ -86,6 +86,69 @@
       },
       "strict_stereo_match": false,
       "note": "This comparison does not establish an inversion, resolution or any actual reaction."
+    },
+    {
+      "case": "只列主产物时不能把消失片段内部键都算作断键",
+      "illustration_only": true,
+      "mapped_inputs": "[CH3:1][C:2](=[O:3])[O:6][CH2:7][CH2:8][CH3:9].[NH2:4][CH3:5]",
+      "reported_main_product": "[CH3:1][C:2](=[O:3])[NH:4][CH3:5]",
+      "illustrated_coproduct": "[OH:6][CH2:7][CH2:8][CH3:9]",
+      "raw_difference_main_only": {
+        "formed": [
+          [
+            2,
+            4
+          ]
+        ],
+        "broken": [
+          [
+            2,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            8,
+            9
+          ]
+        ],
+        "order_changes": []
+      },
+      "raw_difference_with_coproduct": {
+        "formed": [
+          [
+            2,
+            4
+          ]
+        ],
+        "broken": [
+          [
+            2,
+            6
+          ]
+        ],
+        "order_changes": []
+      },
+      "note": "The coproduct is supplied only to demonstrate representation dependence, not inferred from source evidence."
+    },
+    {
+      "case": "map零不是公共原子身份",
+      "illustration_only": true,
+      "structure": "CCCO[C:2]([CH3:1])=[O:3].[NH2:4][CH3:5]",
+      "unmapped_internal_bond_indices": [
+        3,
+        4,
+        5
+      ],
+      "actual_local_bond_count": 3,
+      "naive_map_key_count": 1,
+      "note": "Use local atom references; absent mapping is not a cross-side correspondence."
     }
   ]
 }

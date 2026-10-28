@@ -82,6 +82,12 @@
     ],
     "rerank_input": "frozen_evaluated_candidate_pool",
     "display_selection_deletes_evidence": false,
-    "uses_existing_global_query_and_time_budget": true
-  }
+    "uses_existing_global_query_and_time_budget": true,
+    "preserve_reported_target_outcome": true
+  },
+  "result_section_order": [
+    "reported_target_outcomes",
+    "target_method_references",
+    "other_clues"
+  ]
 }

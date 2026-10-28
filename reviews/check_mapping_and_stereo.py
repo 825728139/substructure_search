@@ -1,4 +1,4 @@
-"""Third-round representation checks, not chemical feasibility tests.
+"""Mapping representation checks, not chemical feasibility tests.
 All mapped equations below are illustrative, not extracted experiments.
 """
 from pathlib import Path
@@ -17,6 +17,11 @@ def plain(m):
     return Chem.MolToSmiles(m)
 
 def bonds(m):
+    # This small helper is intentionally limited to unique, positive maps.
+    # Raw set differences below are not a production reaction classifier.
+    labels=[a.GetAtomMapNum() for a in m.GetAtoms()]
+    if any(label<=0 for label in labels) or len(set(labels))!=len(labels):
+        raise ValueError('This example helper requires unique positive atom maps.')
     return {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(),b.GetEndAtom().GetAtomMapNum()))):str(b.GetBondType()) for b in m.GetBonds()}
 
 def edits(reactants,products):
@@ -49,5 +54,42 @@ assert all(not v for v in edits(a,b).values())
 assert plain(a)!=plain(b)
 assert not a.HasSubstructMatch(b,useChirality=True)
 report['cases'].append({'case':'零重原子键编辑不表示目标立体结构相同','illustration_only':True,'structures':[plain(a),plain(b)],'heavy_atom_bond_changes':edits(a,b),'strict_stereo_match':False,'note':'This comparison does not establish an inversion, resolution or any actual reaction.'})
+# Omitted coproduct atoms are not evidence that every internal bond broke.
+ester = mol('[CH3:1][C:2](=[O:3])[O:6][CH2:7][CH2:8][CH3:9].[NH2:4][CH3:5]')
+amide = mol('[CH3:1][C:2](=[O:3])[NH:4][CH3:5]')
+alcohol = mol('[OH:6][CH2:7][CH2:8][CH3:9]')
+major_only = edits(ester, amide)
+with_coproduct = edits(ester, Chem.CombineMols(amide, alcohol))
+assert major_only['broken'] == [(2, 6), (6, 7), (7, 8), (8, 9)]
+assert with_coproduct['broken'] == [(2, 6)]
+assert major_only['formed'] == with_coproduct['formed'] == [(2, 4)]
+report['cases'].append({
+    'case': '只列主产物时不能把消失片段内部键都算作断键',
+    'illustration_only': True,
+    'mapped_inputs': Chem.MolToSmiles(ester), 'reported_main_product': Chem.MolToSmiles(amide),
+    'illustrated_coproduct': Chem.MolToSmiles(alcohol),
+    'raw_difference_main_only': major_only, 'raw_difference_with_coproduct': with_coproduct,
+    'note': 'The coproduct is supplied only to demonstrate representation dependence, not inferred from source evidence.',
+})
+
+# Multiple unlabelled atoms all return zero, but retain distinct local IDs.
+partial = mol('[CH3:1][C:2](=[O:3])OCCC.[NH2:4][CH3:5]')
+unmapped_edges = [b.GetIdx() for b in partial.GetBonds()
+                  if not b.GetBeginAtom().GetAtomMapNum() and not b.GetEndAtom().GetAtomMapNum()]
+naive_zero_keys = {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(), b.GetEndAtom().GetAtomMapNum())))
+                   for b in partial.GetBonds() if b.GetIdx() in unmapped_edges}
+assert len(unmapped_edges) == 3 and naive_zero_keys == {(0, 0)}
+try:
+    bonds(partial)
+except ValueError:
+    pass
+else:
+    raise AssertionError('Unmapped labels must not enter the positive-map example helper.')
+report['cases'].append({
+    'case': 'map零不是公共原子身份', 'illustration_only': True,
+    'structure': Chem.MolToSmiles(partial), 'unmapped_internal_bond_indices': unmapped_edges,
+    'actual_local_bond_count': len(unmapped_edges), 'naive_map_key_count': len(naive_zero_keys),
+    'note': 'Use local atom references; absent mapping is not a cross-side correspondence.',
+})
 Path(__file__).with_name('mapping_and_stereo_checks.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(f'{len(report["cases"])} illustrative mapping/multiplicity/stereo checks passed; RDKit {rdBase.rdkitVersion}.')
