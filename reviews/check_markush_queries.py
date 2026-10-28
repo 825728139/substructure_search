@@ -84,8 +84,55 @@ assert not evaluate('Oc1ccc(F)cc1')['family_match']
 locked=Chem.MolFromSmarts('[F,Cl,Br]-c1[cH][cH]c(-[OX2+0]-[#6])[cH][cH]1')
 assert not mol('COc1ccc(F)c(C)c1').HasSubstructMatch(locked)
 assert evaluate('COc1ccc(F)c(C)c1')['family_match']
+
+# Symmetric core embeddings are not interchangeable once labeled R predicates
+# are checked outside the core query. Demonstrate an actual false negative
+# from applying the tool's default atom-set deduplication before post-checks.
+symmetric_core = Chem.MolFromSmarts('[c:1]1[c:2][c:3][c:4][c:5][c:6]1')
+
+def labeled_sites_match(molecule, match):
+    core_atoms = set(match)
+    def exterior_symbols(position):
+        return {a.GetSymbol() for a in molecule.GetAtomWithIdx(match[position]).GetNeighbors()
+                if a.GetIdx() not in core_atoms}
+    return 'F' in exterior_symbols(0) and 'Cl' in exterior_symbols(3)
+
+symmetry_cases = []
+for smiles in ('Fc1ccc(Cl)cc1', 'Clc1ccc(F)cc1'):
+    molecule = mol(smiles)
+    defaults = molecule.GetSubstructMatches(symmetric_core)
+    complete = molecule.GetSubstructMatches(symmetric_core, uniquify=False, maxMatches=100)
+    assert len(defaults) == 1 and len(complete) == 12
+    valid = [match for match in complete if labeled_sites_match(molecule, match)]
+    assert len(valid) == 2
+    symmetry_cases.append({
+        'smiles': smiles, 'canonical_smiles': Chem.MolToSmiles(molecule),
+        'default_matches': len(defaults),
+        'default_postcheck_hit': any(labeled_sites_match(molecule, m) for m in defaults),
+        'all_core_mappings': len(complete), 'valid_labeled_assignments': len(valid),
+    })
+assert symmetry_cases[0]['canonical_smiles'] == symmetry_cases[1]['canonical_smiles']
+assert symmetry_cases[0]['default_postcheck_hit']
+assert not symmetry_cases[1]['default_postcheck_hit']
+
+molecule = mol('Clc1ccc(F)cc1')
+limited = molecule.GetSubstructMatches(symmetric_core, uniquify=False, maxMatches=2)
+assert len(limited) == 2 and not labeled_sites_match(molecule, limited[0])
+exhausted = molecule.GetSubstructMatches(symmetric_core, uniquify=False, maxMatches=13)
+assert len(exhausted) == 12
+renumbered = Chem.RenumberAtoms(molecule, list(reversed(range(molecule.GetNumAtoms()))))
+assert any(labeled_sites_match(renumbered, m) for m in renumbered.GetSubstructMatches(
+    symmetric_core, uniquify=False, maxMatches=100))
+enumeration_check = {
+    'checked_limit': 1, 'requested_with_sentinel': 2, 'returned': len(limited),
+    'witness_in_checked_prefix': False, 'enumeration_complete': False,
+    'full_mapping_count': len(exhausted), 'full_witness_found': True,
+    'renumbering_preserves_full_match': True,
+    'scope': 'RDKit counterexample only; no production scheduler or compiler tested',
+}
 result={'scope':'illustrative query checks only; no generalized compiler, reaction evidence or exhaustive sidechain space tested',
         'rdkit_version':rdBase.rdkitVersion,'query':qtext,'generic_group_cases':generic,
+        'symmetry_postcheck_cases':symmetry_cases,'bounded_enumeration_check':enumeration_check,
         'joint_family_cases':rows,'explicit_optional_H_check':True,'explicit_extra_site_lock_check':True}
 Path(__file__).with_name('markush_query_checks.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
-print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks passed.')
+print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks; symmetry and enumeration checks passed.')

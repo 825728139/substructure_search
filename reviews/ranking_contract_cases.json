@@ -121,6 +121,24 @@
       "given": "预算只分析了部分真实反应。",
       "view": "both",
       "expected_behavior": "只声明已分析范围内的排序，显示未分析与截断，不称全局Top-K。"
+    },
+    {
+      "id": "sparse_pairwise_comparison_cycle",
+      "given": "三个越小越好的属性：甲=(0,未知,2)、乙=(1,0,未知)、丙=(未知,1,1)。逐对选择首个共同已知属性会形成循环。",
+      "view": "both",
+      "expected_behavior": "固定可比字段和缺失分组；不能逐对跳过不同缺失项形成比较器。不同输入顺序在同一候选池和配置下生成同一展示次序。"
+    },
+    {
+      "id": "rerank_full_evaluated_pool",
+      "given": "上次只展示18条，但冻结的已评估池有60条；第19条适合新偏好。",
+      "view": "both",
+      "expected_behavior": "从60条冻结候选重做分组和选择，允许第19条出现；不重新检索，不声称原来未分析的记录已被评估。"
+    },
+    {
+      "id": "proposal_pagination_key",
+      "given": "同一来源反应、同一任务产生两个不同替代底物建议。",
+      "view": "both",
+      "expected_behavior": "candidate_key区分推定ID及见证；稳定分页不会漏项或重复，排序键不作为化学优先级。"
     }
   ]
 }

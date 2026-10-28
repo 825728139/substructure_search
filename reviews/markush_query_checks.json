@@ -19,6 +19,35 @@
       "generic_ARY_match": false
     }
   ],
+  "symmetry_postcheck_cases": [
+    {
+      "smiles": "Fc1ccc(Cl)cc1",
+      "canonical_smiles": "Fc1ccc(Cl)cc1",
+      "default_matches": 1,
+      "default_postcheck_hit": true,
+      "all_core_mappings": 12,
+      "valid_labeled_assignments": 2
+    },
+    {
+      "smiles": "Clc1ccc(F)cc1",
+      "canonical_smiles": "Fc1ccc(Cl)cc1",
+      "default_matches": 1,
+      "default_postcheck_hit": false,
+      "all_core_mappings": 12,
+      "valid_labeled_assignments": 2
+    }
+  ],
+  "bounded_enumeration_check": {
+    "checked_limit": 1,
+    "requested_with_sentinel": 2,
+    "returned": 2,
+    "witness_in_checked_prefix": false,
+    "enumeration_complete": false,
+    "full_mapping_count": 12,
+    "full_witness_found": true,
+    "renumbering_preserves_full_match": true,
+    "scope": "RDKit counterexample only; no production scheduler or compiler tested"
+  },
   "joint_family_cases": [
     {
       "case": "F_methoxy",

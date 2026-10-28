@@ -67,7 +67,21 @@
     "missing_critical_data": "retain_as_unverified_no_optimistic_imputation",
     "proposal_measurements": "do_not_inherit_source_results",
     "unknown_values": "not_eligible_for_confirmed_fit",
-    "stable_tie_breaker": "record_id",
+    "comparison_basis": "fixed_feature_availability_and_measurement_scope_per_group",
+    "pairwise_missing_field_skipping": false,
+    "partial_order_policy": "fixed_basis_dominance_layers_then_deterministic_selection",
+    "stable_tie_breaker": "candidate_key",
+    "candidate_key_fields": [
+      "result_kind",
+      "source_namespace",
+      "source_record_id",
+      "source_revision",
+      "target_task_id",
+      "witness_key",
+      "proposal_id"
+    ],
+    "rerank_input": "frozen_evaluated_candidate_pool",
+    "display_selection_deletes_evidence": false,
     "uses_existing_global_query_and_time_budget": true
   }
 }

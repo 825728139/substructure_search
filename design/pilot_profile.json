@@ -6,7 +6,12 @@
   "max_cut_plans": 16,
   "max_views_per_parent": 4,
   "max_total_tasks": 40,
-  "initial_tasks_per_applicable_layer": 1,
+  "task_budget_unit": "dispatched_attempt",
+  "max_candidate_records_scanned": 2000,
+  "candidate_page_size": 100,
+  "matching_batch_size": 100,
+  "reaction_analysis_batch_size": 5,
+  "reserved_reaction_analysis_tasks": 4,
   "max_related_record_edges": 2,
   "max_record_expansion_tasks": 6,
   "max_unique_returned_records": 18,
@@ -31,7 +36,6 @@
     "status": "proposed_not_benchmarked",
     "mode": "post_retrieval_observed_reactions",
     "generate_virtual_ring_precursors_before_hit": false,
-    "max_reaction_records_analyzed": 60,
     "candidate_sampling": "round_robin_across_products_and_structure_levels",
     "source_anchored_followups_only": true,
     "shares_total_time_budget": true
@@ -44,9 +48,14 @@
     "exact_identity_parallel": true,
     "max_families_per_target": 12,
     "max_core_mappings_checked_per_candidate": 128,
+    "mapping_enumeration_uniquify": false,
+    "mapping_overflow_detection_extra": 1,
+    "max_sidechain_atom_visits_per_mapping": 10000,
     "default_R_heavy_atom_limit": null,
     "require_joint_same_instance_witness": true,
     "on_resource_or_unsupported_limit": "unassessed_or_truncated_never_silent_pass_or_fail",
     "shares_total_task_and_time_budget": true
-  }
+  },
+  "initial_families_per_applicable_layer": 1,
+  "max_reaction_records_analyzed": 60
 }

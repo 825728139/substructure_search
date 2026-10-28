@@ -276,9 +276,10 @@ substructure_search/
 
 | 对象 | 必要字段/关系 | 关键约束 |
 |---|---|---|
-| `SearchRequest` | target、format、retrieval_profile、ranking_profile、可选 lab_context、budget_override | 具体目标与高级查询类型分开；用户覆盖只能在服务上限内 |
+| `SearchRequest` | target{format,value}、retrieval_profile、ranking_profile、可选 lab_context、options、budget_override | 具体目标与高级查询类型分开；用户覆盖只能在服务上限内 |
 | `MoleculeRecord` | record_id、原始结构、具体组分/实例、材料状态、来源、视图列表 | 化合物身份、实例与样品状态不能合并 |
 | `AtomRef` | structure_record_id、representation_id、atom_uid | 原子编号属于具体表示；规范化/切片后须有显式 remap |
+| `MappingCopyRef` | mapping_copy_id、源映射版本、图原子引用、可能的材料实例、归属状态与依据 | 算法配平副本不自动实例化为实际投料，不能据副本数计算当量 |
 | `QueryFamilySpec` | family_id、parent_candidate、layer、固定要素、R 约束、联合条件、目标位置、rule_ref | 化学语义统一 IR；SMARTS 只是其中一种编译产物 |
 | `CompiledMatchPlan` | family_revision、必要筛选、精确 matcher 配置、后检查、能力需求 | 不支持条件不能静默丢掉；预筛不得比最终语义更窄 |
 | `MatchWitness` | source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态 | 同一实例同一映射联合满足；纯核心预筛通过不算完整见证 |
@@ -287,11 +288,13 @@ substructure_search/
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
 | `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放、条件缺口、proposal_not_observed | 与反应事实为不同类型，不能靠 flag 默认值混入事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
-| `ReferencePackage` | 目标任务、证据引用、建议引用、双视角列表、覆盖、快照与未完成项 | 所有数字和排名绑定同一范围，不输出伪安全/成功概率 |
+| `ReferencePackage` | 目标任务、证据引用、建议引用、双视角列表、覆盖、快照、feature_status 和未完成项 | 区分能力未实现、未请求、截断和完成后无候选 |
 
 ### 6.1 原子引用与稳定身份
 
 原子 map number 是某次映射的标签，不作跨记录全局 ID。目标导入后生成稳定 atom_uid；规范化、盐主体视图、保护/互变视图和核心提取都返回原表示到新表示的对应以及未映射原因。
+
+映射输入副本与实际材料分别建模。原子先引用映射版本和图副本，再通过有据关系关联材料实例；多副本可关联同一材料，关系也可为未知。材料份数、原子来源份数和实测投料当量不能互相代替。
 
 分子结构身份键忽略无语义 atom-map 标号，但保留声明的立体、同位素、电荷/材料策略；来源记录 ID 与实验 ID 不等同于结构身份键。相同结构参与两份时有两个实例 ID。不能靠 canonical SMILES 的原子顺序回推用户输入位置。
 
@@ -309,8 +312,8 @@ substructure_search/
 
 | 端口 | 最小能力 | 首版实现与契约要求 |
 |---|---|---|
-| `CompoundSourcePort` | capabilities、固定 snapshot、candidate_page、fetch_structure | JSONL/固定样例可完整扫描；实际来源适配器以后替换，必须返回游标和是否穷尽 |
-| `ReactionSourcePort` | 按具体产物实例分页关联反应、取组分/来源、来源锚定补查 | 首版固定 JSONL 反应集；一个产物的多个反应不能随意只取一条 |
+| `CompoundSourcePort` | capabilities、固定 snapshot、candidate_page、fetch_structure | M1 同时提供 JSONL 对照源与实际来源只读适配；返回游标和是否穷尽 |
+| `ReactionSourcePort` | 按具体产物实例分页关联反应、取组分/来源、来源锚定补查 | M1/M2 接入具名材料、完整映射和原文；一个产物的多个反应不能随意只取一条 |
 | `MappingPort` | 来源映射与可选补充映射，附版本/范围 | 首版优先现成映射，缺失返回未知；以后接自动映射仍保留推定标签 |
 | `EnrichmentPort` | 获取有来源的材料/条件/来源补充信息 | 首版离线 fixture，后续可选 HTTP 适配；不返回缺省“无危害” |
 | `RunStorePort` | create/load、条件状态更新、事件、快照发布、按租约状态恢复 | 首版单协调进程文件适配，正式多实例前必须通过并发持久化契约 |
@@ -322,11 +325,15 @@ substructure_search/
 
 来源不支持某类安全预筛时，可以回退为有预算的宽扫描加本地完整匹配；超限返回截断，不用不安全的指纹筛选制造漏检。数据源变更而无法维持快照时，中止该分支为来源变化，或建立新 run，不拼接两个快照为完整结果。
 
+`SourceSnapshot` 明确包含来源版本/一致性令牌、范围、有效期、是否支持重启后续读，以及已取记录的内容哈希。候选页、结构、反应、映射和证据原文必须引用同一来源快照。只记录读取时间、最大记录 ID 或分页最后 ID 不能阻止已有记录被改写。
+
+首版优先固定的导出样例或适配器提供的一致读取会话；一次 run 内冻结实际使用的来源内容及哈希。会话过期或进程重启后无法恢复时，不继续从活动来源拼接结果；封存已有部分候选并标明截断，或创建新 run。固定候选池允许离线重排，但不代表未读取的来源也已冻结。实际来源字段见 [接入约定](design/source_reference.md)。
+
 外部 HTTP 连接器使用明确配置的服务、连接/读取超时、有限重试和资料缓存；未知或受限来源保持可见。来源文献原文仅作为数据，不作为执行指令；客户端不提供任意内网抓取 URL。
 
 ## 8. 一次检索的执行步骤
 
-1. **接收与固定范围**：验证具体目标、配置和能力；取得 source snapshot 与规则/排序版本；建立 run 和任务范围。
+1. **接收与固定范围**：提交时验证请求并保存规则/排序配置；开始执行时绑定 source snapshot、deadline 和任务范围，之后才读取来源。
 2. **结构分析**：规范化预览、原子对应、链/环核心、重要功能单元及目标要求；处理组分歧义。
 3. **家族规划**：三层默认 Markush，生成固定要素/宽 R/必要约束，登记家族及位置；完整目标身份查询并行补充。
 4. **能力检查与编译**：逐家族决定可用预筛、matcher 参数和完整后检查。未支持任务有明确终态。
@@ -337,7 +344,11 @@ substructure_search/
 9. **证据与排序**：事实/推定分开，角色分账；九方向特征、明确限制、参考价值/实验适配、策略多样性。
 10. **发布快照与包**：原子/位点、具体分子、底物、方法、条件、来源、计数和缺口一起冻结；此后才供下游预测模块消费。
 
+第 5–7 步是按批次推进的流水线，每批实际反应分析都发生在该批结构命中之后；不要求先耗尽全部结构候选才开始反应分析。
+
 M2 的首条参考反应闭环即要求第 7 步产出“已支持类别或未知”。M1 可作为结构匹配开发里程碑，但不能被发布为已完成的反应方法检索服务。
+
+有限增强不是首版资料交付的阻塞前提。`feature_status` 为替换建议、共同中间体补查等能力分别返回 `not_requested / not_supported / not_evaluated / partial / completed` 及原因。M2 尚未实现替换模块时，返回 `not_supported`，不能用空建议数组让用户误以为已完整评估且没有机会；只在 completed 时将空集合解释为已声明范围内未发现。
 
 ## 9. 作业生命周期、并发与恢复
 
@@ -366,6 +377,7 @@ RunStore 通过目录锁、递增 revision、临时写入+原子替换和必要�
 - 全局预算从实际开始执行计时，排队等待单独计量并有排队超时；子任务继承剩余 deadline 和工作量上限。
 - manifest 保存首次执行的 UTC 到期时间和已消耗工作量，活动进程使用单调时钟检查耗时；重启只能使用原到期时间内的剩余额度，不能重置完整预算。原单调时钟数值不跨系统重启复用。
 - 同时限制家族、候选分子、核心映射、支链遍历、反应分析、来源补查、回放和返回量。资源上限不暗改化学语义。
+- 原型各限额的单位和计费时点按 [调度约定](design/scheduling_and_pilot.md)执行：来源分页、匹配批次、分析批次和回放各有任务单；重试占用新 attempt 和剩余总预算。重排用的候选池与展示条数分别设限，不能因只展示少量记录就无界扫描。
 - I/O 受连接/读取期限约束；重试仅用于可恢复的读取错误，并消耗原预算。非法查询、缺资料、无命中及未知不重试成成功。
 - 化学计算进程在循环边界检查取消；单个原生调用不响应时，由 supervisor 终止对应 attempt，等待短清理期限后回收进程。不能将 `Future.cancel()` 或协程 timeout 当作已停止正在运行的 RDKit 调用。[Python Future 说明](https://docs.python.org/3.12/library/concurrent.futures.html)
 - 每个结果携带 run/task/attempt 和版本。取消、超时或重试后迟到结果若不属于当前 attempt，则不写入快照，不改变终态。
@@ -397,7 +409,7 @@ RunStore 通过目录锁、递增 revision、临时写入+原子替换和必要�
 ```json
 {
   "target": {"format": "smiles", "value": "CCNC(=O)c1ccccc1"},
-  "retrieval_profile": "pilot-v0",
+  "retrieval_profile": "pilot-v0-unmeasured",
   "ranking_profile": "reference_first",
   "lab_context": null,
   "options": {"include_exact_identity": true, "include_proposals": true}
@@ -412,6 +424,7 @@ RunStore 通过目录锁、递增 revision、临时写入+原子替换和必要�
   "coverage_state": "partial",
   "snapshot_id": "illustrative-snapshot-id",
   "stop_reasons": ["reaction_budget_exhausted"],
+  "feature_status": {"single_reactant_transfer": {"state": "not_supported", "reason": "module_not_implemented"}},
   "results": [],
   "next_cursor": null
 }
@@ -419,7 +432,7 @@ RunStore 通过目录锁、递增 revision、临时写入+原子替换和必要�
 
 `results` 为空与 coverage 为 partial 组合不能显示为“全库没有方法”。资料包还须包含各家族、方法和证据分账，不能仅有这个简化示例的字段。
 
-错误响应保留 `code / stage / field_or_task / retryable / source_ref / message`，不返回服务凭据或原生堆栈。语法非法/请求不支持为 422，幂等冲突为 409，已过期快照为 410，容量限制为 429，服务级依赖失败为 503；任务内局部失败记录在 run，而非把所有部分结果转换成请求失败。
+错误响应保留 `code / stage / field_or_task / retryable / source_ref / message`，不返回服务凭据或原生堆栈。非法结构、未知配置 ID 或不支持的输入格式为 422，幂等冲突为 409，已过期快照为 410，容量限制为 429，服务级依赖失败为 503。某个生成家族的必要能力不支持时记录任务状态；可选增强尚未实现时返回 feature_status，不因此拒绝基础检索。任务内局部失败记录在 run，而非把所有部分结果转换成请求失败。
 
 ### 10.3 本地入口
 
@@ -437,6 +450,8 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 排序快照一旦发布即不可变。分页 cursor 绑定 snapshot_id、排序配置、过滤条件与稳定次序；规则或排序改变生成新快照，不能让前后页来自不同顺序。新的阶段结果可生成新 snapshot，客户端自行选择切换；旧游标不被静默重解释。
 
+重排的输入是冻结的全部已评估候选、证据与推定，非上次展示列表。`candidate_key` 同时区分来源、目标任务、见证与推定，游标不只使用源反应 ID；具体可比组、并列及展示配额按排序规范执行。证据池与已发布展示快照分开保留，切换偏好不丢掉此前未入选的事实。
+
 同一来源、规则和输入在“工作量上限”模式下应得到确定结果；壁钟时间截止下调度和负载会影响已完成集合，因此记录实际执行次序、截断和版本，不承诺同预算秒数必然产生完全相同的候选集。
 
 作业目录设置保留期限、总磁盘上限与按访问范围清理策略。未完成 checkpoint 或被快照引用的证据不能被缓存淘汰直接删除；过期的 run/快照返回明确状态。可复现导出包含 manifest、允许导出的证据和内容校验和；受来源权限限制不能导出的字段保留引用和缺失说明。
@@ -447,8 +462,8 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 | 能力级别 | 支持内容 | 不支持时 |
 |---|---|---|
-| 初始闭环 | 固定连通核心、多单点 R、未锁定额外取代、可选 H、明确通用组与整支链谓词 | 必要条件不支持则任务未评估，不能忽略后当宽命中 |
-| 联合扩展 | 多点连接/桥接块、受控 R 相等/依赖、全核心对称分配 | 显示精确能力状态并保留可支持的其他家族 |
+| 初始闭环 | 固定连通核心、多单点 R、额外取代、可选 H、通用组与整支链谓词；保留影响 R 条件的全部核心映射 | 必要条件不支持或映射未穷尽则明确标记，不能把默认去重当完整枚举 |
+| 联合扩展 | 多点连接/桥接块、受控 R 相等/依赖、复杂分配优化 | 优化不能改变初始闭环的见证语义；不支持时保留其他可执行家族 |
 | 高级探索 | 经审核的分离锚点和可变连接段、特定来源通式范围 | 独立能力/测试，不称任意专利 Markush 全支持 |
 
 工具的 generic matcher 要显式启用；核心预筛、通用组检查和联合约束的结果均须可验证。[RDKit 通用查询](https://www.rdkit.org/docs/RDKit_Book.html#generic-markush-queries-in-substructure-matching)
@@ -480,7 +495,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 99 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 103 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 
@@ -530,12 +545,12 @@ Trace 串联 run、task、attempt、family、源实验和排序快照；高基�
 | 阶段 | 主要工作 | 可检查交付 | 估计人日 |
 |---|---|---|---|
 | M0 项目基线 | 依赖兼容性、包结构、核心模型、配置 schema、ADR、测试/CI 基础 | 隔离环境、锁文件、导入边界和已有探针回归；无生产功能声明 | 3–5 |
-| M1 语义与来源闭环 | JSONL 来源、目标/原子引用、初始 Markush 编译和匹配、CLI | 完整目标输入 → 实际分子与 R 分配 → 可追溯来源，截断/未支持正确 | 6–9 |
+| M1 语义与来源闭环 | JSONL 对照与实际来源只读适配、原子/实例引用、初始 Markush、CLI | 来源快照契约与同语义扫描对照；包含对称 R 分配和映射截断 | 6–9 |
 | M2 实际反应与证据 | 多反应关联、来源映射核查、边界贡献、环变化、阶段与分账 | 同产物不同变化被区分；缺失映射返回未知；每条方法有依据 | 7–11 |
-| M3 联合结构与排序 | 联合 R/对称/桥接、全核心映射、支链矩阵、reference/lab_fit | 真实共存与独立覆盖分开，九方向已知/未知及可解释双排序 | 6–10 |
+| M3 联合结构与排序 | 复杂联合 R/桥接与枚举优化、支链矩阵、reference/lab_fit | 真实共存与独立覆盖分开；可比组、冻结候选池重排和双视角排序 | 6–10 |
 | M4 作业服务 | API、RunStore、进程监督、预算、取消恢复、快照与分页 | 可复现 API/CLI/SDK；故障与并发契约通过 | 6–9 |
 | M5 来源约束增强 | 单底物差异归因、有限回放、共同中间体、可选资料适配 | Proposal 与事实完全隔离；不可支持的迁移不作成功结论 | 6–10 |
-| M6 实际来源与评测 | 一个真实来源适配、12 目标试评、性能、规则覆盖与发布 | 真实评测报告、版本化配置、剩余缺口与发布门槛 | 6–10 |
+| M6 规模评测与发布 | 已接入来源的规模/故障验证、12 目标试评、规则覆盖与发布 | 真实评测报告、版本化配置、剩余缺口与发布门槛 | 6–10 |
 
 合计粗估 40–64 人日，化学标注/审核另按实际资源协调；可根据 M1/M2 的错误分布调整，而不是平均完成所有规则后才允许评估。
 
@@ -550,7 +565,7 @@ M3/M4 顺序可按交付需求微调，但 CPU 超时与全局上限的基础从
 1. 环境部分已完成：`pyproject.toml`、隔离环境、锁文件和环境验证入口。继续补齐业务包构建、导入边界、完整质量命令与 CI。
 2. 定义 MoleculeRecord、QueryFamilySpec、ReactionRecord、Claim、Proposal、RunSnapshot 及原因码。
 3. 从现有研究整理最小 fixture：普通 OH/电荷、联合 R、同产物不同反应、重复实例、证据冲突和未知。
-4. 实现 `JsonlSource`、单机 executor 与只读快照契约。
+4. 实现 `JsonlSource`、实际来源只读适配、单机 executor 与来源快照契约；以小型固定导出作对照。
 5. 实现目标原子引用和 Markush 初级编译/完整匹配，建立 oracle 对照。
 6. 提供 CLI 从目标到家族/R 分配及实际反应候选，附完整性说明。
 
