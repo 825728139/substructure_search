@@ -176,6 +176,38 @@
         "preparation_state": "incomplete_without_qualified_record"
       },
       "description": "读取任务结束，但相关记录结构损坏无法核验；不能转为失败实验或完整无合格结果"
+    },
+    {
+      "id": "input_only_usage_record",
+      "subject_id": "reactant_A",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": true,
+        "preparation_state": "complete_without_qualified_record",
+        "matched_role": "reactant"
+      },
+      "description": "查询结构只有实际投入记录，没有其制备记录；通过输入通道关联实际反应，不能反向推定制备"
+    },
+    {
+      "id": "procedure_reference_without_local_yield",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": false,
+        "preparation_state": "found_complete",
+        "reported_yield_pct": null
+      },
+      "description": "本例报告分离得到B并按例12操作，但未报告本例收率；例12的85%不能继承为B的收率"
     }
   ]
 }

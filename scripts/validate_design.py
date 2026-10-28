@@ -70,6 +70,10 @@ assert (
     <= pilot["max_total_tasks"]
 )
 assert pilot["reaction_analysis_batch_size"] <= pilot["max_reaction_records_analyzed"]
+assert 0 < pilot["input_usage"]["max_task_attempts"] <= pilot["max_total_tasks"]
+assert pilot["input_usage"]["shares_global_budget"]
+assert pilot["procedure_references"]["shares_record_expansion_budget"]
+assert not pilot["procedure_references"]["inherit_example_outcomes"]
 assert not pilot["markush_queries"]["mapping_enumeration_uniquify"]
 assert pilot["markush_queries"]["mapping_overflow_detection_extra"] == 1
 assert not ranking["comparison_policy"]["pairwise_missing_field_skipping"]

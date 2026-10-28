@@ -105,5 +105,18 @@
       "max_relaxation_steps": 2
     },
     "selection_scope_required": true
+  },
+  "input_usage": {
+    "activation": "missing_preparation_or_fragment_port_evidence",
+    "max_task_attempts": 4,
+    "shares_global_budget": true,
+    "source_role": "reactant",
+    "outcome_policy": "usage_evidence_only_without_preparation_inference"
+  },
+  "procedure_references": {
+    "max_reference_depth": 2,
+    "shares_record_expansion_budget": true,
+    "inherit_example_outcomes": false,
+    "on_ambiguous_or_cyclic_reference": "unresolved"
   }
 }

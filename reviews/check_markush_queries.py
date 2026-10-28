@@ -130,9 +130,31 @@ enumeration_check = {
     'renumbering_preserves_full_match': True,
     'scope': 'RDKit counterexample only; no production scheduler or compiler tested',
 }
+# Ordinary substructure containment does not reject extra edges between
+# already-mapped core atoms. Such edges are not external R substituents.
+chain_query = Chem.MolFromSmarts('[#6]-[#6]-[#6]')
+core_topology_cases = []
+for smiles, expected_extra in [('CCC', 0), ('C1CC1', 1), ('CC(C)C', 0)]:
+    molecule = mol(smiles)
+    match = molecule.GetSubstructMatch(chain_query)
+    assert match
+    inverse = {atom: position for position, atom in enumerate(match)}
+    extra_edges = []
+    for bond in molecule.GetBonds():
+        begin, end = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
+        if begin in inverse and end in inverse:
+            if chain_query.GetBondBetweenAtoms(inverse[begin], inverse[end]) is None:
+                extra_edges.append(sorted((inverse[begin], inverse[end])))
+    assert len(extra_edges) == expected_extra
+    core_topology_cases.append({
+        'smiles': smiles, 'ordinary_containment': True,
+        'extra_edges_in_query_positions': extra_edges,
+        'scope': 'graph counterexample; policy depends on the declared family',
+    })
 result={'scope':'illustrative query checks only; no generalized compiler, reaction evidence or exhaustive sidechain space tested',
         'rdkit_version':rdBase.rdkitVersion,'query':qtext,'generic_group_cases':generic,
         'symmetry_postcheck_cases':symmetry_cases,'bounded_enumeration_check':enumeration_check,
+        'internal_core_edge_cases':core_topology_cases,
         'joint_family_cases':rows,'explicit_optional_H_check':True,'explicit_extra_site_lock_check':True}
 Path(__file__).with_name('markush_query_checks.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
-print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks; symmetry and enumeration checks passed.')
+print(f'{len(generic)} generic-group + {len(rows)} joint-family + 2 explicit-option checks; symmetry, enumeration and core-edge checks passed.')

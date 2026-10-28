@@ -48,6 +48,31 @@
     "renumbering_preserves_full_match": true,
     "scope": "RDKit counterexample only; no production scheduler or compiler tested"
   },
+  "internal_core_edge_cases": [
+    {
+      "smiles": "CCC",
+      "ordinary_containment": true,
+      "extra_edges_in_query_positions": [],
+      "scope": "graph counterexample; policy depends on the declared family"
+    },
+    {
+      "smiles": "C1CC1",
+      "ordinary_containment": true,
+      "extra_edges_in_query_positions": [
+        [
+          0,
+          2
+        ]
+      ],
+      "scope": "graph counterexample; policy depends on the declared family"
+    },
+    {
+      "smiles": "CC(C)C",
+      "ordinary_containment": true,
+      "extra_edges_in_query_positions": [],
+      "scope": "graph counterexample; policy depends on the declared family"
+    }
+  ],
   "joint_family_cases": [
     {
       "case": "F_methoxy",
