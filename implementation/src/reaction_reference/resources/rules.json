@@ -1,0 +1,27 @@
+{
+  "schema_version": "1",
+  "version": "organic-reference-1.0",
+  "status": "bounded_rule_set_with_regression_cases",
+  "functional_groups": [
+    {"id": "amide", "smarts": "[CX3](=[OX1])-[NX3]", "priority": 100},
+    {"id": "ester", "smarts": "[CX3](=[OX1])-[OX2]-[#6]", "priority": 95},
+    {"id": "carboxylic_acid", "smarts": "[CX3](=[OX1])-[OX2H1+0]", "priority": 95},
+    {"id": "sulfonamide", "smarts": "[SX4](=[OX1])(=[OX1])-[NX3]", "priority": 95},
+    {"id": "nitrile", "smarts": "[CX2]#[NX1]", "priority": 90},
+    {"id": "nitro", "smarts": "[N+](=[O])-[O-]", "priority": 90},
+    {"id": "carbonyl", "smarts": "[CX3]=[OX1]", "priority": 85},
+    {"id": "hydroxyl", "smarts": "[OX2H1+0]-[#6]", "priority": 80},
+    {"id": "amine", "smarts": "[NX3+0;!$(N-C=O);!$(N-S(=O)=O)]", "priority": 70},
+    {"id": "ether", "smarts": "[#6]-[OX2H0+0]-[#6]", "priority": 50}
+  ],
+  "query_rules": ["whole_murcko_with_adjacent_functional_units", "complete_ring_system", "acyclic_functional_anchor_paths", "functional_neighborhood", "nonring_boundary_fragments"],
+  "transfer_rules": [
+    {
+      "id": "acyl_chloride_primary_amine",
+      "forward": "[C:1](=[O:2])([Cl])-[c:5].[N;H2;+0;!$(N-C=O):3]-[C:4]>>[C:1](=[O:2])(-[NH:3]-[C:4])-[c:5]",
+      "retro": "[C:1](=[O:2])(-[NH:3]-[C:4])-[c:5]>>[C:1](=[O:2])([Cl])-[c:5].[NH2:3]-[C:4]",
+      "scope": "source_self_replay_required; documented_step_only; graph_analogy_not_condition_prediction"
+    }
+  ],
+  "unsupported": ["arbitrary_patent_markush_language", "arbitrary_variable_paths", "metal_coordination_normalization", "unreported_intermediates", "unknown_multistep_template_transfer", "chemical_feasibility_prediction"]
+}

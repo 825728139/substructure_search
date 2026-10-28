@@ -16,3 +16,6 @@ var/
 dist/
 build/
 *.egg-info/
+.env
+.env.local
+.env.production

@@ -1,0 +1,20 @@
+name: implementation
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: implementation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: implementation/uv.lock
+      - run: uv sync --frozen --python 3.12
+      - run: uv run --frozen python scripts/check.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reaction-reference-wheel
+          path: implementation/dist/*.whl

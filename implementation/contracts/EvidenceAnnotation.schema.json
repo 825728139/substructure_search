@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "product_instance_id": {
+          "title": "Product Instance Id",
+          "type": "string"
+        },
+        "result": {
+          "default": "unknown",
+          "enum": [
+            "reported_prepared",
+            "analytical_observation",
+            "enriched",
+            "recovered",
+            "failed",
+            "unknown",
+            "conflict"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "evidence_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Text"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Location"
+        },
+        "isolated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Isolated"
+        },
+        "yield_pct": {
+          "anyOf": [
+            {
+              "maximum": 105,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Yield Pct"
+        },
+        "yield_type": {
+          "default": "unknown",
+          "enum": [
+            "isolated",
+            "analytical",
+            "recovery",
+            "unknown"
+          ],
+          "title": "Yield Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_instance_id"
+      ],
+      "title": "Observation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "expected_source_hash": {
+      "maxLength": 64,
+      "minLength": 24,
+      "title": "Expected Source Hash",
+      "type": "string"
+    },
+    "reviewer": {
+      "minLength": 1,
+      "title": "Reviewer",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "minLength": 1,
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "event_scope": {
+      "default": "unknown",
+      "enum": [
+        "documented_step",
+        "source_record_net",
+        "unknown"
+      ],
+      "title": "Event Scope",
+      "type": "string"
+    },
+    "documented_step_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Documented Step Ref"
+    },
+    "step_count": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step Count"
+    },
+    "actual_input_evidence": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Actual Input Evidence",
+      "type": "object"
+    }
+  },
+  "required": [
+    "record_id",
+    "expected_source_hash",
+    "reviewer",
+    "reviewed_at"
+  ],
+  "title": "EvidenceAnnotation",
+  "type": "object"
+}

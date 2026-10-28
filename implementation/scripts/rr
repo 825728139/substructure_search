@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+rr_project="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -x "$rr_project/.venv/bin/python" ]]; then
+  exec "$rr_project/.venv/bin/python" -m reaction_reference "$@"
+elif [[ -x "$rr_project/../.venv/bin/python" ]]; then
+  export PYTHONPATH="$rr_project/src${PYTHONPATH:+:$PYTHONPATH}"
+  exec "$rr_project/../.venv/bin/python" -m reaction_reference "$@"
+else
+  exec uv run --project "$rr_project" --frozen reaction-reference "$@"
+fi

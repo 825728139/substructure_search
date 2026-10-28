@@ -1,0 +1,62 @@
+{
+  "schema_version": "1",
+  "date": "2026-10-29",
+  "implementation_hash": "cd81f3a3e0f820ec4de21198f1dc402372a9a8c8b433de532a39ac4033a4491f",
+  "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+  "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
+  "environment": {
+    "python": "3.12.12",
+    "rdkit": "2026.3.2",
+    "fastapi": "0.162.0",
+    "pydantic": "2.14.1",
+    "psycopg": "3.3.6",
+    "pytest": "9.2.0",
+    "ruff": "0.17.3",
+    "mypy": "1.20.2"
+  },
+  "project_check": {
+    "passed": true,
+    "tests_passed": 65,
+    "ruff": true,
+    "mypy": true,
+    "contract_drift": false,
+    "wheel_build": true
+  },
+  "wheel_install_smoke": {
+    "passed": true,
+    "isolated_package_location": true,
+    "packaged_resources": true,
+    "subprocess_search": true,
+    "same_implementation_hash": true
+  },
+  "http_smoke": {
+    "passed": true,
+    "bind": "127.0.0.1",
+    "server_stopped_after_verification": true
+  },
+  "source_probe": {
+    "read_only": true,
+    "bounded_live_export_records": 5,
+    "live_export_search_passed": true,
+    "constant_smarts_alcohol_match": true,
+    "constant_smarts_ether_match": false,
+    "fingerprint_self_distance": 0,
+    "chemical_index_ready": false,
+    "missing": "products_mol_GiST",
+    "indexed_full_source_search_verified": false
+  },
+  "evaluation": {
+    "targets": 12,
+    "cases": 24,
+    "report": "evaluation/sample_report.json",
+    "method_labels": "unreviewed_not_scored",
+    "full_corpus_performance_verified": false
+  },
+  "deployment": {
+    "compose_config_valid": true,
+    "container_build_verified": false,
+    "container_runtime_verified": false,
+    "reason": "Docker daemon permission unavailable"
+  },
+  "ci_remote_run_verified": false
+}

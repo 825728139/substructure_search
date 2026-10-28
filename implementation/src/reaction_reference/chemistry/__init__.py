@@ -1,0 +1,1 @@
+"""RDKit-dependent structure processing."""

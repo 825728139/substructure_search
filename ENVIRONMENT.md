@@ -75,11 +75,11 @@ CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
 
 探针和图表在临时目录执行，避免验证时重写已经提交的研究结果。完整报告保存在本地 `.cache/environment-check/latest.json`。
 
-这些检查证明环境可用于开发和重现局部研究。三层 Markush 编译器、来源适配器、反应贡献分析、排序和检索 API 尚未由这些检查验证。当前没有完整业务测试套件，不能把安装了 pytest 记作通过引擎测试。
+本页上述检查用于设计探针和环境复现。业务实现现已在 `implementation/` 使用自己的 `pyproject.toml`、`uv.lock` 和 `.venv`；其化学、来源、预算、API 和打包验证独立记录在 [实现状态](implementation/docs/STATUS.md)，执行方式为该目录下 `uv run --frozen python scripts/check.py`。设计探针通过与业务测试通过分别记录。
 
 ## 开发工具与依赖更新
 
-已声明 pytest、pytest-cov、pytest-asyncio、Ruff、mypy、Hypothesis、import-linter、JSON Schema 验证器及构建工具。业务模块出现后，再配置模块导入约束、完整类型检查、测试发现与 CI。
+已声明 pytest、pytest-cov、pytest-asyncio、Ruff、mypy、Hypothesis、import-linter、JSON Schema 验证器及构建工具。业务实现的模块导入约束、类型检查、测试和 CI 已在 `implementation/` 配置；根目录环境继续用于设计探针与图表。
 
 新增或更新依赖时，先修改 `pyproject.toml`，再通过 `./scripts/project-uv lock` 解析，并用 `./scripts/project-uv sync --locked` 安装及重新验证。提交清单和锁文件；不能只手工修改本地 `.venv`。
 

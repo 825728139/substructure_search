@@ -1,0 +1,356 @@
+{
+  "$defs": {
+    "BudgetConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "time_ms": {
+          "default": 10000,
+          "maximum": 120000,
+          "minimum": 50,
+          "title": "Time Ms",
+          "type": "integer"
+        },
+        "max_tasks": {
+          "default": 40,
+          "maximum": 1000,
+          "minimum": 4,
+          "title": "Max Tasks",
+          "type": "integer"
+        },
+        "max_families": {
+          "default": 12,
+          "maximum": 48,
+          "minimum": 3,
+          "title": "Max Families",
+          "type": "integer"
+        },
+        "max_candidates": {
+          "default": 2000,
+          "maximum": 20000,
+          "minimum": 1,
+          "title": "Max Candidates",
+          "type": "integer"
+        },
+        "page_size": {
+          "default": 100,
+          "maximum": 500,
+          "minimum": 1,
+          "title": "Page Size",
+          "type": "integer"
+        },
+        "max_mappings": {
+          "default": 128,
+          "maximum": 2048,
+          "minimum": 1,
+          "title": "Max Mappings",
+          "type": "integer"
+        },
+        "max_atom_visits": {
+          "default": 10000,
+          "maximum": 100000,
+          "minimum": 16,
+          "title": "Max Atom Visits",
+          "type": "integer"
+        },
+        "max_reactions": {
+          "default": 60,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Max Reactions",
+          "type": "integer"
+        },
+        "max_proposals": {
+          "default": 12,
+          "maximum": 24,
+          "minimum": 0,
+          "title": "Max Proposals",
+          "type": "integer"
+        },
+        "max_replay_sets": {
+          "default": 16,
+          "maximum": 128,
+          "minimum": 1,
+          "title": "Max Replay Sets",
+          "type": "integer"
+        },
+        "max_display": {
+          "default": 18,
+          "maximum": 100,
+          "minimum": 3,
+          "title": "Max Display",
+          "type": "integer"
+        },
+        "max_summary_bytes": {
+          "default": 65536,
+          "maximum": 262144,
+          "minimum": 256,
+          "title": "Max Summary Bytes",
+          "type": "integer"
+        }
+      },
+      "title": "BudgetConfig",
+      "type": "object"
+    },
+    "LabContext": {
+      "additionalProperties": false,
+      "properties": {
+        "max_temperature_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Temperature C"
+        },
+        "min_temperature_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Temperature C"
+        },
+        "max_pressure_kpa": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Pressure Kpa"
+        },
+        "excluded_material_smiles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Material Smiles",
+          "type": "array"
+        },
+        "available_equipment": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available Equipment"
+        }
+      },
+      "title": "LabContext",
+      "type": "object"
+    },
+    "SearchOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "include_exact_identity": {
+          "default": true,
+          "title": "Include Exact Identity",
+          "type": "boolean"
+        },
+        "include_proposals": {
+          "default": true,
+          "title": "Include Proposals",
+          "type": "boolean"
+        },
+        "include_usage": {
+          "default": true,
+          "title": "Include Usage",
+          "type": "boolean"
+        },
+        "exhaustive_fixture": {
+          "default": false,
+          "title": "Exhaustive Fixture",
+          "type": "boolean"
+        },
+        "directed_followups": {
+          "default": true,
+          "title": "Directed Followups",
+          "type": "boolean"
+        }
+      },
+      "title": "SearchOptions",
+      "type": "object"
+    },
+    "SearchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1",
+          "default": "1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "retrieval_profile": {
+          "default": "reference-v1",
+          "enum": [
+            "reference-v1",
+            "pilot-v0-unmeasured"
+          ],
+          "title": "Retrieval Profile",
+          "type": "string"
+        },
+        "ranking_profile": {
+          "default": "reference_first",
+          "enum": [
+            "reference_first",
+            "lab_fit",
+            "process_reference"
+          ],
+          "title": "Ranking Profile",
+          "type": "string"
+        },
+        "lab_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LabContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "options": {
+          "$ref": "#/$defs/SearchOptions"
+        },
+        "budget": {
+          "$ref": "#/$defs/BudgetConfig"
+        }
+      },
+      "required": [
+        "target"
+      ],
+      "title": "SearchRequest",
+      "type": "object"
+    },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "smiles",
+          "default": "smiles",
+          "title": "Format",
+          "type": "string"
+        },
+        "value": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "Target",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "revision": {
+      "default": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "lifecycle": {
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "cancelled",
+        "timed_out",
+        "failed"
+      ],
+      "title": "Lifecycle",
+      "type": "string"
+    },
+    "request": {
+      "$ref": "#/$defs/SearchRequest"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    },
+    "owner": {
+      "default": "internal",
+      "title": "Owner",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snapshot Id"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "parent_run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Run Id"
+    }
+  },
+  "required": [
+    "run_id",
+    "lifecycle",
+    "request",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "RunState",
+  "type": "object"
+}

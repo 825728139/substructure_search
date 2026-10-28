@@ -1,0 +1,27 @@
+digraph G {
+  graph [rankdir=TB, bgcolor="white", pad="0.3", nodesep="0.3", ranksep="0.5", fontname="Noto Sans CJK SC", label="反应参考检索 · 当前实现流程", labelloc=t, fontsize=22];
+  node [shape=box,style="rounded,filled",fillcolor="#edf5ef",color="#49846d",fontname="Noto Sans CJK SC",fontsize=12,margin="0.18,0.12"];
+  edge [color="#638471",fontname="Noto Sans CJK SC",fontsize=10];
+  input [label="完整目标 SMILES\n具体有机分子 · 同位素与立体要求保留"];
+  query [label="自动查询集合\n严格目标补查 + 整体 / 核心 / 分片 Markush\n环系、官能团单元、无环锚点、完整 R 块"];
+  local [label="有限 JSONL\nPattern 必要核心预筛\n体量窗口 + 相似优先 / 有限全集"];
+  pg [label="只读 PostgreSQL\n可用时：整侧指纹 KNN 初选\n独立 mol 子结构游标 · SQL 超时\n当前源库缺少化学索引，明确未就绪",fillcolor="#fff2d5",color="#b29248"];
+  match [label="逐个实际产品 / 输入核验\n多种原子对应 → 每个对应独立检查完整 R 条件\n保留官能团角色、同位素、额外内部边、桥连\n联合覆盖 ≠ 不同映射的位点并集"];
+  evidence [label="按命中实例加载并绑定来源证据\n记录哈希 + 产品观察 / 输入使用 + 操作段落\n提取到产品 ≠ 报告制得；合成示例单独标记"];
+  analysis [label="实际反应与目标的贡献\n校对映射两侧材料 → 成键 / 断键 / 键级 / H与电荷变化\n有限共振辨别；命中后分析真实开环 / 闭环\n通过同一映射投影目标连接位置，歧义明确返回"];
+  analogy [label="有来源约束的替换建议\n明确单操作步骤 + 原反应物使用证据\n来源 radius-2 / 有限注册规则先自回放\n目标逆向回放 → 只改一个完整反应物 → 正向全产物组校验\n保留截断 / 失败 / 竞争位点；建议不是观察事实"];
+  rank [label="九方向排序与证据解释\n方法贡献、迁移、反应性、证据、供应、操作、危害、产出、放大\n已知事实与未知分开；完整目标获得记录全局保留\n实验限制和参考价值各自表达；三层展示配额"];
+  package [label="不可变 ReferencePackage\n三层生成/命中统计、见证、反应、证据、建议\n来源/规则哈希、任务预算、完整性与停止原因"];
+  output [label="CLI / Python SDK / HTTP / 内部页面\n结构高亮 · 固定快照分页 · 证据查看\n从冻结候选重排 · JSON 导出"];
+  downstream [label="下游逆合成模型\n消费有来源与限制的参考资料包",style="rounded,dashed",fillcolor="white"];
+  control [label="任务协调与文件快照\n单协调器目录锁 · revision · 原子写入\n独立计算进程 · 硬超时与取消\n中断后保留结果，不伪造续接来源会话",fillcolor="#eaf0fc",color="#6d85b4"];
+  input -> query;
+  query -> local; query -> pg;
+  local -> match; pg -> match;
+  match -> evidence -> analysis;
+  analysis -> analogy -> rank;
+  analysis -> rank;
+  rank -> package -> output -> downstream;
+  control -> match [style=dashed,label="预算控制"];
+  control -> package [style=dashed,label="持久化"];
+}

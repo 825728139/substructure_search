@@ -1,0 +1,1557 @@
+{
+  "$defs": {
+    "BondChange": {
+      "additionalProperties": false,
+      "properties": {
+        "maps": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Maps",
+          "type": "array"
+        },
+        "before": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After"
+        }
+      },
+      "required": [
+        "maps"
+      ],
+      "title": "BondChange",
+      "type": "object"
+    },
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "subject_id": {
+          "title": "Subject Id",
+          "type": "string"
+        },
+        "predicate": {
+          "title": "Predicate",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "source_reported",
+            "graph_inference",
+            "synthetic_illustration",
+            "unknown"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "evidence_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Text"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "subject_id",
+        "predicate",
+        "support",
+        "source"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "Conditions": {
+      "additionalProperties": false,
+      "properties": {
+        "temperature_min_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature Min C"
+        },
+        "temperature_max_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature Max C"
+        },
+        "pressure_max_kpa": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pressure Max Kpa"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        },
+        "equipment": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Equipment"
+        },
+        "stage_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stage Id"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        }
+      },
+      "title": "Conditions",
+      "type": "object"
+    },
+    "FeatureStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "enum": [
+            "completed",
+            "partial",
+            "not_evaluated",
+            "not_supported",
+            "not_requested"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "title": "FeatureStatus",
+      "type": "object"
+    },
+    "Material": {
+      "additionalProperties": false,
+      "properties": {
+        "instance_id": {
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "reactant",
+            "product",
+            "reagent",
+            "catalyst",
+            "solvent"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "smiles": {
+          "title": "Smiles",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "actual_input": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Input"
+        }
+      },
+      "required": [
+        "instance_id",
+        "role",
+        "smiles"
+      ],
+      "title": "Material",
+      "type": "object"
+    },
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "product_instance_id": {
+          "title": "Product Instance Id",
+          "type": "string"
+        },
+        "result": {
+          "default": "unknown",
+          "enum": [
+            "reported_prepared",
+            "analytical_observation",
+            "enriched",
+            "recovered",
+            "failed",
+            "unknown",
+            "conflict"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "evidence_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Text"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Location"
+        },
+        "isolated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Isolated"
+        },
+        "yield_pct": {
+          "anyOf": [
+            {
+              "maximum": 105,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Yield Pct"
+        },
+        "yield_type": {
+          "default": "unknown",
+          "enum": [
+            "isolated",
+            "analytical",
+            "recovery",
+            "unknown"
+          ],
+          "title": "Yield Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_instance_id"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "Proposal": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_reference_id": {
+          "title": "Source Reference Id",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "source_step_ref": {
+          "title": "Source Step Ref",
+          "type": "string"
+        },
+        "replaced_slot": {
+          "title": "Replaced Slot",
+          "type": "integer"
+        },
+        "original_reactants": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Original Reactants",
+          "type": "array"
+        },
+        "proposed_reactants": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Proposed Reactants",
+          "type": "array"
+        },
+        "target_smiles": {
+          "title": "Target Smiles",
+          "type": "string"
+        },
+        "replay_product_sets": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Replay Product Sets",
+          "type": "array"
+        },
+        "enumeration_complete": {
+          "title": "Enumeration Complete",
+          "type": "boolean"
+        },
+        "validation_complete": {
+          "title": "Validation Complete",
+          "type": "boolean"
+        },
+        "target_found": {
+          "title": "Target Found",
+          "type": "boolean"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "proposal_not_observed": {
+          "const": true,
+          "default": true,
+          "title": "Proposal Not Observed",
+          "type": "boolean"
+        },
+        "condition_support": {
+          "const": "unverified",
+          "default": "unverified",
+          "title": "Condition Support",
+          "type": "string"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_reference_id",
+        "source",
+        "source_step_ref",
+        "replaced_slot",
+        "original_reactants",
+        "proposed_reactants",
+        "target_smiles",
+        "replay_product_sets",
+        "enumeration_complete",
+        "validation_complete",
+        "target_found",
+        "rule_id",
+        "limitations"
+      ],
+      "title": "Proposal",
+      "type": "object"
+    },
+    "QueryFamily": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "layer": {
+          "enum": [
+            "whole",
+            "core",
+            "fragment"
+          ],
+          "title": "Layer",
+          "type": "string"
+        },
+        "core_smarts": {
+          "title": "Core Smarts",
+          "type": "string"
+        },
+        "target_atoms": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Target Atoms",
+          "type": "array"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "r_constraints": {
+          "items": {
+            "$ref": "#/$defs/RConstraint"
+          },
+          "title": "R Constraints",
+          "type": "array"
+        },
+        "equal_r_positions": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Equal R Positions",
+          "type": "array"
+        },
+        "core_topology_policy": {
+          "default": "forbid_extra_internal_edges",
+          "enum": [
+            "forbid_extra_internal_edges",
+            "record_extra_internal_edges"
+          ],
+          "title": "Core Topology Policy",
+          "type": "string"
+        },
+        "allow_extra_substitution": {
+          "default": true,
+          "title": "Allow Extra Substitution",
+          "type": "boolean"
+        },
+        "use_generic_matchers": {
+          "default": true,
+          "title": "Use Generic Matchers",
+          "type": "boolean"
+        },
+        "relation": {
+          "default": "structural_family",
+          "enum": [
+            "strict",
+            "structural_family"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "trigger": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trigger"
+        }
+      },
+      "required": [
+        "id",
+        "layer",
+        "core_smarts",
+        "target_atoms",
+        "rule_id",
+        "rule_version",
+        "description"
+      ],
+      "title": "QueryFamily",
+      "type": "object"
+    },
+    "RBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "core_positions": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Core Positions",
+          "type": "array"
+        },
+        "atom_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atom Indices",
+          "type": "array"
+        },
+        "fragment": {
+          "title": "Fragment",
+          "type": "string"
+        },
+        "boundary_bonds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Boundary Bonds",
+          "type": "array"
+        },
+        "heavy_atoms": {
+          "title": "Heavy Atoms",
+          "type": "integer"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_positions",
+        "atom_indices",
+        "fragment",
+        "boundary_bonds",
+        "heavy_atoms",
+        "category"
+      ],
+      "title": "RBlock",
+      "type": "object"
+    },
+    "RConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "minimum": 0,
+          "title": "Position",
+          "type": "integer"
+        },
+        "requirement": {
+          "default": "optional",
+          "enum": [
+            "optional",
+            "required",
+            "hydrogen"
+          ],
+          "title": "Requirement",
+          "type": "string"
+        },
+        "category": {
+          "default": "any",
+          "enum": [
+            "any",
+            "alkyl",
+            "aryl",
+            "heteroaryl"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "exact_fragment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exact Fragment"
+        },
+        "max_carbons": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Carbons"
+        }
+      },
+      "required": [
+        "position"
+      ],
+      "title": "RConstraint",
+      "type": "object"
+    },
+    "ReactionAnalysis": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "enum": [
+            "analyzed",
+            "partial",
+            "unknown"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "formed": {
+          "items": {
+            "$ref": "#/$defs/BondChange"
+          },
+          "title": "Formed",
+          "type": "array"
+        },
+        "broken": {
+          "items": {
+            "$ref": "#/$defs/BondChange"
+          },
+          "title": "Broken",
+          "type": "array"
+        },
+        "order_changed": {
+          "items": {
+            "$ref": "#/$defs/BondChange"
+          },
+          "title": "Order Changed",
+          "type": "array"
+        },
+        "representation_only": {
+          "items": {
+            "$ref": "#/$defs/BondChange"
+          },
+          "title": "Representation Only",
+          "type": "array"
+        },
+        "atom_property_changes": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Atom Property Changes",
+          "type": "array"
+        },
+        "untracked_input_bonds": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Untracked Input Bonds",
+          "type": "array"
+        },
+        "detached_boundaries": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Detached Boundaries",
+          "type": "array"
+        },
+        "atom_sources": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Atom Sources",
+          "type": "object"
+        },
+        "topology": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Topology",
+          "type": "array"
+        },
+        "reaction_classes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reaction Classes",
+          "type": "array"
+        },
+        "mapping_support": {
+          "default": "single_mapping_inference",
+          "title": "Mapping Support",
+          "type": "string"
+        },
+        "event_scope": {
+          "default": "unknown",
+          "enum": [
+            "documented_step",
+            "source_record_net",
+            "unknown"
+          ],
+          "title": "Event Scope",
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "title": "ReactionAnalysis",
+      "type": "object"
+    },
+    "ReactionRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "materials": {
+          "items": {
+            "$ref": "#/$defs/Material"
+          },
+          "title": "Materials",
+          "type": "array"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/Observation"
+          },
+          "title": "Observations",
+          "type": "array"
+        },
+        "mapped_reaction_smiles": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mapped Reaction Smiles"
+        },
+        "reaction_smiles": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reaction Smiles"
+        },
+        "event_scope": {
+          "default": "unknown",
+          "enum": [
+            "documented_step",
+            "source_record_net",
+            "unknown"
+          ],
+          "title": "Event Scope",
+          "type": "string"
+        },
+        "documented_step_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Documented Step Ref"
+        },
+        "step_count": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Count"
+        },
+        "one_pot": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "One Pot"
+        },
+        "conditions": {
+          "$ref": "#/$defs/Conditions"
+        },
+        "reaction_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reaction Class"
+        },
+        "retro_template": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retro Template"
+        },
+        "raw": {
+          "additionalProperties": true,
+          "title": "Raw",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "materials"
+      ],
+      "title": "ReactionRecord",
+      "type": "object"
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "record": {
+          "$ref": "#/$defs/ReactionRecord"
+        },
+        "material": {
+          "$ref": "#/$defs/Material"
+        },
+        "family_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Family Ids",
+          "type": "array"
+        },
+        "layers": {
+          "items": {
+            "enum": [
+              "whole",
+              "core",
+              "fragment"
+            ],
+            "type": "string"
+          },
+          "title": "Layers",
+          "type": "array"
+        },
+        "witnesses": {
+          "items": {
+            "$ref": "#/$defs/Witness"
+          },
+          "title": "Witnesses",
+          "type": "array"
+        },
+        "exact_record_identity": {
+          "default": false,
+          "title": "Exact Record Identity",
+          "type": "boolean"
+        },
+        "target_requirements_satisfied": {
+          "default": false,
+          "title": "Target Requirements Satisfied",
+          "type": "boolean"
+        },
+        "preparation_hit": {
+          "default": false,
+          "title": "Preparation Hit",
+          "type": "boolean"
+        },
+        "obtainment_hit": {
+          "default": false,
+          "title": "Obtainment Hit",
+          "type": "boolean"
+        },
+        "use_hit": {
+          "default": false,
+          "title": "Use Hit",
+          "type": "boolean"
+        },
+        "contribution": {
+          "default": "unknown",
+          "enum": [
+            "target_outcome",
+            "connection_method",
+            "local_method",
+            "modification",
+            "usage",
+            "structure_clue",
+            "unknown"
+          ],
+          "title": "Contribution",
+          "type": "string"
+        },
+        "contribution_support": {
+          "default": "unknown",
+          "enum": [
+            "source_outcome_and_graph",
+            "graph_only",
+            "reported_input",
+            "synthetic_illustration",
+            "unknown"
+          ],
+          "title": "Contribution Support",
+          "type": "string"
+        },
+        "analysis": {
+          "$ref": "#/$defs/ReactionAnalysis"
+        },
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Claims",
+          "type": "array"
+        },
+        "similarity": {
+          "default": 0.0,
+          "title": "Similarity",
+          "type": "number"
+        },
+        "molecular_weight": {
+          "title": "Molecular Weight",
+          "type": "number"
+        },
+        "coverage": {
+          "additionalProperties": true,
+          "title": "Coverage",
+          "type": "object"
+        },
+        "ranking_features": {
+          "additionalProperties": true,
+          "title": "Ranking Features",
+          "type": "object"
+        },
+        "lab_fit": {
+          "default": "not_applicable",
+          "enum": [
+            "pass",
+            "fail",
+            "unknown",
+            "not_applicable"
+          ],
+          "title": "Lab Fit",
+          "type": "string"
+        },
+        "lab_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Lab Reasons",
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "unresolved": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved",
+          "type": "array"
+        },
+        "display_position": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Position"
+        }
+      },
+      "required": [
+        "id",
+        "record",
+        "material",
+        "family_ids",
+        "layers",
+        "witnesses",
+        "analysis",
+        "molecular_weight"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "namespace": {
+          "title": "Namespace",
+          "type": "string"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "experiment_id": {
+          "title": "Experiment Id",
+          "type": "string"
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Id"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "synthetic": {
+          "default": false,
+          "title": "Synthetic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "namespace",
+        "record_id",
+        "experiment_id"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    },
+    "TaskEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "title": "Elapsed Ms",
+          "type": "number"
+        }
+      },
+      "required": [
+        "attempt",
+        "kind",
+        "scope",
+        "elapsed_ms"
+      ],
+      "title": "TaskEvent",
+      "type": "object"
+    },
+    "Witness": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "structural_witness_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Structural Witness Id"
+        },
+        "family_id": {
+          "title": "Family Id",
+          "type": "string"
+        },
+        "source_structure_id": {
+          "title": "Source Structure Id",
+          "type": "string"
+        },
+        "matched_role": {
+          "enum": [
+            "reactant",
+            "product",
+            "reagent",
+            "catalyst",
+            "solvent"
+          ],
+          "title": "Matched Role",
+          "type": "string"
+        },
+        "target_to_source": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Target To Source",
+          "type": "array"
+        },
+        "core_source_atoms": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Core Source Atoms",
+          "type": "array"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/RBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "matched_r_positions": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Matched R Positions",
+          "type": "array"
+        },
+        "extra_core_edges": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Extra Core Edges",
+          "type": "array"
+        },
+        "target_atom_coverage": {
+          "title": "Target Atom Coverage",
+          "type": "number"
+        },
+        "target_bond_coverage": {
+          "title": "Target Bond Coverage",
+          "type": "number"
+        },
+        "mapping_status": {
+          "default": "single_witness",
+          "enum": [
+            "single_witness",
+            "alternative_witness"
+          ],
+          "title": "Mapping Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "family_id",
+        "source_structure_id",
+        "matched_role",
+        "target_to_source",
+        "core_source_atoms",
+        "blocks",
+        "matched_r_positions",
+        "target_atom_coverage",
+        "target_bond_coverage"
+      ],
+      "title": "Witness",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "target_smiles": {
+      "title": "Target Smiles",
+      "type": "string"
+    },
+    "target_input_smiles": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Target Input Smiles"
+    },
+    "target_atoms": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Target Atoms",
+      "type": "array"
+    },
+    "source_snapshot": {
+      "title": "Source Snapshot",
+      "type": "string"
+    },
+    "manifest": {
+      "additionalProperties": true,
+      "title": "Manifest",
+      "type": "object"
+    },
+    "families": {
+      "items": {
+        "$ref": "#/$defs/QueryFamily"
+      },
+      "title": "Families",
+      "type": "array"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/Reference"
+      },
+      "title": "Results",
+      "type": "array"
+    },
+    "proposals": {
+      "items": {
+        "$ref": "#/$defs/Proposal"
+      },
+      "title": "Proposals",
+      "type": "array"
+    },
+    "material_relations": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Material Relations",
+      "type": "array"
+    },
+    "displayed_reference_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Displayed Reference Ids",
+      "type": "array"
+    },
+    "displayed_proposal_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Displayed Proposal Ids",
+      "type": "array"
+    },
+    "coverage_state": {
+      "enum": [
+        "complete",
+        "partial"
+      ],
+      "title": "Coverage State",
+      "type": "string"
+    },
+    "family_states": {
+      "additionalProperties": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Family States",
+      "type": "object"
+    },
+    "stop_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Stop Reasons",
+      "type": "array"
+    },
+    "source_issues": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Source Issues",
+      "type": "array"
+    },
+    "feature_status": {
+      "additionalProperties": {
+        "$ref": "#/$defs/FeatureStatus"
+      },
+      "title": "Feature Status",
+      "type": "object"
+    },
+    "statistics": {
+      "additionalProperties": true,
+      "title": "Statistics",
+      "type": "object"
+    },
+    "tasks": {
+      "items": {
+        "$ref": "#/$defs/TaskEvent"
+      },
+      "title": "Tasks",
+      "type": "array"
+    },
+    "summary": {
+      "default": "",
+      "title": "Summary",
+      "type": "string"
+    },
+    "summary_status": {
+      "default": "complete",
+      "enum": [
+        "complete",
+        "truncated",
+        "unavailable"
+      ],
+      "title": "Summary Status",
+      "type": "string"
+    },
+    "summary_omitted_items": {
+      "default": 0,
+      "title": "Summary Omitted Items",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "run_id",
+    "snapshot_id",
+    "target_smiles",
+    "target_atoms",
+    "source_snapshot",
+    "manifest",
+    "families",
+    "results",
+    "coverage_state"
+  ],
+  "title": "ReferencePackage",
+  "type": "object"
+}

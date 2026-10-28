@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "RConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "minimum": 0,
+          "title": "Position",
+          "type": "integer"
+        },
+        "requirement": {
+          "default": "optional",
+          "enum": [
+            "optional",
+            "required",
+            "hydrogen"
+          ],
+          "title": "Requirement",
+          "type": "string"
+        },
+        "category": {
+          "default": "any",
+          "enum": [
+            "any",
+            "alkyl",
+            "aryl",
+            "heteroaryl"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "exact_fragment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exact Fragment"
+        },
+        "max_carbons": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Carbons"
+        }
+      },
+      "required": [
+        "position"
+      ],
+      "title": "RConstraint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "parent_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Id"
+    },
+    "layer": {
+      "enum": [
+        "whole",
+        "core",
+        "fragment"
+      ],
+      "title": "Layer",
+      "type": "string"
+    },
+    "core_smarts": {
+      "title": "Core Smarts",
+      "type": "string"
+    },
+    "target_atoms": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Target Atoms",
+      "type": "array"
+    },
+    "rule_id": {
+      "title": "Rule Id",
+      "type": "string"
+    },
+    "rule_version": {
+      "title": "Rule Version",
+      "type": "string"
+    },
+    "r_constraints": {
+      "items": {
+        "$ref": "#/$defs/RConstraint"
+      },
+      "title": "R Constraints",
+      "type": "array"
+    },
+    "equal_r_positions": {
+      "items": {
+        "items": {
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "title": "Equal R Positions",
+      "type": "array"
+    },
+    "core_topology_policy": {
+      "default": "forbid_extra_internal_edges",
+      "enum": [
+        "forbid_extra_internal_edges",
+        "record_extra_internal_edges"
+      ],
+      "title": "Core Topology Policy",
+      "type": "string"
+    },
+    "allow_extra_substitution": {
+      "default": true,
+      "title": "Allow Extra Substitution",
+      "type": "boolean"
+    },
+    "use_generic_matchers": {
+      "default": true,
+      "title": "Use Generic Matchers",
+      "type": "boolean"
+    },
+    "relation": {
+      "default": "structural_family",
+      "enum": [
+        "strict",
+        "structural_family"
+      ],
+      "title": "Relation",
+      "type": "string"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "trigger": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trigger"
+    }
+  },
+  "required": [
+    "id",
+    "layer",
+    "core_smarts",
+    "target_atoms",
+    "rule_id",
+    "rule_version",
+    "description"
+  ],
+  "title": "QueryFamily",
+  "type": "object"
+}

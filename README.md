@@ -4,10 +4,11 @@
 
 系统用于内部研究，按内部服务规划，不包含收费、订阅、套餐或账务功能。
 
-当前已完成设计文档、局部化学探针和独立开发环境配置，尚未提供检索引擎或业务 API。
+可运行项目位于 [implementation](implementation/README.md)，包含检索引擎、反应贡献分析、来源约束替换、排序、CLI、SDK、API 和内部查看页面。启动：`./implementation/scripts/rr serve`。已实现范围与尚未验证的能力见 [实现状态](implementation/docs/STATUS.md)。
 
 - [产品与化学计划](plan.md)
 - [项目实现计划、模块与目录结构](implementation_plan.md)
+- [实现项目、启动与接口说明](implementation/README.md)
 - [结果过滤与排序](ranking_plan.md)
 - [开发环境安装和验证](ENVIRONMENT.md)
 - [详细化学规范](design/specification.md)

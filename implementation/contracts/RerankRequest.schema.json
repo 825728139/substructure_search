@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "LabContext": {
+      "additionalProperties": false,
+      "properties": {
+        "max_temperature_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Temperature C"
+        },
+        "min_temperature_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Temperature C"
+        },
+        "max_pressure_kpa": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Pressure Kpa"
+        },
+        "excluded_material_smiles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Material Smiles",
+          "type": "array"
+        },
+        "available_equipment": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available Equipment"
+        }
+      },
+      "title": "LabContext",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ranking_profile": {
+      "default": "reference_first",
+      "enum": [
+        "reference_first",
+        "lab_fit",
+        "process_reference"
+      ],
+      "title": "Ranking Profile",
+      "type": "string"
+    },
+    "lab_context": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LabContext"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "title": "RerankRequest",
+  "type": "object"
+}
