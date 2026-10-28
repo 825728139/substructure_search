@@ -208,6 +208,22 @@
         "reported_yield_pct": null
       },
       "description": "本例报告分离得到B并按例12操作，但未报告本例收率；例12的85%不能继承为B的收率"
+    },
+    {
+      "id": "unspecified_target_stereo_observed_specific_form",
+      "subject_id": "stereo_product_B",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": false,
+        "preparation_state": "found_complete",
+        "direct_target_relation": "target_requirements_satisfied"
+      },
+      "description": "目标未约束一个手性中心，来源明确制得具体构型且完整图满足其余要求；保留来源构型，不能归并为相同记录身份或外消旋材料"
     }
   ]
 }

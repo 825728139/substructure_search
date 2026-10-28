@@ -51,5 +51,37 @@ atom_union=set().union(*rings)
 bond_union={b.GetIdx() for b in m.GetBonds() if any(b.GetBeginAtomIdx() in r and b.GetEndAtomIdx() in r for r in rings)}
 assert len(atom_union)==m.GetNumHeavyAtoms() and len(bond_union)<m.GetNumBonds()
 add('分开覆盖两个环可覆盖所有原子却不覆盖连接键',{'input':Chem.MolToSmiles(m),'covered_atoms':len(atom_union),'total_heavy_atoms':m.GetNumHeavyAtoms(),'covered_bonds':len(bond_union),'total_bonds':m.GetNumBonds(),'missing_bonds':[b.GetIdx() for b in m.GetBonds() if b.GetIdx() not in bond_union]})
+# Record identity is not the same as satisfying an underspecified target.
+unspecified = mol('CC(O)c1ccccc1')
+stereo_candidates = []
+for smiles in ('C[C@H](O)c1ccccc1', 'C[C@@H](O)c1ccccc1'):
+    candidate = mol(smiles)
+    same_key = Chem.MolToSmiles(candidate) == Chem.MolToSmiles(unspecified)
+    matches_query = candidate.HasSubstructMatch(unspecified, useChirality=True)
+    assert not same_key and matches_query
+    assert candidate.GetNumAtoms() == unspecified.GetNumAtoms()
+    assert candidate.GetNumBonds() == unspecified.GetNumBonds()
+    stereo_candidates.append({'smiles': smiles, 'same_isomeric_key': same_key,
+                              'matches_unspecified_stereo_query': matches_query})
+add('未指定手性的目标不能只靠带立体的身份字符串查找', {
+    'target': Chem.MolToSmiles(unspecified), 'candidates': stereo_candidates,
+    'scope': 'Controlled same-connectivity examples; not a general identity checker or observation claim.'})
+
+# isomericSmiles=False removes isotope labels as well as stereochemistry.
+isotope_examples = []
+for smiles in ('[13CH3][C@H](O)c1ccccc1', 'C[C@H](O)c1ccccc1'):
+    molecule = mol(smiles)
+    view = Chem.Mol(molecule)
+    Chem.RemoveStereochemistry(view)
+    isotope_examples.append({
+        'original': Chem.MolToSmiles(molecule),
+        'nonisomeric_serialization': Chem.MolToSmiles(molecule, isomericSmiles=False),
+        'stereo_removed_isotope_preserved': Chem.MolToSmiles(view, isomericSmiles=True),
+    })
+assert isotope_examples[0]['nonisomeric_serialization'] == isotope_examples[1]['nonisomeric_serialization']
+assert isotope_examples[0]['stereo_removed_isotope_preserved'] != isotope_examples[1]['stereo_removed_isotope_preserved']
+assert '[13CH3]' in isotope_examples[0]['stereo_removed_isotope_preserved']
+add('仅忽略立体的视图仍需保留同位素', {'examples': isotope_examples,
+    'scope': 'Serialization behavior only; original structures remain unchanged.'})
 Path(__file__).with_name('chemical_edge_cases.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(f"{len(report['cases'])} chemical representation/matching cases verified; RDKit {rdBase.rdkitVersion}.")

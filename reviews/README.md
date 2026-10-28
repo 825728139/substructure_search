@@ -6,7 +6,7 @@
 
 | 检查 | 运行脚本 | 对应输出 |
 |---|---|---|
-| 骨架、互变、立体和覆盖边界 | [脚本](check_chemical_edge_cases.py) | [结果](chemical_edge_cases.json) |
+| 骨架、互变、目标立体要求、同位素序列化和覆盖边界 | [脚本](check_chemical_edge_cases.py) | [结果](chemical_edge_cases.json) |
 | 反应环境、原子来源、同位素与互补位点选择 | [脚本](check_reaction_relevance.py) | [结果](reaction_relevance_checks.json) |
 | 映射歧义、未映射标签、遗漏副产物、份数和手性 | [脚本](check_mapping_and_stereo.py) | [结果](mapping_and_stereo_checks.json) |
 | 目标母核—支链连接贡献 | [脚本](check_attachment_methods.py) | [结果](attachment_method_checks.json) |
@@ -26,9 +26,9 @@
 
 ## 待实现的验收要求
 
-- [详细规范第 13.1 节](../design/specification.md#131-化学验收案例)：116 项化学验收要求。
-- [证据契约场景](evidence_contract_cases.json)：14 个结果状态与计数案例。
-- [排序契约场景](ranking_contract_cases.json)：32 个资格、约束与未知信息案例。
+- [详细规范第 13.1 节](../design/specification.md#131-化学验收案例)：118 项化学验收要求。
+- [证据契约场景](evidence_contract_cases.json)：15 个结果状态与计数案例。
+- [排序契约场景](ranking_contract_cases.json)：34 个资格、约束与未知信息案例。
 
 上述清单需由业务实现逐项执行；JSON 格式正确不代表对应行为已经通过测试。
 

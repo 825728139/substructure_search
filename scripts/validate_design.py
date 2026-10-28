@@ -78,6 +78,8 @@ assert (
     <= pilot["markush_queries"]["max_families_per_target"]
 )
 assert pilot["directed_R_followups"]["shares_existing_budgets"]
+assert pilot["model_summary"]["max_utf8_bytes"] > 0
+assert pilot["model_summary"]["preserve_claim_qualifiers"]
 assert 0 < pilot["input_usage"]["max_task_attempts"] <= pilot["max_total_tasks"]
 assert pilot["input_usage"]["shares_global_budget"]
 assert pilot["procedure_references"]["shares_record_expansion_budget"]

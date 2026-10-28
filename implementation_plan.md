@@ -285,13 +285,13 @@ substructure_search/
 | `QueryFamilySpec` | family_id、parent_candidate、layer、固定要素、R 约束、core_topology_policy、联合条件、目标位置、rule_ref | 化学语义统一 IR；包含匹配不自动证明核心没有额外连接 |
 | `CandidateSelectionScope` | selection_scope_id、family_id、来源快照、输入/产物角色范围、比较结构/区域、表示及属性版本、体量窗口、相似策略/K、放宽阶段 | 角色或选择范围改变生成新 ID，不把输入侧命中混入产物制备统计 |
 | `CompiledMatchPlan` | family_revision、必要筛选、精确 matcher 配置、后检查、能力需求 | 不支持条件不能静默丢掉；预筛不得比最终语义更窄 |
-| `MatchWitness` | source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态 | 同一实例同一映射联合满足；纯核心预筛通过不算完整见证 |
+| `MatchWitness` | source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态、直接目标关系（如适用） | 区分严格记录身份与满足目标要求；纯核心预筛通过不算完整见证 |
 | `ReactionRecord` | experiment_id、真实组分实例、阶段、观察、条件、来源、映射来源 | 未知反应物不能由默认值补出；净变化不自动拆为多步 |
 | `AttachmentAssessment` | attachment_id、源反应变化、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；缺失副产物不制造虚假断键，类型名与目标贡献分开 |
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
 | `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放、条件缺口、proposal_not_observed | 与反应事实为不同类型，不能靠 flag 默认值混入事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
-| `ReferencePackage` | 完整目标取得记录、局部方法/其他线索分区、目标任务、证据/建议引用、双视角列表、覆盖、快照、feature_status | 区分全局目标与局部任务；区分未支持、未评估、截断和完成后无候选 |
+| `ReferencePackage` | 完整目标取得记录、局部方法/其他线索分区、证据/建议引用、双视角列表、覆盖、快照、feature_status、summary_status | 检索完整性与摘要裁剪分开；缩短摘要不提升结论强度 |
 
 ### 6.1 原子引用与稳定身份
 
@@ -302,6 +302,8 @@ substructure_search/
 映射输入副本与实际材料分别建模。原子先引用映射版本和图副本，再通过有据关系关联材料实例；多副本可关联同一材料，关系也可为未知。材料份数、原子来源份数和实测投料当量不能互相代替。
 
 分子结构身份键忽略无语义 atom-map 标号，但保留声明的立体、同位素、电荷/材料策略；来源记录 ID 与实验 ID 不等同于结构身份键。相同结构参与两份时有两个实例 ID。不能靠 canonical SMILES 的原子顺序回推用户输入位置。
+
+完整目标查找包含严格记录身份核验，以及对目标未约束立体位置的要求匹配。可先用独立的立体放宽视图取候选，但该视图须保留同位素、电荷及组分策略，最终仍检查完整目标。来源中更明确的立体信息保留在结果里，不因目标未约束就合并来源身份；这些候选是否能直接取得目标还需实际观察证据。
 
 结构相同不等于本地原子索引相同。缓存中的匹配索引只能解释在缓存注明的具体表示中；返回当前 run 前，按显式表示对应重新绑定目标 atom_uid、来源实例及本次 occurrence。若只有 canonical SMILES 身份一致而无可靠重绑定，就重算匹配。对称核心的多种合法对应继续保留，不能随意取一个对称编号完成重绑定。[RDKit 原子重编号接口](https://www.rdkit.org/docs/source/rdkit.Chem.rdmolops.html#rdkit.Chem.rdmolops.RenumberAtoms)
 
@@ -481,6 +483,8 @@ RunStore 通过目录锁、递增 revision、临时写入+原子替换和必要�
 | `GET /v1/capabilities` | 规则/查询/视图与模块已支持能力 | 与实际启用版本绑定，不按路线图宣称实现 |
 | `GET /health/live`、`GET /health/ready` | 进程存活和依赖就绪 | 就绪检查核对规则、运行存储及来源能力，非全量化学检索 |
 
+`rerank` 仅接受原结果快照、排序偏好、实验能力/限制及已存在特征上的展示过滤。目标结构、查询家族、来源快照和候选体量选择窗口属于检索输入，改变它们需要新检索，不能重用旧目标的匹配/证据作为新目标事实。重排可以调整实验适配分组和展示顺序，但不生成新原子对应、方法见证或补读来源。
+
 ### 10.2 请求与返回示例
 
 仅为接口形态，字段值不是真实任务结果：
@@ -535,6 +539,8 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 重排的输入是冻结的全部已评估候选、证据与推定，非上次展示列表。`candidate_key` 同时区分来源、目标任务、见证与推定，游标不只使用源反应 ID；具体可比组、并列及展示配额按排序规范执行。证据池与已发布展示快照分开保留，切换偏好不丢掉此前未入选的事实。
 
+模型摘要从结构化证据生成，记录实际大小上限、选取条目及 `summary_status`；结论和其证据限制不可分割。摘要的长度控制与消费端的模型 token 检查按 [调度约定](design/scheduling_and_pilot.md#模型输入的必备与可折叠部分)执行，不把完整 AAM、全部原文或历史输出直接拼进提示词。不同摘要长度可生成不同展示结果，但不能改变来源事实或检索计数。
+
 同一来源、规则和输入在固定来源枚举顺序的“工作量上限”模式下应得到确定结果。适配器声明枚举顺序是否可跨运行复现；依赖索引物理顺序的截断查询，须保留实际取得的候选与顺序，不能承诺重新访问活动来源会得到同一前缀。壁钟时间截止下调度和负载也会影响已完成集合，因此记录实际执行次序、截断和版本；冻结候选池上的重排保持可重复。
 
 作业目录设置保留期限、总磁盘上限与按访问范围清理策略。未完成 checkpoint 或被快照引用的证据不能被缓存淘汰直接删除；过期的 run/快照返回明确状态。可复现导出包含 manifest、允许导出的证据和内容校验和；受来源权限限制不能导出的字段保留引用和缺失说明。
@@ -578,7 +584,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 116 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 118 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 

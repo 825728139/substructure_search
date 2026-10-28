@@ -84,6 +84,39 @@
       "missing_bonds": [
         5
       ]
+    },
+    {
+      "case": "未指定手性的目标不能只靠带立体的身份字符串查找",
+      "target": "CC(O)c1ccccc1",
+      "candidates": [
+        {
+          "smiles": "C[C@H](O)c1ccccc1",
+          "same_isomeric_key": false,
+          "matches_unspecified_stereo_query": true
+        },
+        {
+          "smiles": "C[C@@H](O)c1ccccc1",
+          "same_isomeric_key": false,
+          "matches_unspecified_stereo_query": true
+        }
+      ],
+      "scope": "Controlled same-connectivity examples; not a general identity checker or observation claim."
+    },
+    {
+      "case": "仅忽略立体的视图仍需保留同位素",
+      "examples": [
+        {
+          "original": "[13CH3][C@H](O)c1ccccc1",
+          "nonisomeric_serialization": "CC(O)c1ccccc1",
+          "stereo_removed_isotope_preserved": "[13CH3]C(O)c1ccccc1"
+        },
+        {
+          "original": "C[C@H](O)c1ccccc1",
+          "nonisomeric_serialization": "CC(O)c1ccccc1",
+          "stereo_removed_isotope_preserved": "CC(O)c1ccccc1"
+        }
+      ],
+      "scope": "Serialization behavior only; original structures remain unchanged."
     }
   ]
 }

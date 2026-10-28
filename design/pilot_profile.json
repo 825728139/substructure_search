@@ -124,5 +124,11 @@
     "max_child_families": 2,
     "shares_existing_budgets": true,
     "new_family_identity_required": true
+  },
+  "model_summary": {
+    "max_utf8_bytes": 65536,
+    "preserve_claim_qualifiers": true,
+    "on_overflow": "drop_whole_items_and_report",
+    "token_limit_owner": "consumer_with_model_tokenizer"
   }
 }

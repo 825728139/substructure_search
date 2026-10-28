@@ -193,6 +193,18 @@
       "given": "一个源反应卡片及依附它的两个不同单底物替换建议进入摘要。",
       "view": "both",
       "expected_behavior": "计3个展示条目、1个被引用实验和2个建议；分页ID区分卡片，建议不增加制备或方法成功计数。"
+    },
+    {
+      "id": "rerank_cannot_change_target",
+      "given": "调用者希望在原快照重排时同时把目标结构或检索体量窗口换掉。",
+      "view": "both",
+      "expected_behavior": "拒绝作为纯重排处理，要求新检索/明确新分析；不能沿用旧目标对应和证据产生新目标结论。"
+    },
+    {
+      "id": "summary_preserves_qualifiers",
+      "given": "替换建议图回放符合目标，但条件迁移未知；输出摘要长度不足。",
+      "view": "reference",
+      "expected_behavior": "保留推定身份、条件未知与来源，必要时整条省略并报告裁剪；不能截掉限制语后输出已经可以合成。"
     }
   ]
 }
