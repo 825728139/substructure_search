@@ -11,7 +11,9 @@
         "use_hit": false,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "只有计划产物，未观察到"
+      "description": "只有计划产物，未观察到",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": []
     },
     {
       "id": "analysis_only",
@@ -22,7 +24,9 @@
         "use_hit": false,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "身份可对应的分析观察，不宣称制备"
+      "description": "身份可对应的分析观察，不宣称制备",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": []
     },
     {
       "id": "reported_product",
@@ -30,10 +34,14 @@
       "expected": {
         "preparation_hit": true,
         "obtainment_hit": true,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "found_complete"
       },
-      "description": "明确报告由实际底物制得对应产物"
+      "description": "明确报告由实际底物制得对应产物",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
     },
     {
       "id": "resolution",
@@ -41,10 +49,14 @@
       "expected": {
         "preparation_hit": false,
         "obtainment_hit": true,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "有据拆分富集；制备和获得分账"
+      "description": "由混合物获得指定富集材料；未证明该富集材料作为输入使用",
+      "subject_id": "enriched_material_B",
+      "verified_input_subject_ids": [
+        "starting_mixture"
+      ]
     },
     {
       "id": "ordinary_recovery",
@@ -55,7 +67,11 @@
         "use_hit": true,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "未变化起始物普通回收"
+      "description": "未变化起始物普通回收",
+      "subject_id": "reactant_A",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
     },
     {
       "id": "failed_attempt",
@@ -66,7 +82,11 @@
         "use_hit": true,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "实际投入后未得到该产物"
+      "description": "查询对象是明确实际投入的底物；实验失败，没有本步制备或富集该对象的证据",
+      "subject_id": "reactant_A",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
     },
     {
       "id": "isolated_byproduct",
@@ -74,10 +94,14 @@
       "expected": {
         "preparation_hit": true,
         "obtainment_hit": true,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "found_complete"
       },
-      "description": "身份可对应的实际制得副产物"
+      "description": "身份可对应的实际制得副产物",
+      "subject_id": "byproduct_C",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
     },
     {
       "id": "same_fact_conflict",
@@ -85,10 +109,14 @@
       "expected": {
         "preparation_hit": false,
         "obtainment_hit": false,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "complete_without_qualified_record"
       },
-      "description": "同实验同事实有未解冲突，无合格阳性见证"
+      "description": "同实验同事实有未解冲突，无合格阳性见证",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
     },
     {
       "id": "independent_success_failure",
@@ -96,10 +124,15 @@
       "expected": {
         "preparation_hit": true,
         "obtainment_hit": true,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "found_complete"
       },
-      "description": "独立成功与失败记录并存"
+      "description": "独立成功与失败记录并存",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "reactant_A1",
+        "reactant_A2"
+      ]
     },
     {
       "id": "hit_before_timeout",
@@ -107,10 +140,42 @@
       "expected": {
         "preparation_hit": true,
         "obtainment_hit": true,
-        "use_hit": true,
+        "use_hit": false,
         "preparation_state": "found_incomplete"
       },
-      "description": "已有合格见证，其他任务超时"
+      "description": "已有合格见证，其他任务超时",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "reactant_A"
+      ]
+    },
+    {
+      "id": "product_later_used",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [
+        "product_B"
+      ],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": true,
+        "preparation_state": "found_complete"
+      },
+      "description": "实验一制得B，另一实验明确投入B；两个结论分别引用各自见证"
+    },
+    {
+      "id": "invalid_source_record",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": [],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": false,
+        "preparation_state": "incomplete_without_qualified_record"
+      },
+      "description": "读取任务结束，但相关记录结构损坏无法核验；不能转为失败实验或完整无合格结果"
     }
   ]
 }

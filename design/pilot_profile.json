@@ -68,7 +68,9 @@
       "merge_with_primary": "union",
       "shares_global_budget": true,
       "activation": "whole_core_or_broad_query",
-      "primary_channel_required_for_complete": true
+      "primary_channel_required_for_complete": true,
+      "candidate_unit": "unique_structure_representation",
+      "on_global_prefix_then_filter": "bounded_refill_with_incomplete_scope"
     },
     "source_query_timeout_ms": 1500,
     "broad_query": {
@@ -76,7 +78,7 @@
       "exact_count_before_first_page": false,
       "automatic_retry_of_slow_query": false,
       "on_timeout": "partial_with_backend_cancellation",
-      "exhaustive_search": "explicit_background_job_on_fixed_source"
+      "exhaustive_search": "deferred_offline_on_fixed_source"
     },
     "molecular_size_priority": {
       "enabled": true,
@@ -86,16 +88,22 @@
         "core"
       ],
       "comparison_view": "same_versioned_component_or_parent_policy",
-      "features": [
+      "window_policy": "near_first_then_relax_when_evidence_insufficient",
+      "fragment_policy": "local_coverage_and_reaction_site_not_full_target_mass",
+      "selection_scope_must_be_reported": true,
+      "preselection_features": [
         "molecular_weight_ratio",
-        "heavy_atom_count_ratio",
+        "heavy_atom_count_ratio"
+      ],
+      "post_match_features": [
         "target_coverage",
         "reference_coverage",
         "extra_heavy_atoms"
       ],
-      "window_policy": "near_first_then_relax_when_evidence_insufficient",
-      "fragment_policy": "local_coverage_and_reaction_site_not_full_target_mass",
-      "selection_scope_must_be_reported": true
-    }
+      "descriptor_binding": "structure_id_and_representation_id_and_version",
+      "on_missing_policy_or_descriptors": "bounded_candidate_mode_with_unapplied_constraints_reported",
+      "max_relaxation_steps": 2
+    },
+    "selection_scope_required": true
   }
 }

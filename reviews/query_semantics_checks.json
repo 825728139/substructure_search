@@ -66,5 +66,41 @@
     }
   ],
   "reaction_reference_value_assessed": false,
+  "selection_order_example": {
+    "scope": "illustrative_not_runtime_thresholds",
+    "target_smiles": "CCNC(=O)c1ccccc1",
+    "window_g_per_mol": [
+      140,
+      180
+    ],
+    "k": 1,
+    "candidates": [
+      {
+        "case": "higher_similarity_outside_window",
+        "smiles": "CCCCCNC(=O)c1ccccc1",
+        "molecular_weight": 191.27400000000003,
+        "similarity": 0.6333333333333333
+      },
+      {
+        "case": "lower_similarity_inside_window",
+        "smiles": "COc1ccc(C(=O)NCC)cc1",
+        "molecular_weight": 179.219,
+        "similarity": 0.6
+      }
+    ],
+    "global_topk_then_window": [],
+    "window_then_topk": [
+      "lower_similarity_inside_window"
+    ]
+  },
+  "representation_consistency_example": {
+    "selected_product_smiles": "CCNC(=O)c1ccccc1",
+    "aggregate_smiles": "CCCCCCCCCCCC.CCNC(=O)c1ccccc1",
+    "selected_product_molecular_weight": 149.19299999999998,
+    "aggregate_molecular_weight": 319.5330000000001,
+    "selected_product_similarity": 1.0,
+    "aggregate_similarity": 0.8148148148148148,
+    "largest_fragment_is_selected_product": false
+  },
   "limitation": "These cases do not prove prefilter safety for every SMARTS, Markush or chemical view."
 }

@@ -55,6 +55,13 @@ assert not pilot["source_execution"]["require_morgan_similarity_threshold"]
 assert pilot["source_execution"]["similarity_priority"]["merge_with_primary"] == "union"
 assert pilot["source_execution"]["similarity_priority"]["activation"] == "whole_core_or_broad_query"
 assert pilot["source_execution"]["molecular_size_priority"]["enabled"]
+size_policy = pilot["source_execution"]["molecular_size_priority"]
+assert not set(size_policy["preselection_features"]) & set(size_policy["post_match_features"])
+assert "target_coverage" in size_policy["post_match_features"]
+assert (
+    pilot["source_execution"]["similarity_priority"]["candidate_unit"]
+    == "unique_structure_representation"
+)
 assert pilot["source_execution"]["source_query_timeout_ms"] <= pilot["global_time_budget_ms"]
 assert not pilot["source_execution"]["broad_query"]["exact_count_before_first_page"]
 initial_read_and_match_tasks = 2 * 3 * pilot["initial_families_per_applicable_layer"]
@@ -73,6 +80,11 @@ for name in ("evidence", "ranking"):
     cases = json.loads((ROOT / "reviews" / f"{name}_contract_cases.json").read_text())["cases"]
     assert len({case["id"] for case in cases}) == len(cases), f"Duplicate {name} case ID"
     case_counts[name] = len(cases)
+    if name == "evidence":
+        for case in cases:
+            assert case["expected"]["use_hit"] == (
+                case["subject_id"] in case["verified_input_subject_ids"]
+            ), f"Use claim lacks subject-specific evidence: {case['id']}"
 acceptance = spec.split("### 13.1 ", 1)[1].split("### 13.2 ", 1)[0]
 chemical_cases = sum(line.startswith("|") for line in acceptance.splitlines()) - 2
 plan = (ROOT / "plan.md").read_text()

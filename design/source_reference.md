@@ -44,6 +44,10 @@
 
 近体量选择若用于减少来源查询工作，应有按具体产物/统一表示策略离线计算的分子量与重原子数，以及可高效访问这些属性的来源能力；不能在千万行上临时逐条解析 SMILES、计算质量后再筛选。已核对的两表没有独立的预计算质量字段，接入时需确认能否从现有资产提供或准备可追溯的属性资产。多产物行及盐的 `products_mol` 是聚合图，其总质量不能直接当作某个命中分子的质量；属性须绑定具体材料及比较视图。
 
+`product_fp` 同样是产物侧指纹，不能默认等于所选具体产物/母体的指纹。适配器分别声明是否支持具体分子表示、窗口内 Top-K 和唯一结构枚举；仅有整侧候选能力时，返回实际能力标签，接入层对有界候选重新核验。按实际分子补算属性时仍保留整侧原始对象及来源关系。
+
+候选选择顺序也需核对：先在窗口内筛选后取 Top-K，与全库取 Top-K 后过滤窗口是两种不同查询。采用子查询或 CTE 时，明确范围条件在哪一层，必要时确认物化方式；不能仅把 SQL 条件位置当作执行边界。[PostgreSQL CTE 说明](https://www.postgresql.org/docs/18/queries-with.html#QUERIES-WITH-MATERIALIZED) 反应行重复造成候选不足时，可有界续取并累计唯一结构，避免每个在线请求都做全库 DISTINCT。
+
 千万级验证应在受控只读样本或维护窗口检查实际索引与 `EXPLAIN`，需要执行测量时再使用带时间上限的 `EXPLAIN (ANALYZE, BUFFERS)`。不能将正在入库的小样本测量推算为最终规模性能；本次设计修订未在源库创建索引或执行全量压测。
 
 小结构宽查询按 [快返约定](../implementation_plan.md#72-小而简单的目标宽查询快返)分流。来源读取使用事务内的语句超时和客户端取消；`LIMIT` 限制返回量，深 `OFFSET` 仍需计算跳过的行，服务端游标也不能消除查询中的阻塞排序。[分页说明](https://www.postgresql.org/docs/18/queries-limit.html)、[语句超时](https://www.postgresql.org/docs/18/runtime-config-client.html#GUC-STATEMENT-TIMEOUT)、[游标说明](https://www.postgresql.org/docs/18/sql-declare.html)

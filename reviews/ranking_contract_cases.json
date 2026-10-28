@@ -151,6 +151,24 @@
       "given": "一个较大的参考产物在目标片段对应位置发生有据连接，但其总分子量远大于该片段。",
       "view": "reference",
       "expected_behavior": "按局部覆盖、额外结构及反应位置比较；不能因完整分子与小片段的质量比超出整体层窗口而删除相关局部方法。"
+    },
+    {
+      "id": "conditional_topk_order",
+      "given": "全库最相似的一条不在体量窗口，窗口内还有另一条较低相似度的有效结构。",
+      "view": "reference",
+      "expected_behavior": "窗口内Top-K与全库Top-K后过滤分开标识；后者为空不代表窗口没有候选，可有界续取。"
+    },
+    {
+      "id": "distinct_structure_candidate_budget",
+      "given": "相似候选前100个反应行都对应同一产物结构。",
+      "view": "reference",
+      "expected_behavior": "只计一个不同结构，保留其全部来源关联；按预算继续取其他结构，不声称获得100个不同分子或独立方法。"
+    },
+    {
+      "id": "representation_consistent_descriptors",
+      "given": "质量来自已确定的具体产物，指纹来自该产物加其他产物的聚合图。",
+      "view": "reference",
+      "expected_behavior": "比较表示不一致，不能按这个组合声称取得具体分子的体量与相似度顺序；有界重算并保留原实例。"
     }
   ]
 }

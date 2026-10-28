@@ -25,19 +25,21 @@ relations [label="核验查询的完整含义
 scope [label="优先选择有参考价值的体量范围
 整体/核心：分子量与重原子数接近目标
 分片：按局部覆盖和实际反应位置比较
-候选过少或方法不足时，再按层放宽", fillcolor="#D6F0E5"];
+属性与指纹绑定同一具体表示
+不足先区分原因，再补查或放宽", fillcolor="#D6F0E5"];
 index [label="当前范围内的子结构索引
 筛选家族必需特征，再匹配固定结构
 限时分批取数，不先全量计数或排序"];
 similar [label="整体/核心和宽查询：相似优先
-相似索引取少量候选，再做严格匹配
+在声明范围累计不同结构，再做严格匹配
+全库前缀后过滤不等于窗口内 Top-K
 与索引通道取并集；保留当前选择范围", fillcolor="#FFF3D6"];
 search [label="完整 R 与联合条件核验
 同一具体分子、同一映射下检查全部要求
 对称核心在完整 R 核验后去重
 工具不支持或预算耗尽时标未评估/截断
 存在命中与分配枚举完整性分别报告
-宽查询先返回参考，完整枚举独立后台执行"];
+宽查询先返回参考；完整枚举为后续离线能力"];
 result [label="提取实际 R 分配与共存组合
 每个位点出现过什么？哪些 R 在同一分子中共存？
 只有分别见过的 R，不能拼成全部已知组合", fillcolor="#EAE0F7"];
@@ -56,5 +58,5 @@ scope -> index -> search;
 scope -> similar;
 similar -> search;
 search -> result -> reaction -> out;
-reaction -> scope [style=dashed,label="有预算且参考不足时放宽"];
+reaction -> scope [style=dashed,label="当前范围方法不足且有预算时放宽"];
 }
