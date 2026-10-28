@@ -286,10 +286,10 @@ substructure_search/
 | `CandidateSelectionScope` | selection_scope_id、family_id、来源快照、输入/产物角色范围、比较结构/区域、表示及属性版本、体量窗口、相似策略/K、放宽阶段 | 角色或选择范围改变生成新 ID，不把输入侧命中混入产物制备统计 |
 | `CompiledMatchPlan` | family_revision、必要筛选、精确 matcher 配置、后检查、能力需求 | 不支持条件不能静默丢掉；预筛不得比最终语义更窄 |
 | `MatchWitness` | witness_id、source_snapshot、实际分子实例、family_id、目标/查询/参考对应、R 分配、枚举状态、直接目标关系（如适用） | 每条见证是一套完整对应，替代映射不混并；完整身份与满足目标要求分开，预筛通过不算见证 |
-| `ReactionRecord` | experiment_id、真实组分实例、阶段、观察、条件、来源、映射来源 | 未知反应物不能由默认值补出；净变化不自动拆为多步 |
-| `AttachmentAssessment` | attachment_id、原始/表示/保留变化、表示规则与核验状态、comparison_scope、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | map=0不作身份；遗漏副产物与共振写法不制造虚假变化，类型名与目标贡献分开 |
+| `ReactionRecord` | experiment_id、真实组分实例、阶段、步骤数量及依据、一锅状态、观察、条件、来源、映射来源 | 未知组分不补造；一条记录不等于一步，一锅与步数分开，净变化不自动拆步 |
+| `AttachmentAssessment` | attachment_id、原始/表示/保留变化、表示规则与核验状态、comparison_scope、event_scope及步骤引用、母核/支链覆盖、边界事件、未追踪片段、支持范围、未知原因 | 净连接贡献不冒充已定位单步；map=0不作身份，遗漏副产物与共振写法不制造虚假变化 |
 | `EvidenceClaim` | claim_id、subject、predicate、source_refs、mapping_basis、support、limitations | 阳性计数必须引用合格见证，规则推定不能成为实验观察 |
-| `ProposalRecord` | source_reaction_id、原/替代实例、差异、回放组合与目标产物位置、枚举/校验状态、条件缺口、proposal_not_observed | 组合内逐产物核验，保留原子追踪；图回放不混入实验事实 |
+| `ProposalRecord` | source_reaction_id、来源步骤与event_scope、原/替代实例、差异、回放组合与目标产物位置、枚举/校验状态、条件缺口、proposal_not_observed | 自动回放要求有据步骤；组合内逐产物核验，图回放不混入实验事实 |
 | `FeatureValue` | value/state、unit、材料/阶段/规模、来源/日期、计算版本 | 0、false、未知、未适用、冲突分开 |
 | `ReferencePackage` | 完整目标取得记录、局部方法/其他线索分区、证据/建议引用、双视角列表、覆盖（聚合范围/见证/枚举状态）、快照、feature_status、summary_status | 联合覆盖与逐位点并集分开；检索完整性与摘要裁剪分开，缩短摘要不提升结论强度 |
 
@@ -586,7 +586,7 @@ SDK 复用同一应用服务和模型，支持离线样例及注入来源适配�
 
 探针中的人工反应保留 `synthetic=true`，禁止进入真实先例来源计数。现有 `reviews/check_*.py` 逐项迁成明确的回归样例，不直接将整个脚本复制为生产模块。检查与场景入口见 [验证说明](reviews/README.md)。
 
-详细规范的 128 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
+详细规范的 130 项验收、证据场景和排序场景在 `acceptance_registry.json` 中分配稳定 case_id，并关联需求章节、fixture、测试名、实现阶段及 `planned/implemented/tested/unsupported`。原有文档数字只是清单数量，不作覆盖率替代。
 
 ### 13.2 性能与化学质量分开报告
 

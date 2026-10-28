@@ -97,5 +97,47 @@
       "alternative_interface_new": true,
       "expected_relative_label": "alternative_boundary_new"
     }
-  ]
+  ],
+  "stage_counterexample": {
+    "id": "endpoint_phenol_does_not_establish_coupling_stage_tolerance",
+    "synthetic": true,
+    "structures": [
+      "[OH:1][c:2]1[cH:3][cH:4][c:5]([Br:6])[cH:7][cH:8]1",
+      "[O:1]([C:9](=[O:10])[CH3:11])[c:2]1[cH:3][cH:4][c:5]([Br:6])[cH:7][cH:8]1",
+      "[O:1]([C:9](=[O:10])[CH3:11])[c:2]1[cH:3][cH:4][c:5]([N:12]([CH3:13])[CH3:14])[cH:7][cH:8]1",
+      "[OH:1][c:2]1[cH:3][cH:4][c:5]([N:12]([CH3:13])[CH3:14])[cH:7][cH:8]1"
+    ],
+    "supplied_state_order": [
+      "initial_free_phenol",
+      "protected_before_coupling",
+      "protected_after_coupling",
+      "final_free_phenol"
+    ],
+    "free_phenol_by_state": [
+      true,
+      false,
+      false,
+      true
+    ],
+    "aryl_oxygen_bond_present_in_all_states": true,
+    "temporary_protection_bond_present": [
+      false,
+      true,
+      true,
+      false
+    ],
+    "net_formed_bonds": [
+      [
+        5,
+        12
+      ]
+    ],
+    "coupling_stage_formed_bonds": [
+      [
+        5,
+        12
+      ]
+    ],
+    "limitation": "The same net connection change does not locate conditions or show free-OH exposure. Without supplied intermediate states, that exposure is unknown. No reaction conditions, literature evidence or transfer engine are tested."
+  }
 }

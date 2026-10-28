@@ -10,6 +10,7 @@
   fixed_query_features / R_site_constraints / joint_constraints
   concrete_R_assignments / observed_joint_combination / matching_completeness
   structure_level / source_reaction_topology_assessment / actual_reaction_direction
+  event_scope / documented_step_ref / step_count_and_basis / one_pot_state
   source_record_id / experiment_id / component_instance_id
   actual_structure / original_role / material_state / stage_id
   matched_target_atoms_and_bonds / view_relation
@@ -36,6 +37,8 @@ source_record 标识来源资料，experiment 区分真实实验，component_ins
 映射/配平产生的输入副本使用 `mapping_copy_id`；其与真实材料实例的联系附归属依据和状态，不默认一一对应，也不增加投料量、实验数或已观察来源份数。多个副本中的原子编号可参与图分析，真实来源结论仍需有据材料对应。
 
 变化结论分别引用原始图差异、经规则核实的共振/芳香表示差异和剩余变化。仅改变表示不能增加化学转化或方法计数；未支持的局部表示问题标未确定，其他已核实的实验结果和连接证据保留。完整判据见 [映射与共振规范](specification.md#105-关键键的映射证据形式稳定性与化学支持)。
+
+整段净变化与已定位步骤的结论分开，见 [步骤范围规范](specification.md#108-整段净变化与可定位步骤)。合格最终产物可有制备见证，即使成键步骤和条件归属仍未知；步骤缺失不自动改变已完成的读取状态。父记录与其同一成键子步骤共用有据实验归属，不重复计成功。起终基团对应仅支持端点比较，不能推导其中间状态或对每组条件的相容性。
 
 原文“按例 N/通法 A 制备”建立的是操作引用关系，不自动建立新的反应步骤边。仅在文档、例号及适用条款可定位时引用步骤；本例明确替换的底物、用量和条件覆盖相应条款，并保留两处出处。通法中的示例收率、产物身份、ee/dr 和成功结论不能转移给本例；当前结果仍需当前实验的报告。引用歧义、循环或预算不足时保留未解析引用，不让摘要自行补全。这里的继承规则属于本系统设计；输入、条件、结果及出处分别记录的依据见 [ORD 数据语义](https://docs.open-reaction-database.org/en/stable/schema.html#outcomes)。
 

@@ -224,6 +224,22 @@
         "direct_target_relation": "target_requirements_satisfied"
       },
       "description": "目标未约束一个手性中心，来源明确制得具体构型且完整图满足其余要求；保留来源构型，不能归并为相同记录身份或外消旋材料"
+    },
+    {
+      "id": "multistep_net_outcome_without_step_assignment",
+      "subject_id": "product_B",
+      "verified_input_subject_ids": ["reactant_A"],
+      "execution": "completed",
+      "expected": {
+        "preparation_hit": true,
+        "obtainment_hit": true,
+        "use_hit": false,
+        "preparation_state": "found_complete",
+        "event_scope": "source_record_net",
+        "documented_step_ref": null,
+        "single_step_transfer_eligible": false
+      },
+      "description": "来源明确报告多步序列最终制得B，起终原子对应支持相关净成键，但中间结构与成键步骤不明。保留序列参考和制备见证，不能把整段模板直接作为单步替换依据；资料缺失不使已结束读取永久处于执行中。"
     }
   ]
 }
