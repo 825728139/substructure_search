@@ -2,6 +2,7 @@
   "$defs": {
     "Conditions": {
       "additionalProperties": false,
+      "description": "来源报告的条件范围与阶段归属；温度 °C、压力 kPa、时长秒，缺失保持 None。",
       "properties": {
         "temperature_min_c": {
           "anyOf": [
@@ -96,6 +97,7 @@
     },
     "Material": {
       "additionalProperties": false,
+      "description": "某个反应中的具体材料实例；同结构在不同角色/实验中仍有不同 instance_id。",
       "properties": {
         "instance_id": {
           "title": "Instance Id",
@@ -151,6 +153,7 @@
     },
     "Observation": {
       "additionalProperties": false,
+      "description": "绑定一个产品实例的报告观察，保留结果类型、引文、位置及产品对应收率类型。",
       "properties": {
         "product_instance_id": {
           "title": "Product Instance Id",
@@ -240,6 +243,7 @@
     },
     "SourceRef": {
       "additionalProperties": false,
+      "description": "来源实验定位；record_id 是来源记录身份，experiment_id 用于实验去重，synthetic 标记演示来源。",
       "properties": {
         "namespace": {
           "title": "Namespace",
@@ -305,6 +309,7 @@
     }
   },
   "additionalProperties": false,
+  "description": "同一来源记录的材料、产品观察、映射式和事件范围；净端点与明确操作步骤不混用。",
   "properties": {
     "id": {
       "title": "Id",

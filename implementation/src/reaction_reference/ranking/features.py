@@ -1,4 +1,4 @@
-"""Nine independently inspectable dimensions; unknown never becomes a low-risk score."""
+"""九方向可解释特征：只计算当前结构与来源实际支持的字段，资料未接入时保留 unknown。"""
 
 from collections import Counter
 
@@ -7,10 +7,18 @@ from reaction_reference.retrieval.planner import functional_matches
 
 
 def _feature(value, support, *, state="known", limitations=None):
+    """把一个特征值封装为状态、支持依据和限制的统一字典。
+
+    value=None 不自动转成低负担、低风险或零值；state 由调用方按已知范围明确给出。
+    """
     return {"state": state, "value": value, "support": support, "limitations": limitations or []}
 
 
 def features(reference, target_smiles=None):
+    """为具体 Reference 提取九方向解释信息，返回特征字典。
+
+    target_smiles 可选，用于质量比与官能团差异；来源与目标均使用具体材料。供应、危害、放大等没有资料供应器的方向返回 unknown；官能团计数只做环境差异线索，不预测反应活性或选择性。
+    """
     record = reference.record
     structural = descriptors(parse(reference.material.smiles))
     target = descriptors(parse(target_smiles)) if target_smiles else None

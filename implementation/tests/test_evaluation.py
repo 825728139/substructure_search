@@ -1,9 +1,12 @@
+"""回归测试：真实目标屏蔽与未知标签不计分。"""
+
 import json
 
 from reaction_reference.evaluation.runner import evaluate
 
 
 def test_masking_removes_target_records_and_unreviewed_is_not_scored(fixture_path, tmp_path):
+    """确认屏蔽移除全部目标来源产品，未审核相关性标签不会产生伪召回得分。"""
     targets = tmp_path / "targets.jsonl"
     targets.write_text(
         json.dumps(

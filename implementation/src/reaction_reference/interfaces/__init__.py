@@ -1,1 +1,1 @@
-"""SDK, CLI and HTTP interfaces sharing the same application services."""
+"""CLI、SDK、HTTP 和内部查看页面，共用应用流程。"""

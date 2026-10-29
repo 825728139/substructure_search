@@ -1,1 +1,1 @@
-"""Read-only sources, local persistence and supervised execution."""
+"""外部来源、证据覆盖、进程与文件持久化的具体实现。"""

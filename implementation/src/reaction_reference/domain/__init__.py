@@ -1,1 +1,1 @@
-"""Serializable domain contracts; this package does not import RDKit or perform I/O."""
+"""可序列化的业务对象与严格数据契约，不依赖基础设施。"""

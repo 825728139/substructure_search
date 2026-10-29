@@ -1,3 +1,5 @@
+"""回归测试：独立进程、API 生命周期与文件快照。"""
+
 import time
 import uuid
 from datetime import UTC, datetime
@@ -12,6 +14,7 @@ from reaction_reference.interfaces.sdk import Client
 
 
 def test_sdk_process_and_frozen_rerank(settings, request_factory, monkeypatch):
+    """确认 SDK 在独立进程检索后可对冻结候选重排，重排不能调用来源配置或重查。"""
     with Client(settings) as client:
         package = client.search(request_factory())
         state = client.manager.store.load(package.run_id)
@@ -20,6 +23,7 @@ def test_sdk_process_and_frozen_rerank(settings, request_factory, monkeypatch):
         monkeypatch.setattr(
             type(client.manager.settings),
             "worker_config",
+            # 若重排尝试重新创建来源配置，替身立即抛错，使测试失败。
             lambda _: (_ for _ in ()).throw(AssertionError("rerank must not read source")),
         )
         reranked = client.rerank(package.run_id, RerankRequest(ranking_profile="process_reference"))
@@ -30,6 +34,7 @@ def test_sdk_process_and_frozen_rerank(settings, request_factory, monkeypatch):
 
 
 def test_single_coordinator_lock(settings):
+    """确认同运行目录只允许一个协调器，关闭后另一实例才可接管。"""
     with Client(settings), pytest.raises(RuntimeError, match="coordinator"):
         Client(settings)
     with Client(settings):
@@ -37,6 +42,7 @@ def test_single_coordinator_lock(settings):
 
 
 def test_api_lifecycle_auth_idempotency_and_cursor(settings, request_factory):
+    """确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。"""
     settings = settings.model_copy(update={"api_token": "test-token"})
     with TestClient(create_app(settings)) as client:
         assert client.get("/health/live").status_code == 200
@@ -99,6 +105,7 @@ def test_api_lifecycle_auth_idempotency_and_cursor(settings, request_factory):
 
 
 def test_cancel_stops_job_and_is_terminal(settings, request_factory):
+    """确认取消返回已落盘的实际终态，迟到完成不能再修改状态。"""
     with Client(settings) as client:
         state = client.manager.submit(request_factory())
         terminal = client.manager.cancel(state.run_id)
@@ -107,10 +114,12 @@ def test_cancel_stops_job_and_is_terminal(settings, request_factory):
 
 
 def test_supervisor_start_failure_does_not_leave_running(settings, request_factory, monkeypatch):
+    """确认监督器启动异常会落为 failed，不把作业永远留在 running。"""
     with Client(settings) as client:
         monkeypatch.setattr(
             type(client.manager.settings),
             "worker_config",
+            # 人工制造子进程启动前的配置异常，验证监督器收尾。
             lambda _: (_ for _ in ()).throw(RuntimeError("start failed")),
         )
         state = client.manager.submit(request_factory())
@@ -119,6 +128,7 @@ def test_supervisor_start_failure_does_not_leave_running(settings, request_facto
 
 
 def test_restart_preserves_snapshot_and_fails_interrupted(settings, request_factory):
+    """确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。"""
     store = FileRunStore(settings.store_path)
     now = datetime.now(UTC).isoformat()
     state = RunState(
@@ -138,6 +148,7 @@ def test_restart_preserves_snapshot_and_fails_interrupted(settings, request_fact
 
 
 def test_hard_timeout_is_terminal_and_subprocess_stops(settings, request_factory):
+    """确认极短硬预算结束子进程并保持 timed_out 终态。"""
     with Client(settings) as client:
         state = client.manager.submit(request_factory(budget={"time_ms": 50}))
         terminal = client.manager.wait(state.run_id)

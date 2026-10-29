@@ -1,1 +1,1 @@
-"""Application orchestration."""
+"""用例编排和共享资源预算，连接纯化学逻辑与来源端口。"""

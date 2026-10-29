@@ -1,3 +1,5 @@
+"""基础结构工具：解析具体分子、比较完整目标、描述目标原子和提取带连接位点的 R 块。所有原子索引均属于传入分子的解析顺序。"""
+
 import hashlib
 import json
 
@@ -6,15 +8,25 @@ from rdkit.Chem import Descriptors, rdFingerprintGenerator
 
 
 class StructureError(ValueError):
+    """结构无法解析或超出当前化学比较能力时抛出的输入错误。"""
+
     pass
 
 
 def digest(value, length=24):
+    """为可 JSON 序列化的数据生成稳定 SHA-256 摘要。
+
+    字典键排序后按 UTF-8 编码，返回前 length 个十六进制字符；用于对象身份和缓存键，不用于加密或口令保存。
+    """
     data = json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(data.encode()).hexdigest()[:length]
 
 
 def parse(smiles, *, target=False):
+    """将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。
+
+    设 target=True 时额外要求具体、单组分、含碳、至多 500 重原子且无增强立体组。返回分子的原子顺序沿用输入解析顺序，不在这里做盐拆分或互变异构体归一化。
+    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None or mol.GetNumAtoms() == 0:
         raise StructureError("Structure cannot be parsed")
@@ -39,6 +51,10 @@ def parse(smiles, *, target=False):
 
 
 def parse_material(smiles):
+    """解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。
+
+    返回具体 Mol；错误抛出 StructureError，由来源适配器记录为局部问题，不冒充一次真实的子结构未命中。
+    """
     mol = parse(smiles)
     if len(Chem.GetMolFrags(mol)) != 1 or any(a.GetAtomicNum() == 0 for a in mol.GetAtoms()):
         raise StructureError(
@@ -52,6 +68,10 @@ def parse_material(smiles):
 
 
 def without_maps(mol):
+    """复制 Mol 并清除反应原子映射号，返回新分子。
+
+    原子顺序、元素、同位素、电荷和立体信息保留；不修改调用方持有的对象。
+    """
     result = Chem.Mol(mol)
     for atom in result.GetAtoms():
         atom.SetAtomMapNum(0)
@@ -59,6 +79,10 @@ def without_maps(mol):
 
 
 def canonical(value, *, stereo=True):
+    """为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。
+
+    stereo=False 只移除立体标记，同位素和电荷仍保留。规范字符串的遍历顺序不能拿来解释原分子的原子索引。
+    """
     mol = parse(value) if isinstance(value, str) else Chem.Mol(value)
     mol = without_maps(mol)
     if not stereo:
@@ -67,14 +91,17 @@ def canonical(value, *, stereo=True):
 
 
 def meets_target(candidate, target):
-    """Complete connectivity plus declared target stereo/isotopes/charge, not containment."""
+    """判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。
+
+    先检查全分子大小与去立体身份，再进行有手性的匹配，返回 bool。目标未指定手性时可接受相应已指定构型的候选；仅包含目标片段不足以通过。
+    """
     candidate, target = without_maps(candidate), without_maps(target)
     if (
         candidate.GetNumAtoms() != target.GetNumAtoms()
         or candidate.GetNumBonds() != target.GetNumBonds()
     ):
         return False
-    # A stereo-removed key preserves isotopes, charge, atom count and full connectivity.
+    # 仅移除立体标记的身份键仍保留同位素、电荷、原子数和完整连接关系。
     if canonical(candidate, stereo=False) != canonical(target, stereo=False):
         return False
     return candidate.HasSubstructMatch(target, useChirality=True)
@@ -84,6 +111,10 @@ FP_GENERATOR = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
 
 
 def similarity(left, right):
+    """返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。
+
+    只用于候选优先级和解释，不能用作保证完整子结构召回的必要筛选条件。
+    """
     return float(
         DataStructs.TanimotoSimilarity(
             FP_GENERATOR.GetFingerprint(without_maps(left)),
@@ -93,6 +124,10 @@ def similarity(left, right):
 
 
 def descriptors(mol):
+    """计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。
+
+    比较对象是这个材料实例，不是多产品反应整侧的总质量。
+    """
     return {
         "molecular_weight": Descriptors.MolWt(mol),  # type: ignore[attr-defined]  # RDKit dynamically registers descriptors
         "heavy_atoms": mol.GetNumHeavyAtoms(),
@@ -100,6 +135,10 @@ def descriptors(mol):
 
 
 def atom_table(mol):
+    """按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。
+
+    结果为资料包中的位点解释提供参照；index 为从 0 开始的本地索引。
+    """
     return [
         {
             "atom_uid": f"target:{i}",
@@ -113,7 +152,10 @@ def atom_table(mol):
 
 
 def fragment_key(mol, atoms, positions):
-    """A query fragment with labeled boundary dummies, never a proposed material."""
+    """把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。
+
+    atoms 为片段原子集合，positions 将核心原子索引映射到核心位点。虚原子映射号取位点加 1，保留边界键型和同位素氢；返回查询片段字符串，不能把它当作真实可投料分子。
+    """
     atoms = set(atoms)
     atoms |= {
         n.GetIdx()
@@ -143,6 +185,10 @@ def fragment_key(mol, atoms, positions):
 
 
 def outside_blocks(mol, core, *, max_visits=10000):
+    """从给定核心外提取完整连通 R 块及其所有连接位点。
+
+    core 的顺序定义核心位点；返回每块的原子索引、带端口签名、边界键和有限类别。一个桥连块可同时接多个核心位置；显式氢不计重原子支链。访问超过 max_visits 时抛出 TimeoutError，不返回伪完整结果。
+    """
     positions = {a: i for i, a in enumerate(core)}
     remaining = {
         a.GetIdx() for a in mol.GetAtoms() if a.GetIdx() not in positions and a.GetAtomicNum() != 1

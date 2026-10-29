@@ -8,6 +8,7 @@
     "/health/live": {
       "get": {
         "summary": "Live",
+        "description": "返回进程存活标志，不检查来源连接，因此不代表检索已就绪。",
         "operationId": "live_health_live_get",
         "responses": {
           "200": {
@@ -24,6 +25,7 @@
     "/health/ready": {
       "get": {
         "summary": "Ready",
+        "description": "校验规则并尝试打开/关闭来源，返回 ready 或 503。\n\n来源缺索引、连接不可用等返回受限异常类型；不执行完整目标检索或修改源数据。",
         "operationId": "ready_health_ready_get",
         "parameters": [
           {
@@ -68,6 +70,7 @@
     "/v1/capabilities": {
       "get": {
         "summary": "Get Capabilities",
+        "description": "返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。",
         "operationId": "get_capabilities_v1_capabilities_get",
         "parameters": [
           {
@@ -112,6 +115,7 @@
     "/v1/query-families/preview": {
       "post": {
         "summary": "Preview",
+        "description": "调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。",
         "operationId": "preview_v1_query_families_preview_post",
         "parameters": [
           {
@@ -166,6 +170,7 @@
     "/v1/search-runs": {
       "post": {
         "summary": "Submit",
+        "description": "校验幂等键长度后提交检索，返回 202 和初始 RunState。\n\nSearchRequest 由 FastAPI/Pydantic 先校验，化学计算在独立进程中进行；同键异请求按 409 处理。",
         "operationId": "submit_v1_search_runs_post",
         "parameters": [
           {
@@ -236,6 +241,7 @@
     "/v1/search-runs/{run_id}": {
       "get": {
         "summary": "Status",
+        "description": "读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。\n\nqueued/running 也可能已有阶段包；latest_snapshot_id 供客户端判断是否切换显示。",
         "operationId": "status_v1_search_runs__run_id__get",
         "parameters": [
           {
@@ -289,6 +295,7 @@
     "/v1/search-runs/{run_id}/results": {
       "get": {
         "summary": "Results",
+        "description": "按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。\n\n首次请求读取 latest，后续 cursor 固定 snapshot/owner/run；limit 只分页该快照的展示集合，不重新做来源检索。没有阶段结果时返回空的部分范围响应。",
         "operationId": "results_v1_search_runs__run_id__results_get",
         "parameters": [
           {
@@ -370,6 +377,7 @@
     "/v1/search-runs/{run_id}/evidence/{claim_id}": {
       "get": {
         "summary": "Evidence",
+        "description": "在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。\n\n只返回当前运行内的证据及来源/反应分析；无法找到时返回 404，不跨运行借用同结构的其他实验。",
         "operationId": "evidence_v1_search_runs__run_id__evidence__claim_id__get",
         "parameters": [
           {
@@ -432,6 +440,7 @@
     "/v1/search-runs/{run_id}/package": {
       "get": {
         "summary": "Export Package",
+        "description": "返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。\n\n未产生任何资料快照时返回 409；返回包括未入选展示的全部已评估候选。",
         "operationId": "export_package_v1_search_runs__run_id__package_get",
         "parameters": [
           {
@@ -501,6 +510,7 @@
     "/v1/search-runs/{run_id}/structures/{reference_id}.svg": {
       "get": {
         "summary": "Structure",
+        "description": "为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。\n\n只绘制已保存材料和见证，不接收任意来源路径；找不到参考返回 404，并对 SVG 使用限制性响应策略。",
         "operationId": "structure_v1_search_runs__run_id__structures__reference_id__svg_get",
         "parameters": [
           {
@@ -579,6 +589,7 @@
     "/v1/search-runs/{run_id}/cancel": {
       "post": {
         "summary": "Cancel",
+        "description": "请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。",
         "operationId": "cancel_v1_search_runs__run_id__cancel_post",
         "parameters": [
           {
@@ -632,6 +643,7 @@
     "/v1/search-runs/{run_id}/rerank": {
       "post": {
         "summary": "Rerank",
+        "description": "在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。\n\n请求仅有排序偏好与实验限制，目标或来源条件变化必须另开新检索。",
         "operationId": "rerank_v1_search_runs__run_id__rerank_post",
         "parameters": [
           {
@@ -784,7 +796,8 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "title": "BudgetConfig"
+        "title": "BudgetConfig",
+        "description": "单次检索的资源上限；time_ms 为毫秒，其他字段为有明确范围的计数/字节限额。"
       },
       "HTTPValidationError": {
         "properties": {
@@ -859,7 +872,8 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "title": "LabContext"
+        "title": "LabContext",
+        "description": "内部实验能力和明确排除条件；未提供的字段表示未限制，不表示已通过。"
       },
       "RerankRequest": {
         "properties": {
@@ -886,7 +900,8 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "title": "RerankRequest"
+        "title": "RerankRequest",
+        "description": "仅改变排序偏好和实验能力，禁止在冻结快照重排时更换目标或候选选择范围。"
       },
       "SearchOptions": {
         "properties": {
@@ -918,7 +933,8 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "title": "SearchOptions"
+        "title": "SearchOptions",
+        "description": "决定是否查完整目标、输入使用、替换建议和定向补查；有限样本穷尽不是全库穷尽。"
       },
       "SearchRequest": {
         "properties": {
@@ -972,7 +988,8 @@
         "required": [
           "target"
         ],
-        "title": "SearchRequest"
+        "title": "SearchRequest",
+        "description": "检索请求：目标、版本化选择/排序偏好、实验能力、开关与预算。"
       },
       "Target": {
         "properties": {
@@ -994,7 +1011,8 @@
         "required": [
           "value"
         ],
-        "title": "Target"
+        "title": "Target",
+        "description": "一个具体合成目标的输入表示，当前只接受 SMILES。"
       },
       "ValidationError": {
         "properties": {

@@ -1,8 +1,14 @@
+"""参考排序和实验能力适配：先区分方法资格与证据，再按明确偏好组织展示，保留所有已评估候选。"""
+
 from reaction_reference.chemistry.structures import canonical
 from reaction_reference.ranking.features import features
 
 
 def lab_fit(reference, context):
+    """将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。
+
+    返回（pass/fail/unknown/not_applicable、原因列表）；任一已知违规优先为 fail，资料缺失保持 unknown。记录未分配到明确操作步骤时，不把净记录条件当作已确认步骤条件。
+    """
     if context is None:
         return "not_applicable", ["lab_context_not_configured"]
     conditions = reference.record.conditions
@@ -12,14 +18,15 @@ def lab_fit(reference, context):
             context.max_temperature_c,
             conditions.temperature_max_c,
             "temperature_max",
-            lambda a, b: b <= a,
+            lambda a, b: b <= a,  # 来源最高温度不能超过实验上限。
         ),
         (
             context.min_temperature_c,
             conditions.temperature_min_c,
             "temperature_min",
-            lambda a, b: b >= a,
+            lambda a, b: b >= a,  # 来源最低温度不能低于实验下限。
         ),
+        # 压力谓词同样按“来源值不超过实验上限”判断，单位为 kPa。
         (context.max_pressure_kpa, conditions.pressure_max_kpa, "pressure", lambda a, b: b <= a),
     ]
     for requirement, actual, label, predicate in checks:
@@ -37,7 +44,7 @@ def lab_fit(reference, context):
             found = {canonical(m.smiles) for m in reference.record.materials}
             if excluded & found:
                 failures.append("explicitly_excluded_material")
-            # Absence from an incomplete source list is not a confirmed exclusion pass.
+            # 来源材料列表不完整时，“没有列出禁用物”不能视为已确认符合限制。
             if not reference.record.raw.get("material_inventory_complete", False):
                 unknown.append("material_inventory_completeness_unknown")
         except ValueError:
@@ -57,6 +64,10 @@ def lab_fit(reference, context):
 
 
 def _priority(reference):
+    """返回参考的方法/证据优先级，数值越小越优先。
+
+    满足完整目标且有获得证据的记录优先；仅图推定或未确认输入不得获得已报告方法相同的资格。
+    """
     if reference.target_requirements_satisfied and reference.obtainment_hit:
         return 0
     if not reference.obtainment_hit and not reference.use_hit:
@@ -79,6 +90,10 @@ def _priority(reference):
 def rank_references(
     references, profile="reference_first", context=None, max_display=18, target_smiles=None
 ):
+    """返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。
+
+    profile 选择参考优先、实验适配或操作偏好；context 只改变适配判断，不改结构和来源事实。补充九方向字段后采用确定性排序，保留完整目标获得记录并轮流分配三层展示位置；max_display 只裁剪展示，不删除候选池。
+    """
     enriched = []
     for reference in references:
         fit, reasons = lab_fit(reference, context)
@@ -94,6 +109,10 @@ def rank_references(
         )
 
     def key(ref):
+        """为单个参考生成可传递且稳定的排序元组。
+
+        先排方法与证据，再在明确偏好下比较已知信息组及温度偏离 25°C/时长；实验适配模式增加能力分组。未知条件不填成容易操作，最终使用参考 ID 固定并列顺序。
+        """
         joint = ref.coverage.get("joint_witness") or {}
         evidence = (
             0
@@ -102,8 +121,8 @@ def rank_references(
             if any(c.support == "source_reported" for c in ref.claims)
             else 2
         )
-        # Missing conditions do not receive lower temperature/easier-operation scores.
-        # Fixed known-field groups prevent a cyclic pairwise comparator.
+        # 缺失条件不获得低温或容易操作的奖励。
+        # 先固定信息可用分组，再用排序键比较，避免成对比较出现循环次序。
         conditions = ref.record.conditions
         availability = (
             conditions.temperature_min_c is not None and conditions.temperature_max_c is not None,
@@ -111,8 +130,8 @@ def rank_references(
         )
         process: tuple = ()
         if profile == "process_reference":
-            # Compare only within an explicit equal-information group. Unknown
-            # fields never stand in for zero temperature/time or easy operation.
+            # 只在同等已知字段分组中比较条件数值。
+            # 未知温度/时间不能按零值或容易操作处理。
             burden = (
                 max(abs(conditions.temperature_min_c - 25), abs(conditions.temperature_max_c - 25))
                 if availability[0]
@@ -138,7 +157,7 @@ def rank_references(
 
     ordered = sorted(enriched, key=key)
     selected, used = [], set()
-    # Preserve a reported complete-target outcome globally, even for deprotection.
+    # 完整目标的已报告获得记录全局保留；即使只是脱保护，也不被分层配额挤掉。
     exact = next((r for r in ordered if r.target_requirements_satisfied and r.obtainment_hit), None)
     if exact:
         selected.append(exact)

@@ -1,4 +1,4 @@
-"""Reproducible observed-target and masked-target evaluations without invented labels."""
+"""有限真实目标评测：分别运行保留/屏蔽目标来源记录的任务，未经审核的相关性不计得分。"""
 
 import json
 import time
@@ -21,7 +21,13 @@ from reaction_reference.rules import code_fingerprint, load_rules
 
 
 class MaskedSource:
+    """评测装饰器，按完整目标要求排除所有含该产物的反应记录，而非只排展示卡片。"""
+
     def __init__(self, source, target):
+        """从固定样本找出满足 target 的产品记录 ID，并据此建立派生来源快照。
+
+        整个记录被排除，避免通过其反应物使用通道再次泄漏目标来源；不是对已确认制备标签的推断。
+        """
         self.source = source
         self.issues = source.issues
         self.target = target
@@ -37,20 +43,29 @@ class MaskedSource:
         )
 
     def candidate_page(self, *args, **kwargs):
+        """委托原来源取页后移除被屏蔽记录，保留原范围、耗尽状态与游标。
+
+        过滤后空页仍可能有 next_cursor，不能将空页当作查询结束。
+        """
         page = self.source.candidate_page(*args, **kwargs)
         return replace(
             page, items=[item for item in page.items if item.record.id not in self.excluded]
         )
 
     def hydrate(self, record):
+        """委托底层来源加载一个未被屏蔽的已命中记录，不创建新证据。"""
         return self.source.hydrate(record)
 
     def close(self):
+        """不关闭底层共享来源；评测主函数负责在两种任务完成后统一释放。"""
         pass
 
 
 def select_targets(source_path, output, count=12):
-    """Farthest-first structural diversity selection; not a reviewed relevance benchmark."""
+    """从有限非合成产品中用最远优先的指纹距离选出结构多样的目标。
+
+    source_path 为样本 JSONL，output 写目标 JSONL，count 为 1–100。标签默认 unreviewed，返回数量/路径；结构多样性选样不等同于有用方法人工标注或独立泛化集。
+    """
     if not 1 <= count <= 100:
         raise ValueError("Target count must be 1..100")
     source = JsonlSource(source_path)
@@ -71,6 +86,7 @@ def select_targets(source_path, output, count=12):
     chosen = [keys[0]]
     distances = {s: 1 - similarity(candidates[s][0], candidates[chosen[0]][0]) for s in keys[1:]}
     while len(chosen) < count:
+        # 选离当前目标集合最远的候选；规范结构字符串用于稳定并列次序。
         selected = max(distances, key=lambda s: (distances[s], s))
         chosen.append(selected)
         del distances[selected]
@@ -97,6 +113,10 @@ def select_targets(source_path, output, count=12):
 
 
 def evaluate(source_path, targets_path, output, *, max_tasks=100):
+    """逐目标运行保留来源与屏蔽全部目标产物记录两种任务并写入 JSON 报告。
+
+    source_path/targets_path 是固定样本和显式目标集，max_tasks 限制每次搜索。只对 reviewed 且有标签的目标计算正例标注召回；未知标签不填成 0 或满分。报告记录代码/规则/来源哈希、耗时、范围与停止原因，不能外推千万级性能。
+    """
     targets = [
         json.loads(line) for line in Path(targets_path).read_text().splitlines() if line.strip()
     ]

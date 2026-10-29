@@ -1,1 +1,1 @@
-"""Stable evidence-first ranking and explicit laboratory constraints."""
+"""九方向可解释特征与确定性的参考/实验适配排序。"""

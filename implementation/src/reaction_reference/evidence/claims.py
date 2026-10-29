@@ -1,8 +1,14 @@
+"""材料实例级证据分账与下游模型摘要：来源报告、结构推定和未观察建议保持分离。"""
+
 from reaction_reference.chemistry.structures import digest
 from reaction_reference.domain.models import Claim
 
 
 def evidence_for(record, material):
+    """判断一个材料实例的来源支持，返回（制备命中、获得命中、使用命中、Claim 列表）。
+
+    产品观察必须有非空文本与位置；冲突/失败/回收会限制阳性结论，输入使用要求 actual_input=True。合成示例可生成演示 Claim，但三个真实文献计数标志始终为 False。
+    """
     observations = [o for o in record.observations if o.product_instance_id == material.instance_id]
     supported = [
         o
@@ -43,7 +49,7 @@ def evidence_for(record, material):
                 limitations=["synthetic_fixture_not_literature"] if record.source.synthetic else [],
             )
         )
-    # Synthetic fixtures can exercise graph logic but never create literature counts.
+    # 合成示例可验证图逻辑，但必须与真实文献统计隔离。
     qualified = not record.source.synthetic
     return (
         prepared and qualified,
@@ -54,6 +60,10 @@ def evidence_for(record, material):
 
 
 def summary_items(references, proposals, max_bytes):
+    """把选中参考和建议转为受 UTF-8 字节预算约束的 JSON 摘要。
+
+    返回（摘要字符串、complete/truncated/unavailable、省略条数）。按整条目追加，不能把半条证据切成可误读的 JSON；一个条目也放不下时摘要为空，而完整证据仍在资料包中。
+    """
     entries = []
     for ref in references:
         entries.append(

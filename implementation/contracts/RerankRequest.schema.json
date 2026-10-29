@@ -2,6 +2,7 @@
   "$defs": {
     "LabContext": {
       "additionalProperties": false,
+      "description": "内部实验能力和明确排除条件；未提供的字段表示未限制，不表示已通过。",
       "properties": {
         "max_temperature_c": {
           "anyOf": [
@@ -68,6 +69,7 @@
     }
   },
   "additionalProperties": false,
+  "description": "仅改变排序偏好和实验能力，禁止在冻结快照重排时更换目标或候选选择范围。",
   "properties": {
     "ranking_profile": {
       "default": "reference_first",

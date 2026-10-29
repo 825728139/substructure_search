@@ -1,4 +1,4 @@
-"""Project checks; run using uv run python scripts/check.py from implementation/."""
+"""项目交付自检入口：依次执行静态检查、测试、契约漂移比较和 wheel 构建；任一步失败即停止。"""
 
 import json
 import os
@@ -11,6 +11,8 @@ from reaction_reference.schema_export import export_schemas
 
 root = Path(__file__).resolve().parents[1]
 os.chdir(root)
+# 先检查交接说明覆盖，再验证实现；新增函数漏写中文说明会直接报告文件与行号。
+subprocess.run([sys.executable, "scripts/check_comments.py"], check=True)
 for arguments in [
     ("ruff", "check", "--config", "pyproject.toml", "."),
     ("ruff", "format", "--config", "pyproject.toml", "--check", "."),

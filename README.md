@@ -9,12 +9,15 @@
 - [产品与化学计划](plan.md)
 - [项目实现计划、模块与目录结构](implementation_plan.md)
 - [实现项目、启动与接口说明](implementation/README.md)
+- [中文代码交接指南、项目结构与阅读路线](implementation/docs/HANDOVER.md)
+- [项目运行架构图](implementation/docs/system-architecture.svg)
+- [核心业务逻辑图](implementation/docs/core-business-flow.svg)
 - [结果过滤与排序](ranking_plan.md)
 - [开发环境安装和验证](ENVIRONMENT.md)
 - [详细化学规范](design/specification.md)
 - [来源字段与接入约定](design/source_reference.md)
 - [化学检查与验收案例](reviews/README.md)
 
-阅读顺序：先看产品计划和实现计划，再按开发模块查阅详细规范。当前决定直接维护在对应文档中，修订过程通过 Git 查看。
+理解需求先看产品计划和实现计划；接手代码先看中文交接指南，再按函数索引定位实现。当前决定直接维护在对应文档中，修订过程通过 Git 查看。
 
 ![检索流程](diagrams/scaffold-search.png)

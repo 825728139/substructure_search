@@ -1,1 +1,1 @@
-"""External dependency contracts."""
+"""应用层所需的来源协议和候选数据结构。"""

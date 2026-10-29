@@ -1,3 +1,5 @@
+"""目标驱动的有限查询规划：按三层规则生成可解释家族，保留原子对应；不预先猜测开闭环反应位置。"""
+
 from rdkit import Chem
 from rdkit.Chem import BRICS
 from rdkit.Chem.Scaffolds import MurckoScaffold
@@ -8,8 +10,13 @@ from reaction_reference.rules import load_rules
 
 
 def functional_matches(mol):
+    """按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。
+
+    允许重叠匹配，结果用于固定功能单元及解释；不能将重叠条目数量直接视为独立反应位点数量。
+    """
     rules, _ = load_rules()
     found: list[tuple[str, tuple[int, ...], int]] = []
+    # 高优先级官能团先处理，避免后续核心补全受随机规则顺序影响。
     for rule in sorted(rules["functional_groups"], key=lambda r: -r["priority"]):
         query = Chem.MolFromSmarts(rule["smarts"])
         found.extend(
@@ -19,6 +26,10 @@ def functional_matches(mol):
 
 
 def _close_units(seed, groups, mol, *, adjacent=False):
+    """把与 seed 相交的功能单元补入核心原子集合并返回新集合。
+
+    adjacent=True 时也检查与当前核心相邻的单元；按已排序规则单次遍历，后续规则可看到已扩展的集合，不是任意深度的闭包求解。
+    """
     result = set(seed)
     for _, match, _ in groups:
         if result.intersection(match) or (
@@ -34,6 +45,10 @@ def _close_units(seed, groups, mol, *, adjacent=False):
 
 
 def _core_smarts(mol, atom_ids, groups):
+    """为选定目标原子构造带目标映射号的固定核心 SMARTS。
+
+    返回（SMARTS、查询原子顺序对应的原目标索引）。保留元素、芳香性、电荷、同位素和相邻同位素氢；羟基额外锁定 H/X 角色。序列化后重新读映射号，避免遍历顺序变化造成位点错配。
+    """
     atom_ids = set(atom_ids)
     atom_ids |= {
         n.GetIdx()
@@ -66,6 +81,10 @@ def _core_smarts(mol, atom_ids, groups):
 
 
 def plan_families(target, max_families=12):
+    """自动生成整体、核心、分片三层的有限 QueryFamily 列表。
+
+    环状目标使用 Murcko 骨架、完整环系和官能团邻域；无环目标使用全框架或功能锚点路径；分片补充 BRICS 非环边界。轮流取各层种子以保留各层机会，按层和目标原子集合去重，最多返回 max_families 个家族；这不是所有可能骨架的穷举。
+    """
     rules, _ = load_rules()
     groups = functional_matches(target)
     all_atoms = {a.GetIdx() for a in target.GetAtoms() if a.GetAtomicNum() > 1}
@@ -122,7 +141,7 @@ def plan_families(target, max_families=12):
                 for n in target.GetAtomWithIdx(atom).GetNeighbors()
                 if n.GetAtomicNum() > 1
             )
-        # Keep complete intersecting rings, never invent an open-ring precursor.
+        # 官能团邻域若碰到环系，则保留完整环系；此处不猜测开环前体。
         for system in systems:
             if neighborhood & system:
                 neighborhood |= system
@@ -146,7 +165,7 @@ def plan_families(target, max_families=12):
         seeds["core"].append((whole, "framework_core_fallback"))
     families: list[QueryFamily] = []
     seen: set[tuple] = set()
-    # Round robin reserves a chance for each applicable structural layer.
+    # 按层轮流取种子，使整体、核心、分片都有进入有限家族预算的机会。
     while len(families) < max_families and any(seeds.values()):
         for layer in ("whole", "core", "fragment"):
             if not seeds[layer] or len(families) >= max_families:
@@ -174,6 +193,10 @@ def plan_families(target, max_families=12):
 
 
 def directed_family(parent, target, positions):
+    """针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。
+
+    parent 保留原核心与目标对应，positions 是查询核心的位置而非目标全分子索引。没有可约束 R 块时返回 None；不猜测新反应或虚构前体。
+    """
     blocks = outside_blocks(target, parent.target_atoms)
     constraints = []
     for block in blocks:
@@ -198,6 +221,10 @@ def directed_family(parent, target, positions):
 
 
 def exact_family(target):
+    """构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。
+
+    返回 relation=strict 的整体层家族；编排器仍须调用 meets_target 核验完整结构与目标立体要求，不能仅凭核心子结构命中认定目标已制得。
+    """
     tagged = Chem.Mol(target)
     for atom in tagged.GetAtoms():
         atom.SetAtomMapNum(atom.GetIdx() + 1)
@@ -217,6 +244,10 @@ def exact_family(target):
 
 
 def initial_families(target, max_families=12, include_exact=True):
+    """组合初始三层家族与可选的严格目标补查，返回有顺序的列表。
+
+    max_families 是本次家族上限；预算仅为 3 且启用补查时，严格整体、核心、分片各留一个位置。较大预算下给后续定向家族预留空间；预览和真实检索共用此入口。
+    """
     planned = plan_families(target, max(3, max_families - (3 if include_exact else 2)))
     if not include_exact:
         return planned

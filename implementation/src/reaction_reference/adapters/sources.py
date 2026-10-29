@@ -1,3 +1,5 @@
+"""现有反应字段适配与候选来源实现：有限 JSONL 用于开发评测；PG 必须具备有效化学索引并在只读会话中取数。"""
+
 import hashlib
 import json
 from pathlib import Path
@@ -22,7 +24,10 @@ from reaction_reference.ports.sources import Candidate, CandidatePage
 
 
 def import_native(row):
-    """Adapt existing exported fields, preserving unknown outcomes and input roles."""
+    """把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。
+
+    原生契约直接严格校验；导出数组生成稳定材料实例 ID，名称按结构身份关联而非数组位置。提取产品只生成 unknown 观察，反应类别保留来源值，raw 记录摘要与定位信息，不携带连接凭据。
+    """
     if "source" in row and "materials" in row:
         return ReactionRecord.model_validate(row)
     record_id = str(row["id"])
@@ -67,8 +72,8 @@ def import_native(row):
         location=str(row.get("paragraph_nums") or ""),
     )
     observations = []
-    # An array of extracted products alone is NOT a preparation witness.
-    # Explicitly annotated outcomes can be added by the evidence importer.
+    # 提取到产物数组，只能证明存在结构字段，不能自动认定文献报告制得。
+    # 明确的产品观察应由绑定来源记录的证据审核补入。
     for material in materials:
         if material.role == "product":
             observations.append(Observation(product_instance_id=material.instance_id))
@@ -108,13 +113,17 @@ def import_native(row):
 
 
 class JsonlSource:
-    """A bounded fixed dataset, with Pattern prefilter plus reference-mode selection."""
+    """有限固定来源；按 Pattern 必要核心预筛，再进行参考范围选择和应用层完整核验。"""
 
     max_selection_stage = 2
     hydration_requires_io = False
     selection_policy = "bounded_jsonl_pattern_core_then_hac_windows_similarity_order_then_full_markush_verification"
 
     def __init__(self, path, *, exhaustive=False, max_records=20000):
+        """读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。
+
+        最多 max_records 条且不超过 256 MiB；exhaustive 只取消该固定数据集的体量窗口。完全重复 ID 去重，冲突 ID 整体隔离；多组分等不支持材料记入 issues，不变成结构反例。
+        """
         self.path = Path(path)
         payload = self.path.read_bytes()
         if len(payload) > 256 * 1024 * 1024:
@@ -177,13 +186,17 @@ class JsonlSource:
         self._selection_cache = {}
 
     def candidate_page(self, family, role, cursor, limit, target_smiles, stage=0):
+        """返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。
+
+        整体/核心阶段 0/1 使用重原子数比窗口 0.5–1.6 / 0.25–3；分片、阶段 2 或穷尽样本不应用此窗口。Pattern 只预筛固定核心，候选按相似度稳定排序；scope_complete 只覆盖当前选择范围。
+        """
         key = (family.id, role, target_smiles, stage, self.exhaustive)
         if key not in self._selection_cache:
             query = Chem.MolFromSmarts(family.core_smarts)
             if query is None:
                 raise ValueError("Invalid query")
-            # Generic attributes/R constraints only make the full check more restrictive;
-            # this fingerprint uses the connected necessary core, not the full target.
+            # generic 属性及 R 条件由后续完整核验处理；
+            # 指纹预筛只用必要的连通核心，避免把完整目标当成必需子结构。
             pattern = Chem.PatternFingerprint(query)
             target = parse(target_smiles)
             target_hac = max(1, target.GetNumHeavyAtoms())
@@ -194,13 +207,14 @@ class JsonlSource:
                 ):
                     continue
                 if not self.exhaustive and family.layer != "fragment" and stage < 2:
-                    # Explicit reference preference, never a chemical no-match claim.
+                    # 体量窗口只表达参考优先级；被窗口排后不等于化学上不匹配。
                     bounds = (0.5, 1.6) if stage == 0 else (0.25, 3.0)
                     ratio = molecule.GetNumHeavyAtoms() / target_hac
                     if not bounds[0] <= ratio <= bounds[1]:
                         continue
                 selected.append((item, similarity(target, molecule)))
             selected.sort(
+                # 相似度降序；结构、记录、实例 ID 依次打破并列，使分页顺序稳定。
                 key=lambda x: (-x[1], x[0].structure_id, x[0].record.id, x[0].material.instance_id)
             )
             self._selection_cache[key] = [item for item, _ in selected]
@@ -218,18 +232,16 @@ class JsonlSource:
         )
 
     def close(self):
+        """清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。"""
         self._selection_cache.clear()
 
     def hydrate(self, record):
+        """返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。"""
         return record
 
 
 class PostgresSource:
-    """Read-only existing schema. Indexed side candidates are individually verified.
-
-    A nearest-neighbor pool is a bounded preference, not a safe substructure filter.
-    The independent substructure cursor never sorts/counts the entire hit set.
-    """
+    """现库只读来源，使用有界 KNN 候选和独立子结构会话游标，不按全量命中排序计数。"""
 
     hydration_requires_io = True
     selection_failure_fallback = True
@@ -257,6 +269,10 @@ class PostgresSource:
     )
 
     def __init__(self, dsn, *, timeout_ms=1500):
+        """建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。
+
+        dsn 只用于建立连接；要求 products_mol 的非部分有效 GiST。指纹 GiST 可用时启用 KNN 初选；初始化失败关闭连接并抛出，不自动创建索引或回退全表 Python 扫描。
+        """
         import psycopg
         from psycopg.rows import dict_row
 
@@ -294,15 +310,24 @@ class PostgresSource:
             raise
 
     def _has_index(self, column):
+        """检查已读取的有效索引定义中是否存在指定列的 GiST，返回 bool。
+
+        只是能力门槛，不证明优化器已使用该索引；上线仍需核对实际执行计划。
+        """
         return any(
             column in definition and "USING gist" in definition for definition in self._indexes
         )
 
     def _assert_index(self, column):
+        """要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。"""
         if not self._has_index(column):
             raise ValueError(f"Indexed source capability unavailable: GiST on {column} is required")
 
     def _items(self, rows, role):
+        """把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。
+
+        逐材料解析与验证；一条 SQL 整侧匹配可展开多个实例，它们仍须通过家族核验才成为参考。脏行/材料追加到 issues。
+        """
         items = []
         for data in rows:
             try:
@@ -333,6 +358,10 @@ class PostgresSource:
         return items
 
     def candidate_page(self, family, role, cursor, limit, target_smiles, stage=0):
+        """在同一只读会话中读取一页候选，返回实例及范围标签。
+
+        具备指纹索引时，整体/核心首阶段复用前 512 条整侧 KNN 池；其他阶段用核心 mol 子结构服务端游标。cursor 校验顺序，limit 限制抓取行数。每次查询置于 savepoint，失败回滚局部事务并使相关游标失效。整侧相似/命中均不能替代逐产品 R 核验。
+        """
         from psycopg import sql
 
         column = "products_mol" if role == "product" else "reactants_mol"
@@ -395,6 +424,10 @@ class PostgresSource:
         )
 
     def hydrate(self, record):
+        """对已命中的轻量记录按需读取详情、重建统一记录并缓存。
+
+        要求记录来自本来源会话；savepoint 隔离详情查询失败，异常向编排器报告。材料实例 ID 必须保持一致，便于重绑定已完成的结构见证。
+        """
         if record.id in self._hydrated:
             return self._hydrated[record.id]
         row = self._rows[record.id]
@@ -410,6 +443,10 @@ class PostgresSource:
         return result
 
     def _fetch_details(self, row):
+        """按完整来源组合键或 reaction_id 查询至多一条详情 JSON。
+
+        先缓存表字段能力；缺字段或键值未知时返回空对象，不使用不充分条件拼接别的实验。参数值绑定传入，标识符由 psycopg.sql 安全组合。
+        """
         from psycopg import sql
 
         if self._details_columns is None:
@@ -448,6 +485,7 @@ class PostgresSource:
         return found["data"] if found else {}
 
     def close(self):
+        """回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。"""
         try:
             self.connection.execute("ROLLBACK")
         finally:

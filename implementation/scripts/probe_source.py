@@ -1,4 +1,4 @@
-"""Read-only constant chemistry probes and catalog readiness; never creates indexes."""
+"""手工来源验收脚本：只读常量 SMARTS/指纹探针与有效化学索引能力检查，不输出凭据。"""
 
 import json
 import os
@@ -10,6 +10,10 @@ from reaction_reference.adapters.sources import PostgresSource
 
 
 def main():
+    """读取 RR_POSTGRES_DSN，执行只读常量化学探针和索引就绪检查并打印 JSON。
+
+    不执行全表反应检索或 DDL；缺少化学索引按未就绪输出，连接等系统错误向进程调用方报告。
+    """
     dsn = os.environ["RR_POSTGRES_DSN"]
     with psycopg.connect(
         dsn, autocommit=True, connect_timeout=5, row_factory=dict_row

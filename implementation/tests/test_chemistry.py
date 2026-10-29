@@ -1,3 +1,5 @@
+"""回归测试：查询、R 条件、原子对应和目标身份。"""
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
@@ -11,6 +13,7 @@ from reaction_reference.retrieval.planner import plan_families
 
 
 def family(smarts, target_atoms, **kwargs):
+    """为单一化学边界构造最小 QueryFamily，避免自动规划掩盖核验错误。"""
     return QueryFamily(
         id="test",
         layer="core",
@@ -27,6 +30,7 @@ def family(smarts, target_atoms, **kwargs):
     "s", ["CCO", "CCNC(=O)c1ccccc1", "C1CCCO1", "CC(=O)NCCO", "C", "[13CH3]CO", "C[C@H](O)CC"]
 )
 def test_auto_queries_preserve_target(s):
+    """多类目标生成三层家族后应能自匹配，且最佳一致见证覆盖完整目标连接。"""
     target = parse(s, target=True)
     families = plan_families(target)
     assert {f.layer for f in families} == {"whole", "core", "fragment"}
@@ -37,12 +41,14 @@ def test_auto_queries_preserve_target(s):
 
 
 def test_functional_oxygen_role_is_preserved():
+    """确认目标羟基约束不会把醚氧当作同一角色而放行。"""
     target = parse("CCO")
     f = plan_families(target)[0]
     assert match_family(f, parse("CCOC"), target, "ether").state == "no_match"
 
 
 def test_whole_r_not_just_first_atom():
+    """确认 R 类别与长度检查整个连接块，支链后部杂原子和超长碳链不能漏检。"""
     target = parse("CO")
     f = family(
         "[O]",
@@ -58,6 +64,7 @@ def test_whole_r_not_just_first_atom():
 
 
 def test_symmetric_core_checks_all_orientations_before_dedup():
+    """确认核心对称方向先逐一检查 R；映射截断时未发现的方向只可返回未知。"""
     target = parse("CCO")
     f = family(
         "[C][C]",
@@ -76,6 +83,7 @@ def test_symmetric_core_checks_all_orientations_before_dedup():
 
 
 def test_extra_internal_edge_is_not_a_chain_witness():
+    """确认环的额外内部边不会被当作严格的线性核心见证。"""
     target = parse("CCC")
     assert (
         match_family(family("[C][C][C]", [0, 1, 2]), parse("C1CC1"), target, "cycle").state
@@ -84,6 +92,7 @@ def test_extra_internal_edge_is_not_a_chain_witness():
 
 
 def test_explicit_deuterium_is_not_heavy_sidechain():
+    """确认显式氘不计重原子支链，但完整目标身份仍保留其同位素要求。"""
     mol = parse("[2H]C(O)C")
     blocks = outside_blocks(mol, [1, 2, 3])
     assert not blocks
@@ -91,6 +100,7 @@ def test_explicit_deuterium_is_not_heavy_sidechain():
 
 
 def test_target_stereo_is_a_requirement():
+    """确认指定目标构型排除反构型/未指定候选，未指定目标可接受相应具体构型。"""
     target = parse("C[C@H](O)CC")
     assert meets_target(target, target)
     assert not meets_target(parse("C[C@@H](O)CC"), target)
@@ -99,6 +109,7 @@ def test_target_stereo_is_a_requirement():
 
 
 def test_equality_checks_entire_substituents():
+    """确认 R 相等比较完整支链，不把乙基和丙基判为相等。"""
     target = parse("CCOCC")
     f = family("[C][O][C]", [1, 2, 3], equal_r_positions=[[0, 2]])
     assert match_family(f, target, target, "equal").state == "match"
@@ -107,6 +118,7 @@ def test_equality_checks_entire_substituents():
 
 @given(st.sampled_from(["CCO", "CCN", "CCNC(=O)c1ccccc1"]), st.integers(min_value=0, max_value=10))
 def test_atom_order_does_not_change_canonical_identity(smiles, shift):
+    """用属性测试确认原子重排不改变规范身份和完整目标满足关系。"""
     mol = parse(smiles)
     order = list(range(mol.GetNumAtoms()))
     shift %= len(order)
@@ -116,6 +128,7 @@ def test_atom_order_does_not_change_canonical_identity(smiles, shift):
 
 
 def test_input_validation_rejects_unknown_and_coerced_budget():
+    """确认未知收费字段、布尔预算和字符串布尔开关被契约拒绝。"""
     with pytest.raises(ValidationError):
         SearchRequest(target={"value": "CCO"}, budget={"max_tasks": True})
     with pytest.raises(ValidationError):
@@ -125,6 +138,7 @@ def test_input_validation_rejects_unknown_and_coerced_budget():
 
 
 def test_isotopic_hydrogen_is_retained_in_core_and_r_signature():
+    """确认核心及支链签名保留同位素氢，普通氢候选不能冒充氘目标。"""
     from reaction_reference.chemistry.structures import fragment_key
     from reaction_reference.retrieval.planner import _core_smarts
 
@@ -137,6 +151,7 @@ def test_isotopic_hydrogen_is_retained_in_core_and_r_signature():
 
 
 def test_native_generic_query_restores_properties_after_ir_roundtrip():
+    """确认家族 JSON 往返恢复 ARY generic 属性，芳基可匹配而环烷基不可混入。"""
     f = family("OC* |$;;ARY$|", [0, 1, 2])
     restored = type(f).model_validate_json(f.model_dump_json())
     target = parse("OCc1ccccc1")
@@ -145,6 +160,7 @@ def test_native_generic_query_restores_properties_after_ir_roundtrip():
 
 
 def test_sitewise_union_is_not_joint_coverage():
+    """确认对称映射的位点并集即使达到 100%，也不能伪造单见证双支链联合覆盖。"""
     from reaction_reference.chemistry.markush import coverage_summary
     from reaction_reference.retrieval.planner import _core_smarts
 

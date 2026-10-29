@@ -1,3 +1,5 @@
+"""导出受版本管理的数据契约与 OpenAPI；临时应用资源在导出完成后关闭。"""
+
 import json
 import tempfile
 from pathlib import Path
@@ -14,6 +16,10 @@ from reaction_reference.domain.models import (
 
 
 def export_schemas(directory):
+    """把请求、家族、反应、证据审核、资料包与状态 Schema 及 OpenAPI 写入 directory。
+
+    导出时创建临时运行目录，不访问生产来源；Pydantic 类 docstring 会进入 Schema 描述，因此修改契约注释后应重新导出并检查漂移。
+    """
     directory.mkdir(parents=True, exist_ok=True)
     for model in (
         SearchRequest,

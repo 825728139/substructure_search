@@ -1,0 +1,61 @@
+// 当前实现的运行架构；实线表示调用/结果传递，虚线表示契约、配置或只读依赖。
+digraph System {
+  graph [rankdir=TB, bgcolor="#ffffff", pad="0.35", nodesep="0.32", ranksep="0.6", fontname="Noto Sans CJK SC", fontsize=24, labelloc=t, label="项目运行架构｜入口、进程边界与代码职责\n当前实现：单协调器 + 受监督计算子进程"];
+  node [shape=box, style="rounded,filled", fillcolor="#eef5f1", color="#4d826a", fontname="Noto Sans CJK SC", fontsize=12, margin="0.20,0.14"];
+  edge [color="#5c786a", fontname="Noto Sans CJK SC", fontsize=10];
+
+  subgraph cluster_entry {
+    label="① 调用入口｜同一套业务能力"; color="#a7bfcf"; style=rounded;
+    ui [label="内部查看页面\ninterfaces/static/index.html\n输入目标、状态、分页、高亮、导出"];
+    api [label="HTTP 服务\ninterfaces/api.py · create_app\n认证、校验、状态/证据/结构接口"];
+    cli [label="命令行入口\ninterfaces/cli.py · main\n检索、预览、评测、来源探针"];
+    sdk [label="Python 客户端\ninterfaces/sdk.py · Client\nsearch / preview / rerank"];
+    ui -> api [label="JSON / SVG"];
+    api -> sdk; cli -> sdk [label="检索命令"];
+  }
+
+  subgraph cluster_parent {
+    label="② 父进程｜任务协调与运行文件的唯一写入方"; color="#8eabd0"; style=rounded;
+    manager [label="RunManager · adapters/execution.py\n提交与幂等 → 有界排队 → 监督线程\nspawn / 取消 / 硬截止 / 异常收尾", fillcolor="#e9effa", color="#758fb8"];
+    store [label="FileRunStore · adapters/run_store.py\n目录锁、revision、原子写入\n任务状态 + 不可变结果快照\n重启保留已有结果，标记中断", fillcolor="#e9effa", color="#758fb8"];
+    reader [label="读取已有快照\n状态 / 固定快照分页 / SVG / 证据\nrerank 从已存候选创建派生任务\n不重新查询来源", fillcolor="#e9effa", color="#758fb8"];
+    files [label="运行目录 RR_STORE_PATH\n默认 var/runs\n单协调器持有目录锁", shape=folder, fillcolor="#f4f6fa"];
+    manager -> store [label="保存状态和阶段包"];
+    reader -> store [label="读取 / 重排写入新包"];
+    store -> files;
+  }
+  sdk -> manager [label="search 提交 / 等待"];
+  api -> reader [label="状态与结果读取"];
+  sdk -> reader [label="rerank"];
+
+  subgraph cluster_child {
+    label="③ 每项检索的独立子进程｜拥有 RDKit 对象及来源连接"; color="#9ebcaa"; style=rounded;
+    worker [label="_worker · adapters/execution.py\n恢复请求与配置 → 打开来源\nfinally 关闭来源"];
+    search [label="核心编排 · application/search.py\nsearch：家族队列、分页、结构核验\n证据与反应分析、建议、排序、阶段包", fillcolor="#dcefe2", color="#3e7657"];
+    chem [label="化学计算模块\nretrieval：查询家族\nchemistry：结构与 Markush 核验\nreaction_analysis：真实变化与目标投影\nanalogs：有来源约束的替换"];
+    evidence [label="解释与结果模块\nevidence：观察、输入使用、材料关系\nranking：九方向特征、偏好与展示配额"];
+    budget [label="application/budget.py\n时间、任务、候选、反应、建议上限\nRDKit 内层检查点", fillcolor="#fff5df", color="#ae9353"];
+    port [label="来源协议 · ports/sources.py\nCompoundSource\ncandidate_page / hydrate / close\n候选是具体材料实例"];
+    adapters [label="来源适配 · adapters/\nJsonlSource：有上限样本\nPostgresSource：只读索引查询\nAnnotatedSource：哈希绑定审核\n来源不具备条件则明确报告"];
+    source [label="反应来源 / 审核文件\n仅作为可替换输入端\n不在本图设计源数据存储", shape=folder, fillcolor="#f4f6fa"];
+    worker -> search;
+    search -> chem; search -> evidence; search -> port;
+    budget -> search [style=dashed, label="全局限额"];
+    port -> adapters [label="由装配入口注入"];
+    adapters -> source [label="只读"];
+  }
+  manager -> worker [label="spawn：只传可序列化配置和请求"];
+  search -> manager [label="进程队列：阶段包 / 最终包 / 错误", color="#9b7041", constraint=false];
+
+  contracts [label="共同契约 · domain/models.py\n请求、家族、见证、反应、建议、资料包、状态\n导出 contracts/：JSON Schema / OpenAPI", fillcolor="#f1edf8", color="#9a82b6"];
+  assembly [label="组合根与可复现规则\nbootstrap.py：连接协议与适配器\nsettings.py：RR_* 环境配置\nrules.py + resources/rules.json：规则及哈希", fillcolor="#f1edf8", color="#9a82b6"];
+  checks [label="交付验证\ntests/：化学、来源、执行、接口回归\nevaluation/：真实目标与屏蔽试跑\nscripts/check.py：中文说明 / 静态检查\n测试 / 契约漂移 / 打包", fillcolor="#f7f5ec", color="#aa9d6c"];
+  output [label="交付物：ReferencePackage\n命中与贡献、来源与见证、排序解释\n范围/未知/停止原因、规则与实现哈希", fillcolor="#dcf0ed", color="#43897d"];
+  model [label="下游逆合成模型（本项目之外）\n读取参考资料包后再做预测", style="rounded,dashed", fillcolor="#ffffff"];
+  contracts -> search [style=dashed, label="数据契约"];
+  contracts -> api [style=dashed, constraint=false];
+  assembly -> worker [style=dashed, label="选择适配器"];
+  checks -> search [style=dashed, label="回归验证", constraint=false];
+  reader -> output [label="读取 / 展示 / 导出"];
+  output -> model;
+}

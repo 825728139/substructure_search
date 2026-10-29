@@ -1,3 +1,5 @@
+"""核心编排入口：家族队列→来源分页→具体材料核验→反应贡献→来源约束建议→排序资料包。依赖来源端口，不直接依赖 HTTP 或具体数据库。"""
+
 import time
 import uuid
 from collections import deque
@@ -36,6 +38,13 @@ from reaction_reference.rules import code_fingerprint, load_rules
 
 
 def search(request, source, *, run_id=None, on_progress=None):
+    """执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。
+
+    request 是已校验的 SearchRequest；source 实现候选分页和按需加载端口；run_id 可由协调器提供；on_progress 接收完整包，用于持久化阶段结果。来源资源由调用方关闭，本函数不接管连接生命周期。
+
+    内部同时维护家族/角色/选择阶段队列、结构匹配缓存、来源加载缓存和反应分析缓存。来源或映射不足记录为局部未知；预算耗尽停止扩展，保留已完成事实并尝试有限替换分析。异常只在已定义的局部边界降级，不把未评估范围记为完整无命中。
+    """
+    # ① 解析目标并规划查询：所有家族位置最终都回指原始输入的原子编号。
     budget = Budget(request.budget)
     run_id = run_id or uuid.uuid4().hex
     target = parse(request.target.value, target=True)
@@ -47,12 +56,14 @@ def search(request, source, *, run_id=None, on_progress=None):
     family_lookup = {f.id: f for f in families}
     states: dict[str, dict] = {}
     references: dict[str, Reference] = {}
+    # 结构核验可跨实验共享；反应分析和最终引用必须仍绑定各自来源记录。
     match_cache, analysis_cache = {}, {}
     stopped: list[str] = []
     proposals: list[Proposal] = []
     proposal_reasons: list[str] = []
     seen_candidates = set()
     hydrated = {}
+    # 队列项依次为：查询家族、材料角色、分页游标、候选优先阶段。
     queue = deque((family, "product", 0, 0) for family in families)
     if request.options.include_usage:
         queue.extend(
@@ -65,6 +76,10 @@ def search(request, source, *, run_id=None, on_progress=None):
     last_progress = 0.0
 
     def package():
+        """将当前累计状态排序、汇总并封装为一个新的结果快照。
+
+        闭包读取家族、参考、建议、预算和来源问题；计算三层范围内计数、能力状态、摘要及可追溯 manifest。快照 ID 使用内容摘要；本函数不保存文件，实际写入由 on_progress 的协调器执行。
+        """
         ranked, display = rank_references(
             list(references.values()),
             request.ranking_profile,
@@ -74,6 +89,7 @@ def search(request, source, *, run_id=None, on_progress=None):
         )
         ids = set(display)
         chosen = [r for r in ranked if r.id in ids]
+        # 展示顺序使用排序器分配的位置，不改变完整候选池的顺序。
         chosen.sort(key=lambda r: r.display_position or 0)
         display_proposals = proposals[: max(0, request.budget.max_display - len(display))]
         summary, summary_state, omitted = summary_items(
@@ -223,11 +239,16 @@ def search(request, source, *, run_id=None, on_progress=None):
         )
 
     def publish(force=False):
+        """按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。
+
+        回调通常把阶段结果传到父进程；无回调时不构造进度包，最终结果仍由 search 返回。
+        """
         nonlocal last_progress
         if on_progress and (force or time.monotonic() - last_progress > 0.5):
             on_progress(package())
             last_progress = time.monotonic()
 
+    # ② 先发布空的初始包，再按有限预算逐页推进，调用方可持续保存已有结果。
     publish(True)
     try:
         while queue:
@@ -248,7 +269,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                 "selection_scope_id": scope,
                 "complete": False,
             }
-            # Reserve at least one analysis opportunity rather than consume all attempts on recall.
+            # 给后面的核验和反应分析预留任务预算，避免召回阶段耗尽全部机会。
             budget.task("source_page", scope, reserve=4)
             try:
                 page = source.candidate_page(
@@ -277,8 +298,10 @@ def search(request, source, *, run_id=None, on_progress=None):
             )
             budget.task("match_batch", scope, reserve=3)
             matching_complete = True
+            # ③ 每个实际材料独立做完整 Markush 核验；记录整侧命中不能替代此步骤。
             for item in page.items:
                 budget.candidate()
+                # 缓存键保留原始 SMILES：同一身份的不同原子顺序不能复用局部索引。
                 cache_key = (family.id, item.structure_id, item.material.smiles)
                 molecule = parse(item.material.smiles)
                 if family.relation == "strict" and not meets_target(molecule, target):
@@ -298,6 +321,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                 matching_complete &= matched.enumeration_complete
                 if matched.state != "match":
                     continue
+                # ④ 只对真正结构命中的记录加载详情，并保持命中的材料实例不变。
                 if item.record.id not in hydrated:
                     if getattr(source, "hydration_requires_io", False):
                         budget.task("source_hydration", item.record.id, reserve=3)
@@ -323,6 +347,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                     ),
                 )
                 item_key = (item.record.id, item.material.instance_id)
+                # 见证 ID 再绑定实验材料；结构缓存 ID 则另存，保证引用不会串实验。
                 ref_id = digest(item_key)
                 matched = matched.model_copy(
                     update={
@@ -334,6 +359,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                         ]
                     }
                 )
+                # 同一材料可能被多个家族发现：合并见证，允许更强的目标位点投影升级贡献。
                 if ref_id in references:
                     previous = references[ref_id]
                     witnesses = {w.id: w for w in previous.witnesses + matched.witnesses}
@@ -346,6 +372,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                             and matched.enumeration_complete,
                         ),
                     }
+                    # 优先取目标原子覆盖最高的见证，并用 ID 稳定并列次序。
                     new_best = max(matched.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
                     new_projection = project_changes(
                         item.record, item.material, new_best, previous.analysis
@@ -406,6 +433,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                         }
                     )
                     continue
+                # ⑤ 先分析来源的真实成断键，再通过本次一致见证投影到目标位置。
                 if item.record.id not in analyzed:
                     if len(analyzed) % 5 == 0:
                         budget.task("reaction_analysis_batch", scope)
@@ -413,9 +441,11 @@ def search(request, source, *, run_id=None, on_progress=None):
                     analyzed.add(item.record.id)
                     analysis_cache[item.record.id] = analyze_reaction(item.record)
                 analysis = analysis_cache.get(item.record.id, ReactionAnalysis(state="unknown"))
+                # 结构/图变化和实验事实分别判断；产物字段存在不自动产生制备命中。
                 preparation, obtained, used, claims = evidence_for(item.record, item.material)
                 exact = canonical(molecule) == target_smiles
                 satisfies = meets_target(molecule, target)
+                # 当前贡献先用覆盖最多的见证解释；后续家族仍可提供更强投影。
                 best = max(matched.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
                 projected = project_changes(item.record, item.material, best, analysis)
                 contribution: Literal[
@@ -498,6 +528,7 @@ def search(request, source, *, run_id=None, on_progress=None):
             states[state_key]["complete"] = (
                 page.scope_complete and states[state_key]["matching_enumeration_complete"]
             )
+            # ⑥ 分页后仍有预算才继续；缺少合格获得记录时再放宽候选优先范围。
             if page.next_cursor is not None:
                 queue.append((family, role, page.next_cursor, stage))
             elif (
@@ -518,6 +549,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                 and followups < 2
                 and len(family_lookup) < request.budget.max_families
             ):
+                # 用现有见证暴露的 R 组合缺口补查，不在检索前猜测战略切断键。
                 desired = {
                     p
                     for block in outside_blocks(target, family.target_atoms)
@@ -539,6 +571,7 @@ def search(request, source, *, run_id=None, on_progress=None):
             publish()
     except BudgetExceeded as exc:
         stopped.append(str(exc))
+    # ⑦ 在已有命中基础上做有限单反应物替换；每项建议都需来源自回放和目标正向核验。
     if request.options.include_proposals:
         try:
             eligible_pool = [r for r in references.values() if r.material.role == "product"]
@@ -546,6 +579,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                 proposal_reasons.append("transfer_reference_limit_top6")
             if request.budget.max_proposals == 0:
                 proposal_reasons.append("proposal_budget_zero")
+            # 建议尝试顺序：有获得证据优先，再看结构相似度，最后按 ID 固定次序。
             for ref in sorted(
                 eligible_pool, key=lambda r: (not r.obtainment_hit, -r.similarity, r.id)
             )[:6]:
@@ -561,5 +595,6 @@ def search(request, source, *, run_id=None, on_progress=None):
         except BudgetExceeded as exc:
             proposal_reasons.append(str(exc))
             stopped.append(str(exc))
+    # ⑧ 统一排序、证据分账和范围统计；预算截断后的最终包仍保留已完成事实。
     publish(True)
     return package()

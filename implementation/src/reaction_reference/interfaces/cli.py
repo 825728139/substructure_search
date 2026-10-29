@@ -1,3 +1,5 @@
+"""命令行入口：检索、预览、服务、来源有限导出、评测及契约导出共用业务模块。"""
+
 import argparse
 import json
 import sys
@@ -16,6 +18,10 @@ from reaction_reference.settings import Settings
 
 
 def _write(data, path=None):
+    """把可 JSON 序列化数据写入指定文件或标准输出，保留中文并缩进。
+
+    指定文件时创建父目录；写入失败由外层命令入口统一转换为失败退出码。
+    """
     content = json.dumps(data, ensure_ascii=False, indent=2)
     if path:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
@@ -25,6 +31,10 @@ def _write(data, path=None):
 
 
 def main(argv=None):
+    """解析 argv 并分派 CLI 命令，返回进程退出码。
+
+    检索成功返回 0，资料为部分范围返回 2，请求/运行错误返回 1；其他管理命令完成时返回 0。来源连接只从 Settings 读取；服务默认仅绑定 127.0.0.1，不在这里实现第二套化学流程。
+    """
     parser = argparse.ArgumentParser(prog="reaction-reference")
     sub = parser.add_subparsers(dest="command", required=True)
     for command in ("search", "preview"):

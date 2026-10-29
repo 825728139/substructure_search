@@ -1,3 +1,5 @@
+"""有来源和单步证据约束的单反应物替换回放；每条建议都与真实实验观察分开。"""
+
 from itertools import permutations
 
 from rdkit import Chem
@@ -10,6 +12,10 @@ from reaction_reference.rules import load_rules
 
 
 def source_rules(record):
+    """返回可用于当前来源的有序回放规则：合法 radius-2 来源模板优先，其后为注册规则。
+
+    来源模板方向是产物到输入；只接受无中间 agents、一种产物查询、至多 4 个输入及有限模板大小。通过编译不代表方法可迁移，后续必须用实际输入自回放。
+    """
     rules = list(load_rules()[0]["transfer_rules"])
     template = record.retro_template
     if template and len(template) <= 20000 and template.count(">") == 2:
@@ -40,6 +46,10 @@ def source_rules(record):
 
 
 def replay(reaction, inputs, max_sets=16):
+    """对一组输入 Mol 执行 RDKit 反应，保留每次回放的完整产品组。
+
+    返回（产品 SMILES 二维列表、枚举是否完整、已检查产品组是否全部结构合法）。使用 max_sets+1 发现截断；一个组内任意产物不合法则整组不采用。结构校验与枚举完整性分别记录。
+    """
     groups = reaction.RunReactants(tuple(inputs), maxProducts=max_sets + 1)
     output, invalid = [], 0
     for group in groups[:max_sets]:
@@ -55,6 +65,12 @@ def replay(reaction, inputs, max_sets=16):
 
 
 def generate_proposals(reference, target, budget):
+    """从一个来源参考生成只替换一个完整反应物的有限建议。
+
+    reference 必须具有明确操作段落、有效映射、产品报告和实际输入使用证据。先用原输入自回放复现来源产物，再对目标逆向回放；仅接受与原输入恰有一个槽位不同且正向回放满足完整目标的组合。
+
+    返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；无额外原因不等于无截断，需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
+    """
     record = reference.record
     if record.event_scope != "documented_step" or not record.documented_step_ref:
         return [], "source_step_not_assigned"

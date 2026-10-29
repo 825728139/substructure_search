@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-29",
-  "implementation_hash": "cd81f3a3e0f820ec4de21198f1dc402372a9a8c8b433de532a39ac4033a4491f",
+  "implementation_hash": "c1cca2abcc433bdfcaf8ce507ab9c026d5c2d26258fcccf6dbda41657dc5c2cf",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -20,19 +20,22 @@
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
-    "wheel_build": true
+    "wheel_build": true,
+    "chinese_comment_coverage": true
   },
   "wheel_install_smoke": {
     "passed": true,
     "isolated_package_location": true,
     "packaged_resources": true,
     "subprocess_search": true,
-    "same_implementation_hash": true
+    "same_implementation_hash": true,
+    "verified_implementation_hash": "cd81f3a3e0f820ec4de21198f1dc402372a9a8c8b433de532a39ac4033a4491f"
   },
   "http_smoke": {
     "passed": true,
     "bind": "127.0.0.1",
-    "server_stopped_after_verification": true
+    "server_stopped_after_verification": true,
+    "verified_implementation_hash": "cd81f3a3e0f820ec4de21198f1dc402372a9a8c8b433de532a39ac4033a4491f"
   },
   "source_probe": {
     "read_only": true,
@@ -43,14 +46,16 @@
     "fingerprint_self_distance": 0,
     "chemical_index_ready": false,
     "missing": "products_mol_GiST",
-    "indexed_full_source_search_verified": false
+    "indexed_full_source_search_verified": false,
+    "verified_implementation_hash": "cd81f3a3e0f820ec4de21198f1dc402372a9a8c8b433de532a39ac4033a4491f"
   },
   "evaluation": {
     "targets": 12,
     "cases": 24,
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
-    "full_corpus_performance_verified": false
+    "full_corpus_performance_verified": false,
+    "implementation_hash": "c1cca2abcc433bdfcaf8ce507ab9c026d5c2d26258fcccf6dbda41657dc5c2cf"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -58,5 +63,27 @@
     "container_runtime_verified": false,
     "reason": "Docker daemon permission unavailable"
   },
-  "ci_remote_run_verified": false
+  "ci_remote_run_verified": false,
+  "handover_review": {
+    "language": "zh-CN",
+    "python_modules_documented": 52,
+    "python_classes_documented": 48,
+    "python_named_functions_documented": 217,
+    "existing_python_files_with_unchanged_business_ast": 50,
+    "maintenance_check_entry_adds_comment_check": true,
+    "frontend_function_and_callback_comments": true,
+    "frontend_syntax_check": true,
+    "frontend_lexical_tokens_unchanged_except_explicit_semicolons": true,
+    "contract_shapes_unchanged": true,
+    "contract_description_changes_exported": true,
+    "function_index_definition_links_verified": 217,
+    "handover_markdown_local_links_valid": true,
+    "architecture_diagrams_rendered_and_visually_checked": [
+      "docs/system-architecture.svg",
+      "docs/core-business-flow.svg"
+    ],
+    "guide": "docs/HANDOVER.md",
+    "function_index": "docs/FUNCTION_INDEX.md",
+    "previous_smokes_pinned_to_prior_implementation_hash": true
+  }
 }

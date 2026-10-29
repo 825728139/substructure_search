@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# 以脚本自身位置定位项目，使调用方在任意目录启动时都使用同一实现。
 rr_project="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+# 优先使用项目锁定环境，其次兼容仓库已有环境，最后由 uv 按锁文件运行。
 if [[ -x "$rr_project/.venv/bin/python" ]]; then
   exec "$rr_project/.venv/bin/python" -m reaction_reference "$@"
 elif [[ -x "$rr_project/../.venv/bin/python" ]]; then

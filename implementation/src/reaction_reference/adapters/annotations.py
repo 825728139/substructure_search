@@ -1,4 +1,4 @@
-"""Immutable reviewed evidence overlays bound to an exact source-record hash."""
+"""审核证据覆盖适配器：按精确来源哈希绑定产品观察、操作范围及实际输入引用。"""
 
 from pathlib import Path
 
@@ -9,6 +9,8 @@ from reaction_reference.domain.models import EventScope, Model, Observation
 
 
 class EvidenceAnnotation(Model):
+    """单条人工审核输入；包含来源哈希、审核人/日期及实例级观察，不能修改来源身份。"""
+
     record_id: str
     expected_source_hash: str = Field(min_length=24, max_length=64)
     reviewer: str = Field(min_length=1)
@@ -21,7 +23,13 @@ class EvidenceAnnotation(Model):
 
 
 class AnnotatedSource:
+    """来源装饰器：保持原候选选择，命中后的 hydrate 再附加经哈希核对的审核信息。"""
+
     def __init__(self, source, path):
+        """读取有限 JSONL 审核文件并建立 record_id 索引，继承被包装来源的能力。
+
+        文件最多 32 MiB，重复审核记录 ID 或契约错误会拒绝加载；审核文件内容参与新来源快照摘要。
+        """
         self.source = source
         self.max_selection_stage = source.max_selection_stage
         self.hydration_requires_io = source.hydration_requires_io
@@ -43,6 +51,10 @@ class AnnotatedSource:
         self._records = {}
 
     def _apply(self, record):
+        """将审核信息应用到一个来源记录的副本并缓存结果。
+
+        来源哈希必须一致，输入证据必须指向实际反应物实例并有引用；失败时记录局部问题并返回原记录。保留 source.synthetic，不能用审核把演示来源变成文献。
+        """
         if record.id in self._records:
             return self._records[record.id]
         annotation = self.annotations.get(record.id)
@@ -93,10 +105,13 @@ class AnnotatedSource:
         return result
 
     def candidate_page(self, *args, **kwargs):
+        """原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。"""
         return self.source.candidate_page(*args, **kwargs)
 
     def hydrate(self, record):
+        """先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。"""
         return self._apply(self.source.hydrate(record))
 
     def close(self):
+        """关闭被包装来源，其连接与缓存仍归原适配器管理。"""
         self.source.close()

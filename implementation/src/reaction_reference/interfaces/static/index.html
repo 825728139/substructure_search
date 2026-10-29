@@ -1,21 +1,324 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>反应参考检索</title>
-<style>:root{font:16px/1.65 system-ui;color:#16302a;background:#f1f5f2}body{max-width:1120px;margin:36px auto;padding:0 22px}h1{font-size:28px;margin-bottom:4px}small,.muted{color:#5d7069}form,.card{background:white;border:1px solid #d5e0d9;border-radius:12px;padding:20px;margin:16px 0}input,select,button{font:inherit;padding:9px 12px;border:1px solid #b8cbc0;border-radius:7px}input{width:min(600px,90%)}button{background:#146b50;color:white;cursor:pointer}button:disabled{opacity:.5;cursor:default}label{display:inline-block;margin:5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 ui-monospace;background:#f5f7f5;padding:12px}summary{cursor:pointer}.tag{display:inline-block;background:#e6f1e9;padding:2px 8px;border-radius:5px;font-size:13px;margin:3px}.warning{background:#fff3d6;color:#765208}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}img{max-width:100%;height:200px}a{color:#146b50}#status{padding:10px}header{border-bottom:2px solid #146b50;padding-bottom:16px}.actions{display:flex;gap:10px;flex-wrap:wrap}.token{width:190px}</style>
-<header><h1>基于 Markush 子结构的反应参考检索</h1><div class="muted">在模型预测之前，查找可参考的反应、底物和目标连接方法。</div></header>
-<form id="form"><label>目标分子 SMILES<br><input id="target" value="CCCNC(=O)c1ccccc1" required></label><label>内部访问令牌（如已配置）<br><input class="token" id="token" type="password" autocomplete="off"></label><br><label>排序 <select id="profile"><option value="reference_first">参考价值</option><option value="lab_fit">实验适配</option><option value="process_reference">已知操作条件</option></select></label><label>最高温度 / °C <input id="temp" type="number" style="width:95px" placeholder="选填"></label><button id="submit">开始检索</button></form>
-<div class="actions"><button id="cancel" disabled>停止当前任务</button><button id="rerank" disabled>按当前偏好重新排序</button><button id="download" disabled>导出完整资料包</button></div><div id="status" role="status">默认使用合成示例，示例不会计入真实文献命中。</div><div id="metrics"></div><div id="cards"></div><button id="more" hidden>查看更多</button>
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>反应参考检索</title>
+<style>:root {
+  font:16px/1.65 system-ui;
+  color:#16302a;
+  background:#f1f5f2
+}
+body {
+  max-width:1120px;
+  margin:36px auto;
+  padding:0 22px
+}
+h1 {
+  font-size:28px;
+  margin-bottom:4px
+}
+small,.muted {
+  color:#5d7069
+}
+form,.card {
+  background:white;
+  border:1px solid #d5e0d9;
+  border-radius:12px;
+  padding:20px;
+  margin:16px 0
+}
+input,select,button {
+  font:inherit;
+  padding:9px 12px;
+  border:1px solid #b8cbc0;
+  border-radius:7px
+}
+input {
+  width:min(600px,90%)
+}
+button {
+  background:#146b50;
+  color:white;
+  cursor:pointer
+}
+button:disabled {
+  opacity:.5;
+  cursor:default
+}
+label {
+  display:inline-block;
+  margin:5px
+}
+pre {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font:13px/1.5 ui-monospace;
+  background:#f5f7f5;
+  padding:12px
+}
+summary {
+  cursor:pointer
+}
+.tag {
+  display:inline-block;
+  background:#e6f1e9;
+  padding:2px 8px;
+  border-radius:5px;
+  font-size:13px;
+  margin:3px
+}
+.warning {
+  background:#fff3d6;
+  color:#765208
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:12px
+}
+img {
+  max-width:100%;
+  height:200px
+}
+a {
+  color:#146b50
+}
+#status {
+  padding:10px
+}
+header {
+  border-bottom:2px solid #146b50;
+  padding-bottom:16px
+}
+.actions {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap
+}
+.token {
+  width:190px
+}
+</style>
+<header>
+<h1>基于 Markush 子结构的反应参考检索</h1>
+<div class="muted">在模型预测之前，查找可参考的反应、底物和目标连接方法。</div></header>
+<form id="form">
+<label>目标分子 SMILES<br>
+<input id="target" value="CCCNC(=O)c1ccccc1" required></label>
+<label>内部访问令牌（如已配置）<br>
+<input class="token" id="token" type="password" autocomplete="off"></label>
+<br>
+<label>排序 <select id="profile">
+<option value="reference_first">参考价值</option>
+<option value="lab_fit">实验适配</option>
+<option value="process_reference">已知操作条件</option></select></label>
+<label>最高温度 / °C <input id="temp" type="number" style="width:95px" placeholder="选填"></label>
+<button id="submit">开始检索</button></form>
+<div class="actions">
+<button id="cancel" disabled>停止当前任务</button>
+<button id="rerank" disabled>按当前偏好重新排序</button>
+<button id="download" disabled>导出完整资料包</button></div>
+<div id="status" role="status">默认使用合成示例，示例不会计入真实文献命中。</div>
+<div id="metrics"></div>
+<div id="cards"></div>
+<button id="more" hidden>查看更多</button>
 <script>
-let run=null,cursor=null,packageData=null,poll=null;const $=id=>document.getElementById(id);const names={target_outcome:'完整目标获得记录',connection_method:'目标连接方法',local_method:'局部连接方法',modification:'修饰转化',usage:'作为底物使用',structure_clue:'结构线索',unknown:'贡献待确认'};
-const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
-function lab(){return $('temp').value===''?null:{max_temperature_c:Number($('temp').value)}}
-async function api(path,body){const h={};if($('token').value)h.Authorization='Bearer '+$('token').value;if(body!==undefined)h['Content-Type']='application/json';const r=await fetch(path,{method:body===undefined?'GET':'POST',headers:h,body:body===undefined?undefined:JSON.stringify(body)});let d;try{d=await r.json()}catch{throw Error('响应无法解析')}if(!r.ok)throw Error(JSON.stringify(d));return d}
-function details(label,data){const d=node('details');d.append(node('summary',label),node('pre',JSON.stringify(data,null,2)));return d}
-async function structure(ref,host){try{const h={};if($('token').value)h.Authorization='Bearer '+$('token').value;const r=await fetch(`/v1/search-runs/${run}/structures/${ref}.svg`,{headers:h});if(!r.ok)return;const u=URL.createObjectURL(await r.blob());const i=node('img');i.alt='来源分子，已匹配的原子用绿色标出';i.src=u;i.onload=()=>URL.revokeObjectURL(u);host.prepend(i)}catch{}}
-function render(cards){for(const c of cards){const r=c.item,card=node('article',undefined,'card');if(c.kind==='proposal_not_observed'){card.append(node('h3','反应物替换建议'),node('span','尚未观察到的类比建议','tag warning'),node('p',r.proposed_reactants.join(' + ')+' → '+r.target_smiles),details('回放结果及限制',r))}else{card.append(node('h3',names[r.contribution]||r.contribution));card.append(node('span',r.record.source.synthetic?'合成示例 · 非文献先例':r.preparation_hit?'来源报告制得':'来源证据待确认','tag warning'));card.append(node('span',r.layers.join(' / '),'tag'));card.append(node('p',r.material.smiles),node('p','来源：'+r.record.source.namespace+' / '+(r.record.source.document_id||r.record.source.record_id)+' / '+(r.record.source.location||'位置待补充')));card.append(node('p','底物：'+r.record.materials.filter(m=>m.role==='reactant').map(m=>m.smiles).join(' + ')));card.append(details('目标位置、反应变化和联合覆盖',{coverage:r.coverage,analysis:r.analysis}),details('九方向排序依据',r.ranking_features),details('来源证据及未解决问题',{claims:r.claims,unresolved:r.unresolved,lab_fit:r.lab_fit,lab_reasons:r.lab_reasons}));structure(r.id,card)}$('cards').append(card)}}
-async function results(reset=true){const d=await api(`/v1/search-runs/${run}/results?limit=12`+(reset?'':'&cursor='+encodeURIComponent(cursor)));if(reset)$('cards').replaceChildren();render(d.results);cursor=d.next_cursor;$('more').hidden=!cursor;$('metrics').replaceChildren(node('pre',JSON.stringify({范围:d.coverage_state,统计:d.statistics,停止原因:d.stop_reasons,能力范围:d.feature_status},null,2)))}
-async function check(){try{const d=await api('/v1/search-runs/'+run);$('status').textContent='任务 '+run+' · '+d.lifecycle;if(['succeeded','cancelled','timed_out','failed'].includes(d.lifecycle)){clearInterval(poll);poll=null;$('cancel').disabled=true;$('submit').disabled=false;await results();$('rerank').disabled=!d.latest_snapshot_id;$('download').disabled=!d.latest_snapshot_id;if(d.error)$('status').append(node('pre',JSON.stringify(d.error,null,2)))}}catch(e){clearInterval(poll);poll=null;$('status').textContent=e.message;$('submit').disabled=false}}
-$('form').onsubmit=async e=>{e.preventDefault();try{if(poll)clearInterval(poll);$('submit').disabled=true;$('cards').replaceChildren();const d=await api('/v1/search-runs',{target:{value:$('target').value},ranking_profile:$('profile').value,lab_context:lab()});run=d.run_id;$('cancel').disabled=false;poll=setInterval(check,500);await check()}catch(e){$('status').textContent=e.message;$('submit').disabled=false}};
-$('cancel').onclick=async()=>{try{await api('/v1/search-runs/'+run+'/cancel',{});await check()}catch(e){$('status').textContent=e.message}};
-$('rerank').onclick=async()=>{try{const d=await api('/v1/search-runs/'+run+'/rerank',{ranking_profile:$('profile').value,lab_context:lab()});run=d.run_id;await check()}catch(e){$('status').textContent=e.message}};
-$('download').onclick=async()=>{try{const d=await api('/v1/search-runs/'+run+'/package');const u=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));const a=node('a');a.href=u;a.download='reference-'+run+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}catch(e){$('status').textContent=e.message}};
-$('more').onclick=()=>results(false).catch(e=>$('status').textContent=e.message);
-</script></html>
+// 页面只持有当前任务、分页游标和轮询句柄；来源事实和排序均由后端提供。
+let run = null, cursor = null, packageData = null, poll = null;
+
+/** 按 DOM id 获取控件；访问令牌只从当前页面输入框读取。 */
+const $ = id => document.getElementById(id);
+const names = {
+  target_outcome: '完整目标获得记录',
+  connection_method: '目标连接方法',
+  local_method: '局部连接方法',
+  modification: '修饰转化',
+  usage: '作为底物使用',
+  structure_clue: '结构线索',
+  unknown: '贡献待确认'
+};
+
+/** 创建显示节点；来源文本统一写入 textContent，避免被浏览器解释成 HTML。 */
+const node = (tag, text, cls) => {
+  const n = document.createElement(tag);
+  if (text !== undefined) n.textContent = text;
+  if (cls) n.className = cls;
+  return n;
+};
+
+/** 将可选的温度上限转为 lab_context；留空表示未提供限制，单位为摄氏度。 */
+function lab() {
+  return $('temp').value === '' ? null : {max_temperature_c: Number($('temp').value)};
+}
+
+/** 统一请求 JSON 接口：无 body 为 GET，有 body 为 POST；非成功响应抛给调用者显示。 */
+async function api(path, body) {
+  const h = {};
+  if ($('token').value) h.Authorization = 'Bearer ' + $('token').value;
+  if (body !== undefined) h['Content-Type'] = 'application/json';
+  const r = await fetch(path, {
+    method: body === undefined ? 'GET' : 'POST',
+    headers: h,
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  let d;
+  try {
+    d = await r.json();
+  } catch {
+    throw Error('响应无法解析');
+  }
+  if (!r.ok) throw Error(JSON.stringify(d));
+  return d;
+}
+
+/** 用折叠区展示后端的原始解释字段，便于追查覆盖、证据和排序依据。 */
+function details(label, data) {
+  const d = node('details');
+  d.append(node('summary', label), node('pre', JSON.stringify(data, null, 2)));
+  return d;
+}
+
+/** 加载当前任务的来源材料 SVG 并高亮命中原子；图片失败不阻断文字证据展示。 */
+async function structure(ref, host) {
+  try {
+    const h = {};
+    if ($('token').value) h.Authorization = 'Bearer ' + $('token').value;
+    const r = await fetch(`/v1/search-runs/${run}/structures/${ref}.svg`, {headers: h});
+    if (!r.ok) return;
+    const u = URL.createObjectURL(await r.blob());
+    const i = node('img');
+    i.alt = '来源分子，已匹配的原子用绿色标出';
+    i.src = u;
+    /** 图像载入后释放临时对象 URL，避免翻页时持续保留 Blob。 */
+    i.onload = () => URL.revokeObjectURL(u);
+    host.prepend(i);
+  } catch {}
+}
+
+/** 渲染一页卡片；观察记录与未观察的替换建议分别标明，前端不自行升级证据。 */
+function render(cards) {
+  for (const c of cards) {
+    const r = c.item, card = node('article', undefined, 'card');
+    if (c.kind === 'proposal_not_observed') {
+      card.append(
+        node('h3', '反应物替换建议'),
+        node('span', '尚未观察到的类比建议', 'tag warning'),
+        node('p', r.proposed_reactants.join(' + ') + ' → ' + r.target_smiles),
+        details('回放结果及限制', r)
+      );
+    } else {
+      card.append(node('h3', names[r.contribution] || r.contribution));
+      card.append(node('span', r.record.source.synthetic ? '合成示例 · 非文献先例' : r.preparation_hit ? '来源报告制得' : '来源证据待确认', 'tag warning'));
+      card.append(node('span', r.layers.join(' / '), 'tag'));
+      card.append(
+        node('p', r.material.smiles),
+        node('p', '来源：' + r.record.source.namespace + ' / ' + (r.record.source.document_id || r.record.source.record_id) + ' / ' + (r.record.source.location || '位置待补充'))
+      );
+      card.append(node('p', '底物：' + r.record.materials
+        // 这里只列明确标记为 reactant 的材料；完整角色信息仍保留在资料包中。
+        .filter(/** 选择明确的反应物角色。 */ m => m.role === 'reactant')
+        .map(/** 提取该反应物的结构表示。 */ m => m.smiles).join(' + ')));
+      card.append(
+        details('目标位置、反应变化和联合覆盖', {coverage: r.coverage, analysis: r.analysis}),
+        details('九方向排序依据', r.ranking_features),
+        details('来源证据及未解决问题', {claims: r.claims, unresolved: r.unresolved, lab_fit: r.lab_fit, lab_reasons: r.lab_reasons})
+      );
+      structure(r.id, card);
+    }
+    $('cards').append(card);
+  }
+}
+
+/** 获取固定快照的一页结果；reset 时替换列表，否则使用服务端游标继续追加。 */
+async function results(reset = true) {
+  const d = await api(`/v1/search-runs/${run}/results?limit=12` + (reset ? '' : '&cursor=' + encodeURIComponent(cursor)));
+  if (reset) $('cards').replaceChildren();
+  render(d.results);
+  cursor = d.next_cursor;
+  $('more').hidden = !cursor;
+  $('metrics').replaceChildren(node('pre', JSON.stringify({范围: d.coverage_state, 统计: d.statistics, 停止原因: d.stop_reasons, 能力范围: d.feature_status}, null, 2)));
+}
+
+/** 轮询任务生命周期；到终态后停止计时器，并展示保存的全部可用结果或错误。 */
+async function check() {
+  try {
+    const d = await api('/v1/search-runs/' + run);
+    $('status').textContent = '任务 ' + run + ' · ' + d.lifecycle;
+    if (['succeeded', 'cancelled', 'timed_out', 'failed'].includes(d.lifecycle)) {
+      clearInterval(poll);
+      poll = null;
+      $('cancel').disabled = true;
+      $('submit').disabled = false;
+      await results();
+      $('rerank').disabled = !d.latest_snapshot_id;
+      $('download').disabled = !d.latest_snapshot_id;
+      if (d.error) $('status').append(node('pre', JSON.stringify(d.error, null, 2)));
+    }
+  } catch (e) {
+    clearInterval(poll);
+    poll = null;
+    $('status').textContent = e.message;
+    $('submit').disabled = false;
+  }
+}
+
+/** 提交完整目标和排序偏好；每 500 毫秒查询任务状态，不让用户先选择骨架。 */
+$('form').onsubmit = async e => {
+  e.preventDefault();
+  try {
+    if (poll) clearInterval(poll);
+    $('submit').disabled = true;
+    $('cards').replaceChildren();
+    const d = await api('/v1/search-runs', {target: {value: $('target').value}, ranking_profile: $('profile').value, lab_context: lab()});
+    run = d.run_id;
+    $('cancel').disabled = false;
+    poll = setInterval(check, 500);
+    await check();
+  } catch (e) {
+    $('status').textContent = e.message;
+    $('submit').disabled = false;
+  }
+};
+
+/** 请求后端取消并刷新状态；取消保留已发布快照，不等于撤销来源事实。 */
+$('cancel').onclick = async () => {
+  try {
+    await api('/v1/search-runs/' + run + '/cancel', {});
+    await check();
+  } catch (e) {
+    $('status').textContent = e.message;
+  }
+};
+
+/** 对已保存候选重新排序；使用新 run_id 查看结果，不重新检索来源。 */
+$('rerank').onclick = async () => {
+  try {
+    const d = await api('/v1/search-runs/' + run + '/rerank', {ranking_profile: $('profile').value, lab_context: lab()});
+    run = d.run_id;
+    await check();
+  } catch (e) {
+    $('status').textContent = e.message;
+  }
+};
+
+/** 下载当前任务的完整 ReferencePackage JSON，保留卡片未显示的证据和范围字段。 */
+$('download').onclick = async () => {
+  try {
+    const d = await api('/v1/search-runs/' + run + '/package');
+    const u = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'}));
+    const a = node('a');
+    a.href = u;
+    a.download = 'reference-' + run + '.json';
+    a.click();
+    /** 为浏览器读取下载 Blob 留出时间，再释放临时 URL。 */
+    setTimeout(() => URL.revokeObjectURL(u), 1000);
+  } catch (e) {
+    $('status').textContent = e.message;
+  }
+};
+
+/** 追加下一页；分页失败只显示错误，不清空已加载的参考。 */
+$('more').onclick = () => results(false)
+  .catch(/** 将分页异常显示在任务状态区域。 */ e => $('status').textContent = e.message);
+</script>
+</html>

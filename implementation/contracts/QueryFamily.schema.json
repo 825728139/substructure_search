@@ -2,6 +2,7 @@
   "$defs": {
     "RConstraint": {
       "additionalProperties": false,
+      "description": "查询核心某位置的完整 R 块限制；position 是查询核心索引，不是全目标索引。",
       "properties": {
         "position": {
           "minimum": 0,
@@ -63,6 +64,7 @@
     }
   },
   "additionalProperties": false,
+  "description": "可序列化的 Markush 查询中间表示，含核心、目标对应、R 谓词和生成规则依据。",
   "properties": {
     "id": {
       "title": "Id",

@@ -1,1 +1,1 @@
-"""RDKit-dependent structure processing."""
+"""具体分子、Markush 核验及覆盖的基础化学计算。"""

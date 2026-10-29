@@ -2,7 +2,13 @@
 
 输入一个具体有机目标分子的 SMILES，在模型预测之前生成整体、核心、分片三层 Markush 查询，找出参考反应，分析实际连接与修饰贡献，给出有来源约束的反应物替换建议和可追溯资料包。提供 CLI、Python SDK、HTTP API 和内部查看页面，不包含收费功能。
 
-![实际模块流程](docs/architecture.svg)
+交接阅读从 [中文代码交接指南](docs/HANDOVER.md) 开始；其中包括项目目录、实际调用链、关键对象和编号含义、修改入口及验证步骤。全部具名 Python 函数有中文说明，可通过 [函数索引](docs/FUNCTION_INDEX.md) 直接定位。
+
+![项目运行架构](docs/system-architecture.svg)
+
+![核心业务逻辑](docs/core-business-flow.svg)
+
+两图分别提供 [运行架构 PNG](docs/system-architecture.png) 与 [业务逻辑 PNG](docs/core-business-flow.png)，可编辑的 `.dot` 源文件位于同一目录。
 
 ## 启动
 
@@ -96,9 +102,9 @@ implementation/
 ├── configs/                    # 内部环境配置示例
 ├── tests/                      # 化学回归、来源/预算、API 生命周期与模块边界
 ├── evaluation/                 # 真实样本试跑报告；未经标注不计算方法召回率
-├── scripts/                    # 启动、自检、只读来源探针
+├── scripts/                    # 启动、自检、中文说明检查/函数索引、只读来源探针
 ├── deploy/                     # Dockerfile 与单协调器 Compose
-└── docs/                       # 模块图、实现范围与运行说明
+└── docs/                       # 中文交接指南、函数索引、两张架构图及实现状态
 ```
 
 ## 验证与评测
@@ -108,7 +114,7 @@ cd implementation
 uv run --frozen python scripts/check.py
 ```
 
-检查包括 Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
+检查包括中文说明覆盖、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
 ```bash
 ./implementation/scripts/rr select-evaluation-targets --source-path var/reactions.jsonl \

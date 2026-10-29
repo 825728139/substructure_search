@@ -1,1 +1,1 @@
-"""Subject-specific evidence and summary construction."""
+"""材料实例级证据、已返回材料关系与资料摘要。"""

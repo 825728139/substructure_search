@@ -1,3 +1,5 @@
+"""单协调器文件运行仓库：目录锁、revision、不可变资料快照与原子持久化。"""
+
 import fcntl
 import json
 import os
@@ -10,19 +12,26 @@ from reaction_reference.domain.models import ReferencePackage, RunState
 
 
 class RevisionConflict(ValueError):
+    """状态修订、幂等请求或快照内容冲突；HTTP 层转换为 409。"""
+
     pass
 
 
 class FileRunStore:
-    """Single-coordinator file store with atomic writes and revision checks."""
+    """单机文件存储；原子写入配合一个协调器使用，不提供分布式事务。"""
 
     def __init__(self, root):
+        """建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。"""
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
         self._coordinator = None
 
     def acquire_coordinator(self):
+        """获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。
+
+        锁文件可以保留在磁盘上，锁的实际生命周期由打开的文件描述符决定。
+        """
         stream = (self.root / ".coordinator.lock").open("a+")
         try:
             fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -34,18 +43,27 @@ class FileRunStore:
         self._coordinator = stream
 
     def close(self):
+        """释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。"""
         if self._coordinator:
             fcntl.flock(self._coordinator.fileno(), fcntl.LOCK_UN)
             self._coordinator.close()
             self._coordinator = None
 
     def _directory(self, run_id):
+        """校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。
+
+        非法值抛出 KeyError，避免用户输入变成任意文件路径。
+        """
         if not run_id or any(c not in "0123456789abcdef" for c in run_id) or len(run_id) != 32:
             raise KeyError("Invalid run ID")
         return self.root / run_id
 
     @staticmethod
     def _atomic(path, content):
+        """把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。
+
+        保证读者看到完整旧文件或完整新文件；本函数执行磁盘 I/O，写入错误向上传播。
+        """
         temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
         with temporary.open("w") as stream:
             stream.write(content)
@@ -59,12 +77,17 @@ class FileRunStore:
             os.close(directory)
 
     def create(self, state):
+        """创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。"""
         with self._lock:
             directory = self._directory(state.run_id)
             directory.mkdir(exist_ok=False)
             self._atomic(directory / "state.json", state.model_dump_json())
 
     def load(self, run_id, owner=None):
+        """读取并校验指定 run 的状态，返回 RunState。
+
+        可选 owner 限制访问范围；不存在或归属不符统一抛出 KeyError，不暴露其他范围的运行信息。
+        """
         with self._lock:
             path = self._directory(run_id) / "state.json"
             if not path.is_file():
@@ -75,6 +98,10 @@ class FileRunStore:
             return state
 
     def update(self, state, expected_revision):
+        """按 expected_revision 更新非终态运行并返回递增 revision 后的状态。
+
+        修订冲突或试图改写终态时抛出 RevisionConflict；调用方不能通过旧状态覆盖取消/成功结果。
+        """
         with self._lock:
             previous = self.load(state.run_id)
             if previous.revision != expected_revision:
@@ -86,6 +113,10 @@ class FileRunStore:
             return state
 
     def save_package(self, package):
+        """保存不可变 ReferencePackage 快照，并原子更新 latest 指针。
+
+        同 snapshot_id 只能重写完全相同的内容；内容冲突抛出 RevisionConflict，防止分页已绑定快照发生变化。
+        """
         with self._lock:
             directory = self._directory(package.run_id)
             path = directory / f"snapshot-{package.snapshot_id}.json"
@@ -99,6 +130,10 @@ class FileRunStore:
             )
 
     def package(self, run_id, snapshot_id=None):
+        """读取指定快照，或在未指定时读取 latest 指向的资料包。
+
+        运行尚无快照时返回 None；显式快照不存在或 ID 非法抛出 KeyError。返回对象经过 ReferencePackage 契约校验。
+        """
         directory = self._directory(run_id)
         if snapshot_id is None:
             latest = directory / "latest.json"
@@ -113,6 +148,10 @@ class FileRunStore:
         return ReferencePackage.model_validate_json(path.read_text())
 
     def idempotency(self, owner, key, request_hash, run_id=None):
+        """查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。
+
+        同键同请求摘要可复用；同键不同请求抛出 RevisionConflict。提供 run_id 才写入绑定文件。
+        """
         with self._lock:
             path = self.root / f"idempotency-{digest([owner, key])}.json"
             if path.is_file():
@@ -125,6 +164,10 @@ class FileRunStore:
             return None
 
     def recover_interrupted(self):
+        """启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。
+
+        进程重启后原只读来源会话已失效，因此不自动续接旧游标或伪造完整性。
+        """
         for path in self.root.glob("*/state.json"):
             state = RunState.model_validate_json(path.read_text())
             if state.lifecycle in ("queued", "running"):

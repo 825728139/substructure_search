@@ -1,1 +1,1 @@
-"""Source-anchored, explicitly unobserved reaction analogies."""
+"""来源约束的反应物替换建议与图回放。"""

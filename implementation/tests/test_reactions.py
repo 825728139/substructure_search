@@ -1,3 +1,5 @@
+"""回归测试：实际反应变化、观察证据与单输入回放。"""
+
 import pytest
 
 from reaction_reference.analogs.transfer import generate_proposals
@@ -9,6 +11,7 @@ from reaction_reference.reaction_analysis.analyze import analyze_reaction
 
 
 def analysis(amide, mapped):
+    """用给定映射式重建测试两侧材料，再调用实际分析，隔离端点归属与键变化场景。"""
     materials = []
     if mapped.count(">") == 2:
         left, _agents, right = mapped.split(">")
@@ -21,6 +24,7 @@ def analysis(amide, mapped):
 
 
 def test_connection_and_leaving_fragment_not_all_broken(amide):
+    """确认酰胺新键与离去边界正确分账，缺少副产物不导致虚构大量断键。"""
     a = analyze_reaction(amide)
     assert a.state == "analyzed"
     assert [c.maps for c in a.formed] == [(1, 3)]
@@ -38,29 +42,34 @@ def test_connection_and_leaving_fragment_not_all_broken(amide):
     ],
 )
 def test_invalid_mapping_is_unknown(amide, mapped, reason):
+    """确认重复正映射、同位素冲突或非法反应式明确返回未知及原因。"""
     a = analysis(amide, mapped)
     assert a.state == "unknown" and reason in a.reasons
 
 
 def test_map_zero_never_establishes_cross_side_identity(amide):
+    """确认 map=0 原子不参与跨侧身份，不从未映射区域制造成断键。"""
     a = analysis(amide, "CC[OH:1]>>CC[OH:1]")
     assert a.state == "partial"
     assert not a.formed and not a.broken
 
 
 def test_resonance_swap_not_transformation(amide):
+    """确认限定硝基氧共振交换记为表示变化，不计真实键级转化。"""
     a = analysis(amide, "[CH3:1][N+:2](=[O:3])[O-:4]>>[CH3:1][N+:2]([O-:3])=[O:4]")
     assert len(a.representation_only) == 2
     assert not a.order_changed
 
 
 def test_real_proton_transfer_not_suppressed_as_resonance(amide):
+    """确认羧酸的实际 H 迁移不会被共振规则抹除。"""
     a = analysis(amide, "[CH3:1][C:2](=[O:3])[OH:4]>>[CH3:1][C:2]([OH:3])=[O:4]")
     assert len(a.order_changed) == 2
     assert not a.representation_only
 
 
 def test_observed_ring_changes(source):
+    """确认从实际命中反应变化识别闭环和开环，不依赖检索前虚构切环位置。"""
     for rid, expected in [
         ("demo-ring-closure", "ring_closure"),
         ("demo-ring-opening", "ring_opening"),
@@ -70,6 +79,7 @@ def test_observed_ring_changes(source):
 
 
 def test_synthetic_sources_never_become_literature(amide):
+    """确认合成示例有演示 Claim，但没有真实制备/获得/使用命中。"""
     product = amide.materials[-1]
     prep, obtained, used, claims = evidence_for(amide, product)
     assert not any([prep, obtained, used])
@@ -77,6 +87,7 @@ def test_synthetic_sources_never_become_literature(amide):
 
 
 def test_product_presence_alone_not_preparation(amide):
+    """确认有产品结构不等于制得，实际输入使用只归属于对应反应物。"""
     actual_source = amide.source.model_copy(update={"synthetic": False})
     record = amide.model_copy(update={"source": actual_source, "observations": []})
     assert evidence_for(record, record.materials[-1])[:3] == (False, False, False)
@@ -84,6 +95,7 @@ def test_product_presence_alone_not_preparation(amide):
 
 
 def test_conflict_cancels_positive_outcome(amide):
+    """确认同产品的明确冲突会取消阳性制备标记。"""
     actual_source = amide.source.model_copy(update={"synthetic": False})
     conflict = Observation(
         product_instance_id=amide.materials[-1].instance_id,
@@ -98,6 +110,7 @@ def test_conflict_cancels_positive_outcome(amide):
 
 
 def reference(amide):
+    """为回放测试构造带来源映射分析的最小 Reference。"""
     return Reference(
         id="ref",
         record=amide,
@@ -111,6 +124,7 @@ def reference(amide):
 
 
 def test_single_reactant_change_core_or_branch(amide):
+    """确认支链或母核差异都能在来源自回放后仅替换一个输入，并满足完整目标。"""
     ref = reference(amide)
     for target, expected_slot in [("CCCNC(=O)c1ccccc1", 1), ("CCNC(=O)c1ccc(F)cc1", 0)]:
         proposals, reason = generate_proposals(ref, parse(target), Budget(BudgetConfig()))
@@ -126,6 +140,7 @@ def test_single_reactant_change_core_or_branch(amide):
 
 
 def test_two_changes_and_unassigned_step_do_not_transfer(amide):
+    """确认需要同时改两个输入或来源未明确分步时不自动给出单输入迁移。"""
     ref = reference(amide)
     proposals, _ = generate_proposals(ref, parse("CCCNC(=O)c1ccc(F)cc1"), Budget(BudgetConfig()))
     assert not proposals
@@ -137,6 +152,7 @@ def test_two_changes_and_unassigned_step_do_not_transfer(amide):
 
 
 def test_source_endpoint_conflict_is_not_a_validated_mapping(amide):
+    """确认映射端点不属于记录实际材料时不能作为已校验反应分析。"""
     changed = amide.model_copy(update={"mapped_reaction_smiles": "[CH3:1][OH:2]>>[CH2:1]=[O:2]"})
     a = analyze_reaction(changed)
     assert a.state == "unknown"
@@ -144,6 +160,7 @@ def test_source_endpoint_conflict_is_not_a_validated_mapping(amide):
 
 
 def test_source_radius2_template_can_transfer_a_non_registry_reaction(amide):
+    """确认合法来源 radius-2 模板经自回放可生成注册酰胺规则以外的单输入建议。"""
     mats = [
         Material(instance_id="r1", role="reactant", smiles="CCBr", actual_input=True),
         Material(instance_id="r2", role="reactant", smiles="Oc1ccccc1", actual_input=True),
@@ -182,6 +199,7 @@ def test_source_radius2_template_can_transfer_a_non_registry_reaction(amide):
 
 
 def test_replay_retains_product_sets_and_independent_enumeration_limit():
+    """确认回放保留整组产品，并把结构有效和枚举截断分开。"""
     from rdkit.Chem import rdChemReactions
 
     from reaction_reference.analogs.transfer import replay

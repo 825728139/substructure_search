@@ -1,3 +1,5 @@
+"""从来源映射反应的真实端点分析键和原子属性变化，再通过具体材料见证投影到目标；不推断未报告机理。"""
+
 from collections import Counter
 
 from rdkit import Chem
@@ -7,6 +9,10 @@ from reaction_reference.domain.models import BondChange, ReactionAnalysis
 
 
 def _bonds(mol):
+    """返回以排序后的正映射号对为键、键型字符串为值的字典。
+
+    没有正映射号的端点不建立跨侧身份；相同映射号的合法性由 analyze_reaction 先行核验。
+    """
     return {
         tuple(sorted((b.GetBeginAtom().GetAtomMapNum(), b.GetEndAtom().GetAtomMapNum()))): str(
             b.GetBondType()
@@ -17,11 +23,15 @@ def _bonds(mol):
 
 
 def _atoms(mol):
+    """建立正原子映射号到 Atom 的查找表，忽略 map=0 的原子。"""
     return {a.GetAtomMapNum(): a for a in mol.GetAtoms() if a.GetAtomMapNum()}
 
 
 def _resonance_pairs(left, right, changed):
-    """Only two reviewed terminal-oxygen motifs; never arbitrary minimum edits."""
+    """识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。
+
+    left/right 是两侧 Mol，changed 是共同映射键的键级变化集合。仅当氧的映射、同位素、H、连接度及电荷/单双键模式满足规则时忽略；真实质子迁移不能被此规则抹掉。
+    """
     la, ra = _atoms(left), _atoms(right)
     lb, rb = _bonds(left), _bonds(right)
     ignored = set()
@@ -57,7 +67,7 @@ def _resonance_pairs(left, right, changed):
             continue
         if left_atom.GetFormalCharge() != right_atom.GetFormalCharge():
             continue
-        # Nitro: central N+, oxygens 0/-1. Carboxylate: central C0, oxygens 0/-1.
+        # 有限共振例外：硝基中心 N+、两氧为 0/-1；羧酸根中心 C0、两氧为 0/-1。
         if (left_atom.GetAtomicNum(), left_atom.GetFormalCharge()) not in ((7, 1), (6, 0)):
             continue
         if any(
@@ -71,7 +81,7 @@ def _resonance_pairs(left, right, changed):
             and sorted(rb.get(p) for p in pairs) == ["DOUBLE", "SINGLE"]
         ):
             for pair in pairs:
-                # Charge must move with the double bond, not change the material charge.
+                # 电荷必须随双键位置一同移动；材料的总电荷不能因此改变。
                 oxygen = next(i for i in pair if i != number)
                 if (lb[pair] == "DOUBLE" and la[oxygen].GetFormalCharge() != 0) or (
                     rb[pair] == "DOUBLE" and ra[oxygen].GetFormalCharge() != 0
@@ -83,10 +93,20 @@ def _resonance_pairs(left, right, changed):
 
 
 def _cycle_rank(mol):
+    """计算分子图的独立环数 E−V+C，用于环变化诊断。
+
+    该数值只是辅助信息；是否开环或闭环仍由实际变化键的环成员关系判断。
+    """
     return mol.GetNumBonds() - mol.GetNumAtoms() + len(Chem.GetMolFrags(mol))
 
 
 def analyze_reaction(record):
+    """分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。
+
+    先校对材料实例、正映射唯一性、元素与同位素，再区分成键、真正断键、离去边界和未跟踪输入片段；补充键级、H/电荷/自由基变化、有限共振例外、实际环变化及粗连接类别。
+
+    缺失或冲突映射返回 unknown，不中断整个搜索。分析范围沿用 event_scope；未分步来源只能解释净端点，原子来源组件编号也不自动等于实际投料证据。
+    """
     if not record.mapped_reaction_smiles:
         return ReactionAnalysis(
             state="unknown", event_scope=record.event_scope, reasons=["mapping_missing"]
@@ -158,9 +178,9 @@ def analyze_reaction(record):
     for label in sorted(la.keys() & ra.keys()):
         before, after = la[label], ra[label]
         for name, getter in (
-            ("formal_charge", lambda a: a.GetFormalCharge()),
-            ("hydrogen_count", lambda a: a.GetTotalNumHs(includeNeighbors=True)),
-            ("radical_electrons", lambda a: a.GetNumRadicalElectrons()),
+            ("formal_charge", lambda a: a.GetFormalCharge()),  # 读取形式电荷。
+            ("hydrogen_count", lambda a: a.GetTotalNumHs(includeNeighbors=True)),  # 包含显式邻氢。
+            ("radical_electrons", lambda a: a.GetNumRadicalElectrons()),  # 读取自由基电子数。
         ):
             if getter(before) != getter(after) and not (
                 name == "formal_charge" and label in resonance_atoms
@@ -272,7 +292,10 @@ def analyze_reaction(record):
 
 
 def project_changes(record, material, witness, analysis):
-    """Project source product changes through one consistent product correspondence."""
+    """把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。
+
+    先定位与 material 同身份的映射产物，再枚举其内部对称对应，返回目标成键、改变原子、支持状态和检查数量。映射歧义、同身份多产物或 128 个对应上限导致结论不稳定时，不输出确定的目标位点。
+    """
     if analysis.state == "unknown" or material.role != "product":
         return {"formed_target_bonds": [], "changed_target_atoms": [], "support": "unknown"}
     selected = parse(material.smiles)
@@ -321,7 +344,7 @@ def project_changes(record, material, witness, analysis):
     if not conclusions:
         return {"formed_target_bonds": [], "changed_target_atoms": [], "support": "unknown"}
     stable = len(set(conclusions)) == 1 and len(embeddings) <= 128 and len(options) == 1
-    # Ambiguous local assignments do not produce definite target-key formation.
+    # 局部对应有歧义时，不把某根目标键武断标记为已由该反应形成。
     return {
         "formed_target_bonds": list(conclusions[0][0]) if stable else [],
         "changed_target_atoms": list(conclusions[0][1]) if stable else [],

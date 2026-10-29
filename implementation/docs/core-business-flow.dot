@@ -1,0 +1,56 @@
+// 当前实现的化学业务流程；虚线表示可选补查、证据约束或预算控制。
+digraph Business {
+  graph [rankdir=TB, bgcolor="#ffffff", pad="0.4", nodesep="0.32", ranksep="0.55", fontname="Noto Sans CJK SC", fontsize=24, labelloc=t, label="核心业务逻辑｜先检索可参考反应，再交给模型\n自动生成查询 → 具体材料核验 → 实际反应贡献 → 可解释参考包"];
+  node [shape=box, style="rounded,filled", fillcolor="#eef5f1", color="#52836c", fontname="Noto Sans CJK SC", fontsize=12, margin="0.18,0.13"];
+  edge [color="#60806e", fontname="Noto Sans CJK SC", fontsize=10];
+  input [label="用户只输入完整目标分子 SMILES\n可选：实验限制与排序偏好\n不要求选择骨架，不调用预测模型"];
+  target [label="① 解析并保留原始目标原子编号\nstructures.parse / atom_table / meets_target\n身份规范化与立体/同位素要求分开"];
+  plan [label="② 自动生成有限查询集合 · planner.initial_families\n重要官能团按规则补全进核心，其他取代位置尽量保留 R 自由度\n固定核心 SMARTS + R 约束 + 对应的目标原子位置"];
+  input -> target -> plan;
+
+  whole [label="整体层：主框架尽量一致\n环状：Murcko 框架 + 相邻功能单元\n无环：完整重原子框架\n寻找末端修饰或少改底物即可借鉴的反应"];
+  core [label="核心层：母核或功能锚点一致\n完整环系；无环用功能锚点连接路径\n核心外保留多个完整 R 块\n寻找头部/尾部连接与组合线索"];
+  fragment [label="分片层：局部可合成片段一致\n官能团邻域 + 完整相交环系\nBRICS 非环边界片段\n给后续战略切断提供已有反应线索"];
+  exact [label="严格完整目标补查\n补足完整身份与立体要求\n它是三层之外的补充通道", fillcolor="#eaf0fb", color="#8198b7"];
+  plan -> whole; plan -> core; plan -> fragment; plan -> exact;
+
+  select [label="③ 有限候选选择 · source.candidate_page\n按家族及材料角色分页，有时间与候选上限\n样本：必要核心 Pattern → 体量优先/放宽 → 相似优先\n索引来源：可用时整侧 KNN 初选 + 独立子结构游标\n相似度/体量仅表达优先级，不能替代子结构核验"];
+  whole -> select; core -> select; fragment -> select; exact -> select;
+  witness [label="④ 核验一个实际产物或输入 · markush.match_family\n枚举核心原子对应，保留对称方向直到 R 条件检查完成\n移去核心 → 提取完整外部连通块，记录全部连接端口\n检查 R 类别/长度/可选氢/精确块/相等/桥连/额外内部边\n一条合法见证＝同一材料 + 同一次一致映射"];
+  select -> witness;
+  gate [label="有合法见证？", shape=diamond, fillcolor="#fff4dc", color="#b69653"];
+  witness -> gate;
+  skip [label="不匹配：继续下一候选\n枚举截断/能力不支持：保留未知原因\n不把未知当作确定无命中", fillcolor="#fff7e8", color="#b69d67"];
+  gate -> skip [label="否 / 未知"];
+  skip -> select [style=dashed, label="仅在预算内", constraint=false];
+  coverage [label="⑤ 计算覆盖并加载命中详情\ncoverage_summary + source.hydrate\n完整 R 覆盖必须固定同一个核心映射\n最佳单见证联合覆盖 ≠ 多个映射的位点并集\n同结构跨实验缓存可共享，引用 ID 仍绑定具体实验"];
+  gate -> coverage [label="是"];
+  follow [label="可选缺口补查 · directed_family\n如多个 R 位点各有匹配，却没有同一见证同时满足\n有限增加更严格的目标 R 组合家族\n不是枚举所有骨架，也不是预测切断键", fillcolor="#edf1fb", color="#8198b7"];
+  coverage -> follow [style=dashed, label="最多有限补查"];
+  follow -> select [style=dashed, constraint=false];
+
+  evidence [label="⑥ 来源事实分账 · evidence_for\n具体材料是否报告制得/分析观察/失败/回收？\n是否明确作为输入使用？是否有操作段落和引用位置？\n提取到产物字段 ≠ 实验制得；合成示例单独计数\n审核补充必须绑定来源记录哈希", fillcolor="#eaf1fb", color="#7896bc"];
+  changes [label="⑦ 实际反应变化 · analyze_reaction\n校对来源两侧材料与映射，检查映射唯一性和元素/同位素\n比较成键、断键、键级、氢、电荷及未跟踪片段\n命中后由实际图变化识别开环/闭环\n映射不足则标记未知；净变化不等于机理证明"];
+  coverage -> evidence; coverage -> changes;
+  project [label="⑧ 通过同一见证投影到目标 · project_changes\n实际形成的键，是否对应目标核心—支链连接？\n是否形成局部目标键，或只做官能团修饰？\n是否只是结构相似，却未提供所需连接方法？\n有位置歧义时不指认某根目标键"];
+  changes -> project;
+  classify [label="形成独立贡献标签与支持级别\n完整目标获得 / 目标连接方法 / 局部方法\n修饰 / 作为底物使用 / 结构线索\n结构覆盖、反应贡献、实验事实分别保留"];
+  project -> classify; evidence -> classify [label="事实支持"];
+
+  transfer [label="⑨ 可选：单反应物替换 · generate_proposals\n来源需明确步骤、实际输入及产品观察\n从来源 radius-2 / 有限规则建立模板，并先回放原反应\n目标逆向回放 → 保留其他完整输入 → 只换一个完整反应物\n再正向回放，检查全产物组及完整目标的立体/同位素要求\n适用整骨架与支链差异；候选数和每源建议数都受限"];
+  proposal [label="单独保存 Proposal\n只是有来源约束的图类比建议\n不是观察到的反应，不保证选择性/实验成功", fillcolor="#fff0dc", color="#b58b47"];
+  classify -> transfer [style=dashed, label="满足前提才尝试"];
+  transfer -> proposal;
+
+  ranking [label="⑩ 参考过滤与排序 · rank_references\n先看方法贡献与证据，再看实验适配和结构迁移负担\n九方向：方法、迁移、反应性、证据、供应、操作、危害、产出、放大\n质量/官能团差异仅作线索，未知不按低风险或易操作处理\n全局保留完整目标获得记录，整体/核心/分片设展示配额\n条件偏好仅在方法/证据/已知信息同组内比较"];
+  classify -> ranking;
+  proposal -> ranking [label="与文献事实分开展示"];
+  result [label="⑪ 不可变 ReferencePackage\n各层生成家族数/实际尝试数/命中家族与材料数/合格制备数\n原子对应、反应变化、来源证据、排序解释、替换建议\n来源/规则/实现哈希，范围完整性、未知与停止原因"];
+  ranking -> result;
+  consume [label="展示、导出或交给下游逆合成模型\n模型再结合参考底物、连接方法和片段线索进行预测\n本项目输出参考资料，不生成保证可行的完整路线", style="rounded,dashed", fillcolor="#ffffff"];
+  result -> consume;
+  budget [label="全过程控制 · Budget + RunManager\n全局时间 / 查询任务 / 家族 / 候选 / 反应 / 映射 / 建议限制\n周期发布阶段包；取消或耗尽仍保留已有事实\n任务成功完成 ≠ 全库穷尽 ≠ 没有其他可参考反应", fillcolor="#fff4dc", color="#b69653"];
+  budget -> select [style=dashed, label="限制来源工作"];
+  budget -> witness [style=dashed, label="内层检查点"];
+  budget -> result [style=dashed, label="明确已评估范围", constraint=false];
+}

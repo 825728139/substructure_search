@@ -1,1 +1,1 @@
-"""Interpret provided reaction graphs without asserting experimental success."""
+"""真实映射端点分析与目标连接贡献投影。"""

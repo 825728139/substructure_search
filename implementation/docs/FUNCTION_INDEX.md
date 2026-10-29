@@ -1,0 +1,407 @@
+# 函数阅读索引
+
+由 `python scripts/check_comments.py --write-index` 生成；说明取自函数 docstring 首段。
+先读 [交接指南](HANDOVER.md)，需要定位具体函数时再查本索引。源码行号会随修改变化，
+提交前重新生成即可；匿名前端回调的中文说明直接写在 [页面源码](../src/reaction_reference/interfaces/static/index.html) 中。
+
+## scripts/check_comments.py
+
+| 函数 | 职责 |
+|---|---|
+| [python_files](../scripts/check_comments.py#L11) | 按稳定路径顺序返回源码、测试和维护脚本，不扫描虚拟环境或构建产物。 |
+| [definitions](../scripts/check_comments.py#L20) | 递归列出具名类及同步/异步函数，保留类名和闭包名，便于定位同名定义。 |
+| [inspect_comments](../scripts/check_comments.py#L31) | 检查每个模块、类和具名函数的 docstring 含中文，返回统计及逐文件函数索引。 |
+| [write_index](../scripts/check_comments.py#L59) | 把具名函数的中文摘要和源码行号写入索引；行号变化后可再次运行本脚本刷新。 |
+| [main](../scripts/check_comments.py#L77) | 执行中文说明覆盖检查；带 --write-index 时额外刷新 Markdown 函数索引。 |
+
+## scripts/probe_source.py
+
+| 函数 | 职责 |
+|---|---|
+| [main](../scripts/probe_source.py#L12) | 读取 RR_POSTGRES_DSN，执行只读常量化学探针和索引就绪检查并打印 JSON。 |
+
+## src/reaction_reference/adapters/annotations.py
+
+| 函数 | 职责 |
+|---|---|
+| [AnnotatedSource.__init__](../src/reaction_reference/adapters/annotations.py#L28) | 读取有限 JSONL 审核文件并建立 record_id 索引，继承被包装来源的能力。 |
+| [AnnotatedSource._apply](../src/reaction_reference/adapters/annotations.py#L53) | 将审核信息应用到一个来源记录的副本并缓存结果。 |
+| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L107) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
+| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L111) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
+| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L115) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
+
+## src/reaction_reference/adapters/execution.py
+
+| 函数 | 职责 |
+|---|---|
+| [_worker](../src/reaction_reference/adapters/execution.py#L16) | 在独立进程中恢复请求和来源、执行检索，并通过队列返回进度/结果或受限错误。 |
+| [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L64) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
+| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L81) | 验证目标并接纳一次检索，保存 queued 状态后返回 RunState。 |
+| [RunManager._release](../src/reaction_reference/adapters/execution.py#L118) | 任务 future 完成后清除其内存登记和取消事件，持久化结果继续保留。 |
+| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L127) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
+| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L145) | 启动 spawn 子进程，接收进度并强制执行截止时间和取消。 |
+| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L218) | 在锁内把非终态 run 写为给定终态并返回状态。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L239) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L257) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L267) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+
+## src/reaction_reference/adapters/export.py
+
+| 函数 | 职责 |
+|---|---|
+| [export_sample](../src/reaction_reference/adapters/export.py#L7) | 只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。 |
+
+## src/reaction_reference/adapters/run_store.py
+
+| 函数 | 职责 |
+|---|---|
+| [FileRunStore.__init__](../src/reaction_reference/adapters/run_store.py#L23) | 建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。 |
+| [FileRunStore.acquire_coordinator](../src/reaction_reference/adapters/run_store.py#L30) | 获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。 |
+| [FileRunStore.close](../src/reaction_reference/adapters/run_store.py#L45) | 释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。 |
+| [FileRunStore._directory](../src/reaction_reference/adapters/run_store.py#L52) | 校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。 |
+| [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L62) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
+| [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L79) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
+| [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L86) | 读取并校验指定 run 的状态，返回 RunState。 |
+| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L100) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
+| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L115) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
+| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L132) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L150) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L166) | 启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。 |
+
+## src/reaction_reference/adapters/sources.py
+
+| 函数 | 职责 |
+|---|---|
+| [import_native](../src/reaction_reference/adapters/sources.py#L26) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
+| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L122) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L188) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L234) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L238) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L271) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L312) | 检查已读取的有效索引定义中是否存在指定列的 GiST，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L321) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L326) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L360) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L426) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L445) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L487) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+
+## src/reaction_reference/analogs/transfer.py
+
+| 函数 | 职责 |
+|---|---|
+| [source_rules](../src/reaction_reference/analogs/transfer.py#L14) | 返回可用于当前来源的有序回放规则：合法 radius-2 来源模板优先，其后为注册规则。 |
+| [replay](../src/reaction_reference/analogs/transfer.py#L48) | 对一组输入 Mol 执行 RDKit 反应，保留每次回放的完整产品组。 |
+| [generate_proposals](../src/reaction_reference/analogs/transfer.py#L67) | 从一个来源参考生成只替换一个完整反应物的有限建议。 |
+
+## src/reaction_reference/application/budget.py
+
+| 函数 | 职责 |
+|---|---|
+| [Budget.__init__](../src/reaction_reference/application/budget.py#L17) | 接收 BudgetConfig，以当前单调时钟建立执行截止时间并将计数归零。 |
+| [Budget.check](../src/reaction_reference/application/budget.py#L29) | 检查当前时间是否达到 deadline；超时抛出 BudgetExceeded，无返回值。 |
+| [Budget.task](../src/reaction_reference/application/budget.py#L34) | 检查时间和任务额度后记入一条 TaskEvent。 |
+| [Budget.candidate](../src/reaction_reference/application/budget.py#L51) | 在逐候选处理前检查时间和候选上限，然后增加接收计数。 |
+| [Budget.reaction](../src/reaction_reference/application/budget.py#L61) | 在首次分析一个反应前检查时间和反应上限，然后增加分析计数。 |
+
+## src/reaction_reference/application/search.py
+
+| 函数 | 职责 |
+|---|---|
+| [search](../src/reaction_reference/application/search.py#L40) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
+| [search.package](../src/reaction_reference/application/search.py#L78) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
+| [search.publish](../src/reaction_reference/application/search.py#L241) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+
+## src/reaction_reference/bootstrap.py
+
+| 函数 | 职责 |
+|---|---|
+| [open_source](../src/reaction_reference/bootstrap.py#L10) | 根据 Settings 创建 JSONL 或只读 PG 来源，并可包装审核证据适配器。 |
+| [create_manager](../src/reaction_reference/bootstrap.py#L31) | 使用给定或默认 Settings 创建 RunManager，供 SDK/API 共享同一装配方式。 |
+
+## src/reaction_reference/chemistry/markush.py
+
+| 函数 | 职责 |
+|---|---|
+| [compile_family](../src/reaction_reference/chemistry/markush.py#L9) | 从 QueryFamily 的 SMARTS/CXSMARTS 恢复查询 Mol 和原生 generic 属性。 |
+| [_predicates](../src/reaction_reference/chemistry/markush.py#L26) | 检查某一次固定核心映射下的全部 R 条件，返回 bool。 |
+| [match_family](../src/reaction_reference/chemistry/markush.py#L90) | 在一个具体来源分子上核验家族并返回 MatchResult 与一致的匹配见证。 |
+| [coverage_summary](../src/reaction_reference/chemistry/markush.py#L236) | 汇总已得到的见证，分别返回最佳单见证联合覆盖和跨见证位点并集。 |
+
+## src/reaction_reference/chemistry/structures.py
+
+| 函数 | 职责 |
+|---|---|
+| [digest](../src/reaction_reference/chemistry/structures.py#L16) | 为可 JSON 序列化的数据生成稳定 SHA-256 摘要。 |
+| [parse](../src/reaction_reference/chemistry/structures.py#L25) | 将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。 |
+| [parse_material](../src/reaction_reference/chemistry/structures.py#L53) | 解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。 |
+| [without_maps](../src/reaction_reference/chemistry/structures.py#L70) | 复制 Mol 并清除反应原子映射号，返回新分子。 |
+| [canonical](../src/reaction_reference/chemistry/structures.py#L81) | 为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。 |
+| [meets_target](../src/reaction_reference/chemistry/structures.py#L93) | 判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。 |
+| [similarity](../src/reaction_reference/chemistry/structures.py#L113) | 返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。 |
+| [descriptors](../src/reaction_reference/chemistry/structures.py#L126) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
+| [atom_table](../src/reaction_reference/chemistry/structures.py#L137) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
+| [fragment_key](../src/reaction_reference/chemistry/structures.py#L154) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
+| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L187) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
+
+## src/reaction_reference/domain/models.py
+
+| 函数 | 职责 |
+|---|---|
+| [LabContext.check_range](../src/reaction_reference/domain/models.py#L68) | 拒绝下限高于上限的温度范围，校验通过返回当前对象。 |
+| [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L171) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
+| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L228) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
+
+## src/reaction_reference/evaluation/runner.py
+
+| 函数 | 职责 |
+|---|---|
+| [MaskedSource.__init__](../src/reaction_reference/evaluation/runner.py#L26) | 从固定样本找出满足 target 的产品记录 ID，并据此建立派生来源快照。 |
+| [MaskedSource.candidate_page](../src/reaction_reference/evaluation/runner.py#L45) | 委托原来源取页后移除被屏蔽记录，保留原范围、耗尽状态与游标。 |
+| [MaskedSource.hydrate](../src/reaction_reference/evaluation/runner.py#L55) | 委托底层来源加载一个未被屏蔽的已命中记录，不创建新证据。 |
+| [MaskedSource.close](../src/reaction_reference/evaluation/runner.py#L59) | 不关闭底层共享来源；评测主函数负责在两种任务完成后统一释放。 |
+| [select_targets](../src/reaction_reference/evaluation/runner.py#L64) | 从有限非合成产品中用最远优先的指纹距离选出结构多样的目标。 |
+| [evaluate](../src/reaction_reference/evaluation/runner.py#L115) | 逐目标运行保留来源与屏蔽全部目标产物记录两种任务并写入 JSON 报告。 |
+
+## src/reaction_reference/evidence/claims.py
+
+| 函数 | 职责 |
+|---|---|
+| [evidence_for](../src/reaction_reference/evidence/claims.py#L7) | 判断一个材料实例的来源支持，返回（制备命中、获得命中、使用命中、Claim 列表）。 |
+| [summary_items](../src/reaction_reference/evidence/claims.py#L62) | 把选中参考和建议转为受 UTF-8 字节预算约束的 JSON 摘要。 |
+
+## src/reaction_reference/evidence/relations.py
+
+| 函数 | 职责 |
+|---|---|
+| [material_relations](../src/reaction_reference/evidence/relations.py#L10) | 连接不同来源记录中同身份的产品与反应物，返回（关系列表、范围内枚举是否完成）。 |
+
+## src/reaction_reference/interfaces/api.py
+
+| 函数 | 职责 |
+|---|---|
+| [create_app](../src/reaction_reference/interfaces/api.py#L24) | 装配 FastAPI 应用、共享 Client、内部认证和快照分页接口，返回 app。 |
+| [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L34) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
+| [create_app.index](../src/reaction_reference/interfaces/api.py#L46) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
+| [create_app.owner](../src/reaction_reference/interfaces/api.py#L50) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
+| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L61) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
+| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L70) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
+| [create_app.missing](../src/reaction_reference/interfaces/api.py#L87) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
+| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L92) | 把 revision、幂等或快照冲突转为 409 JSON。 |
+| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L97) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
+| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L102) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
+| [create_app.live](../src/reaction_reference/interfaces/api.py#L109) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
+| [create_app.ready](../src/reaction_reference/interfaces/api.py#L114) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
+| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L130) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
+| [create_app.preview](../src/reaction_reference/interfaces/api.py#L135) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
+| [create_app.submit](../src/reaction_reference/interfaces/api.py#L140) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
+| [create_app.status](../src/reaction_reference/interfaces/api.py#L154) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L169) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L223) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L245) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L257) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L281) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L286) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+
+## src/reaction_reference/interfaces/cli.py
+
+| 函数 | 职责 |
+|---|---|
+| [_write](../src/reaction_reference/interfaces/cli.py#L20) | 把可 JSON 序列化数据写入指定文件或标准输出，保留中文并缩进。 |
+| [main](../src/reaction_reference/interfaces/cli.py#L33) | 解析 argv 并分派 CLI 命令，返回进程退出码。 |
+
+## src/reaction_reference/interfaces/depiction.py
+
+| 函数 | 职责 |
+|---|---|
+| [reference_svg](../src/reaction_reference/interfaces/depiction.py#L8) | 绘制 Reference 的具体材料，按最佳已发现单见证高亮覆盖原子。 |
+
+## src/reaction_reference/interfaces/sdk.py
+
+| 函数 | 职责 |
+|---|---|
+| [Client.__init__](../src/reaction_reference/interfaces/sdk.py#L17) | 通过统一装配入口创建 RunManager，读取 Settings 或使用传入配置。 |
+| [Client.search](../src/reaction_reference/interfaces/sdk.py#L24) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
+| [Client.preview](../src/reaction_reference/interfaces/sdk.py#L36) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
+| [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L46) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L107) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L111) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L115) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+
+## src/reaction_reference/ports/sources.py
+
+| 函数 | 职责 |
+|---|---|
+| [CompoundSource.candidate_page](../src/reaction_reference/ports/sources.py#L35) | 读取家族在指定角色和选择阶段中的一页候选，返回 CandidatePage。 |
+| [CompoundSource.close](../src/reaction_reference/ports/sources.py#L50) | 释放来源连接、游标或缓存；使用方应在 finally 中调用。 |
+| [CompoundSource.hydrate](../src/reaction_reference/ports/sources.py#L54) | 为已命中的轻量记录补读详情并返回 ReactionRecord。 |
+
+## src/reaction_reference/ranking/engine.py
+
+| 函数 | 职责 |
+|---|---|
+| [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
+| [_priority](../src/reaction_reference/ranking/engine.py#L66) | 返回参考的方法/证据优先级，数值越小越优先。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L90) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L111) | 为单个参考生成可传递且稳定的排序元组。 |
+
+## src/reaction_reference/ranking/features.py
+
+| 函数 | 职责 |
+|---|---|
+| [_feature](../src/reaction_reference/ranking/features.py#L9) | 把一个特征值封装为状态、支持依据和限制的统一字典。 |
+| [features](../src/reaction_reference/ranking/features.py#L17) | 为具体 Reference 提取九方向解释信息，返回特征字典。 |
+
+## src/reaction_reference/reaction_analysis/analyze.py
+
+| 函数 | 职责 |
+|---|---|
+| [_bonds](../src/reaction_reference/reaction_analysis/analyze.py#L11) | 返回以排序后的正映射号对为键、键型字符串为值的字典。 |
+| [_atoms](../src/reaction_reference/reaction_analysis/analyze.py#L25) | 建立正原子映射号到 Atom 的查找表，忽略 map=0 的原子。 |
+| [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
+| [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
+| [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L294) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+
+## src/reaction_reference/retrieval/planner.py
+
+| 函数 | 职责 |
+|---|---|
+| [functional_matches](../src/reaction_reference/retrieval/planner.py#L12) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
+| [_close_units](../src/reaction_reference/retrieval/planner.py#L28) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
+| [_core_smarts](../src/reaction_reference/retrieval/planner.py#L47) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
+| [plan_families](../src/reaction_reference/retrieval/planner.py#L83) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L195) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L223) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L246) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+
+## src/reaction_reference/rules.py
+
+| 函数 | 职责 |
+|---|---|
+| [code_fingerprint](../src/reaction_reference/rules.py#L45) | 对包内 Python、规则/示例 JSON 和 HTML 的路径与原始内容计算 SHA-256。 |
+| [load_rules](../src/reaction_reference/rules.py#L59) | 读取随包 rules.json，严格校验契约并编译官能团及双向回放规则。 |
+| [capabilities](../src/reaction_reference/rules.py#L81) | 返回与当前规则版本绑定的查询形式、来源、分析能力和未支持清单。 |
+
+## src/reaction_reference/schema_export.py
+
+| 函数 | 职责 |
+|---|---|
+| [export_schemas](../src/reaction_reference/schema_export.py#L18) | 把请求、家族、反应、证据审核、资料包与状态 Schema 及 OpenAPI 写入 directory。 |
+
+## src/reaction_reference/settings.py
+
+| 函数 | 职责 |
+|---|---|
+| [Settings.worker_config](../src/reaction_reference/settings.py#L31) | 提取子进程建立来源所需的可序列化配置，返回普通字典。 |
+
+## tests/conftest.py
+
+| 函数 | 职责 |
+|---|---|
+| [fixture_path](../tests/conftest.py#L11) | 返回随包分发的合成示例路径，确保默认测试不访问真实来源。 |
+| [source](../tests/conftest.py#L17) | 为测试创建有限穷尽 JSONL 来源，yield 后清空来源缓存。 |
+| [amide](../tests/conftest.py#L25) | 从合成来源挑出乙胺酰胺化记录，供映射与单输入替换测试使用。 |
+| [request_factory](../tests/conftest.py#L31) | 提供统一请求构造器，允许测试仅覆盖与当前场景相关的字段。 |
+| [request_factory.create](../tests/conftest.py#L34) | 将目标 SMILES 和覆盖参数构造成严格 SearchRequest，返回测试请求。 |
+| [settings](../tests/conftest.py#L42) | 为每个测试分配独立临时运行目录，避免协调锁与作业状态互相污染。 |
+
+## tests/test_annotations.py
+
+| 函数 | 职责 |
+|---|---|
+| [annotation](../tests/test_annotations.py#L10) | 构造绑定记录哈希的测试审核行；updates 用于模拟哈希错误或特定审核输入。 |
+| [test_review_bound_to_record_hash](../tests/test_annotations.py#L26) | 确认来源哈希不符时拒绝旧审核，原记录保留并记录局部问题。 |
+| [test_review_does_not_erase_synthetic_origin](../tests/test_annotations.py#L35) | 确认有效审核也不能把合成示例升级为真实文献制备证据。 |
+
+## tests/test_architecture.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_domain_and_chemical_layers_do_not_import_adapters_or_interfaces](../tests/test_architecture.py#L13) | 检查领域、化学与应用模块不反向导入具体适配器/接口；领域也不依赖 RDKit、HTTP 或 PG。 |
+| [test_rules_compile_and_have_regression_scope](../tests/test_architecture.py#L39) | 确认随包规则可编译、含内容哈希并显式列出未支持范围。 |
+| [test_contract_schema_is_exported](../tests/test_architecture.py#L46) | 比较已提交请求 Schema 与当前模型导出，防止接口契约悄然漂移。 |
+
+## tests/test_chemistry.py
+
+| 函数 | 职责 |
+|---|---|
+| [family](../tests/test_chemistry.py#L15) | 为单一化学边界构造最小 QueryFamily，避免自动规划掩盖核验错误。 |
+| [test_auto_queries_preserve_target](../tests/test_chemistry.py#L32) | 多类目标生成三层家族后应能自匹配，且最佳一致见证覆盖完整目标连接。 |
+| [test_functional_oxygen_role_is_preserved](../tests/test_chemistry.py#L43) | 确认目标羟基约束不会把醚氧当作同一角色而放行。 |
+| [test_whole_r_not_just_first_atom](../tests/test_chemistry.py#L50) | 确认 R 类别与长度检查整个连接块，支链后部杂原子和超长碳链不能漏检。 |
+| [test_symmetric_core_checks_all_orientations_before_dedup](../tests/test_chemistry.py#L66) | 确认核心对称方向先逐一检查 R；映射截断时未发现的方向只可返回未知。 |
+| [test_extra_internal_edge_is_not_a_chain_witness](../tests/test_chemistry.py#L85) | 确认环的额外内部边不会被当作严格的线性核心见证。 |
+| [test_explicit_deuterium_is_not_heavy_sidechain](../tests/test_chemistry.py#L94) | 确认显式氘不计重原子支链，但完整目标身份仍保留其同位素要求。 |
+| [test_target_stereo_is_a_requirement](../tests/test_chemistry.py#L102) | 确认指定目标构型排除反构型/未指定候选，未指定目标可接受相应具体构型。 |
+| [test_equality_checks_entire_substituents](../tests/test_chemistry.py#L111) | 确认 R 相等比较完整支链，不把乙基和丙基判为相等。 |
+| [test_atom_order_does_not_change_canonical_identity](../tests/test_chemistry.py#L120) | 用属性测试确认原子重排不改变规范身份和完整目标满足关系。 |
+| [test_input_validation_rejects_unknown_and_coerced_budget](../tests/test_chemistry.py#L130) | 确认未知收费字段、布尔预算和字符串布尔开关被契约拒绝。 |
+| [test_isotopic_hydrogen_is_retained_in_core_and_r_signature](../tests/test_chemistry.py#L140) | 确认核心及支链签名保留同位素氢，普通氢候选不能冒充氘目标。 |
+| [test_native_generic_query_restores_properties_after_ir_roundtrip](../tests/test_chemistry.py#L153) | 确认家族 JSON 往返恢复 ARY generic 属性，芳基可匹配而环烷基不可混入。 |
+| [test_sitewise_union_is_not_joint_coverage](../tests/test_chemistry.py#L162) | 确认对称映射的位点并集即使达到 100%，也不能伪造单见证双支链联合覆盖。 |
+
+## tests/test_evaluation.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_masking_removes_target_records_and_unreviewed_is_not_scored](../tests/test_evaluation.py#L8) | 确认屏蔽移除全部目标来源产品，未审核相关性标签不会产生伪召回得分。 |
+
+## tests/test_pipeline.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_end_to_end_package](../tests/test_pipeline.py#L12) | 检查目标到三层参考/替换/摘要的完整流程，合成示例不能增加文献命中。 |
+| [test_budgets_return_usable_partial_results](../tests/test_pipeline.py#L29) | 确认小任务/候选预算会停止扩展并保留部分包，不超限或伪报完整。 |
+| [test_cached_matches_never_reuse_wrong_atom_indices](../tests/test_pipeline.py#L38) | 确认同结构不同 SMILES 原子顺序的缓存不会错用目标到来源的索引。 |
+| [test_bad_record_isolated](../tests/test_pipeline.py#L69) | 确认一条损坏 JSON 不阻断其他参考，局部问题仍使结果范围保持部分。 |
+| [test_lab_unknown_not_easy_or_safe](../tests/test_pipeline.py#L79) | 确认缺温度与步骤归属的来源返回实验适配未知，而非通过或低风险。 |
+| [test_imported_arrays_do_not_claim_preparation](../tests/test_pipeline.py#L88) | 确认来源产品/输入数组本身不构成制备或实际使用的报告证据。 |
+| [test_atom_properties_and_ring_analysis_do_not_require_method_name](../tests/test_pipeline.py#L103) | 确认没有人工反应名称也能从实际键级与 H 变化识别修饰，支持仍标合成示例。 |
+| [test_dirty_string_field_is_not_split_into_atom_materials](../tests/test_pipeline.py#L116) | 确认误写成字符串的 SMILES 数组被拒绝，不按字符生成材料实例。 |
+| [test_later_fragment_witness_can_upgrade_reaction_contribution](../tests/test_pipeline.py#L124) | 确认后来的分片成键见证能升级已有核心结构线索，并保存正确方法见证。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages](../tests/test_pipeline.py#L167) | 确认前页映射截断不会被后页正常耗尽覆盖成完整匹配范围。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.candidate_page](../tests/test_pipeline.py#L194) | 按 cursor 返回两页，分别触发映射截断和流耗尽，供跨页完整性回归使用。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.hydrate](../tests/test_pipeline.py#L210) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
+| [test_small_summary_budget_does_not_hide_full_evidence_or_claim_complete](../tests/test_pipeline.py#L233) | 确认摘要预算不足时标不可用且保留完整候选，不截断半条证据或伪报摘要完成。 |
+| [test_detail_names_are_bound_by_structure_not_array_position](../tests/test_pipeline.py#L244) | 确认详情名称按结构身份绑定，材料数组顺序变化不会错配名称。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity](../tests/test_pipeline.py#L261) | 确认相似初选超时后仍有独立子结构补查机会，局部失败不会被隐藏。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.candidate_page](../tests/test_pipeline.py#L289) | stage=0 故意抛超时，其余阶段返回一个真实结构候选，验证独立补查分支。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.hydrate](../tests/test_pipeline.py#L301) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
+| [test_duplicate_record_ids_cannot_mix_materials_and_reaction_analysis](../tests/test_pipeline.py#L321) | 确认同 ID 冲突记录整体隔离，完全重复记录去重，不混用实验材料与分析。 |
+| [test_shared_structure_witness_is_bound_to_each_actual_experiment](../tests/test_pipeline.py#L339) | 确认结构核验可复用，但返回见证 ID 必须分别绑定不同实验来源。 |
+| [test_missing_operation_fields_do_not_rank_as_easy_conditions](../tests/test_pipeline.py#L375) | 确认缺失温度/时长不能在操作偏好下获得比已知条件更容易的优势。 |
+| [test_operation_preference_does_not_assume_zero_celsius_is_room_temperature](../tests/test_pipeline.py#L400) | 确认操作偏好以公开的 25°C 为参照，不把需要制冷的 0°C 当作室温。 |
+
+## tests/test_reactions.py
+
+| 函数 | 职责 |
+|---|---|
+| [analysis](../tests/test_reactions.py#L13) | 用给定映射式重建测试两侧材料，再调用实际分析，隔离端点归属与键变化场景。 |
+| [test_connection_and_leaving_fragment_not_all_broken](../tests/test_reactions.py#L26) | 确认酰胺新键与离去边界正确分账，缺少副产物不导致虚构大量断键。 |
+| [test_invalid_mapping_is_unknown](../tests/test_reactions.py#L44) | 确认重复正映射、同位素冲突或非法反应式明确返回未知及原因。 |
+| [test_map_zero_never_establishes_cross_side_identity](../tests/test_reactions.py#L50) | 确认 map=0 原子不参与跨侧身份，不从未映射区域制造成断键。 |
+| [test_resonance_swap_not_transformation](../tests/test_reactions.py#L57) | 确认限定硝基氧共振交换记为表示变化，不计真实键级转化。 |
+| [test_real_proton_transfer_not_suppressed_as_resonance](../tests/test_reactions.py#L64) | 确认羧酸的实际 H 迁移不会被共振规则抹除。 |
+| [test_observed_ring_changes](../tests/test_reactions.py#L71) | 确认从实际命中反应变化识别闭环和开环，不依赖检索前虚构切环位置。 |
+| [test_synthetic_sources_never_become_literature](../tests/test_reactions.py#L81) | 确认合成示例有演示 Claim，但没有真实制备/获得/使用命中。 |
+| [test_product_presence_alone_not_preparation](../tests/test_reactions.py#L89) | 确认有产品结构不等于制得，实际输入使用只归属于对应反应物。 |
+| [test_conflict_cancels_positive_outcome](../tests/test_reactions.py#L97) | 确认同产品的明确冲突会取消阳性制备标记。 |
+| [reference](../tests/test_reactions.py#L112) | 为回放测试构造带来源映射分析的最小 Reference。 |
+| [test_single_reactant_change_core_or_branch](../tests/test_reactions.py#L126) | 确认支链或母核差异都能在来源自回放后仅替换一个输入，并满足完整目标。 |
+| [test_two_changes_and_unassigned_step_do_not_transfer](../tests/test_reactions.py#L142) | 确认需要同时改两个输入或来源未明确分步时不自动给出单输入迁移。 |
+| [test_source_endpoint_conflict_is_not_a_validated_mapping](../tests/test_reactions.py#L154) | 确认映射端点不属于记录实际材料时不能作为已校验反应分析。 |
+| [test_source_radius2_template_can_transfer_a_non_registry_reaction](../tests/test_reactions.py#L162) | 确认合法来源 radius-2 模板经自回放可生成注册酰胺规则以外的单输入建议。 |
+| [test_replay_retains_product_sets_and_independent_enumeration_limit](../tests/test_reactions.py#L201) | 确认回放保留整组产品，并把结构有效和枚举截断分开。 |
+
+## tests/test_service.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_sdk_process_and_frozen_rerank](../tests/test_service.py#L16) | 确认 SDK 在独立进程检索后可对冻结候选重排，重排不能调用来源配置或重查。 |
+| [test_single_coordinator_lock](../tests/test_service.py#L36) | 确认同运行目录只允许一个协调器，关闭后另一实例才可接管。 |
+| [test_api_lifecycle_auth_idempotency_and_cursor](../tests/test_service.py#L44) | 确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。 |
+| [test_cancel_stops_job_and_is_terminal](../tests/test_service.py#L107) | 确认取消返回已落盘的实际终态，迟到完成不能再修改状态。 |
+| [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L116) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
+| [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
+| [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |

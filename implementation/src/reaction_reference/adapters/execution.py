@@ -1,3 +1,5 @@
+"""任务协调器及 spawn 计算进程：父进程独占文件写入，子进程只传递可序列化进度和结果。"""
+
 import multiprocessing
 import queue
 import threading
@@ -12,7 +14,10 @@ from reaction_reference.domain.models import ReferencePackage, RunState, SearchR
 
 
 def _worker(config, request_json, run_id, output):
-    """Only serializable data crosses the process boundary, never RDKit objects."""
+    """在独立进程中恢复请求和来源、执行检索，并通过队列返回进度/结果或受限错误。
+
+    config/request_json/run_id 都可序列化，不跨进程传 RDKit 对象或连接；finally 关闭来源。输出中的连接配置不进入结果 manifest。
+    """
     from reaction_reference.application.search import search
     from reaction_reference.bootstrap import open_source
     from reaction_reference.settings import Settings
@@ -25,6 +30,7 @@ def _worker(config, request_json, run_id, output):
             request,
             source,
             run_id=run_id,
+            # 进度回调只序列化资料包送入队列；文件保存由父进程负责。
             on_progress=lambda p: output.put(("progress", p.model_dump_json())),
         )
         output.put(("result", result.model_dump_json()))
@@ -47,11 +53,19 @@ def _worker(config, request_json, run_id, output):
 
 
 class CapacityExceeded(RuntimeError):
+    """活跃及排队任务达到容量或协调器已关闭；HTTP 层转换为 429。"""
+
     pass
 
 
 class RunManager:
+    """单协调器运行管理器；线程池监督独立计算进程，FileRunStore 保存终态及快照。"""
+
     def __init__(self, settings):
+        """获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。
+
+        settings 控制来源、运行目录和容量；多个管理器不能同时写同一目录。
+        """
         self.settings = settings
         self.store = FileRunStore(settings.store_path)
         self.store.acquire_coordinator()
@@ -65,6 +79,10 @@ class RunManager:
         self._closed = False
 
     def submit(self, request, *, owner="internal", idempotency_key=None):
+        """验证目标并接纳一次检索，保存 queued 状态后返回 RunState。
+
+        owner 限定范围，idempotency_key 可复用同一请求；检查容量、禁止对 PG 声称有限样本穷尽。随后在监督线程中启动计算，函数本身不等待完成。
+        """
         parse(request.target.value, target=True)
         if request.options.exhaustive_fixture and self.settings.source_kind == "postgres":
             raise ValueError("exhaustive_fixture is only available for a bounded JSONL source")
@@ -93,15 +111,24 @@ class RunManager:
             if idempotency_key:
                 self.store.idempotency(owner, idempotency_key, request_hash, run_id)
             self._futures[run_id] = self._executor.submit(self._execute, state, cancellation)
+            # 完成回调忽略 future 参数，只清除此任务的内存登记。
             self._futures[run_id].add_done_callback(lambda _: self._release(run_id))
             return state
 
     def _release(self, run_id):
+        """任务 future 完成后清除其内存登记和取消事件，持久化结果继续保留。
+
+        作为完成回调运行，用锁避免与提交、取消或关闭时的枚举竞争。
+        """
         with self._lock:
             self._futures.pop(run_id, None)
             self._cancel.pop(run_id, None)
 
     def _execute(self, state, cancellation):
+        """执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。
+
+        调用 _supervise；受限错误只保存异常类型，不返回原生堆栈或连接内容。
+        """
         try:
             self._supervise(state, cancellation)
         except Exception as exc:
@@ -116,6 +143,10 @@ class RunManager:
             )
 
     def _supervise(self, state, cancellation):
+        """启动 spawn 子进程，接收进度并强制执行截止时间和取消。
+
+        父线程把阶段包落盘；成功、报错、进程异常退出、硬超时和取消分别终结。终止后必要时 kill/join，保留的阶段包强制标记 partial；源 SQL 另有自身超时。
+        """
         if cancellation.is_set():
             self._finish(state.run_id, "cancelled")
             return
@@ -185,6 +216,10 @@ class RunManager:
             output.cancel_join_thread()
 
     def _finish(self, run_id, lifecycle, error=None, snapshot_id=None):
+        """在锁内把非终态 run 写为给定终态并返回状态。
+
+        已有终态直接返回，避免迟到工作结果覆盖先发生的取消或失败；snapshot_id 只指向已保存的资料包。
+        """
         with self._lock:
             state = self.store.load(run_id)
             if state.lifecycle in ("succeeded", "cancelled", "timed_out", "failed"):
@@ -202,6 +237,10 @@ class RunManager:
             )
 
     def cancel(self, run_id, owner="internal"):
+        """请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。
+
+        若已成功或失败则不改写终态；等待超时也不伪造 cancelled，调用方可继续读取真实状态。
+        """
         state = self.store.load(run_id, owner)
         if state.lifecycle in ("queued", "running"):
             cancellation = self._cancel.get(run_id)
@@ -216,12 +255,20 @@ class RunManager:
         return self.store.load(run_id, owner)
 
     def wait(self, run_id, timeout=130):
+        """等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。
+
+        已完成并移出内存登记的运行直接读状态；超过 timeout 会向调用方抛出等待超时。
+        """
         future = self._futures.get(run_id)
         if future:
             future.result(timeout=timeout)
         return self.store.load(run_id)
 
     def close(self):
+        """停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。
+
+        先复制事件列表再取消，避免完成回调同时移除登记导致遍历错误。
+        """
         with self._lock:
             self._closed = True
             cancellations = list(self._cancel.values())

@@ -2,6 +2,7 @@
   "$defs": {
     "Observation": {
       "additionalProperties": false,
+      "description": "绑定一个产品实例的报告观察，保留结果类型、引文、位置及产品对应收率类型。",
       "properties": {
         "product_instance_id": {
           "title": "Product Instance Id",
@@ -91,6 +92,7 @@
     }
   },
   "additionalProperties": false,
+  "description": "单条人工审核输入；包含来源哈希、审核人/日期及实例级观察，不能修改来源身份。",
   "properties": {
     "record_id": {
       "title": "Record Id",

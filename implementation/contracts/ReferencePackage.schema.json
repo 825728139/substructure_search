@@ -2,6 +2,7 @@
   "$defs": {
     "BondChange": {
       "additionalProperties": false,
+      "description": "按来源正原子映射号记录的一对键变化，before/after 为键型而非目标索引。",
       "properties": {
         "maps": {
           "maxItems": 2,
@@ -50,6 +51,7 @@
     },
     "Claim": {
       "additionalProperties": false,
+      "description": "绑定具体材料主体和来源的证据主张；报告、图推定、合成示例与未知明确分开。",
       "properties": {
         "id": {
           "title": "Id",
@@ -108,6 +110,7 @@
     },
     "Conditions": {
       "additionalProperties": false,
+      "description": "来源报告的条件范围与阶段归属；温度 °C、压力 kPa、时长秒，缺失保持 None。",
       "properties": {
         "temperature_min_c": {
           "anyOf": [
@@ -202,6 +205,7 @@
     },
     "FeatureStatus": {
       "additionalProperties": false,
+      "description": "某项增强能力在当前运行中的评估状态及原因，区别未请求、未支持、未评估和部分完成。",
       "properties": {
         "state": {
           "enum": [
@@ -235,6 +239,7 @@
     },
     "Material": {
       "additionalProperties": false,
+      "description": "某个反应中的具体材料实例；同结构在不同角色/实验中仍有不同 instance_id。",
       "properties": {
         "instance_id": {
           "title": "Instance Id",
@@ -290,6 +295,7 @@
     },
     "Observation": {
       "additionalProperties": false,
+      "description": "绑定一个产品实例的报告观察，保留结果类型、引文、位置及产品对应收率类型。",
       "properties": {
         "product_instance_id": {
           "title": "Product Instance Id",
@@ -379,6 +385,7 @@
     },
     "Proposal": {
       "additionalProperties": false,
+      "description": "经来源回放约束的单反应物替换建议，始终标记为未观察且条件尚未验证。",
       "properties": {
         "id": {
           "title": "Id",
@@ -484,6 +491,7 @@
     },
     "QueryFamily": {
       "additionalProperties": false,
+      "description": "可序列化的 Markush 查询中间表示，含核心、目标对应、R 谓词和生成规则依据。",
       "properties": {
         "id": {
           "title": "Id",
@@ -605,6 +613,7 @@
     },
     "RBlock": {
       "additionalProperties": false,
+      "description": "核心外一个完整连通支链块；可以有多个边界连接位点，atom_indices 属于具体材料。",
       "properties": {
         "core_positions": {
           "items": {
@@ -653,6 +662,7 @@
     },
     "RConstraint": {
       "additionalProperties": false,
+      "description": "查询核心某位置的完整 R 块限制；position 是查询核心索引，不是全目标索引。",
       "properties": {
         "position": {
           "minimum": 0,
@@ -714,6 +724,7 @@
     },
     "ReactionAnalysis": {
       "additionalProperties": false,
+      "description": "来源端点上的图变化、原子来源和粗类别，含映射支持与事件范围限制。",
       "properties": {
         "state": {
           "enum": [
@@ -846,6 +857,7 @@
     },
     "ReactionRecord": {
       "additionalProperties": false,
+      "description": "同一来源记录的材料、产品观察、映射式和事件范围；净端点与明确操作步骤不混用。",
       "properties": {
         "id": {
           "title": "Id",
@@ -982,6 +994,7 @@
     },
     "Reference": {
       "additionalProperties": false,
+      "description": "一个来源材料的检索参考，聚合多个家族见证、实际反应贡献、证据、排序特征与限制。",
       "properties": {
         "id": {
           "title": "Id",
@@ -1159,6 +1172,7 @@
     },
     "SourceRef": {
       "additionalProperties": false,
+      "description": "来源实验定位；record_id 是来源记录身份，experiment_id 用于实验去重，synthetic 标记演示来源。",
       "properties": {
         "namespace": {
           "title": "Namespace",
@@ -1224,6 +1238,7 @@
     },
     "TaskEvent": {
       "additionalProperties": false,
+      "description": "已消耗的一次业务任务尝试；elapsed_ms 为自本次预算开始的单调时钟时间。",
       "properties": {
         "attempt": {
           "title": "Attempt",
@@ -1253,6 +1268,7 @@
     },
     "Witness": {
       "additionalProperties": false,
+      "description": "一次一致的目标到来源原子对应；id 绑定实验实例，structural_witness_id 可用于结构核验复用。",
       "properties": {
         "id": {
           "title": "Id",
@@ -1379,6 +1395,7 @@
     }
   },
   "additionalProperties": false,
+  "description": "可导出的完整结果快照：原始目标编号参照、来源/规则、全部候选、建议、统计、状态和模型摘要。",
   "properties": {
     "schema_version": {
       "const": "1",
