@@ -113,6 +113,8 @@ class FileRunStore:
             if not path.is_file():
                 raise KeyError("Run not found")
             state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
+            if state.run_id != run_id:
+                raise RevisionConflict("Stored run identity does not match its directory")
             if owner is not None and state.owner != owner:
                 raise KeyError("Run not found")
             return state
@@ -163,7 +165,10 @@ class FileRunStore:
         path = self._snapshot_path(directory, snapshot_id)
         if not path.is_file():
             raise KeyError("Snapshot not found")
-        return ReferencePackage.model_validate_json(path.read_text(encoding="utf-8"))
+        package = ReferencePackage.model_validate_json(path.read_text(encoding="utf-8"))
+        if package.run_id != run_id or package.snapshot_id != snapshot_id:
+            raise RevisionConflict("Stored snapshot identity does not match the requested file")
+        return package
 
     def idempotency(self, owner, key, request_hash, run_id=None):
         """查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。
@@ -208,7 +213,7 @@ class FileRunStore:
         进程重启后原只读来源会话已失效，因此不自动续接旧游标或伪造完整性。
         """
         for path in self.root.glob("*/state.json"):
-            state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
+            state = self.load(path.parent.name)
             if state.lifecycle in ("queued", "running"):
                 snapshot_id = self.interrupt_snapshot(state.run_id, "coordinator_restarted")
                 self.update(

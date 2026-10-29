@@ -30,6 +30,12 @@ def import_native(row):
     """
     if "source" in row and "materials" in row:
         return ReactionRecord.model_validate(row)
+    if (
+        not isinstance(row.get("id"), (str, int))
+        or isinstance(row["id"], bool)
+        or not str(row["id"]).strip()
+    ):
+        raise ValueError("Source record ID must be a nonempty string or integer")
     record_id = str(row["id"])
     namespace = str(row.get("source_namespace") or row.get("source_type") or "patent")
     details = row.get("details") or {}
@@ -64,10 +70,24 @@ def import_native(row):
                     actual_input=None,
                 )
             )
+    # 只有完整定位才能按实验去重；未知段落或序号不能把不同来源记录合并。
+    locator_complete = (
+        row.get("document_id") is not None
+        and bool(str(row["document_id"]).strip())
+        and bool(row.get("paragraph_nums"))
+        and bool(str(row["paragraph_nums"]).strip())
+        and row.get("paragraph_reaction_ordinal") is not None
+        and bool(str(row["paragraph_reaction_ordinal"]).strip())
+    )
+    experiment_id = (
+        f"{namespace}:{row['document_id']}:{row['paragraph_nums']}:{row['paragraph_reaction_ordinal']}"
+        if locator_complete
+        else f"{namespace}:record:{record_id}"
+    )
     source = SourceRef(
         namespace=namespace,
         record_id=record_id,
-        experiment_id=f"{namespace}:{row.get('document_id')}:{row.get('paragraph_nums')}:{row.get('paragraph_reaction_ordinal', record_id)}",
+        experiment_id=experiment_id,
         document_id=str(row["document_id"]) if row.get("document_id") is not None else None,
         location=str(row.get("paragraph_nums") or ""),
     )

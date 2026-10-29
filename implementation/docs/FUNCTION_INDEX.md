@@ -38,21 +38,22 @@
 | [_worker](../src/reaction_reference/adapters/execution.py#L17) | 在独立进程中恢复请求和来源、执行检索，通过单向管道发送进度/结果或受限错误。 |
 | [_receive_packages](../src/reaction_reference/adapters/execution.py#L59) | 阻塞读取完整管道消息，再交给有界本地队列；监督线程不直接等待消息体。 |
 | [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L113) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
-| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L137) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
-| [RunManager._release](../src/reaction_reference/adapters/execution.py#L200) | 保存未启动任务的取消终态，再清除内存登记和取消事件。 |
-| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L213) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
-| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L231) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
-| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L324) | 在锁内把非终态 run 写为给定终态并返回状态。 |
-| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L348) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
-| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L371) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L388) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L401) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [RunManager.validate_lab_context](../src/reaction_reference/adapters/execution.py#L138) | 统一校验检索及重排中的排除结构，不依赖结果池是否为空，也不创建任务。 |
+| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L147) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
+| [RunManager._release](../src/reaction_reference/adapters/execution.py#L205) | 保存未启动任务的取消终态，再清除内存登记和取消事件。 |
+| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L218) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
+| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L236) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
+| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L329) | 在锁内把非终态 run 写为给定终态并返回状态。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L353) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L376) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L393) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L406) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
 | 函数 | 职责 |
 |---|---|
-| [export_sample](../src/reaction_reference/adapters/export.py#L7) | 只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。 |
+| [export_sample](../src/reaction_reference/adapters/export.py#L10) | 只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。 |
 
 ## src/reaction_reference/adapters/run_store.py
 
@@ -66,30 +67,30 @@
 | [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L77) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
 | [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L99) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
 | [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L106) | 读取并校验指定 run 的状态，返回 RunState。 |
-| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L120) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
-| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L135) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
-| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L152) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
-| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L168) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L184) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L205) | 启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。 |
+| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L122) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
+| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L137) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
+| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L154) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L173) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L189) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L210) | 启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。 |
 
 ## src/reaction_reference/adapters/sources.py
 
 | 函数 | 职责 |
 |---|---|
 | [import_native](../src/reaction_reference/adapters/sources.py#L26) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
-| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L122) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L190) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L236) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L240) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L273) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L320) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L327) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L332) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L366) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L432) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L451) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L493) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L142) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L210) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L256) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L260) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L293) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L340) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L347) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L352) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L386) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L452) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L471) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L513) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -229,9 +230,9 @@
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
 | [Client.preview](../src/reaction_reference/interfaces/sdk.py#L37) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
 | [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L47) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L124) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L128) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L132) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L125) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L129) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L133) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -358,6 +359,32 @@
 | [test_cli_source_selection_honors_environment_and_explicit_flags.PreviewClient.preview](../tests/test_cli.py#L48) | 返回空预览，使本例只观察配置选择。 |
 | [test_cli_rejects_incompatible_source_path](../tests/test_cli.py#L68) | 示例或 PG 模式不能同时指定 JSONL 路径，避免悄悄使用与命令含义不同的来源。 |
 | [test_inspect_run_reads_while_coordinator_is_active](../tests/test_cli.py#L76) | 服务持有协调锁时，命令行仍能只读查看任务，且不更改任务生命周期。 |
+
+## tests/test_data_boundaries.py
+
+| 函数 | 职责 |
+|---|---|
+| [empty_snapshot](../tests/test_data_boundaries.py#L22) | 保存无命中资料包，让校验测试不依赖任何化学匹配结果。 |
+| [test_incomplete_source_locator_does_not_merge_different_records](../tests/test_data_boundaries.py#L61) | 实验定位不完整时按来源记录身份计数，不能把不同反应拼成同一实验。 |
+| [test_complete_source_locator_still_groups_duplicate_experiment_records](../tests/test_data_boundaries.py#L74) | 完整文献、段落与反应序号仍表示同一实验，序号零是合法值。 |
+| [test_missing_native_record_id_is_rejected](../tests/test_data_boundaries.py#L83) | 导出行缺少有效记录 ID 时应隔离该行，不能转换成共享的 None 或空身份。 |
+| [test_empty_rerank_validates_exclusions_before_creating_run](../tests/test_data_boundaries.py#L89) | 即使没有参考项触发排序循环，无效实验排除结构仍应拒绝且不创建派生任务。 |
+| [test_stored_identity_must_match_requested_file](../tests/test_data_boundaries.py#L100) | 文件内容误放到其他任务或快照路径时必须报冲突，不能返回错配资料。 |
+| [SampleConnection.__init__](../tests/test_data_boundaries.py#L122) | 准备两条具有非 ASCII 文本的记录，供完整导出和半途失败使用。 |
+| [SampleConnection.__enter__](../tests/test_data_boundaries.py#L126) | 返回受上下文管理的连接替身。 |
+| [SampleConnection.__exit__](../tests/test_data_boundaries.py#L130) | 内存连接没有外部资源。 |
+| [SampleConnection.execute](../tests/test_data_boundaries.py#L134) | 接受只读查询并保留统一的结果读取入口。 |
+| [SampleConnection.fetchone](../tests/test_data_boundaries.py#L138) | 返回固定快照标识。 |
+| [SampleConnection.fetchall](../tests/test_data_boundaries.py#L142) | 返回有限样本记录。 |
+| [sample_connection](../tests/test_data_boundaries.py#L147) | 替换连接函数，保证导出回归只访问本地临时文件。 |
+| [sample_connection.connect](../tests/test_data_boundaries.py#L151) | 返回已准备的内存连接。 |
+| [test_failed_export_is_not_published_and_can_retry](../tests/test_data_boundaries.py#L159) | 第二条记录序列化失败时，不能留下看似完整的最终文件，并且允许同路径重试。 |
+| [test_failed_export_is_not_published_and_can_retry.fail_second](../tests/test_data_boundaries.py#L165) | 只模拟第二条记录写入前的失败，使旧实现已经写出第一行。 |
+| [test_export_never_overwrites_existing_file](../tests/test_data_boundaries.py#L184) | 同名文件已存在时保持原样，不论其内容是否是有效 JSONL。 |
+| [test_concurrent_export_keeps_the_first_published_file](../tests/test_data_boundaries.py#L194) | 另一写入者在最终发布前抢先创建文件时，不覆盖它，并清理本次临时文件。 |
+| [test_concurrent_export_keeps_the_first_published_file.publish_race](../tests/test_data_boundaries.py#L200) | 模拟检查路径为空后，另一进程恰好先发布结果。 |
+| [test_export_publication_failure_does_not_leave_output](../tests/test_data_boundaries.py#L212) | 最终发布失败时也应删除临时文件，避免无效导出占用目标路径。 |
+| [test_export_publication_failure_does_not_leave_output.failed_publish](../tests/test_data_boundaries.py#L217) | 模拟目标文件发布时的权限错误。 |
 
 ## tests/test_evaluation.py
 

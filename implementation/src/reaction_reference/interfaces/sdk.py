@@ -51,6 +51,7 @@ class Client:
         """
         with self.manager.active_writer():
             state = self.manager.store.load(run_id, owner)
+            self.manager.validate_lab_context(request.lab_context)
             package = self.manager.store.package(run_id)
             if package is None:
                 raise ValueError("A retained evidence snapshot is required")

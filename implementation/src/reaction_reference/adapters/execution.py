@@ -134,18 +134,23 @@ class RunManager:
         self._futures = {}
         self._closed = False
 
+    @staticmethod
+    def validate_lab_context(context):
+        """统一校验检索及重排中的排除结构，不依赖结果池是否为空，也不创建任务。"""
+        if context:
+            try:
+                for smiles in context.excluded_material_smiles:
+                    canonical(smiles)
+            except ValueError as exc:
+                raise ValueError("Excluded material structure cannot be parsed") from exc
+
     def submit(self, request, *, owner="internal", idempotency_key=None):
         """验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。
 
         owner 限定范围，idempotency_key 可复用同一请求；检查容量、禁止对 PG 声称有限样本穷尽。随后在监督线程中启动计算，函数本身不等待完成。
         """
         parse(request.target.value, target=True)
-        if request.lab_context:
-            try:
-                for smiles in request.lab_context.excluded_material_smiles:
-                    canonical(smiles)
-            except ValueError as exc:
-                raise ValueError("Excluded material structure cannot be parsed") from exc
+        self.validate_lab_context(request.lab_context)
         if request.options.exhaustive_fixture and self.settings.source_kind == "postgres":
             raise ValueError("exhaustive_fixture is only available for a bounded JSONL source")
         with self._lock:

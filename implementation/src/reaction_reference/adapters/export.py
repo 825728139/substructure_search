@@ -1,13 +1,16 @@
 """开发与评测使用的显式有限样本导出；主键分页取数，不要求化学索引，不作为在线子结构回退。"""
 
 import json
+import os
+import tempfile
+from contextlib import suppress
 from pathlib import Path
 
 
 def export_sample(dsn, output, *, limit=300, after_id=0, timeout_ms=3000):
     """只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。
 
-    dsn 由环境配置传入，不写入文件；读取投影排除大二进制字段，设置 SQL 超时并记录来源快照。返回导出数量、游标和范围说明；文件已存在时拒绝覆盖，提取产品字段不升级为制备证据。
+    dsn 由环境配置传入，不写入文件；读取投影排除大二进制字段，设置 SQL 超时并记录来源快照。数据先写同目录临时文件，成功后原子发布且拒绝覆盖。失败不发布残缺文件，提取产品字段不升级为制备证据。
     """
     import psycopg
     from psycopg.rows import dict_row
@@ -18,6 +21,8 @@ def export_sample(dsn, output, *, limit=300, after_id=0, timeout_ms=3000):
         raise ValueError("Explicit sample limit must be between 1 and 20000")
     destination = Path(output)
     destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists():
+        raise FileExistsError(destination)
     # 显式选择轻量字段，避免把大体积化学二进制和映射原始载荷一并导出。
     columns = (
         "id,source_type,source_namespace,document_id,paragraph_nums,paragraph_reaction_ordinal,"
@@ -40,11 +45,33 @@ def export_sample(dsn, output, *, limit=300, after_id=0, timeout_ms=3000):
             "SELECT " + columns + " FROM reaction.reactions WHERE id>%s ORDER BY id LIMIT %s",
             (after_id, limit),
         ).fetchall()
-        with destination.open("x") as stream:
-            for row in rows:
-                row["export_snapshot"] = snapshot
-                stream.write(json.dumps(row, ensure_ascii=False, default=str) + "\n")
         connection.execute("ROLLBACK")
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=destination.parent,
+            prefix=".reaction-export-",
+            suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            for row in rows:
+                stream.write(
+                    json.dumps(
+                        {**row, "export_snapshot": snapshot}, ensure_ascii=False, default=str
+                    )
+                    + "\n"
+                )
+            stream.flush()
+            os.fsync(stream.fileno())
+        # 同目录硬链接原子创建最终名称；即使另一导出同时完成，也不会覆盖对方文件。
+        os.link(temporary, destination)
+    finally:
+        if temporary is not None:
+            with suppress(OSError):
+                temporary.unlink(missing_ok=True)
     return {
         "records": len(rows),
         "after_id": after_id,
