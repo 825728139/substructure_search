@@ -382,7 +382,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                     # 优先取目标原子覆盖最高的见证，并用 ID 稳定并列次序。
                     new_best = max(matched.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
                     new_projection = project_changes(
-                        item.record, item.material, new_best, previous.analysis
+                        item.record, item.material, new_best, previous.analysis, target=target
                     )
                     old_projection = previous.coverage.get("projected_changes", {})
                     old_strength = (
@@ -454,7 +454,9 @@ def search(request, source, *, run_id=None, on_progress=None):
                 satisfies = meets_target(molecule, target)
                 # 当前贡献先用覆盖最多的见证解释；后续家族仍可提供更强投影。
                 best = max(matched.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
-                projected = project_changes(item.record, item.material, best, analysis)
+                projected = project_changes(
+                    item.record, item.material, best, analysis, target=target
+                )
                 contribution: Literal[
                     "target_outcome",
                     "connection_method",

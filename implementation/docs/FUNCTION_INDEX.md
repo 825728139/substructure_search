@@ -152,7 +152,7 @@
 |---|---|
 | [LabContext.check_range](../src/reaction_reference/domain/models.py#L68) | 拒绝下限高于上限的温度范围，校验通过返回当前对象。 |
 | [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L171) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
-| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L228) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
+| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L230) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
 
 ## src/reaction_reference/evaluation/runner.py
 
@@ -263,7 +263,7 @@
 | [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
 | [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
 | [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
-| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L294) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L296) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
 
 ## src/reaction_reference/retrieval/planner.py
 
@@ -448,6 +448,20 @@
 | [test_exact_r_preserves_double_bond_requirements](../tests/test_round1_chemistry.py#L29) | 精确支链要求指定双键构型时，反构型或未指定构型不能混入。 |
 | [test_r_stereo_signature_is_invariant_to_hydrogens_and_atom_order](../tests/test_round1_chemistry.py#L40) | 加显式氢或改变局部原子编号后，同一支链的立体签名应保持一致。 |
 | [test_exact_chiral_r_accepts_explicit_hydrogen_view](../tests/test_round1_chemistry.py#L54) | 精确四面体支链在显式氢视图下仍应匹配原目标，反构型仍被排除。 |
+
+## tests/test_round2_reactions.py
+
+| 函数 | 职责 |
+|---|---|
+| [graph_record](../tests/test_round2_reactions.py#L21) | 构造明确标记为合成示例的两侧图，用于验证图解释而非实验可行性。 |
+| [test_unresolved_ring_changes_are_not_reported_as_retained](../tests/test_round2_reactions.py#L47) | 未映射区域或未跟踪片段涉及环变化时，不能宣称全反应保留环拓扑。 |
+| [test_fully_mapped_unchanged_ring_is_retained](../tests/test_round2_reactions.py#L55) | 完整映射且环图不变时，仍可报告环拓扑保留。 |
+| [test_projected_formation_must_be_an_actual_target_bond](../tests/test_round2_reactions.py#L68) | 来源成键投影必须在目标中存在且键型一致，宽泛核心匹配不能制造目标成键。 |
+| [amide_reference](../tests/test_round2_reactions.py#L90) | 构造已有来源酰胺反应的最小回放参考。 |
+| [test_failed_source_replays_consume_attempt_budget](../tests/test_round2_reactions.py#L104) | 自回放即使没有复现来源产物也必须计入尝试预算，不能无额度继续调用。 |
+| [test_failed_source_replays_consume_attempt_budget.rules](../tests/test_round2_reactions.py#L108) | 提供只返回原输入、无法得到酰胺产物的受控规则。 |
+| [test_documented_step_requires_nonblank_citation](../tests/test_round2_reactions.py#L121) | 步骤引用只有空白时，不能将记录校验为明确的单步反应。 |
+| [test_transfer_rechecks_blank_step_citation](../tests/test_round2_reactions.py#L129) | 即使调用方通过复制构造了未重校验记录，回放仍应拒绝空白步骤引用。 |
 
 ## tests/test_service.py
 

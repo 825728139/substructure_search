@@ -186,7 +186,9 @@ class ReactionRecord(Model):
                 != "product"
             ):
                 raise ValueError("An outcome observation must reference a product material")
-        if self.event_scope == "documented_step" and not self.documented_step_ref:
+        if self.event_scope == "documented_step" and (
+            not self.documented_step_ref or not self.documented_step_ref.strip()
+        ):
             raise ValueError("A documented step requires a source step reference")
         if self.event_scope == "documented_step" and self.step_count not in (None, 1):
             raise ValueError("A documented single-step event cannot represent several steps")

@@ -200,6 +200,7 @@ def analyze_reaction(record):
             if label:
                 sources[label] = component
     topology = []
+    complete_maps = all(a.GetAtomMapNum() for m in (left, right) for a in m.GetAtoms())
     right_cycles, left_cycles = _cycle_rank(right), _cycle_rank(left)
     changed_pairs = {change.maps for change in formed + broken} | set(detached)
     for pair in changed_pairs:
@@ -215,7 +216,9 @@ def analyze_reaction(record):
         topology.append("ring_reorganization")
     if not topology:
         topology.append(
-            "ring_topology_retained"
+            "ring_topology_unknown"
+            if not complete_maps or right_cycles != left_cycles
+            else "ring_topology_retained"
             if not formed and not broken and not detached
             else "no_identified_ring_change"
         )
@@ -261,7 +264,6 @@ def analyze_reaction(record):
     if not formed and not broken and not detached and not order:
         classes.append("no_resolved_heavy_bond_edit")
     reasons = []
-    complete_maps = all(a.GetAtomMapNum() for m in (left, right) for a in m.GetAtoms())
     if not complete_maps:
         reasons.append("partial_mapping")
     if untracked or detached:
@@ -291,10 +293,10 @@ def analyze_reaction(record):
     )
 
 
-def project_changes(record, material, witness, analysis):
+def project_changes(record, material, witness, analysis, *, target):
     """把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。
 
-    先定位与 material 同身份的映射产物，再枚举其内部对称对应，返回目标成键、改变原子、支持状态和检查数量。映射歧义、同身份多产物或 128 个对应上限导致结论不稳定时，不输出确定的目标位点。
+    target 使用原始目标原子顺序。先定位与 material 同身份的映射产物，再枚举其内部对称对应；只有目标中确实存在且键型一致的来源新键才能记为目标成键。映射歧义、同身份多产物或 128 个对应上限导致结论不稳定时，不输出确定的目标位点。
     """
     if analysis.state == "unknown" or material.role != "product":
         return {"formed_target_bonds": [], "changed_target_atoms": [], "support": "unknown"}
@@ -321,11 +323,14 @@ def project_changes(record, material, witness, analysis):
             mapped.GetAtomWithIdx(embedding[source]).GetAtomMapNum(): target
             for source, target in source_to_target.items()
         }
-        formed = [
-            tuple(sorted((map_to_target[c.maps[0]], map_to_target[c.maps[1]])))
-            for c in analysis.formed
-            if set(c.maps) <= map_to_target.keys()
-        ]
+        formed = []
+        for change in analysis.formed:
+            if not set(change.maps) <= map_to_target.keys():
+                continue
+            pair = tuple(sorted(map_to_target[n] for n in change.maps))
+            target_bond = target.GetBondBetweenAtoms(*pair)
+            if target_bond is not None and str(target_bond.GetBondType()) == change.after:
+                formed.append(pair)
         changed_atoms = sorted(
             {map_to_target[n] for c in changed for n in c.maps if n in map_to_target}
             | {

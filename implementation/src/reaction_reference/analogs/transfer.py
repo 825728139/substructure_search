@@ -72,7 +72,11 @@ def generate_proposals(reference, target, budget):
     返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；无额外原因不等于无截断，需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
     """
     record = reference.record
-    if record.event_scope != "documented_step" or not record.documented_step_ref:
+    if (
+        record.event_scope != "documented_step"
+        or not record.documented_step_ref
+        or not record.documented_step_ref.strip()
+    ):
         return [], "source_step_not_assigned"
     if reference.analysis.state == "unknown":
         return [], "source_mapping_not_validated"
@@ -107,11 +111,14 @@ def generate_proposals(reference, target, budget):
         if forward.GetNumReactantTemplates() != len(actual):
             continue
         for assignment in permutations(actual):
+            budget.check()
             if not all(
                 m.HasSubstructMatch(q)
                 for m, q in zip(assignment, forward.GetReactants(), strict=False)
             ):
                 continue
+            # 开始自回放前计入真实尝试；未复现来源产物也不能免除预算消耗。
+            budget.task("transfer_replay", reference.id)
             original_sets, original_complete, original_valid = replay(
                 forward, assignment, budget.config.max_replay_sets
             )
@@ -120,7 +127,6 @@ def generate_proposals(reference, target, budget):
             ):
                 continue
             original_keys = [canonical(m) for m in assignment]
-            budget.task("transfer_replay", reference.id)
             retro_sets, retro_complete, retro_valid = replay(
                 reverse, [target], budget.config.max_replay_sets
             )
