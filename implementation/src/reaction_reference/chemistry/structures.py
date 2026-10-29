@@ -154,14 +154,14 @@ def atom_table(mol):
 def fragment_key(mol, atoms, positions):
     """把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。
 
-    atoms 为片段原子集合，positions 将核心原子索引映射到核心位点。虚原子映射号取位点加 1，保留边界键型和同位素氢；返回查询片段字符串，不能把它当作真实可投料分子。
+    atoms 为片段原子集合，positions 将核心原子索引映射到核心位点。虚原子映射号取位点加 1，保留边界键型、同位素氢及片段内可表达的双键/四面体手性；返回查询片段字符串，不能把它当作真实可投料分子。
     """
     atoms = set(atoms)
     atoms |= {
         n.GetIdx()
         for i in list(atoms)
         for n in mol.GetAtomWithIdx(i).GetNeighbors()
-        if n.GetAtomicNum() == 1 and n.GetIsotope()
+        if n.GetAtomicNum() == 1 and n.GetIdx() not in positions
     }
     rw = Chem.RWMol()
     remap = {}
@@ -169,18 +169,37 @@ def fragment_key(mol, atoms, positions):
         atom = Chem.Atom(mol.GetAtomWithIdx(index))
         atom.SetAtomMapNum(0)
         remap[index] = rw.AddAtom(atom)
+    boundary = {}
+    internal_bonds = []
     for bond in mol.GetBonds():
         a, b = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
         if a in atoms and b in atoms:
             rw.AddBond(remap[a], remap[b], bond.GetBondType())
+            internal_bonds.append(bond)
         elif (a in atoms and b in positions) or (b in atoms and a in positions):
             outside, core = (a, b) if a in atoms else (b, a)
             dummy = Chem.Atom(0)
             dummy.SetAtomMapNum(positions[core] + 1)
             di = rw.AddAtom(dummy)
             rw.AddBond(remap[outside], di, bond.GetBondType())
+            boundary[(outside, core)] = di
+    # 双键构型依赖两侧参照原子；连接核心的参照需要换成对应虚拟端口。
+    for bond in internal_bonds:
+        stereo_atoms = list(bond.GetStereoAtoms())
+        if len(stereo_atoms) != 2:
+            continue
+        a, b = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
+        left = remap.get(stereo_atoms[0], boundary.get((a, stereo_atoms[0])))
+        right = remap.get(stereo_atoms[1], boundary.get((b, stereo_atoms[1])))
+        if left is not None and right is not None:
+            copied = rw.GetBondBetweenAtoms(remap[a], remap[b])
+            copied.SetStereoAtoms(left, right)
+            copied.SetStereo(bond.GetStereo())
     fragment = rw.GetMol()
     fragment.UpdatePropertyCache(strict=False)
+    Chem.SetDoubleBondNeighborDirections(fragment)
+    # 先保留显式氢重建完整局部手性，再交给 RDKit 折叠普通氢，避免丢失或翻转构型。
+    fragment = Chem.RemoveHs(fragment, sanitize=False)
     return Chem.MolToSmiles(fragment, isomericSmiles=True)
 
 

@@ -144,7 +144,7 @@
 | [descriptors](../src/reaction_reference/chemistry/structures.py#L126) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
 | [atom_table](../src/reaction_reference/chemistry/structures.py#L137) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
 | [fragment_key](../src/reaction_reference/chemistry/structures.py#L154) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
-| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L187) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
+| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L206) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
 
 ## src/reaction_reference/domain/models.py
 
@@ -439,6 +439,15 @@
 | [test_rerank_succeeds_only_after_snapshot_is_saved](../tests/test_review_regressions.py#L289) | 重排必须在快照落盘后才标记成功；写盘失败时任务不能留下虚假的成功状态。 |
 | [test_rerank_succeeds_only_after_snapshot_is_saved.save_snapshot](../tests/test_review_regressions.py#L301) | 记录落盘前的任务状态，并可模拟文件写入失败。 |
 | [test_progress_snapshot_does_not_complete_unstarted_phases](../tests/test_review_regressions.py#L322) | 初始阶段包不能把尚未开始的输入检索或替换回放标记为已完成。 |
+
+## tests/test_round1_chemistry.py
+
+| 函数 | 职责 |
+|---|---|
+| [ring_family](../tests/test_round1_chemistry.py#L12) | 用完整苯环构造核心，并固定目标所有外围支链。 |
+| [test_exact_r_preserves_double_bond_requirements](../tests/test_round1_chemistry.py#L29) | 精确支链要求指定双键构型时，反构型或未指定构型不能混入。 |
+| [test_r_stereo_signature_is_invariant_to_hydrogens_and_atom_order](../tests/test_round1_chemistry.py#L40) | 加显式氢或改变局部原子编号后，同一支链的立体签名应保持一致。 |
+| [test_exact_chiral_r_accepts_explicit_hydrogen_view](../tests/test_round1_chemistry.py#L54) | 精确四面体支链在显式氢视图下仍应匹配原目标，反构型仍被排除。 |
 
 ## tests/test_service.py
 
