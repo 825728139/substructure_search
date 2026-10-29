@@ -1,6 +1,6 @@
-"""Check a bounded export of the JSONB reaction schema without connecting to a source.
+"""检查有数量上限的 JSONB 反应导出样本；只读取本地文件，不连接来源。
 
-Checks representation and traceability only, not experimental or mechanistic validity.
+核对结构表示与可追溯性；本检查不证明实验结果或反应机理。
 """
 
 import argparse
@@ -14,6 +14,7 @@ from rdkit.Chem import rdChemReactions
 
 
 def audit(path: Path) -> dict:
+    """读取有限 JSONL 样本，检查字段、材料身份与份数、映射及模板自回放，返回计数和问题定位；不连接来源。"""
     RDLogger.DisableLog("rdApp.warning")
     RDLogger.DisableLog("rdApp.error")
     payload = path.read_bytes()
@@ -24,11 +25,13 @@ def audit(path: Path) -> dict:
     template_counts = {str(radius): Counter() for radius in range(1, 5)}
 
     def record(name, ok, rid):
+        """累计指定检查项的通过次数；失败时把来源记录编号加入对应问题列表。"""
         counts[name] += bool(ok)
         if not ok:
             issues[name].append(rid)
 
     def canon(smiles):
+        """解析结构并移除映射号，返回保留立体的规范 SMILES；无效输入抛出 ValueError。"""
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
             raise ValueError("Unparseable SMILES")
@@ -115,8 +118,8 @@ def audit(path: Path) -> dict:
         except (ValueError, TypeError, AttributeError):
             record("mapped_reaction_parseable", False, rid)
 
-        # A source reaction template may describe multiple observed products.
-        # This is a whole-side self-check, not a same-molecule Markush witness.
+        # 一个来源反应模板可以同时描述多个观察到的产物。
+        # 这里自检的是反应整侧，不能据此认定同一个分子满足 Markush 条件。
         molecules = [Chem.MolFromSmiles(".".join(row["product_smiles"]))]
         for radius in range(1, 5):
             try:

@@ -1,5 +1,5 @@
-"""Mapping representation checks, not chemical feasibility tests.
-All mapped equations below are illustrative, not extracted experiments.
+"""检查原子映射的表示语义；不验证化学可行性。
+下面的映射反应式均为人工示例，不是提取的真实实验。
 """
 from pathlib import Path
 from collections import Counter
@@ -7,24 +7,28 @@ import json
 from rdkit import Chem, rdBase
 
 def mol(smiles):
+    """将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。"""
     result=Chem.MolFromSmiles(smiles)
     assert result is not None,smiles
     return result
 
 def plain(m):
+    """复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。"""
     m=Chem.Mol(m)
     for a in m.GetAtoms(): a.SetAtomMapNum(0)
     return Chem.MolToSmiles(m)
 
 def bonds(m):
-    # This small helper is intentionally limited to unique, positive maps.
-    # Raw set differences below are not a production reaction classifier.
+    # 这个示例辅助函数只接受唯一的正整数映射号。
+    # 下文用集合差展示图变化，不作为正式反应分类器。
+    """要求示例中所有原子的映射号为唯一正整数，再返回映射键对到键型的字典；不满足时抛出 ValueError。"""
     labels=[a.GetAtomMapNum() for a in m.GetAtoms()]
     if any(label<=0 for label in labels) or len(set(labels))!=len(labels):
         raise ValueError('This example helper requires unique positive atom maps.')
     return {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(),b.GetEndAtom().GetAtomMapNum()))):str(b.GetBondType()) for b in m.GetBonds()}
 
 def edits(reactants,products):
+    """比较两侧受控映射图，返回新成键、消失键和共同键的键级差异。"""
     a,b=bonds(reactants),bonds(products)
     return {'formed':sorted(b.keys()-a.keys()),'broken':sorted(a.keys()-b.keys()),'order_changes':sorted(k for k in a.keys()&b.keys() if a[k]!=b[k])}
 
@@ -54,7 +58,7 @@ assert all(not v for v in edits(a,b).values())
 assert plain(a)!=plain(b)
 assert not a.HasSubstructMatch(b,useChirality=True)
 report['cases'].append({'case':'零重原子键编辑不表示目标立体结构相同','illustration_only':True,'structures':[plain(a),plain(b)],'heavy_atom_bond_changes':edits(a,b),'strict_stereo_match':False,'note':'This comparison does not establish an inversion, resolution or any actual reaction.'})
-# Omitted coproduct atoms are not evidence that every internal bond broke.
+# 未列出副产物原子，不代表该片段内部的每根键都断裂。
 ester = mol('[CH3:1][C:2](=[O:3])[O:6][CH2:7][CH2:8][CH3:9].[NH2:4][CH3:5]')
 amide = mol('[CH3:1][C:2](=[O:3])[NH:4][CH3:5]')
 alcohol = mol('[OH:6][CH2:7][CH2:8][CH3:9]')
@@ -72,7 +76,7 @@ report['cases'].append({
     'note': 'The coproduct is supplied only to demonstrate representation dependence, not inferred from source evidence.',
 })
 
-# Multiple unlabelled atoms all return zero, but retain distinct local IDs.
+# 未标记原子的映射号都是零，但它们仍有各自不同的局部原子索引。
 partial = mol('[CH3:1][C:2](=[O:3])OCCC.[NH2:4][CH3:5]')
 unmapped_edges = [b.GetIdx() for b in partial.GetBonds()
                   if not b.GetBeginAtom().GetAtomMapNum() and not b.GetEndAtom().GetAtomMapNum()]
@@ -92,9 +96,10 @@ report['cases'].append({
     'note': 'Use local atom references; absent mapping is not a cross-side correspondence.',
 })
 
-# These small examples use fixed, unique maps to compare contributors without
-# exchanging atoms. This is not a general resonance normalizer or classifier.
+# 这些小例子固定唯一映射号，以比较不同共振表示而不交换原子。
+# 这里只演示受控情况，不是通用共振归一化器或分类器。
 def nuclear_signature(molecule):
+    """返回固定映射下的元素、同位素、氢、自由基、连边及总电荷签名，用于核对共振示例。"""
     return (
         tuple(sorted((a.GetAtomMapNum(), a.GetAtomicNum(), a.GetIsotope(),
                       a.GetTotalNumHs(includeNeighbors=True), a.GetNumRadicalElectrons())
@@ -104,14 +109,15 @@ def nuclear_signature(molecule):
     )
 
 def controlled_resonance_forms(molecule, normalize_aromaticity=True):
+    """有限枚举受控示例的共振形式，可统一芳香性；断言原子签名不变且未触及示例枚举上限。"""
     original = Chem.MolToSmiles(molecule)
     forms = list(Chem.ResonanceMolSupplier(molecule, flags=0, maxStructs=17))
-    # Fixture bound only. A limited enumeration is not proof that no other
-    # resonance representations exist under other supported rule sets.
+    # 该上限仅适用于当前受控示例；有限枚举不能证明
+    # 换用其他受支持的规则后，不再存在其他共振表示。
     assert 0 < len(forms) < 17
     if normalize_aromaticity:
-        # The supplier can emit Kekule bond types even where the input used
-        # aromatic bonds. Compare both sides under the same aromaticity policy.
+        # 即使输入使用芳香键，枚举器也可能输出凯库勒键型。
+        # 因此比较两侧时必须使用相同的芳香性处理策略。
         for form in forms:
             Chem.SanitizeMol(form)
     assert all(nuclear_signature(form) == nuclear_signature(molecule) for form in forms)
@@ -119,6 +125,7 @@ def controlled_resonance_forms(molecule, normalize_aromaticity=True):
     return forms
 
 def charge_changes(left, right):
+    """比较共同映射原子的形式电荷，返回发生变化的映射号及两侧电荷。"""
     a = {atom.GetAtomMapNum(): atom.GetFormalCharge() for atom in left.GetAtoms()}
     b = {atom.GetAtomMapNum(): atom.GetFormalCharge() for atom in right.GetAtoms()}
     assert a.keys() == b.keys()
@@ -188,8 +195,8 @@ for name, left, right in [
     ('hydrogenation', '[CH2:1]=[CH:2][CH3:3]', '[CH3:1][CH2:2][CH3:3]'),
 ]:
     before, after = mol(left), mol(right)
-    # Fixed-atom H/charge changes rule out representation-only equivalence;
-    # the lack of an intersection by itself would not prove this generally.
+    # 固定原子的氢数或电荷变化，排除了仅有表示差异的解释。
+    # 单靠枚举结果没有交集，不能在一般情况下得出这一结论。
     assert nuclear_signature(before) != nuclear_signature(after)
     left_forms = {Chem.MolToSmiles(f) for f in controlled_resonance_forms(before)}
     right_forms = {Chem.MolToSmiles(f) for f in controlled_resonance_forms(after)}

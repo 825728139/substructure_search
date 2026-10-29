@@ -1,20 +1,53 @@
-"""检查项目 Python 中文说明覆盖，并可重建交接用函数索引；不评价注释的化学正确性。"""
+"""检查整个仓库 Python 说明及注释的中文覆盖，可重建函数索引；不评价说明的化学正确性。"""
 
 import ast
+import io
+import os
 import re
 import sys
+import tokenize
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def python_files():
-    """按稳定路径顺序返回源码、测试和维护脚本，不扫描虚拟环境或构建产物。"""
-    return sorted(
+    """返回业务项目及仓库辅助脚本，包含 reviews、绘图脚本与无扩展名启动器。
+
+    显式限定源码目录，避免扫描虚拟环境、缓存或第三方构建产物。
+    """
+    paths = {
         path
         for directory in (ROOT / "src", ROOT / "tests", ROOT / "scripts")
         for path in directory.rglob("*.py")
-    )
+    }
+    for directory in ("scripts", "reviews", "diagrams"):
+        paths.update((ROOT.parent / directory).rglob("*.py"))
+    for name in ("plan-git", "project-uv"):
+        launcher = ROOT.parent / "scripts" / name
+        if launcher.is_file():
+            paths.add(launcher)
+    return sorted(paths)
+
+
+def english_prose(text, *, comment=False):
+    """判断一段说明是否仍为纯英文；中文中的函数名和化学缩写可以保留。
+
+    对注释先剥离必须保持原样的 shebang、类型检查及格式检查指令。指令后若附有
+    人工解释，仍需检查解释文字，避免英文说明藏在 type: ignore 后面被漏过。
+    """
+    text = text.strip()
+    if comment:
+        if text.startswith("#!"):
+            return False
+        text = text.removeprefix("#").strip()
+        text = re.sub(
+            r"^(?:type:\s*ignore(?:\[[\w, -]+\])?|noqa(?::\s*[A-Z]\d+(?:\s*,\s*[A-Z]\d+)*)?|"
+            r"fmt:\s*(?:skip|off|on)|pragma:\s*no cover)(?=\s|$)",
+            "",
+            text,
+        ).strip(" #")
+    return bool(re.search(r"[A-Za-z]{2}", text) and not re.search(r"[\u3400-\u9fff]", text))
 
 
 def definitions(tree, prefix=""):
@@ -29,21 +62,27 @@ def definitions(tree, prefix=""):
 
 
 def inspect_comments():
-    """检查每个模块、类和具名函数的 docstring 含中文，返回统计及逐文件函数索引。
+    """检查全仓库 Python 的说明和所有注释，返回统计及逐文件函数索引。
 
-    缺少说明时以非零退出码阻止交付。该检查只防止说明遗漏；说明是否准确、是否覆盖
-    输入输出和关键限制，仍需在代码审查时结合实现判断。匿名回调在使用位置人工注释。
+    同时检查 docstring 每一行和 tokenize 提取的独立/行尾注释，不能仅凭某处有中文
+    就放过其他英文段落。缺少说明或残留英文时以非零退出码阻止交付；准确性仍需审查。
     """
     failures, entries = [], []
     counts = {"modules": 0, "classes": 0, "functions": 0}
     for path in python_files():
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        relative = path.relative_to(ROOT).as_posix()
+        source = path.read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        relative = Path(os.path.relpath(path, ROOT)).as_posix()
         nodes = [("模块", tree), *definitions(tree)]
         for name, node in nodes:
             description = ast.get_docstring(node) or ""
             if not re.search(r"[\u3400-\u9fff]", description):
                 failures.append(f"{relative}:{getattr(node, 'lineno', 1)} {name} 缺少中文说明")
+            for offset, line in enumerate(description.splitlines()):
+                if english_prose(line):
+                    failures.append(
+                        f"{relative}:{node.body[0].lineno + offset} {name} 残留英文说明：{line}"
+                    )
             if isinstance(node, ast.Module):
                 counts["modules"] += 1
             elif isinstance(node, ast.ClassDef):
@@ -51,6 +90,9 @@ def inspect_comments():
             else:
                 counts["functions"] += 1
                 entries.append((relative, name, node.lineno, description.split("\n")[0]))
+        for token in tokenize.generate_tokens(io.StringIO(source).readline):
+            if token.type == tokenize.COMMENT and english_prose(token.string, comment=True):
+                failures.append(f"{relative}:{token.start[0]} 残留英文注释：{token.string}")
     if failures:
         raise SystemExit("\n".join(failures))
     return counts, entries

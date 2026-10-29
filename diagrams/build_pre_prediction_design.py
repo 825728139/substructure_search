@@ -1,4 +1,4 @@
-"""Render the current Markush-first retrieval and reference-evaluation design."""
+"""绘制当前以 Markush 查询为主的检索流程与参考价值评估设计图。"""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parent

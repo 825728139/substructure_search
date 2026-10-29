@@ -1,6 +1,6 @@
-"""Illustrative reaction-graph replay, not a feasibility or condition predictor.
-The rule, source reaction, replacements and expected outcomes are invented
-examples. This is not an implementation of reactant-delta attribution.
+"""演示反应图回放；不预测实验可行性或反应条件。
+规则、来源反应、替换结构和预期结果都是人工构造的示例。
+本脚本不实现反应物差异归因。
 """
 from pathlib import Path
 import json
@@ -13,19 +13,22 @@ acid='O=C(Cl)c1ccccc1'
 amine='CCN'
 source='CCNC(=O)c1ccccc1'
 def as_mol(value):
+ """解析 SMILES 或复制已有分子，断言结构有效后返回，避免修改调用方对象。"""
  m=Chem.MolFromSmiles(value) if isinstance(value,str) else Chem.Mol(value)
  assert m is not None
  return m
 def canonical(value):
+ """复制或解析结构、清除映射号，返回保留立体和同位素的规范 SMILES。"""
  m=as_mol(value)
  for atom in m.GetAtoms(): atom.SetAtomMapNum(0)
  return Chem.MolToSmiles(m,isomericSmiles=True)
 def replay(a,b,reaction=rxn,product_set_limit=16):
+ """对两个示例输入执行有上限的反应回放，保留完整产物组与枚举状态；结构校验失败直接抛错。"""
  assert product_set_limit>0
  groups=reaction.RunReactants((as_mol(a),as_mol(b)),maxProducts=product_set_limit+1)
  product_sets=[];raw_sets=[]
- # These controlled examples expect valid products. A production executor
- # must record failed validation per group, rather than silently skip it.
+ # 这些受控例子预期产物结构合法；正式执行器必须逐组记录校验失败，
+ # 不能静默跳过失败的产物组。
  for group in groups[:product_set_limit]:
   for product in group: Chem.SanitizeMol(product)
   raw_sets.append([Chem.MolToSmiles(product,isomericSmiles=True) for product in group])
@@ -36,7 +39,8 @@ def replay(a,b,reaction=rxn,product_set_limit=16):
          'raw_product_sets':raw_sets,'product_sets':product_sets,
          'unique_products':sorted({p for group in product_sets for p in group})}
 def contains(result,target):
- # Membership of one concrete target only; never combine different groups.
+ # 只判断某个完整产品组是否包含具体目标，不能拼接不同组的产物。
+ """判断某个完整产物组是否包含指定具体目标，返回布尔值；不合并不同组来凑目标。"""
  return any(canonical(target) in group for group in result['product_sets'])
 rows=[]
 baseline=replay(acid,amine)

@@ -1,4 +1,4 @@
-"""Demonstrate query and prefilter semantics, not retrieval performance."""
+"""演示查询与预筛选的语义；不作为检索性能基准。"""
 
 import json
 from pathlib import Path
@@ -16,8 +16,8 @@ for smiles, expected in [("CCO", True), ("CC[O-]", False), ("CCOC", False)]:
     assert mol.HasSubstructMatch(plain)
     rows.append({"candidate": smiles, "plain_molecule_query": True, "explicit_oh_query": actual})
 
-# A fixed phenol motif can be present despite low whole-molecule similarity.
-# Explicit H/charge predicates distinguish phenol from an aromatic ether.
+# 即使整分子相似度很低，候选仍可能包含所需的苯酚固定片段。
+# 显式的氢数和电荷条件用于区分苯酚与芳醚。
 query_smarts = "[OX2H1+0]-c1ccccc1"
 query = Chem.MolFromSmarts(query_smarts)
 reference = Chem.MolFromSmiles("Oc1ccccc1")
@@ -56,8 +56,8 @@ assert not screening[1]["morgan_bit_containment"]
 assert screening[3]["morgan_tanimoto"] > screening[1]["morgan_tanimoto"]
 assert screening[3]["pattern_screen_pass"] and not screening[3]["exact_substructure_match"]
 
-# Applying a size window after a global Top-K changes the selected set.
-# This is an illustrative window, not a proposed runtime default.
+# 先取全局前 K 个再应用体量窗口，会改变最终选出的候选集合。
+# 这里的窗口仅用于示例，不是建议的运行默认值。
 selection_target = Chem.MolFromSmiles("CCNC(=O)c1ccccc1")
 selection_fp = generator.GetFingerprint(selection_target)
 selection_rows = []
@@ -85,8 +85,8 @@ window_then_top1 = [row["case"] for row in ordered if 140 <= row["molecular_weig
 assert not global_top1_then_window
 assert window_then_top1 == ["lower_similarity_inside_window"]
 
-# A side containing two products has different descriptors from either product.
-# The actual selected product is declared by the example, not chosen by size.
+# 含两个产物的反应整侧，其描述符不同于任意一个具体产物。
+# 本例明确指定要比较的产物，不按分子大小猜选。
 aggregate = Chem.MolFromSmiles("CCNC(=O)c1ccccc1.CCCCCCCCCCCC")
 fragments = Chem.GetMolFrags(aggregate, asMols=True)
 selected_smiles = Chem.MolToSmiles(selection_target)
@@ -102,7 +102,7 @@ selected_similarity = DataStructs.TanimotoSimilarity(
 assert aggregate_similarity < selected_similarity == 1.0
 assert Descriptors.MolWt(aggregate) > 2 * Descriptors.MolWt(selected)
 
-# A cached tuple of local atom indices cannot be copied to another ordering.
+# 缓存的局部原子索引不能直接复制到原子顺序不同的表示上。
 cache_query = Chem.MolFromSmarts("[CX3](=[OX1])-[NX3]")
 cache_target = Chem.MolFromSmiles("CCNC(=O)c1ccccc1")
 old_match = cache_target.GetSubstructMatch(cache_query)
@@ -117,8 +117,8 @@ stale_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in old_m
 correct_symbols = [renumbered.GetAtomWithIdx(index).GetSymbol() for index in rebound]
 assert stale_symbols != ["C", "O", "N"] and correct_symbols == ["C", "O", "N"]
 
-# Generic group labels are not part of ordinary SMARTS. A round trip must
-# restore both properties and matcher settings; parsing CXSMARTS alone is not enough.
+# 通用基团标签不属于普通 SMARTS；查询序列化后恢复时，
+# 必须同时恢复属性和匹配器设置，仅解析 CXSMARTS 还不够。
 generic_parameters = Chem.SubstructMatchParameters()
 generic_parameters.useGenericMatchers = True
 transport_examples = []

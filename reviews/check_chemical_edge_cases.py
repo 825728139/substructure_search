@@ -1,5 +1,5 @@
-"""Reproduce structural edge cases in the design review, not reaction feasibility.
-Run with a Python environment containing RDKit.
+"""复现设计审查中的结构边界情况；不验证反应可行性。
+请使用已经安装 RDKit 的 Python 环境运行。
 """
 from pathlib import Path
 import json
@@ -9,12 +9,15 @@ from rdkit.Chem.Scaffolds import MurckoScaffold
 
 report={'rdkit_version':rdBase.rdkitVersion,'scope':'structure_and_matching_only','cases':[]}
 def mol(s):
+    """将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。"""
     m=Chem.MolFromSmiles(s)
     assert m is not None,s
     return m
 def scaffold(s):
+    """提取示例分子的 Murcko 骨架并返回规范 SMILES，用于比较结构表示的差异。"""
     return Chem.MolToSmiles(MurckoScaffold.GetScaffoldForMol(mol(s)))
 def add(label,data):
+    """向当前报告追加一个带中文案例名称的结构检查结果。"""
     report['cases'].append({'case':label,**data})
 
 for label,a,b in [
@@ -51,7 +54,7 @@ atom_union=set().union(*rings)
 bond_union={b.GetIdx() for b in m.GetBonds() if any(b.GetBeginAtomIdx() in r and b.GetEndAtomIdx() in r for r in rings)}
 assert len(atom_union)==m.GetNumHeavyAtoms() and len(bond_union)<m.GetNumBonds()
 add('分开覆盖两个环可覆盖所有原子却不覆盖连接键',{'input':Chem.MolToSmiles(m),'covered_atoms':len(atom_union),'total_heavy_atoms':m.GetNumHeavyAtoms(),'covered_bonds':len(bond_union),'total_bonds':m.GetNumBonds(),'missing_bonds':[b.GetIdx() for b in m.GetBonds() if b.GetIdx() not in bond_union]})
-# Record identity is not the same as satisfying an underspecified target.
+# 记录身份一致与满足未完全指定的目标要求，是两种不同判断。
 unspecified = mol('CC(O)c1ccccc1')
 stereo_candidates = []
 for smiles in ('C[C@H](O)c1ccccc1', 'C[C@@H](O)c1ccccc1'):
@@ -67,7 +70,7 @@ add('未指定手性的目标不能只靠带立体的身份字符串查找', {
     'target': Chem.MolToSmiles(unspecified), 'candidates': stereo_candidates,
     'scope': 'Controlled same-connectivity examples; not a general identity checker or observation claim.'})
 
-# isomericSmiles=False removes isotope labels as well as stereochemistry.
+# isomericSmiles=False 同时移除同位素标签和立体信息，不能用于仅忽略立体。
 isotope_examples = []
 for smiles in ('[13CH3][C@H](O)c1ccccc1', 'C[C@H](O)c1ccccc1'):
     molecule = mol(smiles)

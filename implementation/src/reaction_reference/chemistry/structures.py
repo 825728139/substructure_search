@@ -129,7 +129,7 @@ def descriptors(mol):
     比较对象是这个材料实例，不是多产品反应整侧的总质量。
     """
     return {
-        "molecular_weight": Descriptors.MolWt(mol),  # type: ignore[attr-defined]  # RDKit dynamically registers descriptors
+        "molecular_weight": Descriptors.MolWt(mol),  # type: ignore[attr-defined]  # RDKit 在运行时动态注册这些描述符。
         "heavy_atoms": mol.GetNumHeavyAtoms(),
     }
 
@@ -218,7 +218,7 @@ def outside_blocks(mol, core, *, max_visits=10000):
                     ports.append(positions[neighbor])
                     bonds.append(str(bond.GetBondType()))
         if not ports:
-            continue  # another disconnected component is never a joint R witness
+            continue  # 另一个不连通组分不能作为同一核心映射下的联合 R 见证。
         heavy = [mol.GetAtomWithIdx(i) for i in group]
         alkyl = all(
             a.GetAtomicNum() == 6

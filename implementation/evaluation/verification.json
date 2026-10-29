@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-29",
-  "implementation_hash": "c1cca2abcc433bdfcaf8ce507ab9c026d5c2d26258fcccf6dbda41657dc5c2cf",
+  "implementation_hash": "fd13c4157406ee55f023d1f0ff0114fdfb270c4390055b194356804f8f50ac5a",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -55,7 +55,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "c1cca2abcc433bdfcaf8ce507ab9c026d5c2d26258fcccf6dbda41657dc5c2cf"
+    "implementation_hash": "fd13c4157406ee55f023d1f0ff0114fdfb270c4390055b194356804f8f50ac5a"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -66,17 +66,17 @@
   "ci_remote_run_verified": false,
   "handover_review": {
     "language": "zh-CN",
-    "python_modules_documented": 52,
-    "python_classes_documented": 48,
-    "python_named_functions_documented": 217,
-    "existing_python_files_with_unchanged_business_ast": 50,
+    "python_modules_documented": 67,
+    "python_classes_documented": 49,
+    "python_named_functions_documented": 253,
+    "existing_python_files_with_unchanged_business_ast": 66,
     "maintenance_check_entry_adds_comment_check": true,
     "frontend_function_and_callback_comments": true,
     "frontend_syntax_check": true,
     "frontend_lexical_tokens_unchanged_except_explicit_semicolons": true,
     "contract_shapes_unchanged": true,
     "contract_description_changes_exported": true,
-    "function_index_definition_links_verified": 217,
+    "function_index_definition_links_verified": 253,
     "handover_markdown_local_links_valid": true,
     "architecture_diagrams_rendered_and_visually_checked": [
       "docs/system-architecture.svg",
@@ -84,6 +84,14 @@
     ],
     "guide": "docs/HANDOVER.md",
     "function_index": "docs/FUNCTION_INDEX.md",
-    "previous_smokes_pinned_to_prior_implementation_hash": true
+    "previous_smokes_pinned_to_prior_implementation_hash": true,
+    "chinese_comment_check_scope": "business_source_tests_repository_scripts_reviews_and_diagram_scripts",
+    "python_comments_checked_with_tokenize": true,
+    "docstring_lines_checked_individually": true,
+    "tool_directives_preserved_and_trailing_prose_checked": true,
+    "english_inline_and_mixed_docstring_counterexamples_rejected": true,
+    "english_python_prose_lines_translated": 88,
+    "root_environment_config_comment_translated": true,
+    "remaining_english_python_prose_comments_or_docstring_lines": 0
   }
 }

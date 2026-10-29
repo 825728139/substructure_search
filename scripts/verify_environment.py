@@ -1,6 +1,6 @@
-"""Verify installed dependencies and run existing probes without changing tracked outputs.
+"""验证已安装的依赖并运行现有检查脚本，不改动受版本管理的检查产物。
 
-This validates the development environment, not the planned retrieval engine.
+此处检查开发环境，不代替业务检索引擎的回归测试。
 """
 
 import asyncio
@@ -37,6 +37,7 @@ PACKAGES = {
 
 
 def main() -> None:
+    """核对 Python 与依赖、运行本地接口和化学检查、隔离渲染设计图，并将环境报告写入缓存目录。"""
     if sys.version_info[:2] != (3, 12):
         raise SystemExit("Run this checker using the project's Python 3.12 environment.")
     versions = {}
@@ -44,7 +45,7 @@ def main() -> None:
         importlib.import_module(module)
         versions[distribution] = version(distribution)
 
-    # Verify the API, client and strict contract libraries work together.
+    # 检查 API、HTTP 客户端与严格契约校验库能够配合使用。
     from fastapi import FastAPI
     from httpx import ASGITransport, AsyncClient
     from pydantic import BaseModel, ConfigDict
@@ -52,14 +53,16 @@ def main() -> None:
     from rdkit.Chem import Draw
 
     class Input(BaseModel):
+        """本地冒烟接口的严格输入契约，只接受字符串形式的 SMILES。"""
         model_config = ConfigDict(strict=True)
         smiles: str
 
     app = FastAPI()
 
-    # A local smoke app, not a product endpoint.
+    # 这里创建临时应用，仅供本地冒烟检查使用。
     @app.post("/smoke")
     async def smoke(payload: Input) -> dict[str, int | bool]:
+        """解析请求中的 SMILES，返回是否有效及原子数，仅供环境联调检查。"""
         molecule = Chem.MolFromSmiles(payload.smiles)
         return {
             "valid": molecule is not None,
@@ -67,6 +70,7 @@ def main() -> None:
         }
 
     async def check_api() -> None:
+        """使用内存 ASGI 客户端检查合法结构与错误字段类型的响应，受十秒异步超时限制。"""
         async with asyncio.timeout(10):
             async with AsyncClient(
                 transport=ASGITransport(app=app), base_url="http://local-smoke"
@@ -114,7 +118,7 @@ def main() -> None:
             )
             print(f"PASS {probe.relative_to(ROOT)}: {completed.stdout.strip()}")
 
-        # Rendering runs on an isolated copy to avoid changing committed diagrams.
+        # 在隔离副本中渲染，避免改动已经提交的设计图。
         renderer = scratch_path / "build_pre_prediction_design.py"
         shutil.copy2(ROOT / "diagrams" / renderer.name, renderer)
         subprocess.run([sys.executable, str(renderer)], cwd=ROOT, timeout=120, check=True)

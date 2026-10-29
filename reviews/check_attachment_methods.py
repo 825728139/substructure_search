@@ -1,6 +1,6 @@
-"""Check four invented graph changes and an explicit multistage counterexample.
-Tests only atom correspondence and changed boundaries, not experimental
-feasibility, named reaction classification, or a production method scorer.
+"""检查四种人工构造的图变化，以及一个明确给出中间态的多步骤反例。
+只核对原子对应与发生变化的连接边界；
+不验证实验可行性、命名反应分类或正式方法评分器。
 """
 from pathlib import Path
 import json
@@ -12,9 +12,13 @@ aryl,oxygen,c1,c2,nitrogen=p.GetSubstructMatch(Chem.MolFromSmarts('c-[OX2]-[CH2]
 methyl,other_o,_=p.GetSubstructMatch(Chem.MolFromSmarts('[CH3]-[OX2]-c'))
 n_methyl=next(a.GetIdx() for a in p.GetAtomWithIdx(nitrogen).GetNeighbors() if a.GetTotalNumHs()==3)
 def bond_set(m):
+ """返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。"""
  return {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(),b.GetEndAtom().GetAtomMapNum()))):str(b.GetBondType()) for b in m.GetBonds()}
-def key(a,b): return tuple(sorted((a+1,b+1)))
+def key(a,b):
+    """把从零开始的两个局部原子索引转为本例所用的正映射号，并排序为键对。"""
+    return tuple(sorted((a+1,b+1)))
 def unmapped(m):
+ """复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。"""
  m=Chem.Mol(m)
  for a in m.GetAtoms(): a.SetAtomMapNum(0)
  return Chem.MolToSmiles(m)
@@ -42,8 +46,8 @@ for i,(name,a,b,leaving_site,element,expected) in enumerate(cases):
  rows.append({'id':name,'reactants':Chem.MolToSmiles(r),'product':Chem.MolToSmiles(p),'reactants_without_maps':unmapped(r),'formed':new,'broken':sorted(before.keys()-after.keys()),'primary_interface_new':primary in new,'alternative_interface_new':alternative in new,'expected_relative_label':expected})
 assert len({x['product'] for x in rows})==1
 
-# The four intermediate structures are supplied explicitly. They are not
-# inferred by a classifier and make no claim about viable reaction conditions.
+# 四个中间状态的结构由例子明确给出，不由分类器推断。
+# 这些结构不能证明存在可行的实验条件。
 sequence_smiles = [
     '[OH:1][c:2]1[cH:3][cH:4][c:5]([Br:6])[cH:7][cH:8]1',
     '[O:1]([C:9](=[O:10])[CH3:11])[c:2]1[cH:3][cH:4][c:5]([Br:6])[cH:7][cH:8]1',

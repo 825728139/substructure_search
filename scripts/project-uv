@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run uv with interpreter, environment and cache scoped to this project."""
+"""运行 uv，并将解释器、虚拟环境和缓存限定在当前项目目录内。"""
 
 import os
 import sys

@@ -28,7 +28,7 @@ dev = [
 ]
 
 [tool.uv]
-# No installable business package exists yet. Environment bootstrap only.
+# 根目录用于环境初始化；可安装的业务包位于 implementation/。
 package = false
 
 [[tool.uv.index]]

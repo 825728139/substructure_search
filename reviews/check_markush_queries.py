@@ -1,16 +1,17 @@
-"""Small Markush-query examples, not a production engine or patent interpreter.
-Checks generic groups, joint R-site matching, whole substituent predicates,
-optional H and additional substitution. No synthetic feasibility is asserted.
+"""用小型 Markush 查询示例验证语义；本脚本不是正式检索引擎或专利通式解析器。
+检查通用基团、多 R 位点联合匹配、完整取代基条件、
+可选氢和额外取代；这些核验不证明合成可行性。
 """
 from pathlib import Path
 import json
 from rdkit import Chem,rdBase
 
 def mol(s):
+ """将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。"""
  m=Chem.MolFromSmiles(s);assert m is not None,s
  return m
 
-# Official generic group support is opt-in. ARY is carboaryl, not any ring.
+# RDKit 的通用基团匹配需要显式启用；ARY 表示碳芳基，不代表任意环。
 gq=Chem.MolFromSmarts('OC* |$;;ARY$|')
 Chem.SetGenericQueriesFromProperties(gq)
 params=Chem.SubstructMatchParameters();params.useGenericMatchers=True
@@ -21,8 +22,8 @@ for s,want in [('c1ccccc1CO',True),('C1CCCCC1CO',False),('c1ccncc1CO',False)]:
  assert default and actual==want
  generic.append({'structure':s,'default_match':default,'generic_ARY_match':actual})
 
-# Illustrative family: para R1-phenylene-O-R2, R1=F/Cl/Br,
-# R2 = neutral saturated acyclic C1-C3. Other ring substitutions allowed.
+# 示例家族：对位 R1-亚苯基-O-R2，其中 R1 为 F、Cl 或 Br。
+# R2 限于中性、饱和、无环的 C1～C3 烷基；允许环上其他位置有取代。
 qtext='[F,Cl,Br]-[c:1]1[c:2][c:3][c:4](-[OX2+0]-[#6])[c:5][c:6]1'
 q=Chem.MolFromSmarts(qtext)
 core_positions=[a.GetIdx() for a in q.GetAtoms() if 1<=a.GetAtomMapNum()<=6]
@@ -30,12 +31,13 @@ oxygen_position=next(a.GetIdx() for a in q.GetAtoms() if a.GetAtomicNum()==8)
 carbon_position=oxygen_position+1
 
 def evaluate(s):
+ """核验示例核心与完整 R2 烷基组成、长度和连接边界，返回原始命中、家族命中及合法见证。"""
  m=mol(s) if isinstance(s,str) else Chem.Mol(s); witnesses=[]
  for match in m.GetSubstructMatches(q):
   core={match[i] for i in core_positions}
   oxygen,carbon=match[oxygen_position],match[carbon_position]
-  # Traverse the entire R2 outside the fixed core and oxygen. Returning to a
-  # second core attachment is excluded for this single-attachment example.
+  # 从固定核心与氧原子之外遍历完整 R2 支链。
+  # 本例只允许单点连接，若支链返回核心的第二个位点则不匹配。
   seen=set();stack=[carbon];valid=True
   while stack:
    i=stack.pop()
@@ -46,8 +48,8 @@ def evaluate(s):
     valid=False
    for b in a.GetBonds():
     j=b.GetOtherAtomIdx(i)
-    # Alkyl composition/length is defined on heavy atoms. H/D remain in the
-    # original molecule for separate isotope and target-requirement checks.
+    # 烷基组成和长度按重原子定义；普通氢和氘仍保留在原分子中，
+    # 供同位素及完整目标要求的独立检查使用。
     if m.GetAtomWithIdx(j).GetAtomicNum()==1:continue
     if j==oxygen:
      if i!=carbon:valid=False
@@ -79,17 +81,17 @@ rows=[]
 for name,s,want in family_cases:
  result=evaluate(s);assert result['family_match']==want,(name,result)
  rows.append({'case':name,'structure':s,**result})
-# Optional H is a declared alternative, not assumed from a wildcard atom.
+# 可选氢必须明确声明为另一种取值，不能从通配原子自动推定。
 oh=Chem.MolFromSmarts('[F,Cl,Br]-c1ccc([OX2H1+0])cc1')
 assert mol('Oc1ccc(F)cc1').HasSubstructMatch(oh)
 assert not evaluate('Oc1ccc(F)cc1')['family_match']
-# Explicitly locking otherwise free ring positions is an additional constraint.
+# 将原本自由的环上位点明确锁定，是额外增加的查询限制。
 locked=Chem.MolFromSmarts('[F,Cl,Br]-c1[cH][cH]c(-[OX2+0]-[#6])[cH][cH]1')
 assert not mol('COc1ccc(F)c(C)c1').HasSubstructMatch(locked)
 assert evaluate('COc1ccc(F)c(C)c1')['family_match']
 
-# Ordinary hydrogen notation must not change this family's classification.
-# Include negatives so that skipping H does not relax heteroatom/ring/size rules.
+# 普通氢采用显式或隐式表示，不应改变该家族的匹配分类。
+# 同时检查反例，保证跳过氢计数时没有放宽杂原子、环和大小限制。
 hydrogen_representation_cases=[]
 for name,smiles,want in family_cases:
  implicit=mol(smiles)
@@ -103,8 +105,8 @@ for name,smiles,want in family_cases:
      'case':name,'implicit_H_match':implicit_result['family_match'],
      'explicit_H_match':explicit_result['family_match']})
 
-# This family leaves isotopes unrestricted. D is not a non-carbon heavy atom;
-# accepting the alkyl category does not prove a separately requested isotope pattern.
+# 该家族不限制同位素；氘不是非碳重原子。
+# 满足烷基类别，不等于已满足另行指定的同位素分布要求。
 deuterated=mol('[2H]COc1ccc(F)cc1')
 deuterated_result=evaluate(deuterated)
 assert deuterated_result['family_match']
@@ -127,14 +129,16 @@ for smiles,want in [('Oc1ccc(F)cc1',1),('COc1ccc(F)cc1',0)]:
      'neighbor_inclusive_H_counts':neighbor_inclusive_counts,'OH_query_matches':oh_matches})
 assert hydroxyl_representation_cases[0]['default_H_counts']==[1,0]
 
-# Symmetric core embeddings are not interchangeable once labeled R predicates
-# are checked outside the core query. Demonstrate an actual false negative
-# from applying the tool's default atom-set deduplication before post-checks.
+# 当带位置标签的 R 条件在核心查询之后检查时，对称核心映射不再可互换。
+# 下面用反例展示：在后过滤之前使用工具默认的原子集合去重，
+# 可能产生真实的漏匹配。
 symmetric_core = Chem.MolFromSmarts('[c:1]1[c:2][c:3][c:4][c:5][c:6]1')
 
 def labeled_sites_match(molecule, match):
+    """在一次固定苯环映射下核验指定位置外接 F 和 Cl，返回是否满足带位置标签的条件。"""
     core_atoms = set(match)
     def exterior_symbols(position):
+        """返回当前核心映射中指定位置所连接的核心外原子元素集合。"""
         return {a.GetSymbol() for a in molecule.GetAtomWithIdx(match[position]).GetNeighbors()
                 if a.GetIdx() not in core_atoms}
     return 'F' in exterior_symbols(0) and 'Cl' in exterior_symbols(3)
@@ -172,8 +176,8 @@ enumeration_check = {
     'renumbering_preserves_full_match': True,
     'scope': 'RDKit counterexample only; no production scheduler or compiler tested',
 }
-# Ordinary substructure containment does not reject extra edges between
-# already-mapped core atoms. Such edges are not external R substituents.
+# 普通子结构包含匹配不会排除已映射核心原子之间的额外边。
+# 这些额外内部边不能当作核心外的 R 取代基。
 chain_query = Chem.MolFromSmarts('[#6]-[#6]-[#6]')
 core_topology_cases = []
 for smiles, expected_extra in [('CCC', 0), ('C1CC1', 1), ('CC(C)C', 0)]:

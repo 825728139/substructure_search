@@ -1,5 +1,5 @@
-"""Invented endpoint-graph cases for target retrieval semantics.
-Not sourced reactions, mechanism assignment, feasibility or kinetics tests.
+"""用人工构造的反应端点图检查目标检索的语义。
+这些例子没有文献来源，不用于指认机理或验证反应可行性、动力学。
 """
 from pathlib import Path
 import json
@@ -7,20 +7,25 @@ from rdkit import Chem,rdBase
 from rdkit.Chem.Scaffolds import MurckoScaffold
 
 def mol(s):
+ """将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。"""
  m=Chem.MolFromSmiles(s);assert m is not None,s
  return m
 
 def bonds(m):
+ """返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。"""
  return {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(),b.GetEndAtom().GetAtomMapNum()))):str(b.GetBondType()) for b in m.GetBonds()}
 
 def summary(m):
+ """返回重原子、键、组分和独立环数量，供无环与环变化示例比较。"""
  return {'atoms':m.GetNumHeavyAtoms(),'bonds':m.GetNumBonds(),'components':len(Chem.GetMolFrags(m)),'cycle_rank':m.GetNumBonds()-m.GetNumAtoms()+len(Chem.GetMolFrags(m))}
 
 def changes(r,p):
+ """对受控的两侧映射图取键集合差，返回成键、断键和键级变化；不指认反应机理。"""
  a,b=bonds(r),bonds(p)
  return {'formed':sorted(b.keys()-a.keys()),'broken':sorted(a.keys()-b.keys()),'order_changed':sorted(k for k in a.keys()&b.keys() if a[k]!=b[k])}
 
 def plain(m):
+ """复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。"""
  m=Chem.Mol(m)
  for a in m.GetAtoms():a.SetAtomMapNum(0)
  return Chem.MolToSmiles(m)

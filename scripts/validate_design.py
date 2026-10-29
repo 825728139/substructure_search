@@ -1,4 +1,4 @@
-"""Check current design artifacts; this does not test a retrieval engine."""
+"""检查当前设计文档及配套产物的完整性；不验证检索引擎行为。"""
 
 import json
 import re
@@ -31,7 +31,7 @@ for directory in ("design", "reviews"):
 for path in json_files:
     json.loads(path.read_text())
 
-# Keep the executable profile identifiers and documented API examples aligned.
+# 保持可执行配置的标识符与文档中的 API 示例一致。
 pilot = json.loads((ROOT / "design" / "pilot_profile.json").read_text())
 ranking = json.loads((ROOT / "design" / "ranking_profiles.json").read_text())
 profile_ids = {profile["id"] for profile in ranking["profiles"]}

@@ -1,5 +1,5 @@
-"""Structural relevance checks. No experimental feasibility is asserted.
-The atom-mapped multicomponent example is an invented graph illustration.
+"""检查结构相关性；不据此认定实验可行。
+其中带原子映射的多组分反应只是人工构造的图示例。
 """
 from pathlib import Path
 import json
@@ -8,11 +8,13 @@ from rdkit.Chem import Descriptors, rdFingerprintGenerator
 
 report={'rdkit_version':rdBase.rdkitVersion,'scope':'structure_and_atom_correspondence_only','cases':[]}
 def mol(smiles):
+    """将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。"""
     m=Chem.MolFromSmiles(smiles)
     assert m is not None,smiles
     return m
 
 def boundary_components(m, core):
+    """从核心外提取完整连通组分，返回各组分原子数及其连接核心的边界键。"""
     remaining=set(range(m.GetNumAtoms()))-core
     components=[]
     while remaining:
@@ -65,6 +67,7 @@ product='[CH3:1][NH:2][C:3](=[O:6])[CH3:4]'
 rs=[mol(x) for x in reactants.split('.')]; p=mol(product)
 source={a.GetAtomMapNum():i+1 for i,m in enumerate(rs) for a in m.GetAtoms()}
 def bonds(m):
+    """返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。"""
     return {tuple(sorted((b.GetBeginAtom().GetAtomMapNum(),b.GetEndAtom().GetAtomMapNum()))):str(b.GetBondType()) for b in m.GetBonds()}
 before={k:v for m in rs for k,v in bonds(m).items()}; after=bonds(p)
 formed=sorted(after.keys()-before.keys())
@@ -81,8 +84,8 @@ broad=labelled.HasSubstructMatch(unlabelled)
 assert not strict and broad
 report['cases'].append({'case':'明确同位素查询与未指定查询语义不同','labelled_query_matches_unlabelled':strict,'unlabelled_query_matches_labelled':broad})
 
-# Near-sized candidates can be biased toward one R position under a global
-# fingerprint ranking. These are invented structures, not reaction precedents.
+# 整体指纹排序可能使体量相近的候选集中在某一个 R 位点。
+# 这里使用人工构造的结构，不是真实反应先例。
 target_smiles = 'CCOC(=O)c1cc(NC(=O)c2ccc(F)cc2)ccc1OCCN(C)C'
 target = mol(target_smiles)
 generator = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
@@ -98,7 +101,7 @@ for label, smiles in [
 ]:
     molecule = mol(smiles)
     ratio = Descriptors.MolWt(molecule) / Descriptors.MolWt(target)
-    assert abs(ratio - 1) < 0.08  # describes this example, not a runtime cutoff
+    assert abs(ratio - 1) < 0.08  # 仅描述本例，不是运行时阈值。
     candidates.append({
         'id': label, 'smiles': smiles, 'molecular_weight_ratio': ratio,
         'similarity': DataStructs.TanimotoSimilarity(target_fp, generator.GetFingerprint(molecule)),
@@ -116,8 +119,8 @@ report['cases'].append({
     'note': 'Only structural coverage is checked; no reaction evidence, child-family compiler or scheduler tested.',
 })
 
-# Alternative embeddings may each cover a different target R site. Their union
-# is not a joint witness, even when all embeddings come from one source molecule.
+# 不同映射可能分别覆盖不同的目标 R 位点；即使都来自同一个来源分子，
+# 它们的位点并集也不能当作同一次映射下的联合见证。
 coverage_target = mol('COc1cc(OC)cc(OC)c1')
 coverage_core = Chem.MolFromSmarts('c1ccccc1')
 methoxy_query = Chem.MolFromSmarts('[c]-[O;X2;+0]-[C;H3;X4;+0]')
@@ -134,7 +137,7 @@ for name, smiles, expected_joint_sites in [
     molecule = mol(smiles)
     branches = {match[0]: match[1:] for match in molecule.GetSubstructMatches(methoxy_query)}
     embeddings = molecule.GetSubstructMatches(coverage_core, uniquify=False, maxMatches=129)
-    assert len(embeddings) == 12  # all embeddings of this controlled six-membered core
+    assert len(embeddings) == 12  # 枚举这个受控六元核心的所有映射。
     witnesses = []
     for embedding in embeddings:
         atom_mapping = dict(zip(target_core, embedding))
@@ -154,7 +157,7 @@ for name, smiles, expected_joint_sites in [
     assert len(atom_union) == coverage_target.GetNumHeavyAtoms() == 12
     assert len(best['sites']) == expected_joint_sites
     assert len(best['atom_mapping']) == 6 + 2 * expected_joint_sites
-    # Renumbering changes local indices, not the attainable coverage counts.
+    # 原子重编号会改变局部索引，不应改变能够获得的覆盖计数。
     renumbered = Chem.RenumberAtoms(molecule, list(reversed(range(molecule.GetNumAtoms()))))
     renumbered_sites = {match[0] for match in renumbered.GetSubstructMatches(methoxy_query)}
     renumbered_masks = [

@@ -8,11 +8,12 @@
 
 | 函数 | 职责 |
 |---|---|
-| [python_files](../scripts/check_comments.py#L11) | 按稳定路径顺序返回源码、测试和维护脚本，不扫描虚拟环境或构建产物。 |
-| [definitions](../scripts/check_comments.py#L20) | 递归列出具名类及同步/异步函数，保留类名和闭包名，便于定位同名定义。 |
-| [inspect_comments](../scripts/check_comments.py#L31) | 检查每个模块、类和具名函数的 docstring 含中文，返回统计及逐文件函数索引。 |
-| [write_index](../scripts/check_comments.py#L59) | 把具名函数的中文摘要和源码行号写入索引；行号变化后可再次运行本脚本刷新。 |
-| [main](../scripts/check_comments.py#L77) | 执行中文说明覆盖检查；带 --write-index 时额外刷新 Markdown 函数索引。 |
+| [python_files](../scripts/check_comments.py#L14) | 返回业务项目及仓库辅助脚本，包含 reviews、绘图脚本与无扩展名启动器。 |
+| [english_prose](../scripts/check_comments.py#L33) | 判断一段说明是否仍为纯英文；中文中的函数名和化学缩写可以保留。 |
+| [definitions](../scripts/check_comments.py#L53) | 递归列出具名类及同步/异步函数，保留类名和闭包名，便于定位同名定义。 |
+| [inspect_comments](../scripts/check_comments.py#L64) | 检查全仓库 Python 的说明和所有注释，返回统计及逐文件函数索引。 |
+| [write_index](../scripts/check_comments.py#L101) | 把具名函数的中文摘要和源码行号写入索引；行号变化后可再次运行本脚本刷新。 |
+| [main](../scripts/check_comments.py#L119) | 执行中文说明覆盖检查；带 --write-index 时额外刷新 Markdown 函数索引。 |
 
 ## scripts/probe_source.py
 
@@ -405,3 +406,83 @@
 | [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L116) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+
+## ../reviews/audit_reaction_snapshot.py
+
+| 函数 | 职责 |
+|---|---|
+| [audit](../../reviews/audit_reaction_snapshot.py#L16) | 读取有限 JSONL 样本，检查字段、材料身份与份数、映射及模板自回放，返回计数和问题定位；不连接来源。 |
+| [audit.record](../../reviews/audit_reaction_snapshot.py#L27) | 累计指定检查项的通过次数；失败时把来源记录编号加入对应问题列表。 |
+| [audit.canon](../../reviews/audit_reaction_snapshot.py#L33) | 解析结构并移除映射号，返回保留立体的规范 SMILES；无效输入抛出 ValueError。 |
+
+## ../reviews/check_acyclic_and_ring_changes.py
+
+| 函数 | 职责 |
+|---|---|
+| [mol](../../reviews/check_acyclic_and_ring_changes.py#L9) | 将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。 |
+| [bonds](../../reviews/check_acyclic_and_ring_changes.py#L14) | 返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。 |
+| [summary](../../reviews/check_acyclic_and_ring_changes.py#L18) | 返回重原子、键、组分和独立环数量，供无环与环变化示例比较。 |
+| [changes](../../reviews/check_acyclic_and_ring_changes.py#L22) | 对受控的两侧映射图取键集合差，返回成键、断键和键级变化；不指认反应机理。 |
+| [plain](../../reviews/check_acyclic_and_ring_changes.py#L27) | 复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。 |
+
+## ../reviews/check_attachment_methods.py
+
+| 函数 | 职责 |
+|---|---|
+| [bond_set](../../reviews/check_attachment_methods.py#L14) | 返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。 |
+| [key](../../reviews/check_attachment_methods.py#L17) | 把从零开始的两个局部原子索引转为本例所用的正映射号，并排序为键对。 |
+| [unmapped](../../reviews/check_attachment_methods.py#L20) | 复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。 |
+
+## ../reviews/check_chemical_edge_cases.py
+
+| 函数 | 职责 |
+|---|---|
+| [mol](../../reviews/check_chemical_edge_cases.py#L11) | 将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。 |
+| [scaffold](../../reviews/check_chemical_edge_cases.py#L16) | 提取示例分子的 Murcko 骨架并返回规范 SMILES，用于比较结构表示的差异。 |
+| [add](../../reviews/check_chemical_edge_cases.py#L19) | 向当前报告追加一个带中文案例名称的结构检查结果。 |
+
+## ../reviews/check_mapping_and_stereo.py
+
+| 函数 | 职责 |
+|---|---|
+| [mol](../../reviews/check_mapping_and_stereo.py#L9) | 将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。 |
+| [plain](../../reviews/check_mapping_and_stereo.py#L15) | 复制分子并移除映射号，返回保留立体与同位素信息的规范结构字符串。 |
+| [bonds](../../reviews/check_mapping_and_stereo.py#L21) | 要求示例中所有原子的映射号为唯一正整数，再返回映射键对到键型的字典；不满足时抛出 ValueError。 |
+| [edits](../../reviews/check_mapping_and_stereo.py#L30) | 比较两侧受控映射图，返回新成键、消失键和共同键的键级差异。 |
+| [nuclear_signature](../../reviews/check_mapping_and_stereo.py#L101) | 返回固定映射下的元素、同位素、氢、自由基、连边及总电荷签名，用于核对共振示例。 |
+| [controlled_resonance_forms](../../reviews/check_mapping_and_stereo.py#L111) | 有限枚举受控示例的共振形式，可统一芳香性；断言原子签名不变且未触及示例枚举上限。 |
+| [charge_changes](../../reviews/check_mapping_and_stereo.py#L127) | 比较共同映射原子的形式电荷，返回发生变化的映射号及两侧电荷。 |
+
+## ../reviews/check_markush_queries.py
+
+| 函数 | 职责 |
+|---|---|
+| [mol](../../reviews/check_markush_queries.py#L9) | 将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。 |
+| [evaluate](../../reviews/check_markush_queries.py#L33) | 核验示例核心与完整 R2 烷基组成、长度和连接边界，返回原始命中、家族命中及合法见证。 |
+| [labeled_sites_match](../../reviews/check_markush_queries.py#L137) | 在一次固定苯环映射下核验指定位置外接 F 和 Cl，返回是否满足带位置标签的条件。 |
+| [labeled_sites_match.exterior_symbols](../../reviews/check_markush_queries.py#L140) | 返回当前核心映射中指定位置所连接的核心外原子元素集合。 |
+
+## ../reviews/check_reaction_relevance.py
+
+| 函数 | 职责 |
+|---|---|
+| [mol](../../reviews/check_reaction_relevance.py#L10) | 将示例 SMILES 解析为 RDKit 分子；解析失败触发断言，返回有效分子。 |
+| [boundary_components](../../reviews/check_reaction_relevance.py#L16) | 从核心外提取完整连通组分，返回各组分原子数及其连接核心的边界键。 |
+| [bonds](../../reviews/check_reaction_relevance.py#L69) | 返回按原子映射号对索引的键型字典，供受控示例比较端点图变化。 |
+
+## ../reviews/check_single_reactant_transfer.py
+
+| 函数 | 职责 |
+|---|---|
+| [as_mol](../../reviews/check_single_reactant_transfer.py#L15) | 解析 SMILES 或复制已有分子，断言结构有效后返回，避免修改调用方对象。 |
+| [canonical](../../reviews/check_single_reactant_transfer.py#L20) | 复制或解析结构、清除映射号，返回保留立体和同位素的规范 SMILES。 |
+| [replay](../../reviews/check_single_reactant_transfer.py#L25) | 对两个示例输入执行有上限的反应回放，保留完整产物组与枚举状态；结构校验失败直接抛错。 |
+| [contains](../../reviews/check_single_reactant_transfer.py#L41) | 判断某个完整产物组是否包含指定具体目标，返回布尔值；不合并不同组来凑目标。 |
+
+## ../scripts/verify_environment.py
+
+| 函数 | 职责 |
+|---|---|
+| [main](../../scripts/verify_environment.py#L39) | 核对 Python 与依赖、运行本地接口和化学检查、隔离渲染设计图，并将环境报告写入缓存目录。 |
+| [main.smoke](../../scripts/verify_environment.py#L64) | 解析请求中的 SMILES，返回是否有效及原子数，仅供环境联调检查。 |
+| [main.check_api](../../scripts/verify_environment.py#L72) | 使用内存 ASGI 客户端检查合法结构与错误字段类型的响应，受十秒异步超时限制。 |

@@ -1,4 +1,4 @@
-"""Concrete molecular identities versus disconnected/generic query patterns."""
+"""比较具体分子身份与不连通、通用类别查询模式的语义。"""
 from pathlib import Path
 import json
 from rdkit import Chem, rdBase
