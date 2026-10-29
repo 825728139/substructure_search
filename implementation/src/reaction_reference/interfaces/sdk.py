@@ -34,10 +34,12 @@ class Client:
             raise RuntimeError(state.error or {"code": state.lifecycle})
         return package
 
-    def preview(self, request):
+    @staticmethod
+    def preview(request):
         """仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。
 
         使用请求中的家族上限和严格目标补查开关，便于检查核心/位点语义。
+        可直接调用 Client.preview，无需创建协调器或接管运行目录。
         """
         target = parse(request.target.value, target=True)
         return initial_families(

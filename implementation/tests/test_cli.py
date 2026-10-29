@@ -2,12 +2,13 @@
 
 import json
 import uuid
+from contextlib import nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 
-from reaction_reference.domain.models import RunState
+from reaction_reference.domain.models import ReferencePackage, RunState
 from reaction_reference.interfaces.cli import main
 from reaction_reference.interfaces.sdk import Client
 from reaction_reference.settings import Settings
@@ -30,7 +31,7 @@ def test_cli_source_selection_honors_environment_and_explicit_flags(
     monkeypatch.setenv("RR_SOURCE_PATH", str(configured))
     captured = []
 
-    class PreviewClient:
+    class SearchClient:
         """捕获 CLI 实际装配的设置，避免测试发起来源连接。"""
 
         def __init__(self, settings):
@@ -38,19 +39,29 @@ def test_cli_source_selection_honors_environment_and_explicit_flags(
             captured.append(settings)
 
         def __enter__(self):
-            """返回预览客户端替身。"""
+            """返回检索客户端替身。"""
             return self
 
         def __exit__(self, *_):
             """替身没有需要释放的外部资源。"""
             return None
 
-        def preview(self, request):
-            """返回空预览，使本例只观察配置选择。"""
-            return []
+        def search(self, request):
+            """返回空资料包，使本例只观察检索命令的配置选择。"""
+            return ReferencePackage(
+                run_id="a" * 32,
+                snapshot_id="b" * 24,
+                target_smiles=request.target.value,
+                target_atoms=[],
+                source_snapshot="fixture",
+                manifest={},
+                families=[],
+                results=[],
+                coverage_state="complete",
+            )
 
-    monkeypatch.setattr("reaction_reference.interfaces.cli.Client", PreviewClient)
-    assert main(["preview", "--target", "CCO", *arguments]) == 0
+    monkeypatch.setattr("reaction_reference.interfaces.cli.Client", SearchClient)
+    assert main(["search", "--target", "CCO", *arguments]) == 0
     assert captured[0].source_kind == expected_kind
     expected = (
         configured
@@ -92,3 +103,28 @@ def test_inspect_run_reads_while_coordinator_is_active(
         output = json.loads(capsys.readouterr().out)
         assert output["run_id"] == state.run_id and output["lifecycle"] == "queued"
         assert client.manager.store.load(state.run_id) == state
+
+
+@pytest.mark.parametrize("active", [False, True])
+def test_preview_does_not_acquire_coordinator_or_recover_runs(
+    settings, request_factory, monkeypatch, capsys, active
+):
+    """预览在服务运行时可用，在服务停止时也不能把遗留任务标记为恢复失败。"""
+    from reaction_reference.adapters.run_store import FileRunStore
+
+    monkeypatch.setenv("RR_STORE_PATH", str(settings.store_path))
+    now = datetime.now(UTC).isoformat()
+    state = RunState(
+        run_id=uuid.uuid4().hex,
+        lifecycle="running",
+        request=request_factory(),
+        created_at=now,
+        updated_at=now,
+    )
+    with Client(settings) if active else nullcontext():
+        store = FileRunStore(settings.store_path)
+        store.create(state)
+        assert main(["preview", "--target", state.request.target.value]) == 0
+        output = json.loads(capsys.readouterr().out)
+        assert output["families"]
+        assert store.load(state.run_id) == state

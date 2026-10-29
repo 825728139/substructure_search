@@ -145,12 +145,11 @@ def main(argv=None):
                 budget=BudgetConfig(time_ms=args.time_ms),
                 options=SearchOptions(exhaustive_fixture=args.exhaustive_fixture),
             )
+            if args.command == "preview":
+                # 纯查询规划不创建协调器，不能占目录锁或触发遗留任务恢复。
+                _write({"families": [f.model_dump() for f in Client.preview(request)]}, args.output)
+                return 0
             with Client(settings) as client:
-                if args.command == "preview":
-                    _write(
-                        {"families": [f.model_dump() for f in client.preview(request)]}, args.output
-                    )
-                    return 0
                 result = client.search(request)
                 _write(result.model_dump(mode="json"), args.output)
                 return 0 if result.coverage_state == "complete" else 2

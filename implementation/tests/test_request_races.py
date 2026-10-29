@@ -5,9 +5,11 @@ import uuid
 from datetime import UTC, datetime
 
 import pytest
+from fastapi.testclient import TestClient
 
 from reaction_reference.adapters import execution
 from reaction_reference.domain.models import LabContext, ReferencePackage, RerankRequest, RunState
+from reaction_reference.interfaces.api import create_app
 from reaction_reference.interfaces.sdk import Client
 
 
@@ -48,6 +50,30 @@ def test_client_settings_are_detached_from_caller(settings):
         settings.source_kind = "postgres"
         settings.source_timeout_ms = 100
         assert client.manager.settings.worker_config() == original
+
+
+def test_api_auth_configuration_is_detached_from_caller(settings):
+    """外部复用配置对象并清空令牌时，已创建应用仍必须拒绝未认证请求。"""
+    settings.api_token = "initial-token"
+    with TestClient(create_app(settings)) as client:
+        settings.api_token = None
+        assert client.get("/v1/capabilities").status_code == 401
+        assert (
+            client.get(
+                "/v1/capabilities", headers={"Authorization": "Bearer initial-token"}
+            ).status_code
+            == 200
+        )
+
+
+def test_api_readiness_uses_the_same_source_as_worker(settings, tmp_path):
+    """外部修改来源路径时，就绪探测仍须检查应用实际执行任务所用的原配置。"""
+    app = create_app(settings)
+    with TestClient(app) as client:
+        settings.source_path = tmp_path / "missing.jsonl"
+        response = client.get("/health/ready")
+        assert response.status_code == 200, response.text
+        assert app.state.client.manager.settings.source_path != settings.source_path
 
 
 def test_rerank_freezes_request_before_computation(settings, request_factory, monkeypatch):

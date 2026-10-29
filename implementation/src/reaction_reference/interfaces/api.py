@@ -27,7 +27,8 @@ def create_app(settings=None):
 
     settings 可注入测试配置；构造时建立运行目录协调锁。服务应使用单 worker；lifespan 结束时统一关闭任务和锁。
     """
-    settings = settings or Settings()
+    # HTTP 认证和就绪探测与任务执行一样使用配置副本，避免外部修改造成行为分裂。
+    settings = (settings or Settings()).model_copy(deep=True)
     client = Client(settings)
     secret = (settings.cursor_secret or secrets.token_hex(32)).encode()
 

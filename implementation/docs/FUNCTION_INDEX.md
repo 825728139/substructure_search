@@ -187,27 +187,27 @@
 | 函数 | 职责 |
 |---|---|
 | [create_app](../src/reaction_reference/interfaces/api.py#L25) | 装配 FastAPI 应用、共享 Client、内部认证和快照分页接口，返回 app。 |
-| [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L35) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
-| [create_app.index](../src/reaction_reference/interfaces/api.py#L51) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
-| [create_app.owner](../src/reaction_reference/interfaces/api.py#L55) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
-| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L68) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
-| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L77) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
-| [create_app.missing](../src/reaction_reference/interfaces/api.py#L94) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
-| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L99) | 把 revision、幂等或快照冲突转为 409 JSON。 |
-| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L104) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
-| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L109) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
-| [create_app.live](../src/reaction_reference/interfaces/api.py#L116) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
-| [create_app.ready](../src/reaction_reference/interfaces/api.py#L121) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
-| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L141) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
-| [create_app.preview](../src/reaction_reference/interfaces/api.py#L146) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
-| [create_app.submit](../src/reaction_reference/interfaces/api.py#L151) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
-| [create_app.status](../src/reaction_reference/interfaces/api.py#L165) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
-| [create_app.results](../src/reaction_reference/interfaces/api.py#L180) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
-| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L234) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
-| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L256) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
-| [create_app.structure](../src/reaction_reference/interfaces/api.py#L268) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
-| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L292) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
-| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L297) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+| [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L36) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
+| [create_app.index](../src/reaction_reference/interfaces/api.py#L52) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
+| [create_app.owner](../src/reaction_reference/interfaces/api.py#L56) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
+| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L69) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
+| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L78) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
+| [create_app.missing](../src/reaction_reference/interfaces/api.py#L95) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
+| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L100) | 把 revision、幂等或快照冲突转为 409 JSON。 |
+| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L105) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
+| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L110) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
+| [create_app.live](../src/reaction_reference/interfaces/api.py#L117) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
+| [create_app.ready](../src/reaction_reference/interfaces/api.py#L122) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
+| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L142) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
+| [create_app.preview](../src/reaction_reference/interfaces/api.py#L147) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
+| [create_app.submit](../src/reaction_reference/interfaces/api.py#L152) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
+| [create_app.status](../src/reaction_reference/interfaces/api.py#L166) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L181) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L235) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L257) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L269) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L293) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L298) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
 
 ## src/reaction_reference/interfaces/cli.py
 
@@ -228,11 +228,11 @@
 |---|---|
 | [Client.__init__](../src/reaction_reference/interfaces/sdk.py#L18) | 通过统一装配入口创建 RunManager，读取 Settings 或使用传入配置。 |
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
-| [Client.preview](../src/reaction_reference/interfaces/sdk.py#L37) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
-| [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L47) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L127) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L131) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L135) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.preview](../src/reaction_reference/interfaces/sdk.py#L38) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
+| [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L49) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L129) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L133) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L137) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -352,13 +352,14 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_cli_source_selection_honors_environment_and_explicit_flags](../tests/test_cli.py#L24) | 未显式选择来源时尊重环境；显式示例使用包内数据，显式文件路径选择 JSONL。 |
-| [test_cli_source_selection_honors_environment_and_explicit_flags.PreviewClient.__init__](../tests/test_cli.py#L36) | 记录当前命令选择的来源配置。 |
-| [test_cli_source_selection_honors_environment_and_explicit_flags.PreviewClient.__enter__](../tests/test_cli.py#L40) | 返回预览客户端替身。 |
-| [test_cli_source_selection_honors_environment_and_explicit_flags.PreviewClient.__exit__](../tests/test_cli.py#L44) | 替身没有需要释放的外部资源。 |
-| [test_cli_source_selection_honors_environment_and_explicit_flags.PreviewClient.preview](../tests/test_cli.py#L48) | 返回空预览，使本例只观察配置选择。 |
-| [test_cli_rejects_incompatible_source_path](../tests/test_cli.py#L68) | 示例或 PG 模式不能同时指定 JSONL 路径，避免悄悄使用与命令含义不同的来源。 |
-| [test_inspect_run_reads_while_coordinator_is_active](../tests/test_cli.py#L76) | 服务持有协调锁时，命令行仍能只读查看任务，且不更改任务生命周期。 |
+| [test_cli_source_selection_honors_environment_and_explicit_flags](../tests/test_cli.py#L25) | 未显式选择来源时尊重环境；显式示例使用包内数据，显式文件路径选择 JSONL。 |
+| [test_cli_source_selection_honors_environment_and_explicit_flags.SearchClient.__init__](../tests/test_cli.py#L37) | 记录当前命令选择的来源配置。 |
+| [test_cli_source_selection_honors_environment_and_explicit_flags.SearchClient.__enter__](../tests/test_cli.py#L41) | 返回检索客户端替身。 |
+| [test_cli_source_selection_honors_environment_and_explicit_flags.SearchClient.__exit__](../tests/test_cli.py#L45) | 替身没有需要释放的外部资源。 |
+| [test_cli_source_selection_honors_environment_and_explicit_flags.SearchClient.search](../tests/test_cli.py#L49) | 返回空资料包，使本例只观察检索命令的配置选择。 |
+| [test_cli_rejects_incompatible_source_path](../tests/test_cli.py#L79) | 示例或 PG 模式不能同时指定 JSONL 路径，避免悄悄使用与命令含义不同的来源。 |
+| [test_inspect_run_reads_while_coordinator_is_active](../tests/test_cli.py#L87) | 服务持有协调锁时，命令行仍能只读查看任务，且不更改任务生命周期。 |
+| [test_preview_does_not_acquire_coordinator_or_recover_runs](../tests/test_cli.py#L109) | 预览在服务运行时可用，在服务停止时也不能把遗留任务标记为恢复失败。 |
 
 ## tests/test_data_boundaries.py
 
@@ -463,21 +464,23 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_submitted_request_is_detached_from_caller](../tests/test_request_races.py#L15) | 修改原请求或返回状态中的嵌套列表，都不能改变已经接纳的后台请求。 |
-| [test_submitted_request_is_detached_from_caller.hold](../tests/test_request_races.py#L23) | 暂停工作线程，捕获外部修改之后实际执行所见的请求。 |
-| [test_client_settings_are_detached_from_caller](../tests/test_request_races.py#L44) | 调用方修改传入 Settings 不能悄悄改变已有客户端的来源和执行配置。 |
-| [test_rerank_freezes_request_before_computation](../tests/test_request_races.py#L53) | 重排正在计算时外部改变请求列表，不能改变派生任务保存的实验要求。 |
-| [test_rerank_freezes_request_before_computation.mutate_during_rank](../tests/test_request_races.py#L82) | 模拟另一调用方在排序过程中修改原请求，仍执行真实排序函数。 |
-| [test_final_message_cannot_override_interrupt_during_receive](../tests/test_request_races.py#L95) | 结果在等待消息期间触及截止或收到取消时，不得绕过二次检查标记成功。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Channel.close](../tests/test_request_races.py#L127) | 端点关闭不影响本例的接收时序。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.start](../tests/test_request_races.py#L134) | 模拟已启动。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.is_alive](../tests/test_request_races.py#L138) | 结果已就绪，没有仍在运行的进程。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.close](../tests/test_request_races.py#L142) | 模拟句柄清理。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Context.Pipe](../tests/test_request_races.py#L149) | 构造独立收发端。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Context.Process](../tests/test_request_races.py#L153) | 提供不消耗真实时间的进程。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L160) | 兼容有界队列初始化。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L164) | 返回结果之前推进时钟或设置取消事件。 |
-| [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L172) | 本地队列已控制接收结果，不需要独立读取。 |
+| [test_submitted_request_is_detached_from_caller](../tests/test_request_races.py#L17) | 修改原请求或返回状态中的嵌套列表，都不能改变已经接纳的后台请求。 |
+| [test_submitted_request_is_detached_from_caller.hold](../tests/test_request_races.py#L25) | 暂停工作线程，捕获外部修改之后实际执行所见的请求。 |
+| [test_client_settings_are_detached_from_caller](../tests/test_request_races.py#L46) | 调用方修改传入 Settings 不能悄悄改变已有客户端的来源和执行配置。 |
+| [test_api_auth_configuration_is_detached_from_caller](../tests/test_request_races.py#L55) | 外部复用配置对象并清空令牌时，已创建应用仍必须拒绝未认证请求。 |
+| [test_api_readiness_uses_the_same_source_as_worker](../tests/test_request_races.py#L69) | 外部修改来源路径时，就绪探测仍须检查应用实际执行任务所用的原配置。 |
+| [test_rerank_freezes_request_before_computation](../tests/test_request_races.py#L79) | 重排正在计算时外部改变请求列表，不能改变派生任务保存的实验要求。 |
+| [test_rerank_freezes_request_before_computation.mutate_during_rank](../tests/test_request_races.py#L108) | 模拟另一调用方在排序过程中修改原请求，仍执行真实排序函数。 |
+| [test_final_message_cannot_override_interrupt_during_receive](../tests/test_request_races.py#L121) | 结果在等待消息期间触及截止或收到取消时，不得绕过二次检查标记成功。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Channel.close](../tests/test_request_races.py#L153) | 端点关闭不影响本例的接收时序。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.start](../tests/test_request_races.py#L160) | 模拟已启动。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.is_alive](../tests/test_request_races.py#L164) | 结果已就绪，没有仍在运行的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.close](../tests/test_request_races.py#L168) | 模拟句柄清理。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Pipe](../tests/test_request_races.py#L175) | 构造独立收发端。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Process](../tests/test_request_races.py#L179) | 提供不消耗真实时间的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L186) | 兼容有界队列初始化。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L190) | 返回结果之前推进时钟或设置取消事件。 |
+| [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L198) | 本地队列已控制接收结果，不需要独立读取。 |
 
 ## tests/test_review_regressions.py
 
