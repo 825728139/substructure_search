@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 
 from reaction_reference.bootstrap import create_manager
 from reaction_reference.chemistry.structures import digest, parse
-from reaction_reference.domain.models import RunState
+from reaction_reference.domain.models import RerankRequest, RunState
 from reaction_reference.evidence.claims import summary_items
 from reaction_reference.ranking.engine import rank_references
 from reaction_reference.retrieval.planner import initial_families
@@ -50,6 +50,8 @@ class Client:
         request 为 RerankRequest，仅允许排序偏好和实验限制；保留已评估事实与检索版本，同时记录本次排序实现哈希和时间。先保存运行状态，快照落盘后才标记成功；失败经协调器统一收尾。返回新 RunState，不重查来源、不生成新建议，也不允许更改目标。
         """
         with self.manager.active_writer():
+            # 排序和最终保存必须基于同一份独立请求，不能受调用方列表修改影响。
+            request = RerankRequest.model_validate_json(request.model_dump_json())
             state = self.manager.store.load(run_id, owner)
             self.manager.validate_lab_context(request.lab_context)
             package = self.manager.store.package(run_id)

@@ -38,16 +38,16 @@
 | [_worker](../src/reaction_reference/adapters/execution.py#L17) | 在独立进程中恢复请求和来源、执行检索，通过单向管道发送进度/结果或受限错误。 |
 | [_receive_packages](../src/reaction_reference/adapters/execution.py#L59) | 阻塞读取完整管道消息，再交给有界本地队列；监督线程不直接等待消息体。 |
 | [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L113) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
-| [RunManager.validate_lab_context](../src/reaction_reference/adapters/execution.py#L138) | 统一校验检索及重排中的排除结构，不依赖结果池是否为空，也不创建任务。 |
-| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L147) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
-| [RunManager._release](../src/reaction_reference/adapters/execution.py#L205) | 保存未启动任务的取消终态，再清除内存登记和取消事件。 |
-| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L218) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
-| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L236) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
-| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L329) | 在锁内把非终态 run 写为给定终态并返回状态。 |
-| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L353) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
-| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L376) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L393) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L406) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [RunManager.validate_lab_context](../src/reaction_reference/adapters/execution.py#L139) | 统一校验检索及重排中的排除结构，不依赖结果池是否为空，也不创建任务。 |
+| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L148) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
+| [RunManager._release](../src/reaction_reference/adapters/execution.py#L209) | 保存未启动任务的取消终态，再清除内存登记和取消事件。 |
+| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L222) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
+| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L240) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
+| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L340) | 在锁内把非终态 run 写为给定终态并返回状态。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L364) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L387) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L404) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L417) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
@@ -230,9 +230,9 @@
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
 | [Client.preview](../src/reaction_reference/interfaces/sdk.py#L37) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
 | [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L47) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L125) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L129) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L133) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L127) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L131) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L135) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -444,6 +444,26 @@
 | [test_source_endpoint_conflict_is_not_a_validated_mapping](../tests/test_reactions.py#L154) | 确认映射端点不属于记录实际材料时不能作为已校验反应分析。 |
 | [test_source_radius2_template_can_transfer_a_non_registry_reaction](../tests/test_reactions.py#L162) | 确认合法来源 radius-2 模板经自回放可生成注册酰胺规则以外的单输入建议。 |
 | [test_replay_retains_product_sets_and_independent_enumeration_limit](../tests/test_reactions.py#L201) | 确认回放保留整组产品，并把结构有效和枚举截断分开。 |
+
+## tests/test_request_races.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_submitted_request_is_detached_from_caller](../tests/test_request_races.py#L15) | 修改原请求或返回状态中的嵌套列表，都不能改变已经接纳的后台请求。 |
+| [test_submitted_request_is_detached_from_caller.hold](../tests/test_request_races.py#L23) | 暂停工作线程，捕获外部修改之后实际执行所见的请求。 |
+| [test_client_settings_are_detached_from_caller](../tests/test_request_races.py#L44) | 调用方修改传入 Settings 不能悄悄改变已有客户端的来源和执行配置。 |
+| [test_rerank_freezes_request_before_computation](../tests/test_request_races.py#L53) | 重排正在计算时外部改变请求列表，不能改变派生任务保存的实验要求。 |
+| [test_rerank_freezes_request_before_computation.mutate_during_rank](../tests/test_request_races.py#L82) | 模拟另一调用方在排序过程中修改原请求，仍执行真实排序函数。 |
+| [test_final_message_cannot_override_interrupt_during_receive](../tests/test_request_races.py#L95) | 结果在等待消息期间触及截止或收到取消时，不得绕过二次检查标记成功。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Channel.close](../tests/test_request_races.py#L127) | 端点关闭不影响本例的接收时序。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.start](../tests/test_request_races.py#L134) | 模拟已启动。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.is_alive](../tests/test_request_races.py#L138) | 结果已就绪，没有仍在运行的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.close](../tests/test_request_races.py#L142) | 模拟句柄清理。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Pipe](../tests/test_request_races.py#L149) | 构造独立收发端。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Process](../tests/test_request_races.py#L153) | 提供不消耗真实时间的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L160) | 兼容有界队列初始化。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L164) | 返回结果之前推进时钟或设置取消事件。 |
+| [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L172) | 本地队列已控制接收结果，不需要独立读取。 |
 
 ## tests/test_review_regressions.py
 

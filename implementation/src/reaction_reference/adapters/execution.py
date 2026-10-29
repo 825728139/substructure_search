@@ -115,13 +115,14 @@ class RunManager:
 
         settings 控制来源、运行目录和容量；多个管理器不能同时写同一目录。
         """
-        self.settings = settings
-        self.store = FileRunStore(settings.store_path)
+        # Settings 可变；客户端持有独立配置，避免外部修改影响已接纳任务。
+        self.settings = settings.model_copy(deep=True)
+        self.store = FileRunStore(self.settings.store_path)
         self.store.acquire_coordinator()
         try:
             self.store.recover_interrupted()
             self._executor = ThreadPoolExecutor(
-                max_workers=settings.max_concurrent_runs, thread_name_prefix="rr-supervisor"
+                max_workers=self.settings.max_concurrent_runs, thread_name_prefix="rr-supervisor"
             )
         except Exception:
             # 初始化失败时立即释放外部资源，不依赖异常对象何时被垃圾回收。
@@ -149,6 +150,8 @@ class RunManager:
 
         owner 限定范围，idempotency_key 可复用同一请求；检查容量、禁止对 PG 声称有限样本穷尽。随后在监督线程中启动计算，函数本身不等待完成。
         """
+        # 冻结模型只禁止字段赋值，不冻结内部列表；接纳时复制并重校验整个请求。
+        request = SearchRequest.model_validate_json(request.model_dump_json())
         parse(request.target.value, target=True)
         self.validate_lab_context(request.lab_context)
         if request.options.exhaustive_fixture and self.settings.source_kind == "postgres":
@@ -200,7 +203,8 @@ class RunManager:
                 raise
             # 排队取消的 future 不执行工作函数，需要在完成回调中保存取消终态。
             self._futures[run_id].add_done_callback(lambda future: self._release(run_id, future))
-            return state
+            # 返回对象也不能与执行线程共享可变的嵌套请求字段。
+            return state.model_copy(deep=True)
 
     def _release(self, run_id, future):
         """保存未启动任务的取消终态，再清除内存登记和取消事件。
@@ -295,6 +299,13 @@ class RunManager:
                             },
                         )
                     continue
+                # 消息等待会交出执行权；到达的最终包不能覆盖等待期间发生的中断。
+                if cancellation.is_set():
+                    terminal = "cancelled"
+                    break
+                if time.monotonic() >= deadline:
+                    terminal = "timed_out"
+                    break
                 if kind in ("progress", "result"):
                     package = ReferencePackage.model_validate_json(data)
                     self.store.save_package(package)

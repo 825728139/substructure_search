@@ -126,6 +126,8 @@ implementation/
 
 `active_writer` 登记同步重排的生命周期；关闭会等待已登记写操作结束再释放目录锁。排序期间不持有全局协调锁，其他任务仍可取消。排队任务直接取消 Future，SDK 默认等待包含排队时间；通信与持久化的故障路径见[执行层审查](RUNTIME_REVIEW.md)。
 
+客户端复制传入配置；任务接纳和重排时复制、重校验请求，返回状态也与后台对象隔离。调用方之后修改原对象的嵌套列表，不会改变已经接纳的任务；需要不同要求时创建新请求。
+
 ## 关键对象与编号含义
 
 | 对象 / 字段 | 含义及阅读约定 |
@@ -196,7 +198,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、161 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、167 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 
