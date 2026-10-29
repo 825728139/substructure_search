@@ -14,6 +14,7 @@
 - [核心业务逻辑图](implementation/docs/core-business-flow.svg)
 - [整体代码审查与修复记录](implementation/docs/CODE_REVIEW.md)
 - [三轮代码复审记录](implementation/docs/MULTI_ROUND_REVIEW.md)
+- [执行层代码审查：并发、超时、取消与持久化](implementation/docs/RUNTIME_REVIEW.md)
 - [结果过滤与排序](ranking_plan.md)
 - [开发环境安装和验证](ENVIRONMENT.md)
 - [详细化学规范](design/specification.md)

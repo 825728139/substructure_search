@@ -16,7 +16,7 @@ digraph System {
 
   subgraph cluster_parent {
     label="② 父进程｜任务协调与运行文件的唯一写入方"; color="#8eabd0"; style=rounded;
-    manager [label="RunManager · adapters/execution.py\n提交与幂等 → 有界排队 → 监督线程\nspawn / 取消 / 硬截止 / 异常收尾", fillcolor="#e9effa", color="#758fb8"];
+    manager [label="RunManager · adapters/execution.py\n提交与幂等 → 有界排队\n监督线程 + 独立接收线程\nspawn / 取消 / 硬截止 / 异常收尾", fillcolor="#e9effa", color="#758fb8"];
     store [label="FileRunStore · adapters/run_store.py\n目录锁、revision、原子写入\n任务状态 + 不可变结果快照\n重启保留已有结果，标记中断", fillcolor="#e9effa", color="#758fb8"];
     reader [label="读取已有快照\n状态 / 固定快照分页 / SVG / 证据\nrerank 从已存候选创建派生任务\n不重新查询来源", fillcolor="#e9effa", color="#758fb8"];
     files [label="运行目录 RR_STORE_PATH\n默认 var/runs\n单协调器持有目录锁", shape=folder, fillcolor="#f4f6fa"];
@@ -45,7 +45,7 @@ digraph System {
     adapters -> source [label="只读"];
   }
   manager -> worker [label="spawn：只传可序列化配置和请求"];
-  search -> manager [label="进程队列：阶段包 / 最终包 / 错误", color="#9b7041", constraint=false];
+  search -> manager [label="单向管道：阶段包 / 最终包 / 错误", color="#9b7041", constraint=false];
 
   contracts [label="共同契约 · domain/models.py\n请求、家族、见证、反应、建议、资料包、状态\n导出 contracts/：JSON Schema / OpenAPI", fillcolor="#f1edf8", color="#9a82b6"];
   assembly [label="组合根与可复现规则\nbootstrap.py：连接协议与适配器\nsettings.py：RR_* 环境配置\nrules.py + resources/rules.json：规则及哈希", fillcolor="#f1edf8", color="#9a82b6"];

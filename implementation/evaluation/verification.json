@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-29",
-  "implementation_hash": "9a244dd6d5d90757c945b9ec1a562317ef8ffd682a4c9420843ffcec07b4b4a7",
+  "implementation_hash": "bfab254199fa90f17f96c8bfbb84f196342c2689229e223a142efd48bf1c1391",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 119,
+    "tests_passed": 141,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -58,7 +58,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "9a244dd6d5d90757c945b9ec1a562317ef8ffd682a4c9420843ffcec07b4b4a7"
+    "implementation_hash": "bfab254199fa90f17f96c8bfbb84f196342c2689229e223a142efd48bf1c1391"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -171,5 +171,24 @@
     "masked_target_identity_hits": 0,
     "full_corpus_performance_verified": false,
     "method_labels_reviewed": false
+  },
+  "runtime_review": {
+    "verified_implementation_hash": "bfab254199fa90f17f96c8bfbb84f196342c2689229e223a142efd48bf1c1391",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_bug_categories_fixed": 9,
+    "regression_tests_added": 22,
+    "initial_fault_cases_failed_before_fix": 15,
+    "partial_message_real_process_test": true,
+    "large_final_message_bytes": 4194304,
+    "queue_backpressure_cleanup_verified": true,
+    "concurrent_rerank_cancel_and_shutdown_verified": true,
+    "chemistry_rules_changed": false,
+    "live_source_access_performed": false,
+    "python_modules_documented": 74,
+    "python_classes_documented": 58,
+    "python_named_functions_documented": 369,
+    "function_index_definition_links_verified": 369,
+    "diagram_updated": "docs/system-architecture.svg",
+    "strict_realtime_storage_guarantee": false
   }
 }

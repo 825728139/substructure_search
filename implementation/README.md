@@ -118,9 +118,11 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 119 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 141 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 后续三轮新增的 11 类修复与逐轮验证见[三轮复审记录](docs/MULTI_ROUND_REVIEW.md)。审核文件按补丁处理：省略字段会保留来源原值，显式空列表表示清空；使用 Python 模型生成补丁时应调用 `model_dump_json(exclude_unset=True)` 保留字段是否提供的区别。
+
+任务并发、半包超时、排队取消、关闭和持久化的代码修复及故障注入证据见[执行层审查记录](docs/RUNTIME_REVIEW.md)。
 
 ```bash
 ./implementation/scripts/rr select-evaluation-targets --source-path var/reactions.jsonl \
@@ -133,7 +135,7 @@ uv run --frozen python scripts/check.py
 
 ## 运行约束
 
-API 必须单协调进程、单 Uvicorn worker；目录锁会拒绝同时写同一个运行目录。计算任务在独立子进程中执行，支持硬超时/取消；源 SQL 另有限时。预算从执行开始计算，强制终止后的清理可能额外占用最多约 2 秒。服务重启后，不续接已失效的来源会话，保留已有快照并标记中断。
+API 必须单协调进程、单 Uvicorn worker；目录锁会拒绝同时写同一个运行目录。计算任务在独立子进程中执行，支持硬超时/取消；源 SQL 另有限时。预算从进程启动准备开始计算；通信半包不会阻塞监督循环。进程与接收线程清理额外等待最多约 3 秒，另有文件 I/O 耗时。SDK 默认等待包含排队时间，显式传入 `wait(timeout=...)` 可限制调用方等待。服务重启后，不续接已失效的来源会话，保留已有快照并标记中断。
 
 运行文件保存在 `RR_STORE_PATH`，默认 `var/runs`。当前没有自动到期清理，内部试用需监控并在停止服务后清理不再需要的运行目录；删除目录会使对应结果不可读。不要把运行目录当作永久资料归档。
 

@@ -97,16 +97,17 @@
 <!-- manager -->
 <g id="node5" class="node">
 <title>manager</title>
-<path fill="#e9effa" stroke="#758fb8" d="M713,-728C713,-728 493,-728 493,-728 487,-728 481,-722 481,-716 481,-716 481,-681 481,-681 481,-675 487,-669 493,-669 493,-669 713,-669 713,-669 719,-669 725,-675 725,-681 725,-681 725,-716 725,-716 725,-722 719,-728 713,-728"/>
-<text text-anchor="middle" x="603" y="-708.4" font-family="Noto Sans CJK SC" font-size="12.00">RunManager · adapters/execution.py</text>
-<text text-anchor="middle" x="603" y="-695.4" font-family="Noto Sans CJK SC" font-size="12.00">提交与幂等 → 有界排队 → 监督线程</text>
-<text text-anchor="middle" x="603" y="-682.4" font-family="Noto Sans CJK SC" font-size="12.00">spawn / 取消 / 硬截止 / 异常收尾</text>
+<path fill="#e9effa" stroke="#758fb8" d="M713,-734.5C713,-734.5 493,-734.5 493,-734.5 487,-734.5 481,-728.5 481,-722.5 481,-722.5 481,-674.5 481,-674.5 481,-668.5 487,-662.5 493,-662.5 493,-662.5 713,-662.5 713,-662.5 719,-662.5 725,-668.5 725,-674.5 725,-674.5 725,-722.5 725,-722.5 725,-728.5 719,-734.5 713,-734.5"/>
+<text text-anchor="middle" x="603" y="-714.9" font-family="Noto Sans CJK SC" font-size="12.00">RunManager · adapters/execution.py</text>
+<text text-anchor="middle" x="603" y="-701.9" font-family="Noto Sans CJK SC" font-size="12.00">提交与幂等 → 有界排队</text>
+<text text-anchor="middle" x="603" y="-688.9" font-family="Noto Sans CJK SC" font-size="12.00">监督线程 + 独立接收线程</text>
+<text text-anchor="middle" x="603" y="-675.9" font-family="Noto Sans CJK SC" font-size="12.00">spawn / 取消 / 硬截止 / 异常收尾</text>
 </g>
 <!-- sdk&#45;&gt;manager -->
 <g id="edge7" class="edge">
 <title>sdk&#45;&gt;manager</title>
-<path fill="none" stroke="#5c786a" d="M413.06,-817.41C451.89,-793.31 507.51,-758.78 548.53,-733.31"/>
-<polygon fill="#5c786a" stroke="#5c786a" points="550.4,-736.27 557.05,-728.02 546.71,-730.32 550.4,-736.27"/>
+<path fill="none" stroke="#5c786a" d="M413.06,-817.41C448.48,-795.42 497.88,-764.75 537.42,-740.21"/>
+<polygon fill="#5c786a" stroke="#5c786a" points="539.56,-743 546.21,-734.75 535.87,-737.05 539.56,-743"/>
 <text text-anchor="middle" x="503.5" y="-787.5" font-family="Noto Sans CJK SC" font-size="10.00">search 提交 / 等待</text>
 </g>
 <!-- sdk&#45;&gt;reader -->
@@ -128,7 +129,7 @@
 <!-- manager&#45;&gt;store -->
 <g id="edge4" class="edge">
 <title>manager&#45;&gt;store</title>
-<path fill="none" stroke="#5c786a" d="M552.59,-668.97C539.46,-660.55 525.71,-650.8 514,-640.5 498.45,-626.82 483.36,-609.8 470.84,-594.28"/>
+<path fill="none" stroke="#5c786a" d="M542.79,-662.49C532.79,-655.7 522.82,-648.26 514,-640.5 498.45,-626.82 483.36,-609.8 470.84,-594.28"/>
 <polygon fill="#5c786a" stroke="#5c786a" points="473.5,-592 464.55,-586.34 468.01,-596.35 473.5,-592"/>
 <text text-anchor="middle" x="553.5" y="-632.5" font-family="Noto Sans CJK SC" font-size="10.00">保存状态和阶段包</text>
 </g>
@@ -143,7 +144,7 @@
 <!-- manager&#45;&gt;worker -->
 <g id="edge17" class="edge">
 <title>manager&#45;&gt;worker</title>
-<path fill="none" stroke="#5c786a" d="M654.37,-668.82C683.52,-654.11 721.23,-637.61 757,-629.5 814.89,-616.38 966.93,-637.83 1024,-621.5 1050.4,-613.94 1077.05,-599.33 1098.6,-585.36"/>
+<path fill="none" stroke="#5c786a" d="M667.41,-662.41C694.3,-649.55 726.36,-636.44 757,-629.5 814.89,-616.38 966.93,-637.83 1024,-621.5 1050.4,-613.94 1077.05,-599.33 1098.6,-585.36"/>
 <polygon fill="#5c786a" stroke="#5c786a" points="1100.81,-588.1 1107.21,-579.65 1096.94,-582.27 1100.81,-588.1"/>
 <text text-anchor="middle" x="831" y="-632.5" font-family="Noto Sans CJK SC" font-size="10.00">spawn：只传可序列化配置和请求</text>
 </g>
@@ -202,7 +203,7 @@
 <title>search&#45;&gt;manager</title>
 <path fill="none" stroke="#9b7041" d="M1209.59,-459.19C1231.59,-472.48 1253.72,-490.61 1266,-514 1288.21,-556.3 1299.35,-587.29 1266,-621.5 1253.82,-634 969.3,-627.24 952,-629.5 931.16,-632.23 926.57,-636.17 906,-640.5 852.51,-651.75 838.73,-652.45 785,-662.5 768.87,-665.52 751.95,-668.72 735.19,-671.92"/>
 <polygon fill="#9b7041" stroke="#9b7041" points="734.51,-668.48 725.34,-673.8 735.82,-675.36 734.51,-668.48"/>
-<text text-anchor="middle" x="1359" y="-547.5" font-family="Noto Sans CJK SC" font-size="10.00">进程队列：阶段包 / 最终包 / 错误</text>
+<text text-anchor="middle" x="1359" y="-547.5" font-family="Noto Sans CJK SC" font-size="10.00">单向管道：阶段包 / 最终包 / 错误</text>
 </g>
 <!-- chem -->
 <g id="node11" class="node">

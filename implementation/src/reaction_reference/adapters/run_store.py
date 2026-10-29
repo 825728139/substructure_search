@@ -5,6 +5,7 @@ import json
 import os
 import threading
 import uuid
+from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -45,10 +46,11 @@ class FileRunStore:
 
     def close(self):
         """释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。"""
-        if self._coordinator:
-            fcntl.flock(self._coordinator.fileno(), fcntl.LOCK_UN)
-            self._coordinator.close()
-            self._coordinator = None
+        with self._lock:
+            if self._coordinator:
+                fcntl.flock(self._coordinator.fileno(), fcntl.LOCK_UN)
+                self._coordinator.close()
+                self._coordinator = None
 
     def _directory(self, run_id):
         """校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。
@@ -60,22 +62,39 @@ class FileRunStore:
         return self.root / run_id
 
     @staticmethod
+    def _snapshot_path(directory, snapshot_id):
+        """校验快照标识为至多 64 位的非空小写十六进制字符串，返回受限文件路径。"""
+        if (
+            not isinstance(snapshot_id, str)
+            or not snapshot_id
+            or len(snapshot_id) > 64
+            or any(c not in "0123456789abcdef" for c in snapshot_id)
+        ):
+            raise KeyError("Invalid snapshot ID")
+        return directory / f"snapshot-{snapshot_id}.json"
+
+    @staticmethod
     def _atomic(path, content):
         """把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。
 
         保证读者看到完整旧文件或完整新文件；本函数执行磁盘 I/O，写入错误向上传播。
         """
         temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
-        with temporary.open("w") as stream:
-            stream.write(content)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-        directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
         try:
-            os.fsync(directory)
+            with temporary.open("w", encoding="utf-8") as stream:
+                stream.write(content)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, path)
+            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
         finally:
-            os.close(directory)
+            # 失败时尽力清理未发布文件，清理异常不覆盖原始写入异常。
+            with suppress(OSError):
+                temporary.unlink(missing_ok=True)
 
     def create(self, state):
         """创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。"""
@@ -93,7 +112,7 @@ class FileRunStore:
             path = self._directory(run_id) / "state.json"
             if not path.is_file():
                 raise KeyError("Run not found")
-            state = RunState.model_validate_json(path.read_text())
+            state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
             if owner is not None and state.owner != owner:
                 raise KeyError("Run not found")
             return state
@@ -120,9 +139,9 @@ class FileRunStore:
         """
         with self._lock:
             directory = self._directory(package.run_id)
-            path = directory / f"snapshot-{package.snapshot_id}.json"
+            path = self._snapshot_path(directory, package.snapshot_id)
             content = package.model_dump_json()
-            if path.exists() and path.read_text() != content:
+            if path.exists() and path.read_text(encoding="utf-8") != content:
                 raise RevisionConflict("An immutable snapshot cannot be replaced")
             if not path.exists():
                 self._atomic(path, content)
@@ -140,13 +159,11 @@ class FileRunStore:
             latest = directory / "latest.json"
             if not latest.is_file():
                 return None
-            snapshot_id = json.loads(latest.read_text())["snapshot_id"]
-        if any(c not in "0123456789abcdef" for c in snapshot_id):
-            raise KeyError("Invalid snapshot ID")
-        path = directory / f"snapshot-{snapshot_id}.json"
+            snapshot_id = json.loads(latest.read_text(encoding="utf-8"))["snapshot_id"]
+        path = self._snapshot_path(directory, snapshot_id)
         if not path.is_file():
             raise KeyError("Snapshot not found")
-        return ReferencePackage.model_validate_json(path.read_text())
+        return ReferencePackage.model_validate_json(path.read_text(encoding="utf-8"))
 
     def idempotency(self, owner, key, request_hash, run_id=None):
         """查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。
@@ -156,7 +173,7 @@ class FileRunStore:
         with self._lock:
             path = self.root / f"idempotency-{digest([owner, key])}.json"
             if path.is_file():
-                saved = json.loads(path.read_text())
+                saved = json.loads(path.read_text(encoding="utf-8"))
                 if saved["request_hash"] != request_hash:
                     raise RevisionConflict("Idempotency key is bound to a different request")
                 return saved["run_id"]
@@ -191,7 +208,7 @@ class FileRunStore:
         进程重启后原只读来源会话已失效，因此不自动续接旧游标或伪造完整性。
         """
         for path in self.root.glob("*/state.json"):
-            state = RunState.model_validate_json(path.read_text())
+            state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
             if state.lifecycle in ("queued", "running"):
                 snapshot_id = self.interrupt_snapshot(state.run_id, "coordinator_restarted")
                 self.update(

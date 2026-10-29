@@ -49,73 +49,77 @@ class Client:
 
         request 为 RerankRequest，仅允许排序偏好和实验限制；保留已评估事实与检索版本，同时记录本次排序实现哈希和时间。先保存运行状态，快照落盘后才标记成功；失败经协调器统一收尾。返回新 RunState，不重查来源、不生成新建议，也不允许更改目标。
         """
-        state = self.manager.store.load(run_id, owner)
-        package = self.manager.store.package(run_id)
-        if package is None:
-            raise ValueError("A retained evidence snapshot is required")
-        new_id = uuid.uuid4().hex
-        now = datetime.now(UTC).isoformat()
-        new_request = state.request.model_copy(
-            update={"ranking_profile": request.ranking_profile, "lab_context": request.lab_context}
-        )
-        ranked, displayed = rank_references(
-            package.results,
-            request.ranking_profile,
-            request.lab_context,
-            max(3, state.request.budget.max_display - min(3, len(package.proposals))),
-        )
-        # 沿用排序器给出的展示位置，重排不重算来源事实或结构见证。
-        chosen = sorted(
-            (r for r in ranked if r.id in displayed), key=lambda r: r.display_position or 0
-        )
-        shown_proposals = package.proposals[
-            : max(0, state.request.budget.max_display - len(displayed))
-        ]
-        summary, summary_state, omitted = summary_items(
-            chosen, shown_proposals, state.request.budget.max_summary_bytes
-        )
-        new_package = package.model_copy(
-            update={
-                "run_id": new_id,
-                "snapshot_id": digest([new_id, package.snapshot_id, request.model_dump()]),
-                "results": ranked,
-                "displayed_reference_ids": displayed,
-                "displayed_proposal_ids": [p.id for p in shown_proposals],
-                "summary": summary,
-                "summary_status": summary_state,
-                "summary_omitted_items": omitted,
-                "manifest": {
-                    **package.manifest,
-                    "reranked_from_snapshot": package.snapshot_id,
-                    "rerank_implementation_hash": code_fingerprint(),
-                    "reranked_at": now,
-                    "request": new_request.model_dump(),
-                },
-            }
-        )
-        new_state = RunState(
-            run_id=new_id,
-            lifecycle="running",
-            request=new_request,
-            created_at=now,
-            updated_at=now,
-            owner=owner,
-            parent_run_id=run_id,
-        )
-        self.manager.store.create(new_state)
-        try:
-            self.manager.store.save_package(new_package)
-        except Exception:
-            self.manager._finish(
-                new_id,
-                "failed",
-                {
-                    "code": "rerank_snapshot_failed",
-                    "message": "Reranked snapshot could not be saved",
-                },
+        with self.manager.active_writer():
+            state = self.manager.store.load(run_id, owner)
+            package = self.manager.store.package(run_id)
+            if package is None:
+                raise ValueError("A retained evidence snapshot is required")
+            new_id = uuid.uuid4().hex
+            now = datetime.now(UTC).isoformat()
+            new_request = state.request.model_copy(
+                update={
+                    "ranking_profile": request.ranking_profile,
+                    "lab_context": request.lab_context,
+                }
             )
-            raise
-        return self.manager._finish(new_id, "succeeded", snapshot_id=new_package.snapshot_id)
+            ranked, displayed = rank_references(
+                package.results,
+                request.ranking_profile,
+                request.lab_context,
+                max(3, state.request.budget.max_display - min(3, len(package.proposals))),
+            )
+            # 沿用排序器给出的展示位置，重排不重算来源事实或结构见证。
+            chosen = sorted(
+                (r for r in ranked if r.id in displayed), key=lambda r: r.display_position or 0
+            )
+            shown_proposals = package.proposals[
+                : max(0, state.request.budget.max_display - len(displayed))
+            ]
+            summary, summary_state, omitted = summary_items(
+                chosen, shown_proposals, state.request.budget.max_summary_bytes
+            )
+            new_package = package.model_copy(
+                update={
+                    "run_id": new_id,
+                    "snapshot_id": digest([new_id, package.snapshot_id, request.model_dump()]),
+                    "results": ranked,
+                    "displayed_reference_ids": displayed,
+                    "displayed_proposal_ids": [p.id for p in shown_proposals],
+                    "summary": summary,
+                    "summary_status": summary_state,
+                    "summary_omitted_items": omitted,
+                    "manifest": {
+                        **package.manifest,
+                        "reranked_from_snapshot": package.snapshot_id,
+                        "rerank_implementation_hash": code_fingerprint(),
+                        "reranked_at": now,
+                        "request": new_request.model_dump(),
+                    },
+                }
+            )
+            new_state = RunState(
+                run_id=new_id,
+                lifecycle="running",
+                request=new_request,
+                created_at=now,
+                updated_at=now,
+                owner=owner,
+                parent_run_id=run_id,
+            )
+            self.manager.store.create(new_state)
+            try:
+                self.manager.store.save_package(new_package)
+            except Exception:
+                self.manager._finish(
+                    new_id,
+                    "failed",
+                    {
+                        "code": "rerank_snapshot_failed",
+                        "message": "Reranked snapshot could not be saved",
+                    },
+                )
+                raise
+            return self.manager._finish(new_id, "succeeded", snapshot_id=new_package.snapshot_id)
 
     def close(self):
         """关闭协调器，停止其未完成任务并释放运行目录锁。"""

@@ -8,6 +8,7 @@ import secrets
 from contextlib import asynccontextmanager
 from importlib.resources import files
 
+from anyio import CancelScope
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from starlette.concurrency import run_in_threadpool
@@ -36,8 +37,12 @@ def create_app(settings=None):
 
         清理可能停止计算进程，不能阻塞事件循环；启动资源已在 create_app 中创建。
         """
-        yield
-        await run_in_threadpool(client.close)
+        try:
+            yield
+        finally:
+            # 生命周期异常或取消时仍完成资源清理，不将目录锁留给失效客户端。
+            with CancelScope(shield=True):
+                await run_in_threadpool(client.close)
 
     app = FastAPI(title="Reaction Reference", version="0.1.0", lifespan=lifespan)
     app.state.client = client

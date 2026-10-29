@@ -82,7 +82,7 @@ implementation/
 │   ├── adapters/
 │   │   ├── sources.py          # 有限 JSONL / 只读索引来源的实现
 │   │   ├── annotations.py      # 绑定来源哈希的人工审核证据
-│   │   ├── execution.py        # 单协调器、监督线程、spawn 子进程
+│   │   ├── execution.py        # 单协调器、监督/接收线程、spawn 子进程
 │   │   ├── run_store.py        # 运行目录锁、状态修订、原子文件快照
 │   │   └── export.py           # 有数量上限的只读来源导出
 │   ├── interfaces/
@@ -117,12 +117,14 @@ implementation/
 5. 命中后才 `hydrate` 加载详情；同一反应只分析一次。`analyze_reaction` 读取实际来源变化；`project_changes` 通过该材料的一致见证对应目标位置；`evidence_for` 独立判断实验观察和输入使用。
 6. 同一材料被多个家族命中时，合并见证与层级。后发现的分片若能更清楚说明目标连接，可升级贡献解释；不同实验的证据不会因为结构相同而合并成一条实验。
 7. 在预算内翻页、放宽候选选择，并有限补查缺失 R 组合。随后对已有参考尝试来源约束的单反应物替换；不预先枚举可能开环/闭环的位置。
-8. 闭包 `package()` 统一做排序、展示选择、三层统计、能力状态、材料关系和摘要。`publish()` 把阶段包送入进程队列；父进程验证后原子保存。
+8. 闭包 `package()` 统一做排序、展示选择、三层统计、能力状态、材料关系和摘要。`publish()` 把阶段包写入单向管道；父进程接收线程读取完整消息后放入有界内存队列，监督线程持续检查取消/时限并验证、保存资料包。
 9. 正常结束、取消、超时或失败都通过父进程收尾。已有包继续可读；分页绑定快照，重排从已存的全部候选产生新的派生任务。
 
 `package()` 是对当前累计事实的重新封装，不负责文件持久化。`publish()` 是进度回调，不是对外消息发送。真正的文件写入在父进程 `FileRunStore` 中。
 
 重排资料包保留原检索的 `manifest.implementation_hash`，另用 `rerank_implementation_hash` 和 `reranked_at` 标明本次排序的实现与时间。近期反例及修复见[三轮复审记录](MULTI_ROUND_REVIEW.md)。
+
+`active_writer` 登记同步重排的生命周期；关闭会等待已登记写操作结束再释放目录锁。排序期间不持有全局协调锁，其他任务仍可取消。排队任务直接取消 Future，SDK 默认等待包含排队时间；通信与持久化的故障路径见[执行层审查](RUNTIME_REVIEW.md)。
 
 ## 关键对象与编号含义
 
@@ -194,7 +196,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、119 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、141 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 

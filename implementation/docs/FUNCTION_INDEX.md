@@ -35,16 +35,18 @@
 
 | 函数 | 职责 |
 |---|---|
-| [_worker](../src/reaction_reference/adapters/execution.py#L16) | 在独立进程中恢复请求和来源、执行检索，并通过队列返回进度/结果或受限错误。 |
-| [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L64) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
-| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L86) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
-| [RunManager._release](../src/reaction_reference/adapters/execution.py#L129) | 任务 future 完成后清除其内存登记和取消事件，持久化结果继续保留。 |
-| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L138) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
-| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L156) | 启动 spawn 子进程，接收进度并强制执行截止时间和取消。 |
-| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L220) | 在锁内把非终态 run 写为给定终态并返回状态。 |
-| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L244) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
-| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L262) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L272) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [_worker](../src/reaction_reference/adapters/execution.py#L17) | 在独立进程中恢复请求和来源、执行检索，通过单向管道发送进度/结果或受限错误。 |
+| [_receive_packages](../src/reaction_reference/adapters/execution.py#L59) | 阻塞读取完整管道消息，再交给有界本地队列；监督线程不直接等待消息体。 |
+| [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L113) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
+| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L137) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
+| [RunManager._release](../src/reaction_reference/adapters/execution.py#L200) | 保存未启动任务的取消终态，再清除内存登记和取消事件。 |
+| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L213) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
+| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L231) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
+| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L324) | 在锁内把非终态 run 写为给定终态并返回状态。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L348) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L371) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L388) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L401) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
@@ -56,19 +58,20 @@
 
 | 函数 | 职责 |
 |---|---|
-| [FileRunStore.__init__](../src/reaction_reference/adapters/run_store.py#L24) | 建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。 |
-| [FileRunStore.acquire_coordinator](../src/reaction_reference/adapters/run_store.py#L31) | 获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。 |
-| [FileRunStore.close](../src/reaction_reference/adapters/run_store.py#L46) | 释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。 |
-| [FileRunStore._directory](../src/reaction_reference/adapters/run_store.py#L53) | 校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。 |
-| [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L63) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
-| [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L80) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
-| [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L87) | 读取并校验指定 run 的状态，返回 RunState。 |
-| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L101) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
-| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L116) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
-| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L133) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
-| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L151) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L167) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L188) | 启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。 |
+| [FileRunStore.__init__](../src/reaction_reference/adapters/run_store.py#L25) | 建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。 |
+| [FileRunStore.acquire_coordinator](../src/reaction_reference/adapters/run_store.py#L32) | 获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。 |
+| [FileRunStore.close](../src/reaction_reference/adapters/run_store.py#L47) | 释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。 |
+| [FileRunStore._directory](../src/reaction_reference/adapters/run_store.py#L55) | 校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。 |
+| [FileRunStore._snapshot_path](../src/reaction_reference/adapters/run_store.py#L65) | 校验快照标识为至多 64 位的非空小写十六进制字符串，返回受限文件路径。 |
+| [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L77) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
+| [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L99) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
+| [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L106) | 读取并校验指定 run 的状态，返回 RunState。 |
+| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L120) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
+| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L135) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
+| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L152) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L168) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L184) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L205) | 启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。 |
 
 ## src/reaction_reference/adapters/sources.py
 
@@ -182,28 +185,28 @@
 
 | 函数 | 职责 |
 |---|---|
-| [create_app](../src/reaction_reference/interfaces/api.py#L24) | 装配 FastAPI 应用、共享 Client、内部认证和快照分页接口，返回 app。 |
-| [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L34) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
-| [create_app.index](../src/reaction_reference/interfaces/api.py#L46) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
-| [create_app.owner](../src/reaction_reference/interfaces/api.py#L50) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
-| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L63) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
-| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L72) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
-| [create_app.missing](../src/reaction_reference/interfaces/api.py#L89) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
-| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L94) | 把 revision、幂等或快照冲突转为 409 JSON。 |
-| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L99) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
-| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L104) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
-| [create_app.live](../src/reaction_reference/interfaces/api.py#L111) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
-| [create_app.ready](../src/reaction_reference/interfaces/api.py#L116) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
-| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L132) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
-| [create_app.preview](../src/reaction_reference/interfaces/api.py#L137) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
-| [create_app.submit](../src/reaction_reference/interfaces/api.py#L142) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
-| [create_app.status](../src/reaction_reference/interfaces/api.py#L156) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
-| [create_app.results](../src/reaction_reference/interfaces/api.py#L171) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
-| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L225) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
-| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L247) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
-| [create_app.structure](../src/reaction_reference/interfaces/api.py#L259) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
-| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L283) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
-| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L288) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+| [create_app](../src/reaction_reference/interfaces/api.py#L25) | 装配 FastAPI 应用、共享 Client、内部认证和快照分页接口，返回 app。 |
+| [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L35) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
+| [create_app.index](../src/reaction_reference/interfaces/api.py#L51) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
+| [create_app.owner](../src/reaction_reference/interfaces/api.py#L55) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
+| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L68) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
+| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L77) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
+| [create_app.missing](../src/reaction_reference/interfaces/api.py#L94) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
+| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L99) | 把 revision、幂等或快照冲突转为 409 JSON。 |
+| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L104) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
+| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L109) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
+| [create_app.live](../src/reaction_reference/interfaces/api.py#L116) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
+| [create_app.ready](../src/reaction_reference/interfaces/api.py#L121) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
+| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L137) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
+| [create_app.preview](../src/reaction_reference/interfaces/api.py#L142) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
+| [create_app.submit](../src/reaction_reference/interfaces/api.py#L147) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
+| [create_app.status](../src/reaction_reference/interfaces/api.py#L161) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L176) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L230) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L252) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L264) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L288) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L293) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
 
 ## src/reaction_reference/interfaces/cli.py
 
@@ -226,9 +229,9 @@
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
 | [Client.preview](../src/reaction_reference/interfaces/sdk.py#L37) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
 | [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L47) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L120) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L124) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L128) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L124) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L128) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L132) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -480,6 +483,68 @@
 | [test_invalid_exclusion_is_rejected_before_creating_job](../tests/test_round3_boundaries.py#L161) | 无效排除结构必须在提交入口报错，不能先保存和调度一个必然失败的任务。 |
 | [test_invalid_exclusion_is_rejected_before_creating_job.unexpected_submission](../tests/test_round3_boundaries.py#L165) | 一旦越过请求校验进入调度，立即暴露回归。 |
 | [test_rerank_records_current_implementation_without_erasing_origin](../tests/test_round3_boundaries.py#L176) | 旧资料重排后须同时保留检索版本和本次排序版本，避免把新结果归给旧代码。 |
+
+## tests/test_runtime_integrity.py
+
+| 函数 | 职责 |
+|---|---|
+| [seed_run](../tests/test_runtime_integrity.py#L31) | 保存最小任务和资料包，隔离执行协议测试与化学计算。 |
+| [test_submission_failure_leaves_no_queued_ghost](../tests/test_runtime_integrity.py#L58) | 幂等落盘或调度失败后，任务应结束为失败并清除内存登记。 |
+| [test_submission_failure_leaves_no_queued_ghost.rejected](../tests/test_runtime_integrity.py#L64) | 模拟线程池拒绝任务。 |
+| [test_submission_failure_leaves_no_queued_ghost.broken_binding](../tests/test_runtime_integrity.py#L68) | 只在写入幂等绑定时模拟失败，读取仍正常。 |
+| [test_queued_cancel_frees_capacity_immediately](../tests/test_runtime_integrity.py#L93) | 一个任务占满执行线程时，另一个排队任务取消后应立即结束并释放接纳名额。 |
+| [test_queued_cancel_frees_capacity_immediately.blocked](../tests/test_runtime_integrity.py#L99) | 占住唯一工作线程，直到测试明确释放。 |
+| [test_default_wait_includes_queue_time](../tests/test_runtime_integrity.py#L120) | 默认等待不能使用独立于排队时长的固定 130 秒上限；显式上限仍传递。 |
+| [test_default_wait_includes_queue_time.WaitingFuture.__init__](../tests/test_runtime_integrity.py#L128) | 保存观察到的等待上限。 |
+| [test_default_wait_includes_queue_time.WaitingFuture.result](../tests/test_runtime_integrity.py#L132) | 记录调用方是否强加了隐藏等待上限。 |
+| [test_atomic_write_failure_removes_temporary_file](../tests/test_runtime_integrity.py#L147) | 原子写失败应保留旧文件，并清除未发布的临时文件。 |
+| [test_atomic_write_failure_removes_temporary_file.fail](../tests/test_runtime_integrity.py#L152) | 模拟替换或同步失败。 |
+| [test_snapshot_identifier_is_validated_before_io](../tests/test_runtime_integrity.py#L164) | 读写快照都应在文件系统调用前拒绝非法或超长标识。 |
+| [test_closed_client_cannot_write_reranked_run](../tests/test_runtime_integrity.py#L175) | 旧客户端关闭后不能越过新协调器的目录锁继续写重排结果。 |
+| [test_close_waits_for_inflight_rerank](../tests/test_runtime_integrity.py#L186) | 同步重排尚未落盘时，关闭不能提前释放协调器锁。 |
+| [test_close_waits_for_inflight_rerank.blocked_rank](../tests/test_runtime_integrity.py#L196) | 将重排暂停在持久化前。 |
+| [test_close_waits_for_inflight_rerank.rerank](../tests/test_runtime_integrity.py#L202) | 在线程中执行重排并保存异常，供主测试检查。 |
+| [test_close_waits_for_inflight_rerank.close](../tests/test_runtime_integrity.py#L209) | 通知测试已开始关闭，再等待关闭完成。 |
+| [test_lifespan_exception_still_releases_resources](../tests/test_runtime_integrity.py#L233) | 应用生命周期因异常退出时，仍需关闭客户端并释放目录锁。 |
+| [test_lifespan_exception_still_releases_resources.failing_lifespan](../tests/test_runtime_integrity.py#L237) | 模拟生命周期内部异常，而非普通 HTTP 业务错误。 |
+| [TrackedChannel.__init__](../tests/test_runtime_integrity.py#L255) | 初始化未关闭状态。 |
+| [TrackedChannel.close](../tests/test_runtime_integrity.py#L259) | 记录资源已释放。 |
+| [TrackedChannel.cancel_join_thread](../tests/test_runtime_integrity.py#L263) | 兼容旧队列接口，使反例观察实际资源清理。 |
+| [BrokenProcess.__init__](../tests/test_runtime_integrity.py#L271) | 记录尚未关闭的进程句柄。 |
+| [BrokenProcess.start](../tests/test_runtime_integrity.py#L275) | 抛出受控启动失败。 |
+| [BrokenProcess.is_alive](../tests/test_runtime_integrity.py#L279) | 失败启动没有存活进程。 |
+| [BrokenProcess.close](../tests/test_runtime_integrity.py#L283) | 记录进程对象资源关闭。 |
+| [BrokenContext.__init__](../tests/test_runtime_integrity.py#L291) | 保存实际分配的资源。 |
+| [BrokenContext.Queue](../tests/test_runtime_integrity.py#L296) | 兼容旧实现的队列分配。 |
+| [BrokenContext.Pipe](../tests/test_runtime_integrity.py#L302) | 创建两端独立的通信句柄替身。 |
+| [BrokenContext.Process](../tests/test_runtime_integrity.py#L308) | 创建启动必然失败的进程替身。 |
+| [test_process_start_failure_closes_allocated_resources](../tests/test_runtime_integrity.py#L316) | 配置或启动失败时，任务失败状态之外还必须关闭已分配通信与进程资源。 |
+| [test_process_start_failure_closes_allocated_resources.bad_config](../tests/test_runtime_integrity.py#L326) | 模拟序列化配置构造失败。 |
+| [partial_frame_worker](../tests/test_runtime_integrity.py#L337) | 发送消息头和不完整消息体后停住，模拟真实进程通信半包。 |
+| [partial_frame_scenario](../tests/test_runtime_integrity.py#L346) | 在隔离进程中验证半包消息不能阻止硬超时；不执行化学检索。 |
+| [test_incomplete_process_message_cannot_block_timeout](../tests/test_runtime_integrity.py#L360) | 真实管道只收到半包时，外层监督仍须按预算结束；测试自身另有进程级兜底。 |
+| [test_cancelled_waiter_receives_terminal_state](../tests/test_runtime_integrity.py#L385) | 已经开始等待排队任务的调用方，应收到取消终态而非 Future 的取消异常。 |
+| [test_cancelled_waiter_receives_terminal_state.blocked](../tests/test_runtime_integrity.py#L392) | 占住唯一工作线程，让第二个任务保持排队。 |
+| [test_cancelled_waiter_receives_terminal_state.wait_for_run](../tests/test_runtime_integrity.py#L398) | 收集真实等待调用的返回或异常。 |
+| [test_cancelled_waiter_receives_terminal_state.observed_result](../tests/test_runtime_integrity.py#L414) | 确认等待线程已捕获该 future，再允许主线程发起取消。 |
+| [test_rerank_does_not_block_cancelling_other_job](../tests/test_runtime_integrity.py#L432) | 保护重排生命周期时不能持有全局协调锁做计算，从而阻塞另一任务的取消。 |
+| [test_rerank_does_not_block_cancelling_other_job.running](../tests/test_runtime_integrity.py#L442) | 模拟会响应取消信号的运行中任务。 |
+| [test_rerank_does_not_block_cancelling_other_job.blocked_rank](../tests/test_runtime_integrity.py#L448) | 暂时阻塞排序，让取消请求与同步写操作重叠。 |
+| [test_rerank_does_not_block_cancelling_other_job.rerank](../tests/test_runtime_integrity.py#L454) | 捕获并发排序错误，确保测试不会忽略后台失败。 |
+| [test_lifespan_cancellation_still_closes_client](../tests/test_runtime_integrity.py#L478) | 取消作用域已取消时，生命周期的清理仍须完整执行。 |
+| [test_lifespan_cancellation_still_closes_client.cancelled_scope](../tests/test_runtime_integrity.py#L484) | 在应用生命周期内部取消作用域并交出控制权。 |
+| [test_deadline_includes_process_startup](../tests/test_runtime_integrity.py#L500) | 启动准备已经耗尽预算时，即使结果已可读取，也不能获得额外运行时间。 |
+| [test_deadline_includes_process_startup.ReadyChannel.recv](../tests/test_runtime_integrity.py#L511) | 返回最小结果包。 |
+| [test_deadline_includes_process_startup.ReadyChannel.get](../tests/test_runtime_integrity.py#L515) | 兼容旧队列，确保反例源于预算起点。 |
+| [test_deadline_includes_process_startup.SlowStart.start](../tests/test_runtime_integrity.py#L522) | 启动耗时超过当前预算。 |
+| [test_deadline_includes_process_startup.SlowStart.join](../tests/test_runtime_integrity.py#L526) | 模拟已完成的进程等待。 |
+| [test_deadline_includes_process_startup.ReadyContext.Queue](../tests/test_runtime_integrity.py#L533) | 为旧实现提供相同就绪结果。 |
+| [test_deadline_includes_process_startup.ReadyContext.Pipe](../tests/test_runtime_integrity.py#L537) | 为当前实现提供收发端。 |
+| [test_deadline_includes_process_startup.ReadyContext.Process](../tests/test_runtime_integrity.py#L541) | 返回慢启动对象。 |
+| [test_receiver_stops_when_local_queue_is_full](../tests/test_runtime_integrity.py#L551) | 监督循环已结束时，接收线程不能因等待本地队列空位而泄漏。 |
+| [large_result_worker](../tests/test_runtime_integrity.py#L577) | 生成大于管道缓冲区的完整消息后立即退出，验证末包不会因进程退出而丢失。 |
+| [test_large_final_message_survives_worker_exit](../tests/test_runtime_integrity.py#L596) | 完整的大结果必须成功落盘，不能把正常进程退出误判为缺失结果。 |
+| [test_closed_manager_rejects_even_an_existing_idempotency_key](../tests/test_runtime_integrity.py#L605) | 关闭后的提交入口不能因幂等缓存命中而绕过生命周期检查。 |
 
 ## tests/test_service.py
 
