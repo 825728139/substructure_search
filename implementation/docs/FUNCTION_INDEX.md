@@ -27,9 +27,9 @@
 |---|---|
 | [AnnotatedSource.__init__](../src/reaction_reference/adapters/annotations.py#L28) | 读取有限 JSONL 审核文件并建立 record_id 索引，继承被包装来源的能力。 |
 | [AnnotatedSource._apply](../src/reaction_reference/adapters/annotations.py#L54) | 将审核信息应用到一个来源记录的副本并缓存结果。 |
-| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L108) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
-| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L112) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
-| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L116) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
+| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L106) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
+| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L110) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
+| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L114) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
 
 ## src/reaction_reference/adapters/execution.py
 
@@ -37,14 +37,14 @@
 |---|---|
 | [_worker](../src/reaction_reference/adapters/execution.py#L16) | 在独立进程中恢复请求和来源、执行检索，并通过队列返回进度/结果或受限错误。 |
 | [RunManager.__init__](../src/reaction_reference/adapters/execution.py#L64) | 获取目录协调锁、恢复中断状态，再按设置创建有界工作并发的监督线程池。 |
-| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L81) | 验证目标并接纳一次检索，保存 queued 状态后返回 RunState。 |
-| [RunManager._release](../src/reaction_reference/adapters/execution.py#L118) | 任务 future 完成后清除其内存登记和取消事件，持久化结果继续保留。 |
-| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L127) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
-| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L145) | 启动 spawn 子进程，接收进度并强制执行截止时间和取消。 |
-| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L209) | 在锁内把非终态 run 写为给定终态并返回状态。 |
-| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L233) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
-| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L251) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L261) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [RunManager.submit](../src/reaction_reference/adapters/execution.py#L86) | 验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。 |
+| [RunManager._release](../src/reaction_reference/adapters/execution.py#L129) | 任务 future 完成后清除其内存登记和取消事件，持久化结果继续保留。 |
+| [RunManager._execute](../src/reaction_reference/adapters/execution.py#L138) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
+| [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L156) | 启动 spawn 子进程，接收进度并强制执行截止时间和取消。 |
+| [RunManager._finish](../src/reaction_reference/adapters/execution.py#L220) | 在锁内把非终态 run 写为给定终态并返回状态。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L244) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L262) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L272) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
@@ -222,13 +222,13 @@
 
 | 函数 | 职责 |
 |---|---|
-| [Client.__init__](../src/reaction_reference/interfaces/sdk.py#L17) | 通过统一装配入口创建 RunManager，读取 Settings 或使用传入配置。 |
-| [Client.search](../src/reaction_reference/interfaces/sdk.py#L24) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
-| [Client.preview](../src/reaction_reference/interfaces/sdk.py#L36) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
-| [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L46) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L117) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L121) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L125) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.__init__](../src/reaction_reference/interfaces/sdk.py#L18) | 通过统一装配入口创建 RunManager，读取 Settings 或使用传入配置。 |
+| [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
+| [Client.preview](../src/reaction_reference/interfaces/sdk.py#L37) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
+| [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L47) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L120) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L124) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L128) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -243,16 +243,17 @@
 | 函数 | 职责 |
 |---|---|
 | [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
-| [_priority](../src/reaction_reference/ranking/engine.py#L72) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L96) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L117) | 为单个参考生成可传递且稳定的排序元组。 |
+| [_priority](../src/reaction_reference/ranking/engine.py#L77) | 返回参考的方法/证据优先级，数值越小越优先。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L101) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L135) | 为单个参考生成可传递且稳定的排序元组。 |
 
 ## src/reaction_reference/ranking/features.py
 
 | 函数 | 职责 |
 |---|---|
 | [_feature](../src/reaction_reference/ranking/features.py#L9) | 把一个特征值封装为状态、支持依据和限制的统一字典。 |
-| [features](../src/reaction_reference/ranking/features.py#L17) | 为具体 Reference 提取九方向解释信息，返回特征字典。 |
+| [condition_issues](../src/reaction_reference/ranking/features.py#L17) | 标记来源中的倒置温度范围和负时长；保留原始数值供核查，正常低温和零时长有效。 |
+| [features](../src/reaction_reference/ranking/features.py#L31) | 为具体 Reference 提取九方向解释信息，返回特征字典。 |
 
 ## src/reaction_reference/reaction_analysis/analyze.py
 
@@ -462,6 +463,23 @@
 | [test_failed_source_replays_consume_attempt_budget.rules](../tests/test_round2_reactions.py#L108) | 提供只返回原输入、无法得到酰胺产物的受控规则。 |
 | [test_documented_step_requires_nonblank_citation](../tests/test_round2_reactions.py#L121) | 步骤引用只有空白时，不能将记录校验为明确的单步反应。 |
 | [test_transfer_rechecks_blank_step_citation](../tests/test_round2_reactions.py#L129) | 即使调用方通过复制构造了未重校验记录，回放仍应拒绝空白步骤引用。 |
+
+## tests/test_round3_boundaries.py
+
+| 函数 | 职责 |
+|---|---|
+| [overlay](../tests/test_round3_boundaries.py#L15) | 应用只包含调用方提供字段的审核补丁。 |
+| [test_partial_input_review_preserves_existing_outcome_and_step](../tests/test_round3_boundaries.py#L28) | 仅审核实际输入时，已有产品观察和步骤依据不应被默认空值删除。 |
+| [test_omitted_review_field_differs_from_explicit_clear](../tests/test_round3_boundaries.py#L52) | 未提供产品观察与明确清空观察是不同操作，内容和审核哈希都应体现区别。 |
+| [reference](../tests/test_round3_boundaries.py#L64) | 构造方法和证据资格相同的参考，隔离操作条件对排序的影响。 |
+| [test_inverted_temperature_range_is_not_a_capability_pass](../tests/test_round3_boundaries.py#L78) | 下限高于上限的来源温度范围不能被用于判定实验能力已满足。 |
+| [test_invalid_conditions_do_not_receive_easy_operation_priority](../tests/test_round3_boundaries.py#L102) | 倒置温度和负时长应保持异常/未知，不得优于有完整可信数值的同等参考。 |
+| [test_subzero_temperature_and_zero_duration_remain_valid](../tests/test_round3_boundaries.py#L129) | 正常低温和零时长不应被当作倒置范围或负时长处理。 |
+| [test_constructor_failure_releases_coordinator_lock](../tests/test_round3_boundaries.py#L144) | 初始化异常被调用方保留时，目录锁仍需立即释放，允许修复后再次初始化。 |
+| [test_constructor_failure_releases_coordinator_lock.fail](../tests/test_round3_boundaries.py#L148) | 模拟读取遗留状态时的初始化错误。 |
+| [test_invalid_exclusion_is_rejected_before_creating_job](../tests/test_round3_boundaries.py#L161) | 无效排除结构必须在提交入口报错，不能先保存和调度一个必然失败的任务。 |
+| [test_invalid_exclusion_is_rejected_before_creating_job.unexpected_submission](../tests/test_round3_boundaries.py#L165) | 一旦越过请求校验进入调度，立即暴露回归。 |
+| [test_rerank_records_current_implementation_without_erasing_origin](../tests/test_round3_boundaries.py#L176) | 旧资料重排后须同时保留检索版本和本次排序版本，避免把新结果归给旧代码。 |
 
 ## tests/test_service.py
 

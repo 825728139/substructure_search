@@ -92,7 +92,7 @@
     }
   },
   "additionalProperties": false,
-  "description": "单条人工审核输入；包含来源哈希、审核人/日期及实例级观察，不能修改来源身份。",
+  "description": "单条人工审核补丁；绑定来源哈希和审核人/日期，仅覆盖显式提供的字段，不能修改来源身份。",
   "properties": {
     "record_id": {
       "title": "Record Id",

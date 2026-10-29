@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "implementation_hash": "4d8843efa0aa4e803df5efa050f75e98a7b336ed7e5dff48a3481cbc68a5a506",
+  "implementation_hash": "9a244dd6d5d90757c945b9ec1a562317ef8ffd682a4c9420843ffcec07b4b4a7",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "rdkit_version": "2026.03.2",
   "source_snapshot": "jsonl:2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
@@ -13,7 +13,7 @@
       "target_smiles": "C=CCOc1cn(C)c2cc(F)ccc2c1=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 260.98,
+      "elapsed_ms": 238.37,
       "statistics": {
         "families": 6,
         "received_candidates": 70,
@@ -57,7 +57,7 @@
         "analyzed_reactions": 13,
         "proposals": 0,
         "display_items": 15,
-        "elapsed_ms": 253.956
+        "elapsed_ms": 232.552
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -87,7 +87,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 26843
+      "summary_bytes": 26827
     },
     {
       "target_id": "real-target-01",
@@ -96,7 +96,7 @@
       "excluded_record_ids": [
         "epo:106338"
       ],
-      "elapsed_ms": 218.0,
+      "elapsed_ms": 222.39,
       "statistics": {
         "families": 8,
         "received_candidates": 91,
@@ -140,7 +140,7 @@
         "analyzed_reactions": 12,
         "proposals": 0,
         "display_items": 14,
-        "elapsed_ms": 212.004
+        "elapsed_ms": 216.908
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -168,14 +168,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 25076
+      "summary_bytes": 25064
     },
     {
       "target_id": "real-target-02",
       "target_smiles": "O=C([O-])C(O)C(O)C(=O)[O-]",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 146.05,
+      "elapsed_ms": 155.97,
       "statistics": {
         "families": 7,
         "received_candidates": 89,
@@ -219,7 +219,7 @@
         "analyzed_reactions": 4,
         "proposals": 0,
         "display_items": 8,
-        "elapsed_ms": 142.026
+        "elapsed_ms": 152.237
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -241,7 +241,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 14784
+      "summary_bytes": 14770
     },
     {
       "target_id": "real-target-02",
@@ -250,7 +250,7 @@
       "excluded_record_ids": [
         "epo:106449"
       ],
-      "elapsed_ms": 116.77,
+      "elapsed_ms": 121.52,
       "statistics": {
         "families": 9,
         "received_candidates": 90,
@@ -294,7 +294,7 @@
         "analyzed_reactions": 3,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 113.535
+        "elapsed_ms": 118.341
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -314,14 +314,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 10920
+      "summary_bytes": 10908
     },
     {
       "target_id": "real-target-03",
       "target_smiles": "NC(=NO)c1cccc(Cl)n1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 539.47,
+      "elapsed_ms": 550.96,
       "statistics": {
         "families": 4,
         "received_candidates": 67,
@@ -365,7 +365,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 518.902
+        "elapsed_ms": 531.66
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -459,7 +459,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39620
+      "summary_bytes": 39592
     },
     {
       "target_id": "real-target-03",
@@ -468,7 +468,7 @@
       "excluded_record_ids": [
         "uspto:96"
       ],
-      "elapsed_ms": 529.37,
+      "elapsed_ms": 546.08,
       "statistics": {
         "families": 4,
         "received_candidates": 66,
@@ -512,7 +512,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 509.343
+        "elapsed_ms": 526.737
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -606,14 +606,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39620
+      "summary_bytes": 39592
     },
     {
       "target_id": "real-target-04",
       "target_smiles": "COC(=O)[C@H]1C[C@@H](CCC#N)CCN1C(=O)OC(C)(C)C",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1056.09,
+      "elapsed_ms": 1079.93,
       "statistics": {
         "families": 10,
         "received_candidates": 67,
@@ -657,7 +657,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1032.013
+        "elapsed_ms": 1056.239
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -751,7 +751,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 36417
+      "summary_bytes": 36391
     },
     {
       "target_id": "real-target-04",
@@ -760,7 +760,7 @@
       "excluded_record_ids": [
         "epo:106432"
       ],
-      "elapsed_ms": 1049.18,
+      "elapsed_ms": 1093.34,
       "statistics": {
         "families": 11,
         "received_candidates": 69,
@@ -804,7 +804,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1024.44
+        "elapsed_ms": 1067.97
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -898,14 +898,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 36550
+      "summary_bytes": 36524
     },
     {
       "target_id": "real-target-05",
       "target_smiles": "[C]=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 454.4,
+      "elapsed_ms": 467.71,
       "statistics": {
         "families": 4,
         "received_candidates": 178,
@@ -949,7 +949,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 436.624
+        "elapsed_ms": 450.052
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1042,7 +1042,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33562
+      "summary_bytes": 33520
     },
     {
       "target_id": "real-target-05",
@@ -1051,7 +1051,7 @@
       "excluded_record_ids": [
         "epo:106408"
       ],
-      "elapsed_ms": 392.27,
+      "elapsed_ms": 441.97,
       "statistics": {
         "families": 4,
         "received_candidates": 177,
@@ -1095,7 +1095,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 374.014
+        "elapsed_ms": 423.984
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1188,14 +1188,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33740
+      "summary_bytes": 33695
     },
     {
       "target_id": "real-target-06",
       "target_smiles": "O=C1CN2C(=O)CCC2N1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 80.51,
+      "elapsed_ms": 87.91,
       "statistics": {
         "families": 4,
         "received_candidates": 33,
@@ -1239,7 +1239,7 @@
         "analyzed_reactions": 8,
         "proposals": 0,
         "display_items": 9,
-        "elapsed_ms": 76.24
+        "elapsed_ms": 82.866
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1269,7 +1269,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 15889
+      "summary_bytes": 15881
     },
     {
       "target_id": "real-target-06",
@@ -1280,7 +1280,7 @@
         "epo:106282",
         "epo:106284"
       ],
-      "elapsed_ms": 57.79,
+      "elapsed_ms": 54.81,
       "statistics": {
         "families": 4,
         "received_candidates": 21,
@@ -1324,7 +1324,7 @@
         "analyzed_reactions": 5,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 54.532
+        "elapsed_ms": 52.225
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1348,14 +1348,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 11378
+      "summary_bytes": 11370
     },
     {
       "target_id": "real-target-07",
       "target_smiles": "Nc1ncnc2nc[nH]c12",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 20.22,
+      "elapsed_ms": 19.13,
       "statistics": {
         "families": 4,
         "received_candidates": 4,
@@ -1399,7 +1399,7 @@
         "analyzed_reactions": 1,
         "proposals": 0,
         "display_items": 1,
-        "elapsed_ms": 19.046
+        "elapsed_ms": 18.066
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1415,7 +1415,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 2372
+      "summary_bytes": 2368
     },
     {
       "target_id": "real-target-07",
@@ -1424,7 +1424,7 @@
       "excluded_record_ids": [
         "epo:106287"
       ],
-      "elapsed_ms": 4.73,
+      "elapsed_ms": 4.52,
       "statistics": {
         "families": 4,
         "received_candidates": 0,
@@ -1468,7 +1468,7 @@
         "analyzed_reactions": 0,
         "proposals": 0,
         "display_items": 0,
-        "elapsed_ms": 4.045
+        "elapsed_ms": 3.905
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1487,7 +1487,7 @@
       "target_smiles": "CC(CNS(=O)(=O)C(C)C)c1ccc(-c2ccc(C#N)cc2)cc1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1227.5,
+      "elapsed_ms": 1288.18,
       "statistics": {
         "families": 10,
         "received_candidates": 64,
@@ -1531,7 +1531,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1181.958
+        "elapsed_ms": 1244.728
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1624,7 +1624,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 37334
+      "summary_bytes": 37284
     },
     {
       "target_id": "real-target-08",
@@ -1633,7 +1633,7 @@
       "excluded_record_ids": [
         "epo:106451"
       ],
-      "elapsed_ms": 1255.34,
+      "elapsed_ms": 1277.98,
       "statistics": {
         "families": 10,
         "received_candidates": 62,
@@ -1677,7 +1677,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1211.148
+        "elapsed_ms": 1233.376
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1770,14 +1770,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 35556
+      "summary_bytes": 35505
     },
     {
       "target_id": "real-target-09",
       "target_smiles": "CN(C)C(=O)Sc1nc(-c2ccccc2)cn1-c1ccc([N+](=O)[O-])cn1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1393.28,
+      "elapsed_ms": 1430.94,
       "statistics": {
         "families": 10,
         "received_candidates": 71,
@@ -1821,7 +1821,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1342.938
+        "elapsed_ms": 1383.779
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1915,7 +1915,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 38227
+      "summary_bytes": 38191
     },
     {
       "target_id": "real-target-09",
@@ -1924,7 +1924,7 @@
       "excluded_record_ids": [
         "epo:106412"
       ],
-      "elapsed_ms": 1334.04,
+      "elapsed_ms": 1328.78,
       "statistics": {
         "families": 12,
         "received_candidates": 74,
@@ -1968,7 +1968,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1268.638
+        "elapsed_ms": 1285.935
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2062,14 +2062,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 38212
+      "summary_bytes": 38180
     },
     {
       "target_id": "real-target-10",
       "target_smiles": "CCOCn1nccc1C(=O)c1cc2c(c(Cl)c1Cl)OC(C(=O)OCC)O2",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1090.22,
+      "elapsed_ms": 915.83,
       "statistics": {
         "families": 10,
         "received_candidates": 66,
@@ -2113,7 +2113,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1066.307
+        "elapsed_ms": 892.279
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2206,7 +2206,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39350
+      "summary_bytes": 39340
     },
     {
       "target_id": "real-target-10",
@@ -2215,7 +2215,7 @@
       "excluded_record_ids": [
         "epo:106295"
       ],
-      "elapsed_ms": 969.45,
+      "elapsed_ms": 898.93,
       "statistics": {
         "families": 11,
         "received_candidates": 66,
@@ -2259,7 +2259,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 947.785
+        "elapsed_ms": 875.475
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2352,14 +2352,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39082
+      "summary_bytes": 39072
     },
     {
       "target_id": "real-target-11",
       "target_smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2C(O)C1)C(=O)c1c(O)cccc1C3=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 920.96,
+      "elapsed_ms": 913.89,
       "statistics": {
         "families": 7,
         "received_candidates": 180,
@@ -2403,7 +2403,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 892.733
+        "elapsed_ms": 887.009
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2491,7 +2491,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 34069
+      "summary_bytes": 34011
     },
     {
       "target_id": "real-target-11",
@@ -2500,7 +2500,7 @@
       "excluded_record_ids": [
         "epo:106416"
       ],
-      "elapsed_ms": 970.28,
+      "elapsed_ms": 946.98,
       "statistics": {
         "families": 8,
         "received_candidates": 265,
@@ -2544,7 +2544,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 944.197
+        "elapsed_ms": 922.035
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2631,14 +2631,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33973
+      "summary_bytes": 33915
     },
     {
       "target_id": "real-target-12",
       "target_smiles": "Cn1cnnc1CCCO",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 899.24,
+      "elapsed_ms": 924.73,
       "statistics": {
         "families": 6,
         "received_candidates": 599,
@@ -2682,7 +2682,7 @@
         "analyzed_reactions": 40,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 878.047
+        "elapsed_ms": 902.443
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2737,7 +2737,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33800
+      "summary_bytes": 33774
     },
     {
       "target_id": "real-target-12",
@@ -2746,7 +2746,7 @@
       "excluded_record_ids": [
         "epo:106424"
       ],
-      "elapsed_ms": 856.7,
+      "elapsed_ms": 755.34,
       "statistics": {
         "families": 8,
         "received_candidates": 594,
@@ -2790,7 +2790,7 @@
         "analyzed_reactions": 39,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 836.0
+        "elapsed_ms": 735.229
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2843,7 +2843,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33689
+      "summary_bytes": 33660
     }
   ],
   "limits": [

@@ -14,6 +14,20 @@ def _feature(value, support, *, state="known", limitations=None):
     return {"state": state, "value": value, "support": support, "limitations": limitations or []}
 
 
+def condition_issues(conditions):
+    """标记来源中的倒置温度范围和负时长；保留原始数值供核查，正常低温和零时长有效。"""
+    issues = {}
+    if (
+        conditions.temperature_min_c is not None
+        and conditions.temperature_max_c is not None
+        and conditions.temperature_min_c > conditions.temperature_max_c
+    ):
+        issues["temperature"] = "inverted_temperature_range"
+    if conditions.duration_seconds is not None and conditions.duration_seconds < 0:
+        issues["duration"] = "negative_duration"
+    return issues
+
+
 def features(reference, target_smiles=None):
     """为具体 Reference 提取九方向解释信息，返回特征字典。
 
@@ -107,7 +121,8 @@ def features(reference, target_smiles=None):
             },
             "source_reported_fields",
             state="partial",
-            limitations=["missing_workup_and_stage_requirements_not_inferred"],
+            limitations=["missing_workup_and_stage_requirements_not_inferred"]
+            + list(condition_issues(record.conditions).values()),
         ),
         "hazard_process_regulation": _feature(
             None,

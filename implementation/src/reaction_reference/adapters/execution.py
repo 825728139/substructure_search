@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 
 from reaction_reference.adapters.run_store import FileRunStore
-from reaction_reference.chemistry.structures import digest, parse
+from reaction_reference.chemistry.structures import canonical, digest, parse
 from reaction_reference.domain.models import ReferencePackage, RunState, SearchRequest
 
 
@@ -69,21 +69,32 @@ class RunManager:
         self.settings = settings
         self.store = FileRunStore(settings.store_path)
         self.store.acquire_coordinator()
-        self.store.recover_interrupted()
-        self._executor = ThreadPoolExecutor(
-            max_workers=settings.max_concurrent_runs, thread_name_prefix="rr-supervisor"
-        )
+        try:
+            self.store.recover_interrupted()
+            self._executor = ThreadPoolExecutor(
+                max_workers=settings.max_concurrent_runs, thread_name_prefix="rr-supervisor"
+            )
+        except Exception:
+            # 初始化失败时立即释放外部资源，不依赖异常对象何时被垃圾回收。
+            self.store.close()
+            raise
         self._lock = threading.RLock()
         self._cancel = {}
         self._futures = {}
         self._closed = False
 
     def submit(self, request, *, owner="internal", idempotency_key=None):
-        """验证目标并接纳一次检索，保存 queued 状态后返回 RunState。
+        """验证目标和排除材料结构后接纳检索，保存 queued 状态并返回 RunState。
 
         owner 限定范围，idempotency_key 可复用同一请求；检查容量、禁止对 PG 声称有限样本穷尽。随后在监督线程中启动计算，函数本身不等待完成。
         """
         parse(request.target.value, target=True)
+        if request.lab_context:
+            try:
+                for smiles in request.lab_context.excluded_material_smiles:
+                    canonical(smiles)
+            except ValueError as exc:
+                raise ValueError("Excluded material structure cannot be parsed") from exc
         if request.options.exhaustive_fixture and self.settings.source_kind == "postgres":
             raise ValueError("exhaustive_fixture is only available for a bounded JSONL source")
         with self._lock:

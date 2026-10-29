@@ -1,17 +1,18 @@
 """参考排序和实验能力适配：先区分方法资格与证据，再按明确偏好组织展示，保留所有已评估候选。"""
 
 from reaction_reference.chemistry.structures import canonical
-from reaction_reference.ranking.features import features
+from reaction_reference.ranking.features import condition_issues, features
 
 
 def lab_fit(reference, context):
     """将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。
 
-    返回（pass/fail/unknown/not_applicable、原因列表）；任一已知违规优先为 fail，资料缺失保持 unknown。记录未分配到明确操作步骤时，不把净记录条件当作已确认步骤条件。
+    返回（pass/fail/unknown/not_applicable、原因列表）；任一已知违规优先为 fail，资料缺失或温度范围倒置保持 unknown。记录未分配到明确操作步骤时，不把净记录条件当作已确认步骤条件。
     """
     if context is None:
         return "not_applicable", ["lab_context_not_configured"]
     conditions = reference.record.conditions
+    issues = condition_issues(conditions)
     failures, unknown, tested = [], [], 0
     checks = [
         (
@@ -33,6 +34,10 @@ def lab_fit(reference, context):
         if requirement is None:
             continue
         tested += 1
+        if label.startswith("temperature") and "temperature" in issues:
+            if issues["temperature"] not in unknown:
+                unknown.append(issues["temperature"])
+            continue
         if actual is None:
             unknown.append(label + "_unknown")
         elif not predicate(requirement, actual):
@@ -103,13 +108,26 @@ def rank_references(
     enriched = []
     for reference in references:
         fit, reasons = lab_fit(reference, context)
+        ranking_features = reference.ranking_features or features(reference, target_smiles)
+        issues = condition_issues(reference.record.conditions)
+        if issues:
+            # 冻结参考可能来自旧版本；补充当前异常解释时不修改旧快照中的事实字典。
+            operation = ranking_features.get("operation_equipment", {})
+            ranking_features = {
+                **ranking_features,
+                "operation_equipment": {
+                    **operation,
+                    "limitations": list(
+                        dict.fromkeys(operation.get("limitations", []) + list(issues.values()))
+                    ),
+                },
+            }
         enriched.append(
             reference.model_copy(
                 update={
                     "lab_fit": fit,
                     "lab_reasons": reasons,
-                    "ranking_features": reference.ranking_features
-                    or features(reference, target_smiles),
+                    "ranking_features": ranking_features,
                 }
             )
         )
@@ -130,9 +148,12 @@ def rank_references(
         # 缺失条件不获得低温或容易操作的奖励。
         # 先固定信息可用分组，再用排序键比较，避免成对比较出现循环次序。
         conditions = ref.record.conditions
+        issues = condition_issues(conditions)
         availability = (
-            conditions.temperature_min_c is not None and conditions.temperature_max_c is not None,
-            conditions.duration_seconds is not None,
+            conditions.temperature_min_c is not None
+            and conditions.temperature_max_c is not None
+            and "temperature" not in issues,
+            conditions.duration_seconds is not None and "duration" not in issues,
         )
         process: tuple = ()
         if profile == "process_reference":

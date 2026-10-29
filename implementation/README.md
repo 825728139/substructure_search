@@ -118,7 +118,9 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 92 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 119 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+
+后续三轮新增的 11 类修复与逐轮验证见[三轮复审记录](docs/MULTI_ROUND_REVIEW.md)。审核文件按补丁处理：省略字段会保留来源原值，显式空列表表示清空；使用 Python 模型生成补丁时应调用 `model_dump_json(exclude_unset=True)` 保留字段是否提供的区别。
 
 ```bash
 ./implementation/scripts/rr select-evaluation-targets --source-path var/reactions.jsonl \

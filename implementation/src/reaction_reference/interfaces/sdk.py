@@ -9,6 +9,7 @@ from reaction_reference.domain.models import RunState
 from reaction_reference.evidence.claims import summary_items
 from reaction_reference.ranking.engine import rank_references
 from reaction_reference.retrieval.planner import initial_families
+from reaction_reference.rules import code_fingerprint
 
 
 class Client:
@@ -46,7 +47,7 @@ class Client:
     def rerank(self, run_id, request, owner="internal"):
         """在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。
 
-        request 为 RerankRequest，仅允许排序偏好和实验限制；保留所有已评估候选、事实、见证与来源快照。先保存运行状态，快照落盘后才标记成功；失败经协调器统一收尾。返回新 RunState，不重查来源、不生成新建议，也不允许更改目标。
+        request 为 RerankRequest，仅允许排序偏好和实验限制；保留已评估事实与检索版本，同时记录本次排序实现哈希和时间。先保存运行状态，快照落盘后才标记成功；失败经协调器统一收尾。返回新 RunState，不重查来源、不生成新建议，也不允许更改目标。
         """
         state = self.manager.store.load(run_id, owner)
         package = self.manager.store.package(run_id)
@@ -86,6 +87,8 @@ class Client:
                 "manifest": {
                     **package.manifest,
                     "reranked_from_snapshot": package.snapshot_id,
+                    "rerank_implementation_hash": code_fingerprint(),
+                    "reranked_at": now,
                     "request": new_request.model_dump(),
                 },
             }

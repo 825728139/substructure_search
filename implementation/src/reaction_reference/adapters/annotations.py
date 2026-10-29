@@ -9,7 +9,7 @@ from reaction_reference.domain.models import EventScope, Model, Observation
 
 
 class EvidenceAnnotation(Model):
-    """单条人工审核输入；包含来源哈希、审核人/日期及实例级观察，不能修改来源身份。"""
+    """单条人工审核补丁；绑定来源哈希和审核人/日期，仅覆盖显式提供的字段，不能修改来源身份。"""
 
     record_id: str
     expected_source_hash: str = Field(min_length=24, max_length=64)
@@ -54,7 +54,7 @@ class AnnotatedSource:
     def _apply(self, record):
         """将审核信息应用到一个来源记录的副本并缓存结果。
 
-        来源哈希必须一致，输入证据必须指向实际反应物实例并有引用；失败时记录局部问题并返回原记录。保留 source.synthetic，不能用审核把演示来源变成文献。
+        来源哈希必须一致，输入证据必须指向实际反应物实例并有引用。仅覆盖明确提供的字段，未提供的观察和步骤信息保留；显式空列表可撤除旧观察。失败时返回原记录，合成来源标记始终保留。
         """
         if record.id in self._records:
             return self._records[record.id]
@@ -77,12 +77,10 @@ class AnnotatedSource:
                     "Input evidence must refer to actual reactant instances and contain citations"
                 )
             data = record.model_dump()
-            data.update(
-                observations=[o.model_dump() for o in annotation.observations],
-                event_scope=annotation.event_scope,
-                documented_step_ref=annotation.documented_step_ref,
-                step_count=annotation.step_count,
-            )
+            supplied = annotation.model_dump(exclude_unset=True)
+            for field in ("observations", "event_scope", "documented_step_ref", "step_count"):
+                if field in supplied:
+                    data[field] = supplied[field]
             for material in data["materials"]:
                 if material["instance_id"] in annotation.actual_input_evidence:
                     material["actual_input"] = True
@@ -90,7 +88,7 @@ class AnnotatedSource:
                 "reviewer": annotation.reviewer,
                 "reviewed_at": annotation.reviewed_at,
                 "input_evidence": annotation.actual_input_evidence,
-                "annotation_hash": digest(annotation.model_dump(), 64),
+                "annotation_hash": digest(supplied, 64),
             }
             result = type(record).model_validate(data)
         except ValueError as exc:
