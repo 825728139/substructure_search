@@ -85,8 +85,10 @@ CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
 
 RDKit 暂固定为 `2026.3.2`（其运行时显示为 `2026.03.2`）。升级需额外审查匹配语义、芳香性、立体与原子对应行为，不能只验证导入成功。
 
-目前 `tool.uv.package = false`：环境包含第三方依赖，尚不发布或安装一个空的 `reaction_reference` 业务包。到 M0 创建真实业务包时，再补齐构建后端、包发现、CLI 入口和包安装检查。
+仓库根目录设置 `tool.uv.package = false`，用于管理设计检查所需的开发环境。可安装的 `reaction_reference` 业务包已位于 `implementation/`，使用该目录独立的构建配置、依赖锁和运行环境；启动与安装方式见[项目 README](implementation/README.md)。
 
-## 本机 Git 入口
+## Git 与 VS Code
 
-当前工作区的 `.git` 只读，仓库元数据存放在 `.plan-history.git/`。本机使用 `./scripts/plan-git status`、`./scripts/plan-git log --oneline` 或 `./scripts/plan-git show <commit>` 查看状态和修订；正常克隆使用标准 Git。`.plan-history.git/` 是本机实际仓库元数据，需要保留，不提交到自身。
+仓库元数据使用标准 `.git/` 目录，VS Code 源代码管理和普通 `git` 命令共享同一份提交、索引与远端配置。直接使用 `git status`、`git log --oneline` 和 `git show <commit>`；`./scripts/plan-git` 仅兼容原有命令写法，也操作这份标准仓库。
+
+本机曾使用的 `.plan-history.git/` 现仅作为迁移前的历史备份保留，不再接收提交，也不提交到远端。若 VS Code 仍显示初始化前的状态，刷新源代码管理视图即可。
