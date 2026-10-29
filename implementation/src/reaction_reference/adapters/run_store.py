@@ -28,6 +28,7 @@ class FileRunStore:
         self.root.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
         self._coordinator = None
+        self.recovery_issues: list[dict] = []
 
     def acquire_coordinator(self):
         """获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。
@@ -112,7 +113,10 @@ class FileRunStore:
             path = self._directory(run_id) / "state.json"
             if not path.is_file():
                 raise KeyError("Run not found")
-            state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
+            try:
+                state = RunState.model_validate_json(path.read_text(encoding="utf-8"))
+            except ValueError:
+                raise RevisionConflict("Stored run state is unreadable") from None
             if state.run_id != run_id:
                 raise RevisionConflict("Stored run identity does not match its directory")
             if owner is not None and state.owner != owner:
@@ -161,11 +165,20 @@ class FileRunStore:
             latest = directory / "latest.json"
             if not latest.is_file():
                 return None
-            snapshot_id = json.loads(latest.read_text(encoding="utf-8"))["snapshot_id"]
+            try:
+                pointer = json.loads(latest.read_text(encoding="utf-8"))
+                if not isinstance(pointer, dict) or not isinstance(pointer.get("snapshot_id"), str):
+                    raise ValueError()
+                snapshot_id = pointer["snapshot_id"]
+            except ValueError:
+                raise RevisionConflict("Stored snapshot pointer is unreadable") from None
         path = self._snapshot_path(directory, snapshot_id)
         if not path.is_file():
             raise KeyError("Snapshot not found")
-        package = ReferencePackage.model_validate_json(path.read_text(encoding="utf-8"))
+        try:
+            package = ReferencePackage.model_validate_json(path.read_text(encoding="utf-8"))
+        except ValueError:
+            raise RevisionConflict("Stored snapshot is unreadable") from None
         if package.run_id != run_id or package.snapshot_id != snapshot_id:
             raise RevisionConflict("Stored snapshot identity does not match the requested file")
         return package
@@ -208,24 +221,49 @@ class FileRunStore:
             return interrupted.snapshot_id
 
     def recover_interrupted(self):
-        """启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。
+        """逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。
 
-        进程重启后原只读来源会话已失效，因此不自动续接旧游标或伪造完整性。
+        仅处理合法任务目录。有效状态即使缺少可读快照也可终结为 failed；数据损坏不阻断
+        其他任务，真实文件 I/O 错误仍向上传播。重启后不续接失效的来源会话。
         """
         for path in self.root.glob("*/state.json"):
-            state = self.load(path.parent.name)
+            run_id = path.parent.name
+            if len(run_id) != 32 or any(c not in "0123456789abcdef" for c in run_id):
+                continue
+            try:
+                state = self.load(run_id)
+            except (KeyError, RevisionConflict) as exc:
+                self.recovery_issues.append(
+                    {"run_id": run_id, "code": "unreadable_run", "type": type(exc).__name__}
+                )
+                continue
             if state.lifecycle in ("queued", "running"):
-                snapshot_id = self.interrupt_snapshot(state.run_id, "coordinator_restarted")
+                error: dict = {
+                    "code": "coordinator_restarted",
+                    "message": "Existing source snapshot cannot be resumed; retained results remain readable.",
+                }
+                try:
+                    snapshot_id = self.interrupt_snapshot(state.run_id, "coordinator_restarted")
+                except (KeyError, RevisionConflict) as exc:
+                    self.recovery_issues.append(
+                        {
+                            "run_id": run_id,
+                            "code": "unreadable_snapshot",
+                            "type": type(exc).__name__,
+                        }
+                    )
+                    snapshot_id = None
+                    error.update(
+                        snapshot_unavailable=True,
+                        message="Task interrupted; stored snapshot is unavailable and requires inspection.",
+                    )
                 self.update(
                     state.model_copy(
                         update={
                             "lifecycle": "failed",
                             "snapshot_id": snapshot_id,
                             "updated_at": datetime.now(UTC).isoformat(),
-                            "error": {
-                                "code": "coordinator_restarted",
-                                "message": "Existing source snapshot cannot be resumed; retained results remain readable.",
-                            },
+                            "error": error,
                         }
                     ),
                     state.revision,

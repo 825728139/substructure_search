@@ -28,6 +28,8 @@ def import_native(row):
 
     原生契约直接严格校验；导出数组生成稳定材料实例 ID，名称按结构身份关联而非数组位置。提取产品只生成 unknown 观察，反应类别保留来源值，raw 记录摘要与定位信息，不携带连接凭据。
     """
+    if not isinstance(row, dict):
+        raise ValueError("Source record must be an object")
     if "source" in row and "materials" in row:
         return ReactionRecord.model_validate(row)
     if (
@@ -38,13 +40,17 @@ def import_native(row):
         raise ValueError("Source record ID must be a nonempty string or integer")
     record_id = str(row["id"])
     namespace = str(row.get("source_namespace") or row.get("source_type") or "patent")
-    details = row.get("details") or {}
+    details = row.get("details")
+    if details is None:
+        details = {}
     if not isinstance(details, dict):
         raise ValueError("Source details must be an object")
     materials = []
     for role in ("product", "reactant", "reagent", "catalyst", "solvent"):
         entries = details.get(role + "s") or []
-        structures = row.get(role + "_smiles") or []
+        structures = row.get(role + "_smiles")
+        if structures is None:
+            structures = []
         if not isinstance(structures, (list, tuple)) or any(
             not isinstance(s, str) or not s for s in structures
         ):

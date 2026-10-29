@@ -131,7 +131,11 @@ def create_app(settings=None):
             return JSONResponse(
                 status_code=503, content={"status": "not_ready", "reason": type(exc).__name__}
             )
-        return {"status": "ready", "source": settings.source_kind}
+        return {
+            "status": "ready",
+            "source": settings.source_kind,
+            "recovery_issues": client.manager.store.recovery_issues,
+        }
 
     @app.get("/v1/capabilities")
     def get_capabilities(_=Depends(owner)):

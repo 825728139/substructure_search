@@ -198,7 +198,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、167 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、188 项回归、契约漂移和 wheel 构建。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 
@@ -229,5 +229,6 @@ dot -Tpng -Gdpi=120 implementation/docs/core-business-flow.dot -o implementation
 | 条件或危害显示未知 | 来源条件归属、已知字段和外部资料能力状态；未知不自动填默认值 |
 | 翻页返回冲突或游标无效 | 是否混用了任务或快照；重排生成新任务，应从其第一页重新读取 |
 | 实际来源未就绪 | 来源配置与索引能力检查；当前不自动退回全表扫描 |
+| 重启后部分旧任务不可读取 | 查看 `/health/ready` 的 `recovery_issues`；损坏文件被保留，按任务 ID 检查对应状态或快照，其余有效任务可以继续使用 |
 
 锁定环境安装方式、接口示例见[项目 README](../README.md)。当前支持范围、真实样本限制和尚未验证的部署能力见 [STATUS](STATUS.md)，它们是交接时应一起阅读的现状说明。
