@@ -201,7 +201,8 @@ def directed_family(parent, target, positions):
     constraints = []
     for block in blocks:
         if set(block["core_positions"]) & set(positions):
-            for position in block["core_positions"]:
+            # 桥连块可能两次连接同一核心原子，但它仍是一个实际支链块。
+            for position in sorted(set(block["core_positions"])):
                 constraints.append(
                     RConstraint(
                         position=position, requirement="required", exact_fragment=block["fragment"]

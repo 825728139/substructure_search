@@ -5,6 +5,7 @@ import json
 import os
 import threading
 import uuid
+from datetime import UTC, datetime
 from pathlib import Path
 
 from reaction_reference.chemistry.structures import digest
@@ -163,6 +164,27 @@ class FileRunStore:
                 self._atomic(path, json.dumps({"request_hash": request_hash, "run_id": run_id}))
             return None
 
+    def interrupt_snapshot(self, run_id, reason):
+        """为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。
+
+        原快照保持不可变；没有资料包时不创建空包。相同中断原因重复处理时复用已保存快照。
+        """
+        with self._lock:
+            package = self.package(run_id)
+            if package is None:
+                return None
+            if package.coverage_state == "partial" and reason in package.stop_reasons:
+                return package.snapshot_id
+            interrupted = package.model_copy(
+                update={
+                    "coverage_state": "partial",
+                    "stop_reasons": sorted(set(package.stop_reasons + [reason])),
+                    "snapshot_id": digest([package.snapshot_id, reason]),
+                }
+            )
+            self.save_package(interrupted)
+            return interrupted.snapshot_id
+
     def recover_interrupted(self):
         """启动时将遗留 queued/running 标为 failed，并保留已经写入的资料快照。
 
@@ -171,10 +193,13 @@ class FileRunStore:
         for path in self.root.glob("*/state.json"):
             state = RunState.model_validate_json(path.read_text())
             if state.lifecycle in ("queued", "running"):
+                snapshot_id = self.interrupt_snapshot(state.run_id, "coordinator_restarted")
                 self.update(
                     state.model_copy(
                         update={
                             "lifecycle": "failed",
+                            "snapshot_id": snapshot_id,
+                            "updated_at": datetime.now(UTC).isoformat(),
                             "error": {
                                 "code": "coordinator_restarted",
                                 "message": "Existing source snapshot cannot be resumed; retained results remain readable.",

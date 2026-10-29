@@ -36,7 +36,8 @@ class AnnotatedSource:
         self.selection_policy = source.selection_policy
         self.selection_failure_fallback = getattr(source, "selection_failure_fallback", False)
         self.issues = source.issues
-        payload = Path(path).read_bytes()
+        with Path(path).open("rb") as stream:
+            payload = stream.read(32 * 1024 * 1024 + 1)
         if len(payload) > 32 * 1024 * 1024:
             raise ValueError("Evidence overlay exceeds the bounded 32 MiB input size")
         self.annotations: dict[str, EvidenceAnnotation] = {}
@@ -70,7 +71,7 @@ class AnnotatedSource:
         try:
             ids = {m.instance_id for m in record.materials if m.role == "reactant"}
             if not set(annotation.actual_input_evidence) <= ids or not all(
-                annotation.actual_input_evidence.values()
+                citation.strip() for citation in annotation.actual_input_evidence.values()
             ):
                 raise ValueError(
                     "Input evidence must refer to actual reactant instances and contain citations"

@@ -228,10 +228,15 @@ def outside_blocks(mol, core, *, max_visits=10000):
             and a.GetNumRadicalElectrons() == 0
             for a in heavy
         )
-        alkyl = alkyl and all(
-            b.GetBondType() == Chem.BondType.SINGLE
-            for b in mol.GetBonds()
-            if b.GetBeginAtomIdx() in group and b.GetEndAtomIdx() in group
+        # 烷基必须通过单键连接核心；孤立在核心外的一个碳也可能是烯基或炔基端点。
+        alkyl = (
+            alkyl
+            and all(bond == "SINGLE" for bond in bonds)
+            and all(
+                b.GetBondType() == Chem.BondType.SINGLE
+                for b in mol.GetBonds()
+                if b.GetBeginAtomIdx() in group and b.GetEndAtomIdx() in group
+            )
         )
         aromatic = all(a.GetIsAromatic() for a in heavy)
         category = (

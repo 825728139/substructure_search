@@ -74,6 +74,9 @@ def search(request, source, *, run_id=None, on_progress=None):
     analyzed: set[str] = set()
     source_issues: list[dict] = []
     last_progress = 0.0
+    # 阶段包只能声明已经完成的能力；尚未开始的工作保留未评估状态。
+    retrieval_finished = False
+    proposal_phase_finished = False
 
     def package():
         """将当前累计状态排序、汇总并封装为一个新的结果快照。
@@ -176,6 +179,8 @@ def search(request, source, *, run_id=None, on_progress=None):
                     if request.budget.max_proposals == 0 and request.options.include_proposals
                     else "not_requested"
                     if not request.options.include_proposals
+                    else "not_evaluated"
+                    if not proposal_phase_finished
                     else "partial"
                     if stopped or any(proposal_reasons)
                     else "completed",
@@ -197,8 +202,10 @@ def search(request, source, *, run_id=None, on_progress=None):
                 "usage_lookup": FeatureStatus(
                     state="not_requested"
                     if not request.options.include_usage
+                    else "not_evaluated"
+                    if not use_attempts
                     else "partial"
-                    if stopped
+                    if stopped or not retrieval_finished
                     else "completed",
                     reason="evaluated_input_channel_scope_only",
                 ),
@@ -571,6 +578,7 @@ def search(request, source, *, run_id=None, on_progress=None):
             publish()
     except BudgetExceeded as exc:
         stopped.append(str(exc))
+    retrieval_finished = True
     # ⑦ 在已有命中基础上做有限单反应物替换；每项建议都需来源自回放和目标正向核验。
     if request.options.include_proposals:
         try:
@@ -595,6 +603,7 @@ def search(request, source, *, run_id=None, on_progress=None):
         except BudgetExceeded as exc:
             proposal_reasons.append(str(exc))
             stopped.append(str(exc))
+        proposal_phase_finished = True
     # ⑧ 统一排序、证据分账和范围统计；预算截断后的最终包仍保留已完成事实。
     publish(True)
     return package()

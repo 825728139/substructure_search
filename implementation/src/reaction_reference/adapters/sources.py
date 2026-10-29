@@ -125,7 +125,9 @@ class JsonlSource:
         最多 max_records 条且不超过 256 MiB；exhaustive 只取消该固定数据集的体量窗口。完全重复 ID 去重，冲突 ID 整体隔离；多组分等不支持材料记入 issues，不变成结构反例。
         """
         self.path = Path(path)
-        payload = self.path.read_bytes()
+        # 读取前限制内存占用，额外一个字节用于检测超限。
+        with self.path.open("rb") as stream:
+            payload = stream.read(256 * 1024 * 1024 + 1)
         if len(payload) > 256 * 1024 * 1024:
             raise ValueError(
                 "Use an indexed source or explicit offline import for datasets above 256 MiB"
@@ -296,13 +298,19 @@ class PostgresSource:
                 raise RuntimeError("Source snapshot unavailable")
             self.snapshot_id = "postgres-session:" + digest([snapshot["snapshot"], id(self)])
             rows = self.connection.execute("""
-                SELECT pg_get_indexdef(i.indexrelid) AS indexdef
+                SELECT DISTINCT a.attname AS column_name
                 FROM pg_index i JOIN pg_class t ON t.oid=i.indrelid
                 JOIN pg_namespace n ON n.oid=t.relnamespace
+                JOIN pg_class ix ON ix.oid=i.indexrelid
+                JOIN pg_am am ON am.oid=ix.relam
+                JOIN LATERAL unnest(i.indkey::smallint[]) WITH ORDINALITY
+                    AS indexed_key(attnum, position)
+                    ON indexed_key.position <= i.indnkeyatts
+                JOIN pg_attribute a ON a.attrelid=t.oid AND a.attnum=indexed_key.attnum
                 WHERE n.nspname='reaction' AND t.relname='reactions'
-                AND i.indisvalid AND i.indisready AND i.indpred IS NULL
+                AND am.amname='gist' AND i.indisvalid AND i.indisready AND i.indpred IS NULL
             """).fetchall()
-            self._indexes = [r["indexdef"] for r in rows]
+            self._indexes = {r["column_name"] for r in rows}
             self._assert_index("products_mol")
             self.max_selection_stage = 1 if self._has_index("product_fp") else 0
         except Exception:
@@ -310,13 +318,11 @@ class PostgresSource:
             raise
 
     def _has_index(self, column):
-        """检查已读取的有效索引定义中是否存在指定列的 GiST，返回 bool。
+        """检查指定列是否为有效 GiST 的真实键列，返回 bool。
 
-        只是能力门槛，不证明优化器已使用该索引；上线仍需核对实际执行计划。
+        不从索引名称、表达式或 INCLUDE 列推断能力；这仍不证明优化器实际使用索引。
         """
-        return any(
-            column in definition and "USING gist" in definition for definition in self._indexes
-        )
+        return column in self._indexes
 
     def _assert_index(self, column):
         """要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。"""

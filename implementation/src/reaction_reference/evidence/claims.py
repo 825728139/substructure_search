@@ -19,7 +19,7 @@ def evidence_for(record, material):
         and o.source_location.strip()
     ]
     conflicting = any(o.result == "conflict" for o in supported) or (
-        any(o.result == "reported_prepared" for o in supported)
+        any(o.result in ("reported_prepared", "enriched") for o in supported)
         and any(o.result in ("failed", "recovered") for o in supported)
     )
     prepared = any(o.result == "reported_prepared" for o in supported) and not conflicting

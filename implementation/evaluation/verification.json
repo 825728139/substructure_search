@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-29",
-  "implementation_hash": "fd13c4157406ee55f023d1f0ff0114fdfb270c4390055b194356804f8f50ac5a",
+  "implementation_hash": "4d8843efa0aa4e803df5efa050f75e98a7b336ed7e5dff48a3481cbc68a5a506",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -12,16 +12,19 @@
     "psycopg": "3.3.6",
     "pytest": "9.2.0",
     "ruff": "0.17.3",
-    "mypy": "1.20.2"
+    "mypy": "1.20.2",
+    "node": "v26.8.1"
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 65,
+    "tests_passed": 92,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
     "wheel_build": true,
-    "chinese_comment_coverage": true
+    "chinese_comment_coverage": true,
+    "tests_skipped": 0,
+    "frontend_async_scenarios": 6
   },
   "wheel_install_smoke": {
     "passed": true,
@@ -55,7 +58,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "fd13c4157406ee55f023d1f0ff0114fdfb270c4390055b194356804f8f50ac5a"
+    "implementation_hash": "4d8843efa0aa4e803df5efa050f75e98a7b336ed7e5dff48a3481cbc68a5a506"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -92,6 +95,44 @@
     "english_inline_and_mixed_docstring_counterexamples_rejected": true,
     "english_python_prose_lines_translated": 88,
     "root_environment_config_comment_translated": true,
-    "remaining_english_python_prose_comments_or_docstring_lines": 0
+    "remaining_english_python_prose_comments_or_docstring_lines": 0,
+    "verified_implementation_hash": "fd13c4157406ee55f023d1f0ff0114fdfb270c4390055b194356804f8f50ac5a"
+  },
+  "code_review": {
+    "verified_implementation_hash": "4d8843efa0aa4e803df5efa050f75e98a7b336ed7e5dff48a3481cbc68a5a506",
+    "report": "docs/CODE_REVIEW.md",
+    "confirmed_bug_categories_fixed": 15,
+    "regression_tests_added": 27,
+    "backend_counterexamples_before_fix": {
+      "failed": 15,
+      "passed": 1
+    },
+    "cli_counterexamples_before_fix": {
+      "failed": 5,
+      "passed": 1
+    },
+    "frontend_counterexamples_before_fix": {
+      "failed": 4
+    },
+    "frontend_async_scenarios_after_fix": {
+      "passed": 6
+    },
+    "catalog_probe": {
+      "read_only": true,
+      "catalog_query_verified": true,
+      "indexed_search_executed": false,
+      "chemical_index_ready": false,
+      "reason": "required_products_mol_gist_missing"
+    },
+    "python_modules_documented": 70,
+    "python_named_functions_documented": 283,
+    "function_index_definition_links_verified": 283,
+    "full_corpus_indexed_performance_verified": false,
+    "method_relevance_labels_reviewed": false,
+    "python_classes_documented": 51,
+    "rerank_publication_counterexamples_before_fix": {
+      "failed": 2
+    },
+    "progress_phase_state_regression": true
   }
 }

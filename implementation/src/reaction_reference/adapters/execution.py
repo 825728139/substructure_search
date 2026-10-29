@@ -198,15 +198,6 @@ class RunManager:
             if process.is_alive():
                 process.kill()
                 process.join(timeout=1)
-            if package is not None and terminal != "succeeded":
-                package = package.model_copy(
-                    update={
-                        "coverage_state": "partial",
-                        "stop_reasons": sorted(set(package.stop_reasons + [terminal])),
-                        "snapshot_id": digest([package.snapshot_id, terminal]),
-                    }
-                )
-                self.store.save_package(package)
             self._finish(state.run_id, terminal, error, package.snapshot_id if package else None)
         finally:
             if process.is_alive():
@@ -224,6 +215,9 @@ class RunManager:
             state = self.store.load(run_id)
             if state.lifecycle in ("succeeded", "cancelled", "timed_out", "failed"):
                 return state
+            # 正常监督与异常兜底共用同一收尾，避免任务失败但资料包仍宣称完整。
+            if lifecycle != "succeeded":
+                snapshot_id = self.store.interrupt_snapshot(run_id, lifecycle)
             return self.store.update(
                 state.model_copy(
                     update={

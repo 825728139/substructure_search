@@ -1,5 +1,7 @@
 """Markush 家族的编译、逐映射 R 条件核验与联合覆盖统计；结构命中和实验事实在不同模块判断。"""
 
+from collections import Counter
+
 from rdkit import Chem
 
 from reaction_reference.chemistry.structures import digest, outside_blocks
@@ -36,6 +38,15 @@ def _predicates(family, molecule, embedding, blocks):
         v for p, v in by_position.items() if p not in constrained
     ):
         return False
+    # 同一核心位置可能连接多个相同支链；必需块必须按份数匹配，不能反复使用一个块。
+    required = Counter(
+        (c.position, c.exact_fragment)
+        for c in family.r_constraints
+        if c.requirement == "required" and c.exact_fragment is not None
+    )
+    for (position, fragment), count in required.items():
+        if sum(b["fragment"] == fragment for b in by_position[position]) < count:
+            return False
     for constraint in family.r_constraints:
         values = by_position[constraint.position]
         if constraint.requirement == "hydrogen":
@@ -147,11 +158,13 @@ def match_family(
             continue
         correspondence = dict(zip(family.target_atoms, embedding, strict=False))
         covered_r = set()
+        used_source_blocks = set()
         # 只用完整 R 块的一致对应扩展覆盖，不能把不同映射的最佳支链任意拼在一起。
         for tb in target_blocks:
-            for sb in blocks:
+            for block_index, sb in enumerate(blocks):
                 if (
-                    tb["core_positions"] == sb["core_positions"]
+                    block_index not in used_source_blocks
+                    and tb["core_positions"] == sb["core_positions"]
                     and tb["fragment"] == sb["fragment"]
                 ):
                     # 扩展查询必须仍满足本次已固定的核心映射。
@@ -192,8 +205,11 @@ def match_family(
                             ) + len(additions):
                                 correspondence.update(additions)
                                 covered_r.update(tb["core_positions"])
-                            break
-                    break
+                                used_source_blocks.add(block_index)
+                                break
+                    # 当前块无法在固定核心下扩展时，继续寻找其他实际支链块。
+                    if block_index in used_source_blocks:
+                        break
         key = (tuple(sorted(correspondence.items())), tuple(b["fragment"] for b in blocks))
         if key in seen:
             continue

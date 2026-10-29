@@ -124,7 +124,8 @@ header {
 <button id="more" hidden>查看更多</button>
 <script>
 // 页面只持有当前任务、分页游标和轮询句柄；来源事实和排序均由后端提供。
-let run = null, cursor = null, packageData = null, poll = null;
+let run = null, cursor = null, activeSnapshot = null, poll = null;
+let generation = 0, statusRequest = 0, resultRequest = 0;
 
 /** 按 DOM id 获取控件；访问令牌只从当前页面输入框读取。 */
 const $ = id => document.getElementById(id);
@@ -179,24 +180,27 @@ function details(label, data) {
 }
 
 /** 加载当前任务的来源材料 SVG 并高亮命中原子；图片失败不阻断文字证据展示。 */
-async function structure(ref, host) {
+async function structure(ref, host, expectedRun, expectedGeneration, snapshot) {
   try {
     const h = {};
     if ($('token').value) h.Authorization = 'Bearer ' + $('token').value;
-    const r = await fetch(`/v1/search-runs/${run}/structures/${ref}.svg`, {headers: h});
-    if (!r.ok) return;
-    const u = URL.createObjectURL(await r.blob());
+    const query = snapshot ? "?snapshot=" + encodeURIComponent(snapshot) : "";
+    const r = await fetch(`/v1/search-runs/${expectedRun}/structures/${ref}.svg` + query, {headers: h});
+    if (!r.ok || !active(expectedRun, expectedGeneration)) return;
+    const blob = await r.blob();
+    if (!active(expectedRun, expectedGeneration)) return;
+    const u = URL.createObjectURL(blob);
     const i = node('img');
     i.alt = '来源分子，已匹配的原子用绿色标出';
     i.src = u;
     /** 图像载入后释放临时对象 URL，避免翻页时持续保留 Blob。 */
-    i.onload = () => URL.revokeObjectURL(u);
+    i.onload = i.onerror = () => URL.revokeObjectURL(u);
     host.prepend(i);
   } catch {}
 }
 
 /** 渲染一页卡片；观察记录与未观察的替换建议分别标明，前端不自行升级证据。 */
-function render(cards) {
+function render(cards, expectedRun, expectedGeneration, snapshot) {
   for (const c of cards) {
     const r = c.item, card = node('article', undefined, 'card');
     if (c.kind === 'proposal_not_observed') {
@@ -223,102 +227,169 @@ function render(cards) {
         details('九方向排序依据', r.ranking_features),
         details('来源证据及未解决问题', {claims: r.claims, unresolved: r.unresolved, lab_fit: r.lab_fit, lab_reasons: r.lab_reasons})
       );
-      structure(r.id, card);
+      structure(r.id, card, expectedRun, expectedGeneration, snapshot);
     }
     $('cards').append(card);
   }
 }
 
-/** 获取固定快照的一页结果；reset 时替换列表，否则使用服务端游标继续追加。 */
-async function results(reset = true) {
-  const d = await api(`/v1/search-runs/${run}/results?limit=12` + (reset ? '' : '&cursor=' + encodeURIComponent(cursor)));
-  if (reset) $('cards').replaceChildren();
-  render(d.results);
-  cursor = d.next_cursor;
-  $('more').hidden = !cursor;
-  $('metrics').replaceChildren(node('pre', JSON.stringify({范围: d.coverage_state, 统计: d.statistics, 停止原因: d.stop_reasons, 能力范围: d.feature_status}, null, 2)));
+/** 判断响应是否仍属于当前页面任务，阻止旧请求污染新任务。 */
+function active(expectedRun, expectedGeneration) {
+  return run === expectedRun && generation === expectedGeneration;
 }
 
-/** 轮询任务生命周期；到终态后停止计时器，并展示保存的全部可用结果或错误。 */
-async function check() {
+/** 获取固定快照的一页结果；同一页面只接纳最新请求，后续分页继续绑定该快照。 */
+async function results(reset = true, expectedRun = run, expectedGeneration = generation) {
+  if (!expectedRun || !active(expectedRun, expectedGeneration) || (!reset && !cursor)) return;
+  const requestVersion = ++resultRequest;
+  $('more').disabled = true;
   try {
-    const d = await api('/v1/search-runs/' + run);
-    $('status').textContent = '任务 ' + run + ' · ' + d.lifecycle;
+    const d = await api(`/v1/search-runs/${expectedRun}/results?limit=12` + (reset ? '' : '&cursor=' + encodeURIComponent(cursor)));
+    if (!active(expectedRun, expectedGeneration) || requestVersion !== resultRequest) return;
+    if (reset) $('cards').replaceChildren();
+    activeSnapshot = d.snapshot_id || null;
+    render(d.results, expectedRun, expectedGeneration, activeSnapshot);
+    cursor = d.next_cursor;
+    $('more').hidden = !cursor;
+    $('metrics').replaceChildren(node('pre', JSON.stringify({范围: d.coverage_state, 统计: d.statistics, 停止原因: d.stop_reasons, 能力范围: d.feature_status}, null, 2)));
+  } finally {
+    if (active(expectedRun, expectedGeneration) && requestVersion === resultRequest) $('more').disabled = false;
+  }
+}
+
+/** 串行轮询任务状态；只有当前任务的最新响应可以更新页面和下一次轮询。 */
+async function check(expectedRun = run, expectedGeneration = generation) {
+  if (!expectedRun || !active(expectedRun, expectedGeneration)) return;
+  const requestVersion = ++statusRequest;
+  clearTimeout(poll);
+  poll = null;
+  try {
+    const d = await api('/v1/search-runs/' + expectedRun);
+    if (!active(expectedRun, expectedGeneration) || requestVersion !== statusRequest) return;
+    $('status').textContent = '任务 ' + expectedRun + ' · ' + d.lifecycle;
     if (['succeeded', 'cancelled', 'timed_out', 'failed'].includes(d.lifecycle)) {
-      clearInterval(poll);
-      poll = null;
       $('cancel').disabled = true;
       $('submit').disabled = false;
-      await results();
+      await results(true, expectedRun, expectedGeneration);
+      if (!active(expectedRun, expectedGeneration) || requestVersion !== statusRequest) return;
       $('rerank').disabled = !d.latest_snapshot_id;
       $('download').disabled = !d.latest_snapshot_id;
       if (d.error) $('status').append(node('pre', JSON.stringify(d.error, null, 2)));
+    } else {
+      // 当前响应处理完才安排下一轮，避免慢网络下请求不断重叠。
+      poll = setTimeout(/** 始终轮询创建此计时器的任务。 */ () => check(expectedRun, expectedGeneration), 500);
     }
   } catch (e) {
-    clearInterval(poll);
+    if (!active(expectedRun, expectedGeneration) || requestVersion !== statusRequest) return;
+    clearTimeout(poll);
     poll = null;
     $('status').textContent = e.message;
     $('submit').disabled = false;
   }
 }
 
-/** 提交完整目标和排序偏好；每 500 毫秒查询任务状态，不让用户先选择骨架。 */
+/** 提交完整目标和排序偏好，立即禁用上次任务的操作并递增页面版本。 */
 $('form').onsubmit = async e => {
   e.preventDefault();
+  const expectedGeneration = ++generation;
+  clearTimeout(poll);
+  poll = null;
+  run = null;
+  cursor = null;
+  activeSnapshot = null;
+  $('submit').disabled = true;
+  $('cancel').disabled = true;
+  $('rerank').disabled = true;
+  $('download').disabled = true;
+  $('more').hidden = true;
+  $('cards').replaceChildren();
+  $('metrics').replaceChildren();
   try {
-    if (poll) clearInterval(poll);
-    $('submit').disabled = true;
-    $('cards').replaceChildren();
     const d = await api('/v1/search-runs', {target: {value: $('target').value}, ranking_profile: $('profile').value, lab_context: lab()});
+    if (generation !== expectedGeneration) return;
     run = d.run_id;
     $('cancel').disabled = false;
-    poll = setInterval(check, 500);
-    await check();
+    await check(run, expectedGeneration);
   } catch (e) {
+    if (generation !== expectedGeneration) return;
     $('status').textContent = e.message;
     $('submit').disabled = false;
   }
 };
 
-/** 请求后端取消并刷新状态；取消保留已发布快照，不等于撤销来源事实。 */
+/** 取消点击时对应的任务；后续页面切换不会把取消结果套到另一项检索上。 */
 $('cancel').onclick = async () => {
+  const expectedRun = run, expectedGeneration = generation;
+  if (!expectedRun) return;
+  $('cancel').disabled = true;
   try {
-    await api('/v1/search-runs/' + run + '/cancel', {});
-    await check();
+    await api('/v1/search-runs/' + expectedRun + '/cancel', {});
+    if (active(expectedRun, expectedGeneration)) await check(expectedRun, expectedGeneration);
   } catch (e) {
+    if (!active(expectedRun, expectedGeneration)) return;
     $('status').textContent = e.message;
+    $('cancel').disabled = false;
   }
 };
 
-/** 对已保存候选重新排序；使用新 run_id 查看结果，不重新检索来源。 */
+/** 重排点击时保存的候选；派生任务接管页面前，旧请求即失去更新页面的资格。 */
 $('rerank').onclick = async () => {
+  const sourceRun = run;
+  if (!sourceRun) return;
+  const expectedGeneration = ++generation;
+  clearTimeout(poll);
+  poll = null;
+  $('submit').disabled = true;
+  $('cancel').disabled = true;
+  $('rerank').disabled = true;
+  $('download').disabled = true;
+  $('more').disabled = true;
   try {
-    const d = await api('/v1/search-runs/' + run + '/rerank', {ranking_profile: $('profile').value, lab_context: lab()});
+    const d = await api('/v1/search-runs/' + sourceRun + '/rerank', {ranking_profile: $('profile').value, lab_context: lab()});
+    if (generation !== expectedGeneration) return;
     run = d.run_id;
-    await check();
+    cursor = null;
+    activeSnapshot = null;
+    $('more').hidden = true;
+    await check(run, expectedGeneration);
   } catch (e) {
+    if (generation !== expectedGeneration) return;
     $('status').textContent = e.message;
+    $('submit').disabled = false;
+    $('rerank').disabled = false;
+    $('download').disabled = false;
+    $('more').disabled = false;
   }
 };
 
-/** 下载当前任务的完整 ReferencePackage JSON，保留卡片未显示的证据和范围字段。 */
+/** 下载当前展示快照的完整资料包，文件名绑定发起请求时的任务编号。 */
 $('download').onclick = async () => {
+  const expectedRun = run, expectedGeneration = generation;
+  if (!expectedRun) return;
   try {
-    const d = await api('/v1/search-runs/' + run + '/package');
+    const query = activeSnapshot ? '?snapshot=' + encodeURIComponent(activeSnapshot) : '';
+    const d = await api('/v1/search-runs/' + expectedRun + '/package' + query);
+    if (!active(expectedRun, expectedGeneration)) return;
     const u = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'}));
     const a = node('a');
     a.href = u;
-    a.download = 'reference-' + run + '.json';
+    a.download = 'reference-' + expectedRun + '.json';
     a.click();
     /** 为浏览器读取下载 Blob 留出时间，再释放临时 URL。 */
     setTimeout(() => URL.revokeObjectURL(u), 1000);
   } catch (e) {
-    $('status').textContent = e.message;
+    if (active(expectedRun, expectedGeneration)) $('status').textContent = e.message;
   }
 };
 
-/** 追加下一页；分页失败只显示错误，不清空已加载的参考。 */
-$('more').onclick = () => results(false)
-  .catch(/** 将分页异常显示在任务状态区域。 */ e => $('status').textContent = e.message);
+/** 追加当前任务的下一页，旧任务分页异常不覆盖新任务状态。 */
+$('more').onclick = async () => {
+  const expectedRun = run, expectedGeneration = generation;
+  try {
+    await results(false, expectedRun, expectedGeneration);
+  } catch (e) {
+    if (active(expectedRun, expectedGeneration)) $('status').textContent = e.message;
+  }
+};
 </script>
 </html>

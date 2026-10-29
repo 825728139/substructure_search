@@ -40,15 +40,21 @@ def lab_fit(reference, context):
     if context.excluded_material_smiles:
         tested += 1
         excluded = {canonical(s) for s in context.excluded_material_smiles}
-        try:
-            found = {canonical(m.smiles) for m in reference.record.materials}
-            if excluded & found:
-                failures.append("explicitly_excluded_material")
-            # 来源材料列表不完整时，“没有列出禁用物”不能视为已确认符合限制。
-            if not reference.record.raw.get("material_inventory_complete", False):
-                unknown.append("material_inventory_completeness_unknown")
-        except ValueError:
+        found = set()
+        identity_unknown = False
+        for material in reference.record.materials:
+            try:
+                found.add(canonical(material.smiles))
+            except ValueError:
+                identity_unknown = True
+        # 脏材料只增加未知项，不能抹掉其他已识别材料触发的明确禁用结论。
+        if excluded & found:
+            failures.append("explicitly_excluded_material")
+        if identity_unknown:
             unknown.append("material_identity_unknown")
+        # 来源材料列表不完整时，“没有列出禁用物”不能视为已确认符合限制。
+        if not reference.record.raw.get("material_inventory_complete", False):
+            unknown.append("material_inventory_completeness_unknown")
     if context.available_equipment is not None:
         tested += 1
         if conditions.equipment is None:

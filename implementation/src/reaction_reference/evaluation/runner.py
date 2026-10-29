@@ -24,7 +24,7 @@ class MaskedSource:
     """评测装饰器，按完整目标要求排除所有含该产物的反应记录，而非只排展示卡片。"""
 
     def __init__(self, source, target):
-        """从固定样本找出满足 target 的产品记录 ID，并据此建立派生来源快照。
+        """从固定样本已核验的产品候选找出满足 target 的记录 ID，建立派生来源快照。
 
         整个记录被排除，避免通过其反应物使用通道再次泄漏目标来源；不是对已确认制备标签的推断。
         """
@@ -32,11 +32,9 @@ class MaskedSource:
         self.issues = source.issues
         self.target = target
         self.excluded = {
-            r.id
-            for r in source.records
-            if any(
-                m.role == "product" and meets_target(parse(m.smiles), target) for m in r.materials
-            )
+            candidate.record.id
+            for candidate, molecule, _ in source.candidates
+            if candidate.material.role == "product" and meets_target(molecule, target)
         }
         self.snapshot_id = digest(
             [source.snapshot_id, sorted(self.excluded), "entire_source_record_mask"]

@@ -42,7 +42,7 @@ def main(argv=None):
         target = child.add_mutually_exclusive_group(required=True)
         target.add_argument("--target")
         target.add_argument("--target-file")
-        child.add_argument("--source", choices=["jsonl", "fixture", "postgres"], default="fixture")
+        child.add_argument("--source", choices=["jsonl", "fixture", "postgres"])
         child.add_argument("--source-path")
         child.add_argument("--output")
         child.add_argument("--exhaustive-fixture", action="store_true")
@@ -117,13 +117,26 @@ def main(argv=None):
 
             export_schemas(Path(args.output_dir))
             return 0
+        if args.command == "inspect-run":
+            from reaction_reference.adapters.run_store import FileRunStore
+
+            # 只读状态不创建协调器，也不触发重启恢复，允许与运行中的服务共用目录。
+            _write(FileRunStore(settings.store_path).load(args.run_id).model_dump(mode="json"))
+            return 0
         if args.command in ("search", "preview"):
-            settings = settings.model_copy(
-                update={
-                    "source_kind": "postgres" if args.source == "postgres" else "jsonl",
-                    **({"source_path": Path(args.source_path)} if args.source_path else {}),
-                }
-            )
+            if args.source_path and args.source in ("fixture", "postgres"):
+                raise ValueError("--source-path requires a JSONL source")
+            updates: dict = {}
+            if args.source is not None:
+                updates["source_kind"] = "postgres" if args.source == "postgres" else "jsonl"
+            if args.source_path:
+                updates.update(source_kind="jsonl", source_path=Path(args.source_path))
+            if args.source == "fixture":
+                # 显式示例使用模型声明的包内默认数据，避免继承真实来源文件路径。
+                updates["source_path"] = Settings.model_fields["source_path"].get_default(
+                    call_default_factory=True
+                )
+            settings = settings.model_copy(update=updates)
             text = Path(args.target_file).read_text().strip() if args.target_file else args.target
             if not text or len(text.splitlines()) != 1:
                 raise ValueError("Provide exactly one nonempty target SMILES")
@@ -142,9 +155,7 @@ def main(argv=None):
                 _write(result.model_dump(mode="json"), args.output)
                 return 0 if result.coverage_state == "complete" else 2
         with Client(settings) as client:
-            if args.command == "inspect-run":
-                _write(client.manager.store.load(args.run_id).model_dump(mode="json"))
-            elif args.command == "rerank":
+            if args.command == "rerank":
                 _write(
                     client.rerank(
                         args.run_id, RerankRequest(ranking_profile=args.profile)

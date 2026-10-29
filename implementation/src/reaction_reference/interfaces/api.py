@@ -54,7 +54,9 @@ def create_app(settings=None):
         """
         if settings.api_token:
             supplied = authorization or ""
-            if not secrets.compare_digest(supplied, f"Bearer {settings.api_token}"):
+            if not secrets.compare_digest(
+                supplied.encode(), f"Bearer {settings.api_token}".encode()
+            ):
                 raise HTTPException(401, "Authentication required")
         return "internal"
 
