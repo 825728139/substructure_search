@@ -18,3 +18,45 @@ jobs:
         with:
           name: reaction-reference-wheel
           path: implementation/dist/*.whl
+
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: implementation
+    steps:
+      - uses: actions/checkout@v4
+      - name: 构建并检查绘图依赖
+        run: docker build -f deploy/Dockerfile -t reaction-reference-ci .
+      - name: 以只读根目录和独立运行卷启动
+        run: >-
+          docker run -d --name reaction-reference-ci --init --read-only --tmpfs /tmp
+          -v reaction-reference-ci-runs:/app/var/runs
+          -p 127.0.0.1:18000:8000
+          -e RR_SOURCE_KIND=jsonl -e RR_API_TOKEN=ci-test-token
+          reaction-reference-ci
+      - name: 检查真实 HTTP 检索及结构图
+        env:
+          RR_API_TOKEN: ci-test-token
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --max-time 2 -fsS http://127.0.0.1:18000/health/live > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          python3 scripts/check_deployment.py --base-url http://127.0.0.1:18000 --output container-check.json
+      - name: 记录日志并清理临时部署
+        if: always()
+        run: |
+          docker logs reaction-reference-ci || true
+          docker stop -t 15 reaction-reference-ci || true
+          docker rm -f reaction-reference-ci || true
+          docker volume rm reaction-reference-ci-runs || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reaction-reference-container-check
+          path: implementation/container-check.json
+          if-no-files-found: ignore

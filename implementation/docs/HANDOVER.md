@@ -99,6 +99,7 @@ implementation/
 ├── scripts/
 │   ├── rr                      # 优先选项目虚拟环境的启动脚本
 │   ├── check.py                # 完整交付检查
+│   ├── check_deployment.py     # 合成示例部署的真实 HTTP、SVG 与重排验收
 │   ├── check_comments.py       # 中文说明覆盖检查及函数索引生成
 │   └── probe_source.py         # 可选只读来源探针
 ├── configs/                    # 内部环境配置示例

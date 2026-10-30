@@ -15,6 +15,14 @@
 | [write_index](../scripts/check_comments.py#L101) | 把具名函数的中文摘要和源码行号写入索引；行号变化后可再次运行本脚本刷新。 |
 | [main](../scripts/check_comments.py#L119) | 执行中文说明覆盖检查；带 --write-index 时额外刷新 Markdown 函数索引。 |
 
+## scripts/check_deployment.py
+
+| 函数 | 职责 |
+|---|---|
+| [fetch](../scripts/check_deployment.py#L13) | 发送有超时的 HTTP 请求并返回原始响应体；令牌只放在请求头中。 |
+| [check](../scripts/check_deployment.py#L25) | 验证包内示例服务的完整请求链，返回有限验收结果；不会改动来源反应数据。 |
+| [main](../scripts/check_deployment.py#L110) | 读取地址和可选预期代码哈希，运行验收并输出 JSON；访问令牌从环境读取。 |
+
 ## scripts/probe_source.py
 
 | 函数 | 职责 |

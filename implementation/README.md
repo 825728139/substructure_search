@@ -157,6 +157,16 @@ API 必须单协调进程、单 Uvicorn worker；目录锁会拒绝同时写同�
 
 重启时单个损坏状态或快照会单独记录到 `/health/ready` 的 `recovery_issues`，原文件保留，其他有效任务继续恢复；权限或真实磁盘 I/O 错误仍会报错。该机制用于隔离局部损坏，不会自动修复坏文件。
 
-Docker/Compose 配置位于 `deploy/`，可用 `docker compose -f deploy/compose.yaml up --build` 启动。默认只绑定本机端口。当前机器的 Docker daemon 访问权限不足，镜像构建和容器运行尚未验证；本机 Python 服务已完成运行验证。
+Docker/Compose 配置位于 `deploy/`，在本目录可用 `docker compose -f deploy/compose.yaml up --build` 启动，默认只绑定本机端口。镜像安装 RDKit 绘图需要的系统共享库，并在构建阶段验证绘图模块导入。可通过构建参数 `PIP_INDEX_URL` 指定公开 Python 包镜像；默认使用 PyPI。
+
+本机已使用无特权 Podman 按 Docker 格式构建镜像，并以 UID 10001、只读根目录、独立运行卷验证真实 HTTP、结构图、重排和重启保留。Docker daemon 权限仍不可用，因此 Compose 编排本身只做了配置检查。
+
+合成示例部署就绪后，可运行以下检查；访问令牌从 `RR_API_TOKEN` 环境变量读取。检查会创建示例任务，应对包内示例部署运行：
+
+```bash
+python scripts/check_deployment.py --base-url http://127.0.0.1:8000 --output /tmp/container-check.json
+```
+
+CI 新增独立容器构建和 HTTP 检查任务，用于发现开发机系统库掩盖的依赖问题；远端执行结果仍需查看实际 Actions 状态。
 
 保护基/互变异构体自动展开、任意可变路径 Markush、金属配位处理、共同中间体主动补查、供应/危害外部资料接入、化学可行性和条件预测尚未实现，均有明确能力状态。现有材料身份关系只是已返回记录之间的线索。模板回放成功不证明选择性、实验可行性或条件可照搬。完整范围见 [STATUS](docs/STATUS.md)；产品和化学设计见[上层实现计划](../implementation_plan.md)。

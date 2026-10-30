@@ -127,3 +127,20 @@ implementation/.venv/bin/python implementation/scripts/check.py
 修改位于 [rules.py](../src/reaction_reference/rules.py)，随包化学规则内容没有改变。[test_rule_validation.py](../tests/test_rule_validation.py)新增 6 项回归：最先运行的 5 项中，4 项反例修复前失败，合法多产物对照通过；另补充 CLI `validate-rules` 的错误退出与输出检查。
 
 完整检查 **261 项测试通过、无跳过**，中文说明、静态检查、契约检查与 wheel 构建通过，真实 PostgreSQL 和浏览器回归也执行通过；固定样本 24 项任务按当前实现哈希重跑。这是配置与程序调用方式的一致性校验，不是对新增反应规则的化学正确性认证。
+
+## 打包与隔离部署复核（2026-10-30）
+
+在 `3dfb104` 基础上确认一个部署缺陷：RDKit 绘图扩展还依赖系统的 X11/Expat 共享库，开发机已经安装这些库，原 `python:3.12-slim-bookworm` 镜像却没有安装。在官方精简基底中只读加载锁定的运行依赖，实际复现 `ImportError: libXrender.so.1: cannot open shared object file`。服务的普通检索可能可用，但结构图接口会失败。
+
+[Dockerfile](../deploy/Dockerfile)现安装 `libxrender1`、`libxext6`、`libexpat1`，所需间接依赖由包管理器安装；构建时导入绘图模块，及早检测缺失共享库。增加可选的构建阶段 Python 包镜像参数，处理本机下载超时，不改变应用运行配置。
+
+验证分为两个独立环境：
+
+- **新安装的 wheel 环境**：从仓库外运行，未安装 pytest、Ruff、mypy 或构建工具；实际独立进程检索、HTTP、资源读取、分页、SVG 和冻结重排通过，包内实现哈希与当前源码一致。
+- **无特权容器环境**：Docker daemon 不可访问，改用临时 Podman 存储构建 Docker 格式镜像。Docker Hub 连接超时后，测试基底取自 [Docker 在 ECR 的官方发布账号](https://gallery.ecr.aws/docker/)，实际镜像身份保存在验证记录中。最终镜像以 UID 10001、只读根目录及独立运行卷通过认证、检索、分页、SVG、重排和数据库驱动导入；健康检查命令实际执行成功。重启后原有两份快照仍可读取，带任务关闭后的四个在途任务均保存为 `cancelled`。
+
+重启检查曾把启动瞬间的连接重置当成失败；进一步读取进程、容器内接口及宿主接口后，确认应用运行正常，最终任务状态也正确。这属于临时检查的等待处理问题，没有修改应用启动逻辑。
+
+新增可复用的 [HTTP 部署检查脚本](../scripts/check_deployment.py)，CI 新增独立容器构建、只读运行及真实 HTTP 验收任务。完整项目 **282 项测试通过、无跳过**，静态检查、中文说明、契约检查和 wheel 构建通过。本轮没有改动检索业务源码，既有固定样本评测的实现哈希仍匹配。临时运行服务、运行卷及失败构建容器已清理，测试镜像作为临时缓存保留。
+
+这些验证不代表真实生产规模性能、Docker Compose 整套编排或远端 GitHub Actions 已运行通过；上述边界与本地验证结果分别记录。
