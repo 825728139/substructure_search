@@ -496,6 +496,7 @@
 | [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L257) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
 | [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L293) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
 | [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
+| [test_bounded_export_preserves_source_replay_template](../tests/test_postgres_integration.py#L341) | 有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。 |
 
 ## tests/test_query_input_planning.py
 

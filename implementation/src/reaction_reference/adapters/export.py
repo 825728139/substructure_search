@@ -10,7 +10,7 @@ from pathlib import Path
 def export_sample(dsn, output, *, limit=300, after_id=0, timeout_ms=3000):
     """只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。
 
-    dsn 由环境配置传入，不写入文件；读取投影排除大二进制字段，设置 SQL 超时并记录来源快照。数据先写同目录临时文件，成功后原子发布且拒绝覆盖。失败不发布残缺文件，提取产品字段不升级为制备证据。
+    dsn 由环境配置传入，不写入文件；读取投影排除大二进制字段，保留来源回放模板，设置 SQL 超时并记录来源快照。数据先写同目录临时文件，成功后原子发布且拒绝覆盖。失败不发布残缺文件，提取产品字段不升级为制备证据。
     """
     import psycopg
     from psycopg.rows import dict_row
@@ -27,7 +27,7 @@ def export_sample(dsn, output, *, limit=300, after_id=0, timeout_ms=3000):
     columns = (
         "id,source_type,source_namespace,document_id,paragraph_nums,paragraph_reaction_ordinal,"
         "product_smiles,reactant_smiles,reagent_smiles,catalyst_smiles,solvent_smiles,"
-        "reaction_smiles,mapped_reaction_smiles,reaction_class,"
+        "reaction_smiles,mapped_reaction_smiles,reaction_class,reaction_center_r2,"
         "temperature_min_c,temperature_max_c,duration_max_seconds,pressure_max_kpa"
     )
     with psycopg.connect(

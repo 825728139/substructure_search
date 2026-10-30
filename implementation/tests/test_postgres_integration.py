@@ -335,3 +335,36 @@ def test_direct_reaction_id_link_does_not_require_paragraph_locator(indexed_sour
         assert source.hydrate(item.record).materials[0].name == "乙醇"
     finally:
         source.close()
+
+
+@pytest.mark.parametrize("template", ["[CH2:1][OH:2]>>[CH:1]=[O:2]", None])
+def test_bounded_export_preserves_source_replay_template(indexed_source_dsn, tmp_path, template):
+    """有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。"""
+    from reaction_reference.adapters.export import export_sample
+    from reaction_reference.adapters.sources import JsonlSource
+    from reaction_reference.analogs.transfer import source_rules
+
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute(
+            "UPDATE reaction.reactions SET reaction_center_r2=%s WHERE id=1", (template,)
+        )
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
+        online = next(item.record for item in page.items if item.record.source.record_id == "1")
+        assert online.retro_template == template
+        output = tmp_path / "sample.jsonl"
+        exported = export_sample(indexed_source_dsn, output, limit=1)
+        assert exported["records"] == 1 and exported["last_id"] == 1
+        offline = JsonlSource(output)
+        try:
+            assert not offline.issues
+            restored = offline.records[0]
+            assert restored.retro_template == online.retro_template
+            assert [rule["id"] for rule in source_rules(restored)] == [
+                rule["id"] for rule in source_rules(online)
+            ]
+        finally:
+            offline.close()
+    finally:
+        source.close()
