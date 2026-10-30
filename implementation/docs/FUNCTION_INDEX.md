@@ -259,9 +259,9 @@
 | 函数 | 职责 |
 |---|---|
 | [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
-| [_priority](../src/reaction_reference/ranking/engine.py#L78) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L102) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L136) | 为单个参考生成可传递且稳定的排序元组。 |
+| [_priority](../src/reaction_reference/ranking/engine.py#L90) | 返回参考的方法/证据优先级，数值越小越优先。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L114) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L148) | 为单个参考生成可传递且稳定的排序元组。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -647,13 +647,14 @@
 | [test_omitted_review_field_differs_from_explicit_clear](../tests/test_round3_boundaries.py#L52) | 未提供产品观察与明确清空观察是不同操作，内容和审核哈希都应体现区别。 |
 | [reference](../tests/test_round3_boundaries.py#L64) | 构造方法和证据资格相同的参考，隔离操作条件对排序的影响。 |
 | [test_inverted_temperature_range_is_not_a_capability_pass](../tests/test_round3_boundaries.py#L78) | 下限高于上限的来源温度范围不能被用于判定实验能力已满足。 |
-| [test_invalid_conditions_do_not_receive_easy_operation_priority](../tests/test_round3_boundaries.py#L102) | 倒置温度和负时长应保持异常/未知，不得优于有完整可信数值的同等参考。 |
-| [test_subzero_temperature_and_zero_duration_remain_valid](../tests/test_round3_boundaries.py#L129) | 正常低温和零时长不应被当作倒置范围或负时长处理。 |
-| [test_constructor_failure_releases_coordinator_lock](../tests/test_round3_boundaries.py#L144) | 初始化异常被调用方保留时，目录锁仍需立即释放，允许修复后再次初始化。 |
-| [test_constructor_failure_releases_coordinator_lock.fail](../tests/test_round3_boundaries.py#L148) | 模拟读取遗留状态时的初始化错误。 |
-| [test_invalid_exclusion_is_rejected_before_creating_job](../tests/test_round3_boundaries.py#L161) | 无效排除结构必须在提交入口报错，不能先保存和调度一个必然失败的任务。 |
-| [test_invalid_exclusion_is_rejected_before_creating_job.unexpected_submission](../tests/test_round3_boundaries.py#L165) | 一旦越过请求校验进入调度，立即暴露回归。 |
-| [test_rerank_records_current_implementation_without_erasing_origin](../tests/test_round3_boundaries.py#L176) | 旧资料重排后须同时保留检索版本和本次排序版本，避免把新结果归给旧代码。 |
+| [test_one_known_temperature_endpoint_can_prove_failure_but_not_a_pass](../tests/test_round3_boundaries.py#L117) | 温度只报告一端时，已知越界仍须拒绝；未越界不能补造另一端并判通过。 |
+| [test_invalid_conditions_do_not_receive_easy_operation_priority](../tests/test_round3_boundaries.py#L145) | 倒置温度和负时长应保持异常/未知，不得优于有完整可信数值的同等参考。 |
+| [test_subzero_temperature_and_zero_duration_remain_valid](../tests/test_round3_boundaries.py#L172) | 正常低温和零时长不应被当作倒置范围或负时长处理。 |
+| [test_constructor_failure_releases_coordinator_lock](../tests/test_round3_boundaries.py#L187) | 初始化异常被调用方保留时，目录锁仍需立即释放，允许修复后再次初始化。 |
+| [test_constructor_failure_releases_coordinator_lock.fail](../tests/test_round3_boundaries.py#L191) | 模拟读取遗留状态时的初始化错误。 |
+| [test_invalid_exclusion_is_rejected_before_creating_job](../tests/test_round3_boundaries.py#L204) | 无效排除结构必须在提交入口报错，不能先保存和调度一个必然失败的任务。 |
+| [test_invalid_exclusion_is_rejected_before_creating_job.unexpected_submission](../tests/test_round3_boundaries.py#L208) | 一旦越过请求校验进入调度，立即暴露回归。 |
+| [test_rerank_records_current_implementation_without_erasing_origin](../tests/test_round3_boundaries.py#L219) | 旧资料重排后须同时保留检索版本和本次排序版本，避免把新结果归给旧代码。 |
 
 ## tests/test_rule_validation.py
 

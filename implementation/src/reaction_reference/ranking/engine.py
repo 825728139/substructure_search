@@ -7,7 +7,7 @@ from reaction_reference.ranking.features import condition_issues, features
 def lab_fit(reference, context):
     """将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。
 
-    返回（pass/fail/unknown/not_applicable、原因列表）；任一已知违规优先为 fail，资料缺失或温度范围倒置保持 unknown。记录未分配到明确操作步骤时，不把净记录条件当作已确认步骤条件。
+    返回（pass/fail/unknown/not_applicable、原因列表）；任一已知违规优先为 fail。缺失资料不能证明符合要求，但已知温度端点足以证明越界时仍为 fail；倒置范围保持 unknown。记录未分配到明确操作步骤时，不把净记录条件当作已确认步骤条件。
     """
     if context is None:
         return "not_applicable", ["lab_context_not_configured"]
@@ -39,7 +39,19 @@ def lab_fit(reference, context):
                 unknown.append(issues["temperature"])
             continue
         if actual is None:
-            unknown.append(label + "_unknown")
+            # 只报告最低 100°C 也足以否定最高 50°C 的能力；低温方向同理。
+            # 另一端未越界只能保留未知，不能把它补成缺失端点后判通过。
+            opposite = (
+                conditions.temperature_min_c
+                if label == "temperature_max"
+                else conditions.temperature_max_c
+                if label == "temperature_min"
+                else None
+            )
+            if opposite is not None and not predicate(requirement, opposite):
+                failures.append(label + "_outside_capability")
+            else:
+                unknown.append(label + "_unknown")
         elif not predicate(requirement, actual):
             failures.append(label + "_outside_capability")
     if context.excluded_material_smiles:

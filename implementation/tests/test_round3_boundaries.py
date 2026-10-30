@@ -85,6 +85,49 @@ def test_inverted_temperature_range_is_not_a_capability_pass(amide):
     assert "inverted_temperature_range" in reasons
 
 
+@pytest.mark.parametrize(
+    "conditions,context,expected,reason",
+    [
+        (
+            Conditions(temperature_min_c=100),
+            LabContext(max_temperature_c=50),
+            "fail",
+            "temperature_max_outside_capability",
+        ),
+        (
+            Conditions(temperature_max_c=-30),
+            LabContext(min_temperature_c=0),
+            "fail",
+            "temperature_min_outside_capability",
+        ),
+        (
+            Conditions(temperature_min_c=20),
+            LabContext(max_temperature_c=50),
+            "unknown",
+            "temperature_max_unknown",
+        ),
+        (
+            Conditions(temperature_max_c=20),
+            LabContext(min_temperature_c=0),
+            "unknown",
+            "temperature_min_unknown",
+        ),
+    ],
+)
+def test_one_known_temperature_endpoint_can_prove_failure_but_not_a_pass(
+    amide, conditions, context, expected, reason
+):
+    """温度只报告一端时，已知越界仍须拒绝；未越界不能补造另一端并判通过。"""
+    record = amide.model_copy(update={"conditions": conditions})
+    candidate = reference(record, "a-outside")
+    fit, reasons = lab_fit(candidate, context)
+    assert fit == expected and reason in reasons
+    if expected == "fail":
+        unknown = reference(amide.model_copy(update={"conditions": Conditions()}), "z-unknown")
+        ranked, _ = rank_references([candidate, unknown], profile="lab_fit", context=context)
+        assert [item.id for item in ranked] == ["z-unknown", "a-outside"]
+
+
 @pytest.mark.parametrize("cached", [False, True])
 @pytest.mark.parametrize(
     "conditions,reason",
