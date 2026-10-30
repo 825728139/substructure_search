@@ -827,7 +827,7 @@
           "type": "array"
         },
         "mapping_support": {
-          "default": "single_mapping_inference",
+          "default": "unknown",
           "title": "Mapping Support",
           "type": "string"
         },

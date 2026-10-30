@@ -27,6 +27,7 @@ def test_connection_and_leaving_fragment_not_all_broken(amide):
     """确认酰胺新键与离去边界正确分账，缺少副产物不导致虚构大量断键。"""
     a = analyze_reaction(amide)
     assert a.state == "analyzed"
+    assert a.mapping_support == "single_mapping_inference"
     assert [c.maps for c in a.formed] == [(1, 3)]
     assert a.detached_boundaries == [(1, 12)]
     assert not a.broken
@@ -45,12 +46,23 @@ def test_invalid_mapping_is_unknown(amide, mapped, reason):
     """确认重复正映射、同位素冲突或非法反应式明确返回未知及原因。"""
     a = analysis(amide, mapped)
     assert a.state == "unknown" and reason in a.reasons
+    assert a.mapping_support == "unknown"
+
+
+def test_missing_mapping_has_no_inference_support(amide):
+    """缺少映射的数据与编排器的未知分析默认值都不能标成单一映射推断。"""
+    from reaction_reference.domain.models import ReactionAnalysis
+
+    actual = analyze_reaction(amide.model_copy(update={"mapped_reaction_smiles": None}))
+    assert actual.state == "unknown" and actual.mapping_support == "unknown"
+    assert ReactionAnalysis(state="unknown").mapping_support == "unknown"
 
 
 def test_map_zero_never_establishes_cross_side_identity(amide):
     """确认 map=0 原子不参与跨侧身份，不从未映射区域制造成断键。"""
     a = analysis(amide, "CC[OH:1]>>CC[OH:1]")
     assert a.state == "partial"
+    assert a.mapping_support == "single_mapping_inference"
     assert not a.formed and not a.broken
 
 

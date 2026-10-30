@@ -76,6 +76,35 @@ def test_bad_record_isolated(tmp_path, amide, request_factory):
     assert package.source_issues and package.coverage_state == "partial"
 
 
+def test_unknown_mapping_support_remains_unknown_in_features_and_summary(tmp_path, request_factory):
+    """来源没有映射时，完整结果、排序依据和模型摘要必须一致保留未知支持。"""
+    path = tmp_path / "unmapped.jsonl"
+    path.write_text(
+        json.dumps({"id": 1, "product_smiles": ["CCO"], "reactant_smiles": ["CC=O"]}) + "\n",
+        encoding="utf-8",
+    )
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search(
+            request_factory("CCO", options={"include_usage": False, "include_proposals": False}),
+            source,
+        )
+        assert package.results
+        for reference in package.results:
+            assert reference.analysis.state == "unknown"
+            assert reference.analysis.mapping_support == "unknown"
+            assert (
+                reference.ranking_features["evidence_quality"]["value"]["mapping_support"]
+                == "unknown"
+            )
+        assert all(
+            entry["reaction_analysis"]["mapping_support"] == "unknown"
+            for entry in json.loads(package.summary)
+        )
+    finally:
+        source.close()
+
+
 def test_lab_unknown_not_easy_or_safe(source, request_factory):
     """确认缺温度与步骤归属的来源返回实验适配未知，而非通过或低风险。"""
     package = search(request_factory(budget={"max_tasks": 100}), source)

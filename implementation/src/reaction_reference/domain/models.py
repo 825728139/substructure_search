@@ -300,7 +300,8 @@ class ReactionAnalysis(Model):
     atom_sources: dict[int, int] = Field(default_factory=dict)
     topology: list[str] = Field(default_factory=list)
     reaction_classes: list[str] = Field(default_factory=list)
-    mapping_support: str = "single_mapping_inference"
+    # 未分析或校验失败时不赋予映射支持；成功解析的端点分析显式填写推断依据。
+    mapping_support: str = "unknown"
     event_scope: EventScope = "unknown"
     reasons: list[str] = Field(default_factory=list)
 

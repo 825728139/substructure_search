@@ -278,6 +278,7 @@ def analyze_reaction(record):
         reasons.append("cycle_rank_changed_but_event_unresolved")
     return ReactionAnalysis(
         state="analyzed" if complete_maps else "partial",
+        mapping_support="single_mapping_inference",
         formed=formed,
         broken=broken,
         order_changed=order,

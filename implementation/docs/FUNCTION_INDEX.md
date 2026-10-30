@@ -279,7 +279,7 @@
 | [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
 | [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
 | [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
-| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L296) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L297) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
 
 ## src/reaction_reference/retrieval/planner.py
 
@@ -455,23 +455,24 @@
 | [test_budgets_return_usable_partial_results](../tests/test_pipeline.py#L29) | 确认小任务/候选预算会停止扩展并保留部分包，不超限或伪报完整。 |
 | [test_cached_matches_never_reuse_wrong_atom_indices](../tests/test_pipeline.py#L38) | 确认同结构不同 SMILES 原子顺序的缓存不会错用目标到来源的索引。 |
 | [test_bad_record_isolated](../tests/test_pipeline.py#L69) | 确认一条损坏 JSON 不阻断其他参考，局部问题仍使结果范围保持部分。 |
-| [test_lab_unknown_not_easy_or_safe](../tests/test_pipeline.py#L79) | 确认缺温度与步骤归属的来源返回实验适配未知，而非通过或低风险。 |
-| [test_imported_arrays_do_not_claim_preparation](../tests/test_pipeline.py#L88) | 确认来源产品/输入数组本身不构成制备或实际使用的报告证据。 |
-| [test_atom_properties_and_ring_analysis_do_not_require_method_name](../tests/test_pipeline.py#L103) | 确认没有人工反应名称也能从实际键级与 H 变化识别修饰，支持仍标合成示例。 |
-| [test_dirty_string_field_is_not_split_into_atom_materials](../tests/test_pipeline.py#L116) | 确认误写成字符串的 SMILES 数组被拒绝，不按字符生成材料实例。 |
-| [test_later_fragment_witness_can_upgrade_reaction_contribution](../tests/test_pipeline.py#L124) | 确认后来的分片成键见证能升级已有核心结构线索，并保存正确方法见证。 |
-| [test_mapping_incompleteness_is_accumulated_across_source_pages](../tests/test_pipeline.py#L167) | 确认前页映射截断不会被后页正常耗尽覆盖成完整匹配范围。 |
-| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.candidate_page](../tests/test_pipeline.py#L194) | 按 cursor 返回两页，分别触发映射截断和流耗尽，供跨页完整性回归使用。 |
-| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.hydrate](../tests/test_pipeline.py#L210) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
-| [test_small_summary_budget_does_not_hide_full_evidence_or_claim_complete](../tests/test_pipeline.py#L233) | 确认摘要预算不足时标不可用且保留完整候选，不截断半条证据或伪报摘要完成。 |
-| [test_detail_names_are_bound_by_structure_not_array_position](../tests/test_pipeline.py#L244) | 确认详情名称按结构身份绑定，材料数组顺序变化不会错配名称。 |
-| [test_failed_similarity_selection_keeps_independent_substructure_opportunity](../tests/test_pipeline.py#L261) | 确认相似初选超时后仍有独立子结构补查机会，局部失败不会被隐藏。 |
-| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.candidate_page](../tests/test_pipeline.py#L289) | stage=0 故意抛超时，其余阶段返回一个真实结构候选，验证独立补查分支。 |
-| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.hydrate](../tests/test_pipeline.py#L301) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
-| [test_duplicate_record_ids_cannot_mix_materials_and_reaction_analysis](../tests/test_pipeline.py#L321) | 确认同 ID 冲突记录整体隔离，完全重复记录去重，不混用实验材料与分析。 |
-| [test_shared_structure_witness_is_bound_to_each_actual_experiment](../tests/test_pipeline.py#L339) | 确认结构核验可复用，但返回见证 ID 必须分别绑定不同实验来源。 |
-| [test_missing_operation_fields_do_not_rank_as_easy_conditions](../tests/test_pipeline.py#L375) | 确认缺失温度/时长不能在操作偏好下获得比已知条件更容易的优势。 |
-| [test_operation_preference_does_not_assume_zero_celsius_is_room_temperature](../tests/test_pipeline.py#L400) | 确认操作偏好以公开的 25°C 为参照，不把需要制冷的 0°C 当作室温。 |
+| [test_unknown_mapping_support_remains_unknown_in_features_and_summary](../tests/test_pipeline.py#L79) | 来源没有映射时，完整结果、排序依据和模型摘要必须一致保留未知支持。 |
+| [test_lab_unknown_not_easy_or_safe](../tests/test_pipeline.py#L108) | 确认缺温度与步骤归属的来源返回实验适配未知，而非通过或低风险。 |
+| [test_imported_arrays_do_not_claim_preparation](../tests/test_pipeline.py#L117) | 确认来源产品/输入数组本身不构成制备或实际使用的报告证据。 |
+| [test_atom_properties_and_ring_analysis_do_not_require_method_name](../tests/test_pipeline.py#L132) | 确认没有人工反应名称也能从实际键级与 H 变化识别修饰，支持仍标合成示例。 |
+| [test_dirty_string_field_is_not_split_into_atom_materials](../tests/test_pipeline.py#L145) | 确认误写成字符串的 SMILES 数组被拒绝，不按字符生成材料实例。 |
+| [test_later_fragment_witness_can_upgrade_reaction_contribution](../tests/test_pipeline.py#L153) | 确认后来的分片成键见证能升级已有核心结构线索，并保存正确方法见证。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages](../tests/test_pipeline.py#L196) | 确认前页映射截断不会被后页正常耗尽覆盖成完整匹配范围。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.candidate_page](../tests/test_pipeline.py#L223) | 按 cursor 返回两页，分别触发映射截断和流耗尽，供跨页完整性回归使用。 |
+| [test_mapping_incompleteness_is_accumulated_across_source_pages.Source.hydrate](../tests/test_pipeline.py#L239) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
+| [test_small_summary_budget_does_not_hide_full_evidence_or_claim_complete](../tests/test_pipeline.py#L262) | 确认摘要预算不足时标不可用且保留完整候选，不截断半条证据或伪报摘要完成。 |
+| [test_detail_names_are_bound_by_structure_not_array_position](../tests/test_pipeline.py#L273) | 确认详情名称按结构身份绑定，材料数组顺序变化不会错配名称。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity](../tests/test_pipeline.py#L290) | 确认相似初选超时后仍有独立子结构补查机会，局部失败不会被隐藏。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.candidate_page](../tests/test_pipeline.py#L318) | stage=0 故意抛超时，其余阶段返回一个真实结构候选，验证独立补查分支。 |
+| [test_failed_similarity_selection_keeps_independent_substructure_opportunity.Source.hydrate](../tests/test_pipeline.py#L330) | 返回模拟记录本身；此测试不引入额外详情 I/O。 |
+| [test_duplicate_record_ids_cannot_mix_materials_and_reaction_analysis](../tests/test_pipeline.py#L350) | 确认同 ID 冲突记录整体隔离，完全重复记录去重，不混用实验材料与分析。 |
+| [test_shared_structure_witness_is_bound_to_each_actual_experiment](../tests/test_pipeline.py#L368) | 确认结构核验可复用，但返回见证 ID 必须分别绑定不同实验来源。 |
+| [test_missing_operation_fields_do_not_rank_as_easy_conditions](../tests/test_pipeline.py#L404) | 确认缺失温度/时长不能在操作偏好下获得比已知条件更容易的优势。 |
+| [test_operation_preference_does_not_assume_zero_celsius_is_room_temperature](../tests/test_pipeline.py#L429) | 确认操作偏好以公开的 25°C 为参照，不把需要制冷的 0°C 当作室温。 |
 
 ## tests/test_postgres_integration.py
 
@@ -507,20 +508,21 @@
 |---|---|
 | [analysis](../tests/test_reactions.py#L13) | 用给定映射式重建测试两侧材料，再调用实际分析，隔离端点归属与键变化场景。 |
 | [test_connection_and_leaving_fragment_not_all_broken](../tests/test_reactions.py#L26) | 确认酰胺新键与离去边界正确分账，缺少副产物不导致虚构大量断键。 |
-| [test_invalid_mapping_is_unknown](../tests/test_reactions.py#L44) | 确认重复正映射、同位素冲突或非法反应式明确返回未知及原因。 |
-| [test_map_zero_never_establishes_cross_side_identity](../tests/test_reactions.py#L50) | 确认 map=0 原子不参与跨侧身份，不从未映射区域制造成断键。 |
-| [test_resonance_swap_not_transformation](../tests/test_reactions.py#L57) | 确认限定硝基氧共振交换记为表示变化，不计真实键级转化。 |
-| [test_real_proton_transfer_not_suppressed_as_resonance](../tests/test_reactions.py#L64) | 确认羧酸的实际 H 迁移不会被共振规则抹除。 |
-| [test_observed_ring_changes](../tests/test_reactions.py#L71) | 确认从实际命中反应变化识别闭环和开环，不依赖检索前虚构切环位置。 |
-| [test_synthetic_sources_never_become_literature](../tests/test_reactions.py#L81) | 确认合成示例有演示 Claim，但没有真实制备/获得/使用命中。 |
-| [test_product_presence_alone_not_preparation](../tests/test_reactions.py#L89) | 确认有产品结构不等于制得，实际输入使用只归属于对应反应物。 |
-| [test_conflict_cancels_positive_outcome](../tests/test_reactions.py#L97) | 确认同产品的明确冲突会取消阳性制备标记。 |
-| [reference](../tests/test_reactions.py#L112) | 为回放测试构造带来源映射分析的最小 Reference。 |
-| [test_single_reactant_change_core_or_branch](../tests/test_reactions.py#L126) | 确认支链或母核差异都能在来源自回放后仅替换一个输入，并满足完整目标。 |
-| [test_two_changes_and_unassigned_step_do_not_transfer](../tests/test_reactions.py#L142) | 确认需要同时改两个输入或来源未明确分步时不自动给出单输入迁移。 |
-| [test_source_endpoint_conflict_is_not_a_validated_mapping](../tests/test_reactions.py#L154) | 确认映射端点不属于记录实际材料时不能作为已校验反应分析。 |
-| [test_source_radius2_template_can_transfer_a_non_registry_reaction](../tests/test_reactions.py#L162) | 确认合法来源 radius-2 模板经自回放可生成注册酰胺规则以外的单输入建议。 |
-| [test_replay_retains_product_sets_and_independent_enumeration_limit](../tests/test_reactions.py#L201) | 确认回放保留整组产品，并把结构有效和枚举截断分开。 |
+| [test_invalid_mapping_is_unknown](../tests/test_reactions.py#L45) | 确认重复正映射、同位素冲突或非法反应式明确返回未知及原因。 |
+| [test_missing_mapping_has_no_inference_support](../tests/test_reactions.py#L52) | 缺少映射的数据与编排器的未知分析默认值都不能标成单一映射推断。 |
+| [test_map_zero_never_establishes_cross_side_identity](../tests/test_reactions.py#L61) | 确认 map=0 原子不参与跨侧身份，不从未映射区域制造成断键。 |
+| [test_resonance_swap_not_transformation](../tests/test_reactions.py#L69) | 确认限定硝基氧共振交换记为表示变化，不计真实键级转化。 |
+| [test_real_proton_transfer_not_suppressed_as_resonance](../tests/test_reactions.py#L76) | 确认羧酸的实际 H 迁移不会被共振规则抹除。 |
+| [test_observed_ring_changes](../tests/test_reactions.py#L83) | 确认从实际命中反应变化识别闭环和开环，不依赖检索前虚构切环位置。 |
+| [test_synthetic_sources_never_become_literature](../tests/test_reactions.py#L93) | 确认合成示例有演示 Claim，但没有真实制备/获得/使用命中。 |
+| [test_product_presence_alone_not_preparation](../tests/test_reactions.py#L101) | 确认有产品结构不等于制得，实际输入使用只归属于对应反应物。 |
+| [test_conflict_cancels_positive_outcome](../tests/test_reactions.py#L109) | 确认同产品的明确冲突会取消阳性制备标记。 |
+| [reference](../tests/test_reactions.py#L124) | 为回放测试构造带来源映射分析的最小 Reference。 |
+| [test_single_reactant_change_core_or_branch](../tests/test_reactions.py#L138) | 确认支链或母核差异都能在来源自回放后仅替换一个输入，并满足完整目标。 |
+| [test_two_changes_and_unassigned_step_do_not_transfer](../tests/test_reactions.py#L154) | 确认需要同时改两个输入或来源未明确分步时不自动给出单输入迁移。 |
+| [test_source_endpoint_conflict_is_not_a_validated_mapping](../tests/test_reactions.py#L166) | 确认映射端点不属于记录实际材料时不能作为已校验反应分析。 |
+| [test_source_radius2_template_can_transfer_a_non_registry_reaction](../tests/test_reactions.py#L174) | 确认合法来源 radius-2 模板经自回放可生成注册酰胺规则以外的单输入建议。 |
+| [test_replay_retains_product_sets_and_independent_enumeration_limit](../tests/test_reactions.py#L213) | 确认回放保留整组产品，并把结构有效和枚举截断分开。 |
 
 ## tests/test_recovery_isolation.py
 
