@@ -280,7 +280,7 @@
 | [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
 | [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
 | [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
-| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L297) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L309) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
 
 ## src/reaction_reference/retrieval/planner.py
 
@@ -453,6 +453,13 @@
 | [test_invalid_evaluation_row_is_rejected_before_source_access](../tests/test_global_review.py#L237) | 非法目标行在读取来源前得到输入错误，不泄漏类型异常或启动无效评测。 |
 | [test_valid_evaluation_labels_preserve_reviewed_only_scoring](../tests/test_global_review.py#L246) | 合法标签只在已审核时计分，屏蔽组剔除被屏蔽正例且不伪造零或满分。 |
 | [test_reordered_target_self_matches_keep_complete_joint_coverage](../tests/test_global_review.py#L271) | 对环系、无环、同位素及立体目标改变原子遍历顺序，核对预筛、身份和联合覆盖。 |
+
+## tests/test_mapping_representation.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_mapping_support_requires_supported_endpoint_representations](../tests/test_mapping_representation.py#L33) | 两侧或声明材料包含未支持语义时应保持未知，合法氧化及产物参考仍保留。 |
+| [test_product_mapping_endpoint_has_the_same_representation_boundary](../tests/test_mapping_representation.py#L74) | 映射产物端也必须拒绝未支持语义，不能只校验反应物端。 |
 
 ## tests/test_pipeline.py
 

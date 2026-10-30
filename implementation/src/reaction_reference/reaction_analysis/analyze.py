@@ -4,7 +4,7 @@ from collections import Counter
 
 from rdkit import Chem
 
-from reaction_reference.chemistry.structures import canonical, parse
+from reaction_reference.chemistry.structures import canonical, parse, parse_material
 from reaction_reference.domain.models import BondChange, ReactionAnalysis
 
 
@@ -119,10 +119,22 @@ def analyze_reaction(record):
         return ReactionAnalysis(
             state="unknown", event_scope=record.event_scope, reasons=["invalid_mapped_reaction"]
         )
+    # 映射整侧允许多个组分，但不能将虚原子或增强立体组丢失语义后当作具体端点。
+    if any(
+        side.GetStereoGroups() or any(atom.GetAtomicNum() == 0 for atom in side.GetAtoms())
+        for side in (left, right)
+    ):
+        return ReactionAnalysis(
+            state="unknown",
+            event_scope=record.event_scope,
+            reasons=["unsupported_mapped_endpoint_structure"],
+        )
     try:
         for side, role in ((left, "reactant"), (right, "product")):
             available = Counter(canonical(m) for m in Chem.GetMolFrags(side, asMols=True))
-            declared = Counter(canonical(m.smiles) for m in record.materials if m.role == role)
+            declared = Counter(
+                canonical(parse_material(m.smiles)) for m in record.materials if m.role == role
+            )
             if declared - available:
                 return ReactionAnalysis(
                     state="unknown",
