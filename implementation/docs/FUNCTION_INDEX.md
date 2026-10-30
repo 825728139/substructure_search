@@ -165,10 +165,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [LabContext.check_range](../src/reaction_reference/domain/models.py#L68) | 拒绝下限高于上限的温度范围，校验通过返回当前对象。 |
-| [SourceRef.experiment_key](../src/reaction_reference/domain/models.py#L110) | 返回带来源命名空间的实验去重键；不同来源的同名编号不能自动认定为同一实验。 |
-| [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L176) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
-| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L235) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
+| [LabContext.check_range](../src/reaction_reference/domain/models.py#L70) | 拒绝下限高于上限的温度范围，校验通过返回当前对象。 |
+| [SourceRef.experiment_key](../src/reaction_reference/domain/models.py#L112) | 返回带来源命名空间的实验去重键；不同来源的同名编号不能自动认定为同一实验。 |
+| [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L178) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
+| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L237) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
 
 ## src/reaction_reference/evaluation/runner.py
 
@@ -748,6 +748,13 @@
 | [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L116) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+
+## tests/test_source_identifiers.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_blank_native_identifier_is_isolated](../tests/test_source_identifiers.py#L14) | 五类必要身份字段为空时应隔离当前原生记录，不能影响下一条合法来源。 |
+| [test_identifier_validation_preserves_valid_identity_text](../tests/test_source_identifiers.py#L44) | 合法标识可含中文、标点和外围空格，校验不能擅自归一化为其他记录的编号。 |
 
 ## tests/test_traceability.py
 

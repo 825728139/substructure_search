@@ -17,6 +17,8 @@ Layer = Literal["whole", "core", "fragment"]
 State = Literal["completed", "partial", "not_evaluated", "not_supported", "not_requested"]
 Role = Literal["reactant", "product", "reagent", "catalyst", "solvent"]
 EventScope = Literal["documented_step", "source_record_net", "unknown"]
+# 必要来源标识必须含非空白字符；保留原文，不擅自去空格或改变去重身份。
+SourceIdentifier = Annotated[str, Field(min_length=1, pattern=r"\S")]
 
 
 class Target(Model):
@@ -98,9 +100,9 @@ class FeatureStatus(Model):
 class SourceRef(Model):
     """来源实验定位；记录和实验编号属于 namespace 范围，synthetic 标记演示来源。"""
 
-    namespace: str
-    record_id: str
-    experiment_id: str
+    namespace: SourceIdentifier
+    record_id: SourceIdentifier
+    experiment_id: SourceIdentifier
     document_id: str | None = None
     location: str | None = None
     url: str | None = None
@@ -115,7 +117,7 @@ class SourceRef(Model):
 class Material(Model):
     """某个反应中的具体材料实例；同结构在不同角色/实验中仍有不同 instance_id。"""
 
-    instance_id: str
+    instance_id: SourceIdentifier
     role: Role
     smiles: str
     name: str | None = None
@@ -157,7 +159,7 @@ class Conditions(Model):
 class ReactionRecord(Model):
     """同一来源记录的材料、产品观察、映射式和事件范围；净端点与明确操作步骤不混用。"""
 
-    id: str
+    id: SourceIdentifier
     source: SourceRef
     materials: list[Material]
     observations: list[Observation] = Field(default_factory=list)
