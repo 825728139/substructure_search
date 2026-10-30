@@ -107,6 +107,15 @@ def search(request, source, *, run_id=None, on_progress=None):
         )
         if not request.options.exhaustive_fixture:
             complete = False
+        # 输入查询流结束不代表核验及证据加载完整；沿用逐页累积的真实范围状态。
+        # 来源问题可能影响多个角色，尚未能限定影响范围时不能宣称输入通道完整。
+        usage_complete = (
+            retrieval_finished
+            and not stopped
+            and not source.issues
+            and not source_issues
+            and all(s.get("complete") for s in states.values() if s["role"] == "reactant")
+        )
         source_hashes = {r.record.id: digest(r.record.model_dump()) for r in ranked}
         unsupported = [
             "arbitrary_variable_paths",
@@ -205,7 +214,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                     else "not_evaluated"
                     if not use_attempts
                     else "partial"
-                    if stopped or not retrieval_finished
+                    if not usage_complete
                     else "completed",
                     reason="evaluated_input_channel_scope_only",
                 ),

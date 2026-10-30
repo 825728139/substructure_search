@@ -24,12 +24,15 @@ def material_relations(references, max_relations=100):
             except ValueError:
                 continue
             (products if material.role == "product" else inputs)[key].append((record, material))
-    result = []
+    result: list[dict] = []
     for key in sorted(products.keys() & inputs.keys()):
         for producer, product in products[key]:
             for consumer, material in inputs[key]:
                 if producer.id == consumer.id:
                     continue
+                # 只有确实发现下一条未能保留的关联，才证明上限造成了遗漏。
+                if len(result) >= max_relations:
+                    return result, False
                 qualified = (
                     evidence_for(producer, product)[0] and evidence_for(consumer, material)[2]
                 )
@@ -53,6 +56,4 @@ def material_relations(references, max_relations=100):
                         ],
                     }
                 )
-                if len(result) >= max_relations:
-                    return result, False
     return result, True
