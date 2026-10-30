@@ -150,16 +150,16 @@
 | 函数 | 职责 |
 |---|---|
 | [digest](../src/reaction_reference/chemistry/structures.py#L16) | 为可 JSON 序列化的数据生成稳定 SHA-256 摘要。 |
-| [parse](../src/reaction_reference/chemistry/structures.py#L28) | 将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。 |
-| [parse_material](../src/reaction_reference/chemistry/structures.py#L56) | 解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。 |
-| [without_maps](../src/reaction_reference/chemistry/structures.py#L73) | 复制 Mol 并清除反应原子映射号，返回新分子。 |
-| [canonical](../src/reaction_reference/chemistry/structures.py#L84) | 为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。 |
-| [meets_target](../src/reaction_reference/chemistry/structures.py#L96) | 判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。 |
-| [similarity](../src/reaction_reference/chemistry/structures.py#L116) | 返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。 |
-| [descriptors](../src/reaction_reference/chemistry/structures.py#L129) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
-| [atom_table](../src/reaction_reference/chemistry/structures.py#L140) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
-| [fragment_key](../src/reaction_reference/chemistry/structures.py#L157) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
-| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L209) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
+| [parse](../src/reaction_reference/chemistry/structures.py#L28) | 将单行 SMILES 解析为 RDKit Mol；无效、空结构或多行输入抛出 StructureError。 |
+| [parse_material](../src/reaction_reference/chemistry/structures.py#L60) | 解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。 |
+| [without_maps](../src/reaction_reference/chemistry/structures.py#L77) | 复制 Mol 并清除反应原子映射号，返回新分子。 |
+| [canonical](../src/reaction_reference/chemistry/structures.py#L88) | 为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。 |
+| [meets_target](../src/reaction_reference/chemistry/structures.py#L100) | 判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。 |
+| [similarity](../src/reaction_reference/chemistry/structures.py#L120) | 返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。 |
+| [descriptors](../src/reaction_reference/chemistry/structures.py#L133) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
+| [atom_table](../src/reaction_reference/chemistry/structures.py#L144) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
+| [fragment_key](../src/reaction_reference/chemistry/structures.py#L161) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
+| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L213) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
 
 ## src/reaction_reference/domain/models.py
 
@@ -289,9 +289,9 @@
 | [_close_units](../src/reaction_reference/retrieval/planner.py#L28) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
 | [_core_smarts](../src/reaction_reference/retrieval/planner.py#L47) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L83) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L195) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L224) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L247) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L197) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L226) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L249) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -487,6 +487,18 @@
 | [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L257) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
 | [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L293) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
 | [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
+
+## tests/test_query_input_planning.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_multiline_smiles_cannot_silently_drop_a_structure](../tests/test_query_input_planning.py#L17) | 目标和来源结构都必须拒绝含多个非空行的输入，不能只解释第一种分子。 |
+| [test_single_structure_whitespace_and_cx_annotations_remain_supported](../tests/test_query_input_planning.py#L24) | 外围空白、单行 CX 标签与同位素仍应保留原本的具体结构语义。 |
+| [test_http_rejects_multiline_structure_before_accepting_a_job](../tests/test_query_input_planning.py#L30) | HTTP 预览、检索和排除材料校验应拒绝多行结构，且不落盘错误任务。 |
+| [test_jsonl_multiline_material_is_isolated_without_losing_other_records](../tests/test_query_input_planning.py#L45) | 来源 JSONL 中转义换行的材料必须报告结构问题，相邻有效反应仍可检索。 |
+| [test_acyclic_core_preserves_all_anchor_connecting_paths](../tests/test_query_input_planning.py#L64) | 优化后的无环核心应与所有原始官能团锚点之间的路径并集完全一致。 |
+| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs](../tests/test_query_input_planning.py#L78) | 大量官能团的合法目标只需线性次路径连接，避免查询预览被两两路径计算拖慢。 |
+| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs.counted_path](../tests/test_query_input_planning.py#L85) | 记录实际图路径调用次数，避免用不稳定的机器耗时作为回归断言。 |
 
 ## tests/test_reactions.py
 

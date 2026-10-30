@@ -26,11 +26,15 @@ def digest(value, length=24):
 
 
 def parse(smiles, *, target=False):
-    """将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。
+    """将单行 SMILES 解析为 RDKit Mol；无效、空结构或多行输入抛出 StructureError。
 
     设 target=True 时额外要求具体、单组分、含碳、至多 500 重原子且无增强立体组。返回分子的原子顺序沿用输入解析顺序，不在这里做盐拆分或互变异构体归一化。
     """
-    mol = Chem.MolFromSmiles(smiles)
+    # RDKit 会忽略换行后的内容；先校验单行，避免悄悄检索另一个目标或来源材料。
+    # 允许复制文件时带入的外围空白，单行 CXSMILES 中的空格不受影响。
+    if not isinstance(smiles, str) or len(smiles.strip().splitlines()) != 1:
+        raise StructureError("Provide exactly one nonempty SMILES line")
+    mol = Chem.MolFromSmiles(smiles.strip())
     if mol is None or mol.GetNumAtoms() == 0:
         raise StructureError("Structure cannot be parsed")
     if target:

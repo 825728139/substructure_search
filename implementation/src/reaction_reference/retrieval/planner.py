@@ -126,10 +126,12 @@ def plan_families(target, max_families=12):
     for _, match, _ in groups:
         anchors.update(match)
     if not systems:
-        for a in sorted(anchors):
-            for b in sorted(anchors):
-                if a < b:
-                    anchors.update(Chem.GetShortestPath(target, a, b))
+        # 无环单组分是树：同一根锚点到其余锚点的路径并集，等于全部两两路径的并集。
+        # 固定原始锚点列表，不能把路径中新加入的原子再次当作待连接锚点。
+        anchor_ids = sorted(anchors)
+        if anchor_ids:
+            for other in anchor_ids[1:]:
+                anchors.update(Chem.GetShortestPath(target, anchor_ids[0], other))
         seeds["core"].append(
             (_close_units(anchors or all_atoms, groups, target), "acyclic_functional_anchor_paths")
         )

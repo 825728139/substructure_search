@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "64ecc64e6bfbb7c871f2e2266e4f70492857e8a9fcd8f26bc27c9005bccbabc8",
+  "implementation_hash": "1935e84ed0bc57448fe2169b68a4884c7d05ceb465893aa42101c2e824db52ce",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 287,
+    "tests_passed": 305,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "64ecc64e6bfbb7c871f2e2266e4f70492857e8a9fcd8f26bc27c9005bccbabc8"
+    "implementation_hash": "1935e84ed0bc57448fe2169b68a4884c7d05ceb465893aa42101c2e824db52ce"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -460,6 +460,33 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 490,
     "function_index_links_verified": 490,
+    "live_source_access_performed": false
+  },
+  "query_planning_review": {
+    "date": "2026-10-30",
+    "base_commit": "a22c024",
+    "verified_implementation_hash": "1935e84ed0bc57448fe2169b68a4884c7d05ceb465893aa42101c2e824db52ce",
+    "report": "docs/CODE_REVIEW.md",
+    "fixed_bug_categories": 2,
+    "regressions_added": 18,
+    "initial_failures": 9,
+    "initial_passing_controls": 9,
+    "postgres_integration_cases_passed": 15,
+    "real_browser_cases_passed": 5,
+    "python_modules_documented": 86,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 497,
+    "function_index_links_verified": 497,
+    "planning_benchmark": {
+      "heavy_atoms": 450,
+      "original_anchors": 300,
+      "shortest_path_calls_before": 67051,
+      "shortest_path_calls_after": 299,
+      "local_seconds_before": 5.798,
+      "local_seconds_after": 0.222,
+      "scope": "single_local_family_planning_not_source_search"
+    },
+    "chemistry_rules_changed": false,
     "live_source_access_performed": false
   }
 }
