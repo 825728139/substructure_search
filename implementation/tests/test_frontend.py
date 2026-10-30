@@ -9,7 +9,7 @@ import pytest
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="前端异步回归需要 Node.js")
 def test_frontend_task_isolation_and_current_results():
-    """运行乱序状态、分页、异常、下载精度与错误、正常显示及串行轮询八个场景。"""
+    """运行乱序状态、分页、下载、重排失败隔离、正常显示及串行轮询十个场景。"""
     result = subprocess.run(
         [shutil.which("node"), str(Path(__file__).with_name("check_frontend_state.cjs"))],
         capture_output=True,

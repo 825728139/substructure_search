@@ -29,6 +29,8 @@ function environment(fetch) {
       replaceChildren(...items) { this.children = items; },
       /** 记录模拟下载文件名。 */
       click() { downloads.push(this.download); },
+      /** 默认提供合法输入，具体数值输入的浏览器校验由 Chromium 回归覆盖。 */
+      reportValidity() { return true; },
     };
   }
   const context = vm.createContext({
@@ -168,10 +170,40 @@ async function failedDownloadIsNotPublished() {
   assert.match(app.elements.get('status').textContent, /not_ready/);
 }
 
+/** 派生任务已创建但新结果读取失败时，不能把旧卡片留在新任务名下。 */
+async function rerankResultFailureClearsOldCards() {
+  const app = environment(/** 完成重排与状态查询，只让新任务结果读取失败。 */ async url => {
+    if (url.endsWith('/rerank')) return response({run_id: 'new'});
+    if (url.includes('/results')) throw Error('新任务结果暂时不可读');
+    return response({lifecycle: 'succeeded', latest_snapshot_id: 'new-snapshot'});
+  });
+  vm.runInContext('run = "old"; generation = 1; activeSnapshot = "old-snapshot"; $("cards").append("旧卡片"); $("metrics").append("旧统计");', app.context);
+  await app.elements.get('rerank').onclick();
+  assert.equal(vm.runInContext('run', app.context), 'new');
+  assert.deepEqual(app.elements.get('cards').children, []);
+  assert.deepEqual(app.elements.get('metrics').children, []);
+  assert.equal(app.elements.get('download').disabled, true);
+  assert.match(app.elements.get('status').textContent, /新任务结果暂时不可读/);
+}
+
+/** 重排尚未创建派生任务就失败时，旧任务、卡片和固定快照仍可继续查看与导出。 */
+async function rerankSubmissionFailureKeepsOldCards() {
+  const app = environment(/** 模拟服务在创建派生任务前拒绝重排。 */ async () => {
+    throw Error('重排未接纳');
+  });
+  vm.runInContext('run = "old"; generation = 1; activeSnapshot = "old-snapshot"; $("cards").append("旧卡片"); $("metrics").append("旧统计");', app.context);
+  await app.elements.get('rerank').onclick();
+  assert.equal(vm.runInContext('run', app.context), 'old');
+  assert.equal(vm.runInContext('activeSnapshot', app.context), 'old-snapshot');
+  assert.deepEqual(app.elements.get('cards').children, ['旧卡片']);
+  assert.deepEqual(app.elements.get('metrics').children, ['旧统计']);
+  assert.equal(app.elements.get('download').disabled, false);
+}
+
 /** 汇总所有乱序响应场景，任何失败均以非零状态退出。 */
 async function main() {
   let failures = 0;
-  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling, originalDownloadBytes, failedDownloadIsNotPublished]) {
+  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling, originalDownloadBytes, failedDownloadIsNotPublished, rerankResultFailureClearsOldCards, rerankSubmissionFailureKeepsOldCards]) {
     try { await test(); console.log('通过：' + test.name); }
     catch (error) { failures++; console.error('失败：' + test.name + '\n' + error.message); }
   }

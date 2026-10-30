@@ -188,3 +188,30 @@ def test_browser_download_preserves_original_integer_metadata(browser_page, tmp_
         reference["record"]["raw"]["large_counter"] == 9007199254740993
         for reference in package["results"]
     )
+
+
+def test_rerank_rejects_incomplete_temperature_without_clearing_constraint(browser_page):
+    """重排不能把浏览器未完成的指数输入当作空值，修正后再发送明确的温度限制。"""
+    page = browser_page
+    page.locator("#temp").fill("30")
+    page.locator("#submit").click()
+    page.locator("#download:not([disabled])").wait_for()
+    original = page.evaluate("run")
+    requests = []
+    page.on(
+        "request",
+        lambda request: requests.append(request) if request.url.endswith("/rerank") else None,
+    )
+    page.locator("#temp").fill("")
+    page.locator("#temp").press_sequentially("1e")
+    assert page.locator("#temp").evaluate("element => element.validity.badInput")
+    assert page.locator("#temp").input_value() == ""
+    page.locator("#rerank").click()
+    assert not requests, "非法温度被静默转成了不限制温度的重排请求"
+    assert page.evaluate("run") == original
+    assert page.locator("#download").is_enabled()
+    page.locator("#temp").fill("25.5")
+    with page.expect_request("**/rerank") as pending:
+        page.locator("#rerank").click()
+    assert pending.value.post_data_json["lab_context"]["max_temperature_c"] == 25.5
+    page.locator("#download:not([disabled])").wait_for()

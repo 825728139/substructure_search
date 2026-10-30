@@ -355,6 +355,7 @@
 | [test_browser_pagination_structures_rerank_and_download](../tests/test_browser_integration.py#L128) | 真实页面的分页、图片、重排和下载必须始终绑定当前运行及快照。 |
 | [test_browser_can_retry_after_authentication_failure](../tests/test_browser_integration.py#L160) | 错误令牌得到可见错误后，修正令牌可再次提交，不沿用失败任务状态。 |
 | [test_browser_download_preserves_original_integer_metadata](../tests/test_browser_integration.py#L176) | 下载完整资料包时不能经过 JavaScript 数值重编码，避免合法大整数被舍入。 |
+| [test_rerank_rejects_incomplete_temperature_without_clearing_constraint](../tests/test_browser_integration.py#L193) | 重排不能把浏览器未完成的指数输入当作空值，修正后再发送明确的温度限制。 |
 
 ## tests/test_chemistry.py
 
@@ -426,7 +427,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、异常、下载精度与错误、正常显示及串行轮询八个场景。 |
+| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、下载、重排失败隔离、正常显示及串行轮询十个场景。 |
 
 ## tests/test_global_review.py
 

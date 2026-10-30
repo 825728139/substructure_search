@@ -337,6 +337,8 @@ $('cancel').onclick = async () => {
 $('rerank').onclick = async () => {
   const sourceRun = run;
   if (!sourceRun) return;
+  // 重排按钮在表单外，需要主动校验温度；未完成的指数输入不能被当作空白限制。
+  if (!$('temp').reportValidity()) return;
   const expectedGeneration = ++generation;
   clearTimeout(poll);
   poll = null;
@@ -352,6 +354,9 @@ $('rerank').onclick = async () => {
     cursor = null;
     activeSnapshot = null;
     $('more').hidden = true;
+    // 派生任务接管后立即清空旧展示；新结果读取失败也不能混用原任务卡片和统计。
+    $('cards').replaceChildren();
+    $('metrics').replaceChildren();
     await check(run, expectedGeneration);
   } catch (e) {
     if (generation !== expectedGeneration) return;
