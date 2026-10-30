@@ -203,6 +203,87 @@ def test_indexed_cursor_pages_and_read_only_session(indexed_source_dsn, role):
         source.close()
 
 
+@pytest.mark.parametrize("role", ["product", "reactant"])
+@pytest.mark.parametrize("failure", [None, "cursor_order", "later_page_processing"])
+def test_failed_page_closes_existing_cursor_and_allows_restart(
+    indexed_source_dsn, monkeypatch, role, failure
+):
+    """后续页失败时释放此前已存在的服务端游标；同一家族可重新从零分页，正常续页不受影响。"""
+    source = PostgresSource(indexed_source_dsn)
+    family = carbon_family(name="retry-existing-cursor")
+    try:
+        first = source.candidate_page(family, role, 0, 1, "CCO")
+        assert first.next_cursor == 1
+        names = source.connection.execute(
+            "SELECT name FROM pg_cursors WHERE name LIKE 'rr_%'"
+        ).fetchall()
+        assert len(names) == 1
+        remaining = []
+        if failure:
+            with monkeypatch.context() as fault:
+                if failure == "later_page_processing":
+
+                    def fail_processing(*_):
+                        """在真实 FETCH 已完成后模拟材料处理异常。"""
+                        raise RuntimeError("模拟后续页材料处理失败")
+
+                    fault.setattr(source, "_items", fail_processing)
+                with pytest.raises(ValueError if failure == "cursor_order" else RuntimeError):
+                    source.candidate_page(
+                        family, role, 2 if failure == "cursor_order" else 1, 1, "CCO"
+                    )
+            remaining = source.connection.execute(
+                "SELECT name FROM pg_cursors WHERE name=%s", (names[0]["name"],)
+            ).fetchall()
+            items, cursor = [], 0
+        else:
+            items, cursor = list(first.items), first.next_cursor
+        assert source.connection.execute("SELECT 1 AS value").fetchone()["value"] == 1
+        while True:
+            page = source.candidate_page(family, role, cursor, 1, "CCO")
+            items.extend(page.items)
+            if page.next_cursor is None:
+                assert page.stream_exhausted and page.scope_complete
+                break
+            assert page.next_cursor > cursor
+            cursor = page.next_cursor
+        assert not remaining
+        assert len(items) == 3
+        assert {item.record.id for item in items} == {
+            "integration:1",
+            "integration:2",
+            "integration:3",
+        }
+    finally:
+        source.close()
+
+
+def test_first_page_processing_failure_does_not_poison_cursor_cleanup(
+    indexed_source_dsn, monkeypatch
+):
+    """第一页处理失败会使新游标随保存点回滚消失，重复清理也不能让连接陷入事务错误。"""
+    source = PostgresSource(indexed_source_dsn)
+    family = carbon_family(name="retry-first-page")
+    try:
+        with monkeypatch.context() as fault:
+
+            def fail_processing(*_):
+                """在首个真实 FETCH 后抛错，使新游标在回滚时被服务器自动删除。"""
+                raise RuntimeError("模拟首个页面处理失败")
+
+            fault.setattr(source, "_items", fail_processing)
+            with pytest.raises(RuntimeError, match="模拟首个页面处理失败"):
+                source.candidate_page(family, "product", 0, 1, "CCO")
+        assert not source.connection.execute(
+            "SELECT name FROM pg_cursors WHERE name LIKE 'rr_%'"
+        ).fetchall()
+        assert source.connection.execute("SELECT 1 AS value").fetchone()["value"] == 1
+        page = source.candidate_page(family, "product", 0, 10, "CCO")
+        assert page.stream_exhausted and page.scope_complete and len(page.items) == 3
+    finally:
+        source.close()
+
+
 @pytest.mark.parametrize("details_by_id", [False, True])
 def test_knn_selection_and_detail_hydration(indexed_source_dsn, details_by_id):
     """真实指纹近邻首项命中乙醇，详情名称通过结构对应，并可切换独立子结构通道。"""
@@ -237,6 +318,8 @@ def test_query_timeout_preserves_independent_query(indexed_source_dsn):
             with pytest.raises(psycopg.errors.QueryCanceled):
                 source.candidate_page(carbon_family(name="timeout"), "product", 0, 10, "CCO")
             writer.rollback()
+        # 锁等待仍用 100ms；后续只验证连接恢复，不把首次加载或机器调度耗时当作事务故障。
+        source.connection.execute("SELECT set_config('statement_timeout', '1500ms', true)")
         page = source.candidate_page(carbon_family(name="after-timeout"), "product", 0, 10, "CCO")
         assert len(page.items) == 3
     finally:

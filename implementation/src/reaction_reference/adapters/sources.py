@@ -424,7 +424,7 @@ class PostgresSource:
 
         具备指纹索引时，整体/核心首阶段复用前 512 条整侧 KNN 池；其他阶段用核心 mol 子结构服务端游标。cursor 校验顺序，limit 限制抓取行数。每次查询置于 savepoint，失败回滚局部事务并使相关游标失效。整侧相似/命中均不能替代逐产品 R 核验。
         """
-        from psycopg import sql
+        from psycopg import Error, sql
 
         column = "products_mol" if role == "product" else "reactants_mol"
         fp_column = "product_fp" if role == "product" else "reactant_fp"
@@ -478,8 +478,15 @@ class PostgresSource:
             self.connection.execute("RELEASE SAVEPOINT rr_query")
         except Exception:
             self.connection.execute("ROLLBACK TO SAVEPOINT rr_query")
+            invalidated = self._cursors.pop(key, None)
+            if invalidated is not None:
+                try:
+                    # 回滚不会删除更早页面创建的游标，必须关闭后才允许同一家族重新查询。
+                    invalidated[0].close()
+                except Error:
+                    # 本页新建游标可能已随回滚消失；清理错误不能破坏事务或替换原始异常。
+                    self.connection.execute("ROLLBACK TO SAVEPOINT rr_query")
             self.connection.execute("RELEASE SAVEPOINT rr_query")
-            self._cursors.pop(key, None)
             raise
         return CandidatePage(
             items, None if done else cursor + len(rows), done, done and not self.issues, enumeration
