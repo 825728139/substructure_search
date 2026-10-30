@@ -69,7 +69,7 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
 
     reference 必须具有明确操作段落、有效映射、产品报告和实际输入使用证据。先用原输入自回放复现来源产物，再对目标逆向回放；仅接受与原输入恰有一个槽位不同且正向回放满足完整目标的组合。
 
-    返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；无额外原因不等于无截断，需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
+    返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；达到局部数量上限时报告停止原因，不再继续探测是否有第三条。无额外原因不等于无截断，仍需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
     可选 on_proposal 在每条唯一建议验证后立即接收结果；返回 False 表示调用方已达到保留上限。
     后续预算异常仍向上传播，但已交付的建议不会随当前函数的局部列表一起丢失。
     """
@@ -194,5 +194,5 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
                 if on_proposal is not None and on_proposal(proposals[-1]) is False:
                     return proposals, "proposal_count_budget"
                 if len(proposals) >= 2:
-                    return proposals, None
+                    return proposals, "per_reference_proposal_limit"
     return proposals, None

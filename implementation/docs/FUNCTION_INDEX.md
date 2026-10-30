@@ -559,6 +559,14 @@
 | [test_real_storage_io_failure_still_blocks_startup](../tests/test_recovery_isolation.py#L201) | 真实权限或存储 I/O 错误不能当作单条数据损坏忽略，应明确阻止不可靠启动。 |
 | [test_real_storage_io_failure_still_blocks_startup.unreadable](../tests/test_recovery_isolation.py#L206) | 模拟文件系统拒绝读取。 |
 
+## tests/test_replay_limits.py
+
+| 函数 | 职责 |
+|---|---|
+| [halide_transfer_case](../tests/test_replay_limits.py#L16) | 构造三种仅用于程序测试的酰卤图回放规则，不表示其条件或实验可行性等价。 |
+| [test_per_reference_proposal_limit_reports_stopped_enumeration](../tests/test_replay_limits.py#L42) | 有第三种可回放输入时，保留前两条并报告局部停止；只有一条的对照仍正常完成。 |
+| [test_local_proposal_limit_keeps_results_and_marks_transfer_partial](../tests/test_replay_limits.py#L66) | 完整检索包须保留两条有效建议，将局部上限写入替换分析的部分状态及原因。 |
+
 ## tests/test_request_races.py
 
 | 函数 | 职责 |
