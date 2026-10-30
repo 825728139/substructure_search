@@ -215,12 +215,12 @@
 | [create_app.preview](../src/reaction_reference/interfaces/api.py#L147) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
 | [create_app.submit](../src/reaction_reference/interfaces/api.py#L152) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
 | [create_app.status](../src/reaction_reference/interfaces/api.py#L166) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
-| [create_app.results](../src/reaction_reference/interfaces/api.py#L191) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
-| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L245) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
-| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L267) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
-| [create_app.structure](../src/reaction_reference/interfaces/api.py#L279) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
-| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L303) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
-| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L308) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L193) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L247) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L269) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L281) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L305) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L310) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
 
 ## src/reaction_reference/interfaces/cli.py
 
@@ -358,6 +358,8 @@
 | [test_browser_can_retry_after_authentication_failure](../tests/test_browser_integration.py#L160) | 错误令牌得到可见错误后，修正令牌可再次提交，不沿用失败任务状态。 |
 | [test_browser_download_preserves_original_integer_metadata](../tests/test_browser_integration.py#L176) | 下载完整资料包时不能经过 JavaScript 数值重编码，避免合法大整数被舍入。 |
 | [test_rerank_rejects_incomplete_temperature_without_clearing_constraint](../tests/test_browser_integration.py#L193) | 重排不能把浏览器未完成的指数输入当作空值，修正后再发送明确的温度限制。 |
+| [test_failed_task_without_snapshot_keeps_terminal_status_and_error](../tests/test_browser_integration.py#L221) | 已知无最终快照时显示失败终态和实际原因，不让额外结果请求的 409 覆盖它们。 |
+| [test_failed_task_without_snapshot_keeps_terminal_status_and_error.respond](../tests/test_browser_integration.py#L226) | 模拟已保存失败终态及不可用结果，记录页面是否仍发起不必要的结果请求。 |
 
 ## tests/test_chemistry.py
 
@@ -435,7 +437,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、下载、重排失败隔离、正常显示及串行轮询十个场景。 |
+| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序响应、分页、下载、重排隔离、无快照终态及串行轮询十二个场景。 |
 
 ## tests/test_global_review.py
 
@@ -835,6 +837,14 @@
 |---|---|
 | [test_blank_native_identifier_is_isolated](../tests/test_source_identifiers.py#L14) | 五类必要身份字段为空时应隔离当前原生记录，不能影响下一条合法来源。 |
 | [test_identifier_validation_preserves_valid_identity_text](../tests/test_source_identifiers.py#L44) | 合法标识可含中文、标点和外围空格，校验不能擅自归一化为其他记录的编号。 |
+
+## tests/test_status_snapshot_race.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable](../tests/test_status_snapshot_race.py#L14) | 在状态读取后、快照读取前注入真实失败收尾，避免旧 running 状态导致错误的 409。 |
+| [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable.fail_snapshot_write](../tests/test_status_snapshot_race.py#L39) | 只阻断新的中断快照，状态文件仍可写入真实失败终态。 |
+| [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable.read_after_transition](../tests/test_status_snapshot_race.py#L45) | 首次读取快照前执行失败收尾，精确控制并发写入相对于状态读取的位置。 |
 
 ## tests/test_traceability.py
 

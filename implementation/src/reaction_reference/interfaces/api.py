@@ -172,6 +172,8 @@ def create_app(settings=None):
         try:
             package = client.manager.store.package(run_id)
         except (KeyError, RevisionConflict):
+            # 读取快照期间任务可能刚刚终结；不能拿先前的 running 状态判断当前失败。
+            state = client.manager.store.load(run_id, scope)
             # 已明确记录快照不可用的失败任务仍可查看终态，避免查询状态也被旧指针阻断。
             if (
                 state.lifecycle != "failed"

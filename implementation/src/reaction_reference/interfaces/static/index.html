@@ -271,7 +271,17 @@ async function check(expectedRun = run, expectedGeneration = generation) {
     if (['succeeded', 'cancelled', 'timed_out', 'failed'].includes(d.lifecycle)) {
       $('cancel').disabled = true;
       $('submit').disabled = false;
-      await results(true, expectedRun, expectedGeneration);
+      if (d.latest_snapshot_id) {
+        await results(true, expectedRun, expectedGeneration);
+      } else {
+        // 无可用快照时保留终态和原始错误，废弃尚未返回的旧结果请求。
+        ++resultRequest;
+        cursor = null;
+        activeSnapshot = null;
+        $('more').hidden = true;
+        $('cards').replaceChildren();
+        $('metrics').replaceChildren();
+      }
       if (!active(expectedRun, expectedGeneration) || requestVersion !== statusRequest) return;
       $('rerank').disabled = !d.latest_snapshot_id;
       $('download').disabled = !d.latest_snapshot_id;

@@ -200,10 +200,62 @@ async function rerankSubmissionFailureKeepsOldCards() {
   assert.equal(app.elements.get('download').disabled, false);
 }
 
+/** 无最终快照的终态保留任务状态和错误，不再读取结果或混用旧快照。 */
+async function terminalWithoutSnapshotKeepsStatus() {
+  for (const lifecycle of ['failed', 'cancelled', 'timed_out']) {
+    const requests = [];
+    const error = lifecycle === 'failed' ? {code: 'snapshot_finalization_failed'} : null;
+    const app = environment(/** 只允许读取终态；结果请求代表错误的前端控制流。 */ async url => {
+      requests.push(url);
+      if (url.includes('/results')) throw Error('最终快照不可用');
+      return response({lifecycle, error, latest_snapshot_id: null});
+    });
+    vm.runInContext('run = "stopped"; generation = 1; cursor = "old-cursor"; activeSnapshot = "old-snapshot"; $("cards").append("旧卡片"); $("metrics").append("旧统计");', app.context);
+    await vm.runInContext('check()', app.context);
+    assert.deepEqual(requests, ['/v1/search-runs/stopped']);
+    assert.match(app.elements.get('status').textContent, new RegExp(lifecycle));
+    if (error) assert.match(app.elements.get('status').children[0].textContent, /snapshot_finalization_failed/);
+    assert.deepEqual(app.elements.get('cards').children, []);
+    assert.deepEqual(app.elements.get('metrics').children, []);
+    assert.equal(vm.runInContext('cursor', app.context), null);
+    assert.equal(vm.runInContext('activeSnapshot', app.context), null);
+    assert.equal(app.elements.get('more').hidden, true);
+    assert.equal(app.elements.get('download').disabled, true);
+    assert.equal(app.elements.get('rerank').disabled, true);
+    assert.equal(app.elements.get('cancel').disabled, true);
+    assert.equal(app.elements.get('submit').disabled, false);
+    assert.equal(app.timers.size, 0);
+  }
+}
+
+/** 终态已说明快照不可用时，迟到的旧分页响应不能再次恢复旧卡片或游标。 */
+async function terminalWithoutSnapshotRejectsPendingResults() {
+  const pending = deferred();
+  let resultRequests = 0;
+  const app = environment(/** 延迟已经发出的旧分页，状态查询则返回无快照的失败终态。 */ async url => {
+    if (url.includes('/results')) {
+      if (++resultRequests > 1) throw Error('最终快照不可用');
+      return pending.promise;
+    }
+    return response({lifecycle: 'failed', latest_snapshot_id: null, error: {code: 'snapshot_finalization_failed'}});
+  });
+  vm.runInContext('run = "stopped"; generation = 1; cursor = "old-cursor"; activeSnapshot = "old-snapshot";', app.context);
+  const oldResults = vm.runInContext('results(false)', app.context);
+  await vm.runInContext('check()', app.context);
+  pending.resolve(response({results: [{kind: 'proposal_not_observed', item: {proposed_reactants: [], target_smiles: 'CCO'}}], snapshot_id: 'old-snapshot', next_cursor: 'old-next'}));
+  await oldResults;
+  assert.equal(resultRequests, 1);
+  assert.deepEqual(app.elements.get('cards').children, []);
+  assert.equal(vm.runInContext('cursor', app.context), null);
+  assert.equal(vm.runInContext('activeSnapshot', app.context), null);
+  assert.equal(app.elements.get('download').disabled, true);
+  assert.equal(app.elements.get('more').hidden, true);
+}
+
 /** 汇总所有乱序响应场景，任何失败均以非零状态退出。 */
 async function main() {
   let failures = 0;
-  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling, originalDownloadBytes, failedDownloadIsNotPublished, rerankResultFailureClearsOldCards, rerankSubmissionFailureKeepsOldCards]) {
+  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling, originalDownloadBytes, failedDownloadIsNotPublished, rerankResultFailureClearsOldCards, rerankSubmissionFailureKeepsOldCards, terminalWithoutSnapshotKeepsStatus, terminalWithoutSnapshotRejectsPendingResults]) {
     try { await test(); console.log('通过：' + test.name); }
     catch (error) { failures++; console.error('失败：' + test.name + '\n' + error.message); }
   }

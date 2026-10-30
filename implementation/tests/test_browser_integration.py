@@ -196,6 +196,7 @@ def test_rerank_rejects_incomplete_temperature_without_clearing_constraint(brows
     page.locator("#temp").fill("30")
     page.locator("#submit").click()
     page.locator("#download:not([disabled])").wait_for()
+
     original = page.evaluate("run")
     requests = []
     page.on(
@@ -215,3 +216,38 @@ def test_rerank_rejects_incomplete_temperature_without_clearing_constraint(brows
         page.locator("#rerank").click()
     assert pending.value.post_data_json["lab_context"]["max_temperature_c"] == 25.5
     page.locator("#download:not([disabled])").wait_for()
+
+
+def test_failed_task_without_snapshot_keeps_terminal_status_and_error(browser_page):
+    """已知无最终快照时显示失败终态和实际原因，不让额外结果请求的 409 覆盖它们。"""
+    page = browser_page
+    result_requests = []
+
+    def respond(route):
+        """模拟已保存失败终态及不可用结果，记录页面是否仍发起不必要的结果请求。"""
+        url = route.request.url
+        if "/results" in url:
+            result_requests.append(url)
+            route.fulfill(status=409, json={"message": "最终快照不可用"})
+        elif url.endswith("/v1/search-runs"):
+            route.fulfill(status=202, json={"run_id": "f" * 32})
+        else:
+            route.fulfill(
+                json={
+                    "lifecycle": "failed",
+                    "latest_snapshot_id": None,
+                    "error": {"code": "snapshot_finalization_failed"},
+                }
+            )
+
+    page.route("**/v1/search-runs**", respond)
+    page.locator("#submit").click()
+    page.wait_for_function(
+        'document.getElementById("status").textContent.includes("snapshot_finalization_failed")',
+        timeout=3000,
+    )
+    assert "failed" in page.locator("#status").inner_text()
+    assert not result_requests
+    assert page.locator("#download").is_disabled()
+    assert page.locator("#rerank").is_disabled()
+    assert page.locator("#submit").is_enabled()
