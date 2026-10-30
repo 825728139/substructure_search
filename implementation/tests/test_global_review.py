@@ -99,6 +99,78 @@ def test_search_counts_and_displays_symmetric_proposal_once(
     assert len(package.displayed_proposal_ids) == len(set(package.displayed_proposal_ids)) == 1
 
 
+@pytest.mark.parametrize("asymmetric", [False, True])
+@pytest.mark.parametrize("max_replay_sets", [1, 16])
+def test_replay_enumeration_limit_is_visible_with_or_without_proposals(
+    symmetric_reduction, tmp_path, request_factory, asymmetric, max_replay_sets
+):
+    """真实回放截断无论已找到建议还是尚未复现来源，都不能被阶段误报为完整完成。"""
+    record = symmetric_reduction
+    target_smiles = "CCC(O)CC"
+    if asymmetric:
+        record = record.model_copy(
+            update={
+                "materials": [
+                    Material(
+                        instance_id="input",
+                        role="reactant",
+                        smiles="CCC(=O)CCC(C)=O",
+                        actual_input=True,
+                    ),
+                    Material(instance_id="product", role="product", smiles="CCC(=O)CCC(C)O"),
+                ],
+                "mapped_reaction_smiles": (
+                    "[CH3:1][CH2:2][C:3](=[O:4])[CH2:5][CH2:6][C:7]([CH3:8])=[O:9]"
+                    ">>[CH3:1][CH2:2][C:3](=[O:4])[CH2:5][CH2:6][CH:7]([CH3:8])[OH:9]"
+                ),
+            }
+        )
+        target_smiles = "CCCC(=O)CCC(C)O"
+    analysis = analyze_reaction(record)
+    assert analysis.state == "analyzed"
+    reference = Reference(
+        id="enumeration-reference",
+        record=record,
+        material=record.materials[-1],
+        family_ids=[],
+        layers=["whole"],
+        witnesses=[],
+        analysis=analysis,
+        molecular_weight=60.0,
+    )
+    limited = max_replay_sets == 1
+    proposals, reason = generate_proposals(
+        reference,
+        parse(target_smiles),
+        Budget(BudgetConfig(max_tasks=100, max_replay_sets=max_replay_sets)),
+    )
+    assert len(proposals) == (0 if limited and asymmetric else 1)
+    assert reason == ("replay_enumeration_limit" if limited else None)
+    assert all(proposal.enumeration_complete is not limited for proposal in proposals)
+    path = tmp_path / "record.jsonl"
+    path.write_text(record.model_dump_json() + "\n", encoding="utf-8")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search(
+            request_factory(
+                target_smiles,
+                budget={"max_tasks": 100, "max_replay_sets": max_replay_sets},
+                options={
+                    "exhaustive_fixture": True,
+                    "include_usage": False,
+                    "directed_followups": False,
+                },
+            ),
+            source,
+        )
+        status = package.feature_status["single_reactant_transfer"]
+        assert status.state == ("partial" if limited else "completed")
+        assert (status.reason or "") == ("replay_enumeration_limit" if limited else "")
+        assert len(package.proposals) == len(proposals)
+    finally:
+        source.close()
+
+
 @pytest.mark.parametrize("labels", ["patent:1", {"patent:1": False}, [1], [" "]])
 def test_evaluation_rejects_malformed_method_labels(tmp_path, labels):
     """错误标签格式不能被 set 隐式转换成字符或字典键，再当作人工审核正例计分。"""

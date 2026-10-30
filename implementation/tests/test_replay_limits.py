@@ -94,3 +94,43 @@ def test_local_proposal_limit_keeps_results_and_marks_transfer_partial(
         assert "per_reference_proposal_limit" in status.reason
     finally:
         source.close()
+
+
+@pytest.mark.parametrize("invalid_products", [False, True])
+def test_replay_product_validation_gap_is_reported_without_losing_references(
+    halide_transfer_case, monkeypatch, tmp_path, request_factory, invalid_products
+):
+    """回放产生不可清理的产物时报告校验缺口，不能把无建议误报为已完整排除迁移。"""
+    reference, target, rules = halide_transfer_case
+    rule = rules[0]
+    if invalid_products:
+        # 额外两根氟键使中性氮价态非法，用真实 RDKit 产物清理暴露失败路径。
+        rule = {**rule, "forward": rule["forward"].replace("[NH:3]", "[NH:3](F)(F)")}
+    monkeypatch.setattr("reaction_reference.analogs.transfer.source_rules", lambda _: [rule])
+    proposals, reason = generate_proposals(reference, target, Budget(BudgetConfig(max_tasks=100)))
+    assert len(proposals) == (0 if invalid_products else 1)
+    expected_reason = "replay_product_validation_incomplete" if invalid_products else None
+    assert reason == expected_reason
+    path = tmp_path / "records.jsonl"
+    path.write_text(reference.record.model_dump_json() + "\n", encoding="utf-8")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search(
+            request_factory(
+                "CCNC(=O)c1ccc(F)cc1",
+                options={
+                    "exhaustive_fixture": True,
+                    "include_usage": False,
+                    "directed_followups": False,
+                },
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        assert package.results
+        assert len(package.proposals) == len(proposals)
+        status = package.feature_status["single_reactant_transfer"]
+        assert status.state == ("partial" if invalid_products else "completed")
+        assert status.reason == expected_reason
+    finally:
+        source.close()

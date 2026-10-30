@@ -69,7 +69,7 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
 
     reference 必须具有明确操作段落、有效映射、产品报告和实际输入使用证据。先用原输入自回放复现来源产物，再对目标逆向回放；仅接受与原输入恰有一个槽位不同且正向回放满足完整目标的组合。
 
-    返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；达到局部数量上限时报告停止原因，不再继续探测是否有第三条。无额外原因不等于无截断，仍需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
+    返回（Proposal 列表、逗号分隔的跳过/不完整原因或 None），每个参考至多 2 条，消耗传入 budget；达到局部数量上限时报告停止原因，不再继续探测是否有第三条。来源、逆向和目标回放的枚举/结构校验缺口均汇总到原因；建议自身仍保留各自的检查状态。保留条件、可获得性、竞争位点及未实测限制。
     可选 on_proposal 在每条唯一建议验证后立即接收结果；返回 False 表示调用方已达到保留上限。
     后续预算异常仍向上传播，但已交付的建议不会随当前函数的局部列表一起丢失。
     """
@@ -106,6 +106,7 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
         return [], "reactant_assignment_unsupported"
     proposals = []
     proposal_ids = set()
+    replay_issues = set()
     target_key = canonical(target)
     for rule in source_rules(record):
         budget.check()
@@ -125,6 +126,10 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
             original_sets, original_complete, original_valid = replay(
                 forward, assignment, budget.config.max_replay_sets
             )
+            if not original_complete:
+                replay_issues.add("replay_enumeration_limit")
+            if not original_valid:
+                replay_issues.add("replay_product_validation_incomplete")
             if not original_valid or not any(
                 canonical(reference.material.smiles) in g for g in original_sets
             ):
@@ -133,6 +138,10 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
             retro_sets, retro_complete, retro_valid = replay(
                 reverse, [target], budget.config.max_replay_sets
             )
+            if not retro_complete:
+                replay_issues.add("replay_enumeration_limit")
+            if not retro_valid:
+                replay_issues.add("replay_product_validation_incomplete")
             for group in retro_sets:
                 budget.check()
                 if len(group) != len(original_keys):
@@ -154,6 +163,10 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
                 product_sets, complete, valid = replay(
                     forward, candidates, budget.config.max_replay_sets
                 )
+                if not complete:
+                    replay_issues.add("replay_enumeration_limit")
+                if not valid:
+                    replay_issues.add("replay_product_validation_incomplete")
                 found = any(any(meets_target(parse(s), target) for s in g) for g in product_sets)
                 if not found:
                     continue
@@ -192,7 +205,9 @@ def generate_proposals(reference, target, budget, *, on_proposal=None):
                 )
                 proposal_ids.add(proposal_id)
                 if on_proposal is not None and on_proposal(proposals[-1]) is False:
-                    return proposals, "proposal_count_budget"
+                    return proposals, ",".join(sorted(replay_issues | {"proposal_count_budget"}))
                 if len(proposals) >= 2:
-                    return proposals, "per_reference_proposal_limit"
-    return proposals, None
+                    return proposals, ",".join(
+                        sorted(replay_issues | {"per_reference_proposal_limit"})
+                    )
+    return proposals, ",".join(sorted(replay_issues)) or None

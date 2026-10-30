@@ -443,16 +443,17 @@
 | [symmetric_reduction](../tests/test_global_review.py#L31) | 构造有完整输入/产物依据的对称酮还原示例，触发等价模板映射。 |
 | [test_symmetric_replay_returns_unique_proposals](../tests/test_global_review.py#L57) | 两个等价逆向映射不能占用两个建议名额或产生相同建议 ID。 |
 | [test_search_counts_and_displays_symmetric_proposal_once](../tests/test_global_review.py#L78) | 端到端资料包、统计与展示列表只能保留一次相同替换建议。 |
-| [test_evaluation_rejects_malformed_method_labels](../tests/test_global_review.py#L103) | 错误标签格式不能被 set 隐式转换成字符或字典键，再当作人工审核正例计分。 |
-| [test_minimum_task_budget_can_complete_one_reference](../tests/test_global_review.py#L130) | 合法的四/五任务预算足够取页、核验、可选详情和一次分析，不能在取页前耗尽。 |
-| [test_minimum_task_budget_can_complete_one_reference.Source.candidate_page](../tests/test_global_review.py#L148) | 一次返回完整有限来源，确保本例预算只需覆盖一次处理链。 |
-| [test_minimum_task_budget_can_complete_one_reference.Source.hydrate](../tests/test_global_review.py#L152) | 返回原记录，详情动作是否单独计数由来源能力声明控制。 |
-| [test_verified_proposal_survives_later_replay_budget_exhaustion](../tests/test_global_review.py#L176) | 首条建议已通过正向回放后，下一条规则耗尽预算不能抹掉这条有效部分结果。 |
-| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.candidate_page](../tests/test_global_review.py#L204) | 一次返回酰胺产物，检索链只使用三个任务额度。 |
-| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.hydrate](../tests/test_global_review.py#L210) | 完整示例无需额外详情读取。 |
-| [test_invalid_evaluation_row_is_rejected_before_source_access](../tests/test_global_review.py#L237) | 非法目标行在读取来源前得到输入错误，不泄漏类型异常或启动无效评测。 |
-| [test_valid_evaluation_labels_preserve_reviewed_only_scoring](../tests/test_global_review.py#L246) | 合法标签只在已审核时计分，屏蔽组剔除被屏蔽正例且不伪造零或满分。 |
-| [test_reordered_target_self_matches_keep_complete_joint_coverage](../tests/test_global_review.py#L271) | 对环系、无环、同位素及立体目标改变原子遍历顺序，核对预筛、身份和联合覆盖。 |
+| [test_replay_enumeration_limit_is_visible_with_or_without_proposals](../tests/test_global_review.py#L104) | 真实回放截断无论已找到建议还是尚未复现来源，都不能被阶段误报为完整完成。 |
+| [test_evaluation_rejects_malformed_method_labels](../tests/test_global_review.py#L175) | 错误标签格式不能被 set 隐式转换成字符或字典键，再当作人工审核正例计分。 |
+| [test_minimum_task_budget_can_complete_one_reference](../tests/test_global_review.py#L202) | 合法的四/五任务预算足够取页、核验、可选详情和一次分析，不能在取页前耗尽。 |
+| [test_minimum_task_budget_can_complete_one_reference.Source.candidate_page](../tests/test_global_review.py#L220) | 一次返回完整有限来源，确保本例预算只需覆盖一次处理链。 |
+| [test_minimum_task_budget_can_complete_one_reference.Source.hydrate](../tests/test_global_review.py#L224) | 返回原记录，详情动作是否单独计数由来源能力声明控制。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion](../tests/test_global_review.py#L248) | 首条建议已通过正向回放后，下一条规则耗尽预算不能抹掉这条有效部分结果。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.candidate_page](../tests/test_global_review.py#L276) | 一次返回酰胺产物，检索链只使用三个任务额度。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.hydrate](../tests/test_global_review.py#L282) | 完整示例无需额外详情读取。 |
+| [test_invalid_evaluation_row_is_rejected_before_source_access](../tests/test_global_review.py#L309) | 非法目标行在读取来源前得到输入错误，不泄漏类型异常或启动无效评测。 |
+| [test_valid_evaluation_labels_preserve_reviewed_only_scoring](../tests/test_global_review.py#L318) | 合法标签只在已审核时计分，屏蔽组剔除被屏蔽正例且不伪造零或满分。 |
+| [test_reordered_target_self_matches_keep_complete_joint_coverage](../tests/test_global_review.py#L343) | 对环系、无环、同位素及立体目标改变原子遍历顺序，核对预筛、身份和联合覆盖。 |
 
 ## tests/test_mapping_representation.py
 
@@ -566,6 +567,7 @@
 | [halide_transfer_case](../tests/test_replay_limits.py#L16) | 构造三种仅用于程序测试的酰卤图回放规则，不表示其条件或实验可行性等价。 |
 | [test_per_reference_proposal_limit_reports_stopped_enumeration](../tests/test_replay_limits.py#L42) | 有第三种可回放输入时，保留前两条并报告局部停止；只有一条的对照仍正常完成。 |
 | [test_local_proposal_limit_keeps_results_and_marks_transfer_partial](../tests/test_replay_limits.py#L66) | 完整检索包须保留两条有效建议，将局部上限写入替换分析的部分状态及原因。 |
+| [test_replay_product_validation_gap_is_reported_without_losing_references](../tests/test_replay_limits.py#L100) | 回放产生不可清理的产物时报告校验缺口，不能把无建议误报为已完整排除迁移。 |
 
 ## tests/test_request_races.py
 
