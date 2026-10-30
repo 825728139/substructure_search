@@ -9,7 +9,7 @@ import pytest
 
 from reaction_reference.adapters import export as sample_export
 from reaction_reference.adapters.run_store import FileRunStore, RevisionConflict
-from reaction_reference.adapters.sources import import_native
+from reaction_reference.adapters.sources import JsonlSource, import_native
 from reaction_reference.domain.models import (
     LabContext,
     ReferencePackage,
@@ -53,9 +53,13 @@ def empty_snapshot(store, request):
         {"document_id": " "},
         {"paragraph_nums": None},
         {"paragraph_nums": []},
+        {"paragraph_nums": [""]},
+        {"paragraph_nums": [None]},
+        {"paragraph_nums": ["10", None]},
         {"paragraph_nums": " "},
         {"paragraph_reaction_ordinal": None},
         {"paragraph_reaction_ordinal": ""},
+        {"paragraph_reaction_ordinal": False},
     ],
 )
 def test_incomplete_source_locator_does_not_merge_different_records(missing):
@@ -77,6 +81,45 @@ def test_complete_source_locator_still_groups_duplicate_experiment_records():
     first = import_native({"id": 1, "product_smiles": ["CCO"], **locator})
     second = import_native({"id": 2, "product_smiles": ["CCO"], **locator})
     assert first.source.experiment_id == second.source.experiment_id
+
+
+def test_native_record_components_cannot_collide_at_delimiters(tmp_path):
+    """命名空间和记录编号中的分隔符不能把不同合法记录拼成同一个 ID 并一起丢弃。"""
+    rows = [
+        {"source_namespace": "archive:collection", "id": "entry"},
+        {"source_namespace": "archive", "id": "collection:entry"},
+        {"source_namespace": "archive%3Acollection", "id": "entry"},
+    ]
+    path = tmp_path / "identities.jsonl"
+    path.write_text(
+        "".join(json.dumps({**row, "product_smiles": ["CCO"]}) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+    source = JsonlSource(path)
+    try:
+        assert len(source.records) == 3 and not source.issues
+        assert len({record.id for record in source.records}) == 3
+        assert {record.source.namespace for record in source.records} == {
+            row["source_namespace"] for row in rows
+        }
+    finally:
+        source.close()
+
+
+def test_experiment_components_cannot_collide_at_delimiters():
+    """不同命名空间及文档的完整实验定位也必须保持唯一，字面转义符不能产生新碰撞。"""
+    locators = [
+        {"source_namespace": "archive", "document_id": "collection:document"},
+        {"source_namespace": "archive:collection", "document_id": "document"},
+        {"source_namespace": "archive", "document_id": "collection%3Adocument"},
+    ]
+    records = [
+        import_native(
+            {"id": index, "paragraph_nums": [10], "paragraph_reaction_ordinal": 0, **locator}
+        )
+        for index, locator in enumerate(locators, 1)
+    ]
+    assert len({record.source.experiment_id for record in records}) == 3
 
 
 @pytest.mark.parametrize("record_id", [None, "", " ", True])

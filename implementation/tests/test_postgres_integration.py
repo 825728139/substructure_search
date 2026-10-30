@@ -277,3 +277,61 @@ def test_indexed_source_runs_the_full_search_pipeline(indexed_source_dsn):
     assert exact[0].record.conditions.duration_seconds == 3600
     assert not exact[0].preparation_hit and not package.source_issues
     assert package.coverage_state == "partial"
+
+
+@pytest.mark.parametrize(
+    "column,value",
+    [
+        ("source_type", ""),
+        ("source_namespace", ""),
+        ("document_id", " "),
+        ("paragraph_nums", []),
+        ("paragraph_nums", [""]),
+        ("paragraph_nums", [None]),
+    ],
+)
+def test_incomplete_source_keys_do_not_attach_unidentified_details(
+    indexed_source_dsn, column, value
+):
+    """两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。"""
+    from psycopg import sql
+
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute(
+            sql.SQL("UPDATE reaction.reactions SET {}=%s WHERE id=1").format(
+                sql.Identifier(column)
+            ),
+            (value,),
+        )
+        writer.execute(
+            sql.SQL("UPDATE reaction.reaction_details SET {}=%s").format(sql.Identifier(column)),
+            (value,),
+        )
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
+        item = next(item for item in page.items if item.record.source.record_id == "1")
+        hydrated = source.hydrate(item.record)
+        assert hydrated.materials[0].name is None
+        assert hydrated.conditions.text is None
+    finally:
+        source.close()
+
+
+def test_direct_reaction_id_link_does_not_require_paragraph_locator(indexed_source_dsn):
+    """明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("ALTER TABLE reaction.reaction_details ADD COLUMN reaction_id bigint")
+        writer.execute(
+            "UPDATE reaction.reaction_details SET reaction_id=1,document_id='',paragraph_nums=ARRAY[]::text[]"
+        )
+        writer.execute(
+            "UPDATE reaction.reactions SET document_id='',paragraph_nums=ARRAY[]::text[] WHERE id=1"
+        )
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
+        item = next(item for item in page.items if item.record.source.record_id == "1")
+        assert source.hydrate(item.record).materials[0].name == "乙醇"
+    finally:
+        source.close()

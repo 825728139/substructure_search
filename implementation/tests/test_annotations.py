@@ -5,6 +5,7 @@ import json
 from reaction_reference.adapters.annotations import AnnotatedSource
 from reaction_reference.chemistry.structures import digest
 from reaction_reference.evidence.claims import evidence_for
+from reaction_reference.ports.sources import CandidatePage
 
 
 def annotation(record, **updates):
@@ -40,3 +41,37 @@ def test_review_does_not_erase_synthetic_origin(source, amide, tmp_path):
     assert result.source.synthetic
     assert not evidence_for(result, result.materials[-1])[0]
     assert result.raw["evidence_review"]["reviewer"] == "test-only"
+
+
+def test_overlay_accepts_the_declared_minimum_source_protocol(amide, tmp_path):
+    """审核装饰器必须支持已声明的最小来源协议，不能强制访问协议外的可选能力属性。"""
+
+    class MinimalSource:
+        """仅提供来源端口要求的方法和字段，不声明可选选择阶段或 I/O 提示。"""
+
+        snapshot_id = "minimal-source"
+        issues = []
+        closed = False
+
+        def candidate_page(self, *args, **kwargs):
+            """提供一个合法空页，验证包装后仍可正常委托查询。"""
+            return CandidatePage([], None, True, True, "test")
+
+        def hydrate(self, record):
+            """完整来源无需额外加载，返回原记录。"""
+            return record
+
+        def close(self):
+            """记录调用方释放了来源。"""
+            self.closed = True
+
+    path = tmp_path / "review.jsonl"
+    path.write_text(json.dumps(annotation(amide, observations=[])) + "\n", encoding="utf-8")
+    source = MinimalSource()
+    wrapper = AnnotatedSource(source, path)
+    try:
+        assert not wrapper.candidate_page(None, "product", 0, 10, "CCO").items
+        assert wrapper.hydrate(amide).observations == []
+    finally:
+        wrapper.close()
+    assert source.closed

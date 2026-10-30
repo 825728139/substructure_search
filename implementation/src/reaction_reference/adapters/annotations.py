@@ -31,9 +31,12 @@ class AnnotatedSource:
         文件最多 32 MiB，重复审核记录 ID 或契约错误会拒绝加载；审核文件内容参与新来源快照摘要。
         """
         self.source = source
-        self.max_selection_stage = source.max_selection_stage
-        self.hydration_requires_io = source.hydration_requires_io
-        self.selection_policy = source.selection_policy
+        # 能力提示不是最小来源协议的必需字段，缺省值与检索编排器保持一致。
+        self.max_selection_stage = getattr(source, "max_selection_stage", 2)
+        self.hydration_requires_io = getattr(source, "hydration_requires_io", False)
+        self.selection_policy = getattr(
+            source, "selection_policy", "source_declared_bounded_selection"
+        )
         self.selection_failure_fallback = getattr(source, "selection_failure_fallback", False)
         self.issues = source.issues
         with Path(path).open("rb") as stream:

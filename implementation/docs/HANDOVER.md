@@ -152,6 +152,8 @@ API 同样复制配置，认证和就绪探测不会随外部对象修改而变�
 
 切下 R 块时，边界虚拟原子的 `:1`、`:2` 等临时端口标签表示“查询核心位置 + 1”，并非原始反应映射号。所有这些编号的互转都应通过保留的对应关系完成，不能靠规范 SMILES、排序或名字猜测。
 
+非原生导出行的 `ReactionRecord.id` 和实验复合标识会转义组成字段中的 `%`、`:`，避免字段拼接碰撞。外置审核的 `record_id` 使用实际返回的 `ReactionRecord.id`；`SourceRef.record_id` 保留原始编号。缺少完整定位时按来源记录区分实验，不用空值关联其他记录的详情。
+
 `Witness.id` 返回到结果时绑定具体反应/材料；`structural_witness_id` 保留可复用的结构核验身份。匹配缓存还保留原始材料 SMILES，防止同一身份但不同原子顺序串用局部索引。
 
 ## 化学逻辑需要守住的边界
@@ -204,7 +206,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、261 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、275 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 

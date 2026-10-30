@@ -26,10 +26,10 @@
 | 函数 | 职责 |
 |---|---|
 | [AnnotatedSource.__init__](../src/reaction_reference/adapters/annotations.py#L28) | 读取有限 JSONL 审核文件并建立 record_id 索引，继承被包装来源的能力。 |
-| [AnnotatedSource._apply](../src/reaction_reference/adapters/annotations.py#L54) | 将审核信息应用到一个来源记录的副本并缓存结果。 |
-| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L114) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
-| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L118) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
-| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L122) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
+| [AnnotatedSource._apply](../src/reaction_reference/adapters/annotations.py#L57) | 将审核信息应用到一个来源记录的副本并缓存结果。 |
+| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L117) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
+| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L121) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
+| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L125) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
 
 ## src/reaction_reference/adapters/execution.py
 
@@ -78,19 +78,21 @@
 
 | 函数 | 职责 |
 |---|---|
-| [import_native](../src/reaction_reference/adapters/sources.py#L26) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
-| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L148) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L219) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L265) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L269) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L302) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L349) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L356) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L361) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L395) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L461) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L480) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L522) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [_locator_value_present](../src/reaction_reference/adapters/sources.py#L26) | 检查定位字段是否有明确非空值；整数零有效，布尔值及含缺失项的数组无效。 |
+| [_compound_source_id](../src/reaction_reference/adapters/sources.py#L38) | 为复合来源标识转义百分号和冒号，避免字段边界碰撞；普通标识保持原有可读格式。 |
+| [import_native](../src/reaction_reference/adapters/sources.py#L43) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
+| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L163) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L234) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L280) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L284) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L317) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L364) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L371) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L376) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L410) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L476) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L495) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L537) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -318,9 +320,13 @@
 
 | 函数 | 职责 |
 |---|---|
-| [annotation](../tests/test_annotations.py#L10) | 构造绑定记录哈希的测试审核行；updates 用于模拟哈希错误或特定审核输入。 |
-| [test_review_bound_to_record_hash](../tests/test_annotations.py#L26) | 确认来源哈希不符时拒绝旧审核，原记录保留并记录局部问题。 |
-| [test_review_does_not_erase_synthetic_origin](../tests/test_annotations.py#L35) | 确认有效审核也不能把合成示例升级为真实文献制备证据。 |
+| [annotation](../tests/test_annotations.py#L11) | 构造绑定记录哈希的测试审核行；updates 用于模拟哈希错误或特定审核输入。 |
+| [test_review_bound_to_record_hash](../tests/test_annotations.py#L27) | 确认来源哈希不符时拒绝旧审核，原记录保留并记录局部问题。 |
+| [test_review_does_not_erase_synthetic_origin](../tests/test_annotations.py#L36) | 确认有效审核也不能把合成示例升级为真实文献制备证据。 |
+| [test_overlay_accepts_the_declared_minimum_source_protocol](../tests/test_annotations.py#L46) | 审核装饰器必须支持已声明的最小来源协议，不能强制访问协议外的可选能力属性。 |
+| [test_overlay_accepts_the_declared_minimum_source_protocol.MinimalSource.candidate_page](../tests/test_annotations.py#L56) | 提供一个合法空页，验证包装后仍可正常委托查询。 |
+| [test_overlay_accepts_the_declared_minimum_source_protocol.MinimalSource.hydrate](../tests/test_annotations.py#L60) | 完整来源无需额外加载，返回原记录。 |
+| [test_overlay_accepts_the_declared_minimum_source_protocol.MinimalSource.close](../tests/test_annotations.py#L64) | 记录调用方释放了来源。 |
 
 ## tests/test_architecture.py
 
@@ -378,26 +384,28 @@
 | 函数 | 职责 |
 |---|---|
 | [empty_snapshot](../tests/test_data_boundaries.py#L22) | 保存无命中资料包，让校验测试不依赖任何化学匹配结果。 |
-| [test_incomplete_source_locator_does_not_merge_different_records](../tests/test_data_boundaries.py#L61) | 实验定位不完整时按来源记录身份计数，不能把不同反应拼成同一实验。 |
-| [test_complete_source_locator_still_groups_duplicate_experiment_records](../tests/test_data_boundaries.py#L74) | 完整文献、段落与反应序号仍表示同一实验，序号零是合法值。 |
-| [test_missing_native_record_id_is_rejected](../tests/test_data_boundaries.py#L83) | 导出行缺少有效记录 ID 时应隔离该行，不能转换成共享的 None 或空身份。 |
-| [test_empty_rerank_validates_exclusions_before_creating_run](../tests/test_data_boundaries.py#L89) | 即使没有参考项触发排序循环，无效实验排除结构仍应拒绝且不创建派生任务。 |
-| [test_stored_identity_must_match_requested_file](../tests/test_data_boundaries.py#L100) | 文件内容误放到其他任务或快照路径时必须报冲突，不能返回错配资料。 |
-| [SampleConnection.__init__](../tests/test_data_boundaries.py#L122) | 准备两条具有非 ASCII 文本的记录，供完整导出和半途失败使用。 |
-| [SampleConnection.__enter__](../tests/test_data_boundaries.py#L126) | 返回受上下文管理的连接替身。 |
-| [SampleConnection.__exit__](../tests/test_data_boundaries.py#L130) | 内存连接没有外部资源。 |
-| [SampleConnection.execute](../tests/test_data_boundaries.py#L134) | 接受只读查询并保留统一的结果读取入口。 |
-| [SampleConnection.fetchone](../tests/test_data_boundaries.py#L138) | 返回固定快照标识。 |
-| [SampleConnection.fetchall](../tests/test_data_boundaries.py#L142) | 返回有限样本记录。 |
-| [sample_connection](../tests/test_data_boundaries.py#L147) | 替换连接函数，保证导出回归只访问本地临时文件。 |
-| [sample_connection.connect](../tests/test_data_boundaries.py#L151) | 返回已准备的内存连接。 |
-| [test_failed_export_is_not_published_and_can_retry](../tests/test_data_boundaries.py#L159) | 第二条记录序列化失败时，不能留下看似完整的最终文件，并且允许同路径重试。 |
-| [test_failed_export_is_not_published_and_can_retry.fail_second](../tests/test_data_boundaries.py#L165) | 只模拟第二条记录写入前的失败，使旧实现已经写出第一行。 |
-| [test_export_never_overwrites_existing_file](../tests/test_data_boundaries.py#L184) | 同名文件已存在时保持原样，不论其内容是否是有效 JSONL。 |
-| [test_concurrent_export_keeps_the_first_published_file](../tests/test_data_boundaries.py#L194) | 另一写入者在最终发布前抢先创建文件时，不覆盖它，并清理本次临时文件。 |
-| [test_concurrent_export_keeps_the_first_published_file.publish_race](../tests/test_data_boundaries.py#L200) | 模拟检查路径为空后，另一进程恰好先发布结果。 |
-| [test_export_publication_failure_does_not_leave_output](../tests/test_data_boundaries.py#L212) | 最终发布失败时也应删除临时文件，避免无效导出占用目标路径。 |
-| [test_export_publication_failure_does_not_leave_output.failed_publish](../tests/test_data_boundaries.py#L217) | 模拟目标文件发布时的权限错误。 |
+| [test_incomplete_source_locator_does_not_merge_different_records](../tests/test_data_boundaries.py#L65) | 实验定位不完整时按来源记录身份计数，不能把不同反应拼成同一实验。 |
+| [test_complete_source_locator_still_groups_duplicate_experiment_records](../tests/test_data_boundaries.py#L78) | 完整文献、段落与反应序号仍表示同一实验，序号零是合法值。 |
+| [test_native_record_components_cannot_collide_at_delimiters](../tests/test_data_boundaries.py#L86) | 命名空间和记录编号中的分隔符不能把不同合法记录拼成同一个 ID 并一起丢弃。 |
+| [test_experiment_components_cannot_collide_at_delimiters](../tests/test_data_boundaries.py#L109) | 不同命名空间及文档的完整实验定位也必须保持唯一，字面转义符不能产生新碰撞。 |
+| [test_missing_native_record_id_is_rejected](../tests/test_data_boundaries.py#L126) | 导出行缺少有效记录 ID 时应隔离该行，不能转换成共享的 None 或空身份。 |
+| [test_empty_rerank_validates_exclusions_before_creating_run](../tests/test_data_boundaries.py#L132) | 即使没有参考项触发排序循环，无效实验排除结构仍应拒绝且不创建派生任务。 |
+| [test_stored_identity_must_match_requested_file](../tests/test_data_boundaries.py#L143) | 文件内容误放到其他任务或快照路径时必须报冲突，不能返回错配资料。 |
+| [SampleConnection.__init__](../tests/test_data_boundaries.py#L165) | 准备两条具有非 ASCII 文本的记录，供完整导出和半途失败使用。 |
+| [SampleConnection.__enter__](../tests/test_data_boundaries.py#L169) | 返回受上下文管理的连接替身。 |
+| [SampleConnection.__exit__](../tests/test_data_boundaries.py#L173) | 内存连接没有外部资源。 |
+| [SampleConnection.execute](../tests/test_data_boundaries.py#L177) | 接受只读查询并保留统一的结果读取入口。 |
+| [SampleConnection.fetchone](../tests/test_data_boundaries.py#L181) | 返回固定快照标识。 |
+| [SampleConnection.fetchall](../tests/test_data_boundaries.py#L185) | 返回有限样本记录。 |
+| [sample_connection](../tests/test_data_boundaries.py#L190) | 替换连接函数，保证导出回归只访问本地临时文件。 |
+| [sample_connection.connect](../tests/test_data_boundaries.py#L194) | 返回已准备的内存连接。 |
+| [test_failed_export_is_not_published_and_can_retry](../tests/test_data_boundaries.py#L202) | 第二条记录序列化失败时，不能留下看似完整的最终文件，并且允许同路径重试。 |
+| [test_failed_export_is_not_published_and_can_retry.fail_second](../tests/test_data_boundaries.py#L208) | 只模拟第二条记录写入前的失败，使旧实现已经写出第一行。 |
+| [test_export_never_overwrites_existing_file](../tests/test_data_boundaries.py#L227) | 同名文件已存在时保持原样，不论其内容是否是有效 JSONL。 |
+| [test_concurrent_export_keeps_the_first_published_file](../tests/test_data_boundaries.py#L237) | 另一写入者在最终发布前抢先创建文件时，不覆盖它，并清理本次临时文件。 |
+| [test_concurrent_export_keeps_the_first_published_file.publish_race](../tests/test_data_boundaries.py#L243) | 模拟检查路径为空后，另一进程恰好先发布结果。 |
+| [test_export_publication_failure_does_not_leave_output](../tests/test_data_boundaries.py#L255) | 最终发布失败时也应删除临时文件，避免无效导出占用目标路径。 |
+| [test_export_publication_failure_does_not_leave_output.failed_publish](../tests/test_data_boundaries.py#L260) | 模拟目标文件发布时的权限错误。 |
 
 ## tests/test_evaluation.py
 
@@ -468,6 +476,8 @@
 | [test_repeatable_read_keeps_material_fields_frozen](../tests/test_postgres_integration.py#L217) | 来源建立快照后其他会话更新原行，本次查询和详情仍必须对应旧材料结构。 |
 | [test_sql_row_paging_survives_dirty_and_multiple_materials](../tests/test_postgres_integration.py#L231) | SQL 游标按行推进，脏行不提前终结流，多产物行也不能跳过后一行。 |
 | [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L257) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
+| [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L293) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
+| [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
 
 ## tests/test_reactions.py
 

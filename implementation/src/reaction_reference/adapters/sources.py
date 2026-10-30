@@ -23,6 +23,23 @@ from reaction_reference.domain.models import (
 from reaction_reference.ports.sources import Candidate, CandidatePage
 
 
+def _locator_value_present(value):
+    """检查定位字段是否有明确非空值；整数零有效，布尔值及含缺失项的数组无效。
+
+    这里只判断关联依据是否齐全，不推断未知文档或段落；实验分组和详情关联共用此规则。
+    """
+    if isinstance(value, (list, tuple)):
+        return bool(value) and all(_locator_value_present(item) for item in value)
+    return (
+        isinstance(value, (str, int)) and not isinstance(value, bool) and bool(str(value).strip())
+    )
+
+
+def _compound_source_id(*parts):
+    """为复合来源标识转义百分号和冒号，避免字段边界碰撞；普通标识保持原有可读格式。"""
+    return ":".join(str(part).replace("%", "%25").replace(":", "%3A") for part in parts)
+
+
 def import_native(row):
     """把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。
 
@@ -77,18 +94,16 @@ def import_native(row):
                 )
             )
     # 只有完整定位才能按实验去重；未知段落或序号不能把不同来源记录合并。
-    locator_complete = (
-        row.get("document_id") is not None
-        and bool(str(row["document_id"]).strip())
-        and bool(row.get("paragraph_nums"))
-        and bool(str(row["paragraph_nums"]).strip())
-        and row.get("paragraph_reaction_ordinal") is not None
-        and bool(str(row["paragraph_reaction_ordinal"]).strip())
+    locator_complete = bool(row.get("paragraph_nums")) and all(
+        _locator_value_present(row.get(key))
+        for key in ("document_id", "paragraph_nums", "paragraph_reaction_ordinal")
     )
     experiment_id = (
-        f"{namespace}:{row['document_id']}:{row['paragraph_nums']}:{row['paragraph_reaction_ordinal']}"
+        _compound_source_id(
+            namespace, row["document_id"], row["paragraph_nums"], row["paragraph_reaction_ordinal"]
+        )
         if locator_complete
-        else f"{namespace}:record:{record_id}"
+        else _compound_source_id(namespace, "record", record_id)
     )
     source = SourceRef(
         namespace=namespace,
@@ -104,7 +119,7 @@ def import_native(row):
         if material.role == "product":
             observations.append(Observation(product_instance_id=material.instance_id))
     return ReactionRecord(
-        id=f"{namespace}:{record_id}",
+        id=_compound_source_id(namespace, record_id),
         source=source,
         materials=materials,
         observations=observations,
@@ -506,7 +521,7 @@ class PostgresSource:
         if not set(keys) <= columns:
             return {}
         values = [row["id"]] if keys == ["reaction_id"] else [row[k] for k in keys]
-        if any(value is None for value in values):
+        if not all(_locator_value_present(value) for value in values):
             return {}
         condition = sql.SQL(" AND ").join(
             sql.SQL("{} = %s").format(sql.Identifier(key)) for key in keys
