@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "2bb4f394e89a27f4b3cdd9b438ccf52aa80f34fdf5e13ea0b2b93279701420d0",
+  "implementation_hash": "6263344f1c668ac809169ddd8d5eed2bdf47d21159ba5d332002380ed3c8f5aa",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 429,
+    "tests_passed": 433,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "2bb4f394e89a27f4b3cdd9b438ccf52aa80f34fdf5e13ea0b2b93279701420d0"
+    "implementation_hash": "6263344f1c668ac809169ddd8d5eed2bdf47d21159ba5d332002380ed3c8f5aa"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1234,6 +1234,34 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 551,
     "function_index_links_verified": 551,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "overlay_initialization_original_error_review": {
+    "date": "2026-10-30",
+    "base_commit": "6c50ada",
+    "verified_implementation_hash": "6263344f1c668ac809169ddd8d5eed2bdf47d21159ba5d332002380ed3c8f5aa",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 4,
+    "initial_failures": 2,
+    "initial_passing_controls": 2,
+    "overlay_failures": [
+      "missing_file",
+      "malformed_json"
+    ],
+    "real_backend_terminated_before_overlay_load": true,
+    "actual_driver_cleanup_errors_observed": true,
+    "original_file_or_contract_error_preserved": true,
+    "client_closed_and_no_backend_session_remains": true,
+    "source_object_retained_during_assertions": true,
+    "postgres_integration_cases_passed": 37,
+    "real_browser_cases_passed": 7,
+    "node_scenarios_passed": 12,
+    "python_modules_documented": 98,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 554,
+    "function_index_links_verified": 554,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }

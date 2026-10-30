@@ -133,8 +133,8 @@
 
 | 函数 | 职责 |
 |---|---|
-| [open_source](../src/reaction_reference/bootstrap.py#L10) | 根据 Settings 创建 JSONL 或只读 PG 来源，并可包装审核证据适配器。 |
-| [create_manager](../src/reaction_reference/bootstrap.py#L31) | 使用给定或默认 Settings 创建 RunManager，供 SDK/API 共享同一装配方式。 |
+| [open_source](../src/reaction_reference/bootstrap.py#L12) | 根据 Settings 创建 JSONL 或只读 PG 来源，并可包装审核证据适配器。 |
+| [create_manager](../src/reaction_reference/bootstrap.py#L35) | 使用给定或默认 Settings 创建 RunManager，供 SDK/API 共享同一装配方式。 |
 
 ## src/reaction_reference/chemistry/markush.py
 
@@ -534,6 +534,9 @@
 | [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L628) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
 | [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L663) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
 | [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L672) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L702) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L722) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L729) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
 
 ## tests/test_query_input_planning.py
 

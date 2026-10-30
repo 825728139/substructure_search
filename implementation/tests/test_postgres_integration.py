@@ -695,3 +695,70 @@ def test_overlay_initialization_releases_real_source_connection(
         while connections():
             assert time.monotonic() < deadline, "审核来源连接关闭后仍残留数据库会话"
             time.sleep(0.01)
+
+
+@pytest.mark.parametrize("overlay", ["missing", "malformed"])
+@pytest.mark.parametrize("terminate_backend", [False, True])
+def test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails(
+    indexed_source_dsn, tmp_path, monkeypatch, overlay, terminate_backend
+):
+    """审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。"""
+    import time
+
+    from pydantic import ValidationError
+
+    from reaction_reference import bootstrap
+    from reaction_reference.settings import Settings
+
+    path = tmp_path / "review.jsonl"
+    if overlay == "malformed":
+        path.write_text("{broken\n", encoding="utf-8")
+    settings = Settings(source_kind="postgres", postgres_dsn=indexed_source_dsn, evidence_path=path)
+    constructor = bootstrap.PostgresSource
+    opened, pids, cleanup_errors = [], [], []
+    try:
+        with psycopg.connect(indexed_source_dsn, autocommit=True) as observer:
+
+            def capture_source(*args, **kwargs):
+                """建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。"""
+                source = constructor(*args, **kwargs)
+                opened.append(source)
+                pids.append(source.connection.info.backend_pid)
+                close = source.close
+
+                def record_close():
+                    """调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。"""
+                    try:
+                        close()
+                    except psycopg.Error as error:
+                        cleanup_errors.append(error)
+                        raise
+
+                monkeypatch.setattr(source, "close", record_close)
+                if terminate_backend:
+                    assert observer.execute(
+                        "SELECT pg_terminate_backend(%s, 1000)",
+                        (pids[-1],),
+                    ).fetchone()[0]
+                return source
+
+            monkeypatch.setattr(bootstrap, "PostgresSource", capture_source)
+            expected = FileNotFoundError if overlay == "missing" else ValidationError
+            with pytest.raises(expected) as failure:
+                bootstrap.open_source(settings)
+            if overlay == "missing":
+                assert failure.value.filename == str(path)
+            else:
+                assert failure.value.errors()[0]["type"] == "json_invalid"
+            assert len(opened) == 1 and opened[0].connection.closed
+            assert len(cleanup_errors) == int(terminate_backend)
+            pid = pids[0]
+            deadline = time.monotonic() + 2
+            while observer.execute(
+                "SELECT count(*) FROM pg_stat_activity WHERE pid=%s", (pid,)
+            ).fetchone()[0]:
+                assert time.monotonic() < deadline
+                time.sleep(0.01)
+    finally:
+        for source in opened:
+            source.connection.close()
