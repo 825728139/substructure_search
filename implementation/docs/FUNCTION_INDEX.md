@@ -505,6 +505,8 @@
 | [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
 | [test_bounded_export_preserves_source_replay_template](../tests/test_postgres_integration.py#L341) | 有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。 |
 | [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L374) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
+| [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L427) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
+| [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L474) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
 
 ## tests/test_query_input_planning.py
 

@@ -422,3 +422,91 @@ def test_ambiguous_details_are_not_arbitrarily_attached(indexed_source_dsn, link
         assert any(issue["code"] == "source_hydration_failed" for issue in package.source_issues)
     finally:
         source.close()
+
+
+def test_indexed_and_jsonl_sources_agree_after_full_family_verification(
+    indexed_source_dsn, tmp_path
+):
+    """同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。"""
+    import json
+
+    from reaction_reference.adapters.sources import JsonlSource
+    from reaction_reference.chemistry.markush import match_family
+    from reaction_reference.chemistry.structures import canonical, parse
+    from reaction_reference.retrieval.planner import initial_families
+
+    examples = [
+        "CCO",
+        "CC(C)O",
+        "CCN",
+        "CC(=O)NCC",
+        "C[C@H](O)CC",
+        "C/C=C/C(=O)N",
+        "[2H]OC(C)C",
+        "C[13CH2]CO",
+        "[O-][N+](=O)c1ccccc1",
+        "c1ccc2ccccc2c1",
+        "C1CCC2(CC1)CCCC2",
+        "C1CC2CCC1C2",
+    ]
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("DELETE FROM reaction.reactions")
+        for number, smiles in enumerate(examples, 1):
+            writer.execute(
+                "INSERT INTO reaction.reactions "
+                "(id,paragraph_reaction_ordinal,product_smiles,products_mol) "
+                "VALUES (%s,%s,%s,%s::mol)",
+                (number, number, [smiles], smiles),
+            )
+        projection = ",".join(PostgresSource.lightweight_columns)
+        rows = writer.execute(
+            "SELECT " + projection + " FROM reaction.reactions ORDER BY id"
+        ).fetchall()
+    path = tmp_path / "equivalent.jsonl"
+    path.write_text(
+        "".join(
+            json.dumps(dict(zip(PostgresSource.lightweight_columns, row, strict=True))) + "\n"
+            for row in rows
+        ),
+        encoding="utf-8",
+    )
+
+    def verified_ids(source, family, target):
+        """逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。"""
+        cursor, identities = 0, set()
+        while True:
+            page = source.candidate_page(family, "product", cursor, 2, canonical(target))
+            for item in page.items:
+                result = match_family(
+                    family,
+                    parse(item.material.smiles),
+                    target,
+                    item.structure_id,
+                    max_mappings=2048,
+                )
+                assert result.enumeration_complete
+                if result.state == "match":
+                    identities.add((item.record.id, item.material.instance_id))
+            if page.next_cursor is None:
+                return identities
+            assert page.next_cursor > cursor
+            cursor = page.next_cursor
+
+    offline = JsonlSource(path, exhaustive=True)
+    try:
+        for number, smiles in enumerate(examples, 1):
+            target = parse(smiles, target=True)
+            indexed = PostgresSource(indexed_source_dsn)
+            try:
+                for original in initial_families(target):
+                    # 本例比较完整候选流，禁用首阶段 KNN，避免把有界初选当成完整召回。
+                    family = original.model_copy(update={"layer": "fragment"})
+                    expected = verified_ids(offline, family, target)
+                    actual = verified_ids(indexed, family, target)
+                    assert actual == expected, (smiles, original.rule_id)
+                    assert (f"integration:{number}", f"{number}:product:0") in actual
+            finally:
+                indexed.close()
+        assert not offline.issues
+    finally:
+        offline.close()
