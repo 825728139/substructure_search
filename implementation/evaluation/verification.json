@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "434a6ce1462d5ae8ca12f8b050a4f400248d230a042ca4fd1aaa1e3f7812fbb8",
+  "implementation_hash": "64ecc64e6bfbb7c871f2e2266e4f70492857e8a9fcd8f26bc27c9005bccbabc8",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 282,
+    "tests_passed": 287,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "434a6ce1462d5ae8ca12f8b050a4f400248d230a042ca4fd1aaa1e3f7812fbb8"
+    "implementation_hash": "64ecc64e6bfbb7c871f2e2266e4f70492857e8a9fcd8f26bc27c9005bccbabc8"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -91,7 +91,6 @@
     ],
     "build_pip_index": "https://pypi.tuna.tsinghua.edu.cn/simple"
   },
-  "ci_remote_run_verified": false,
   "handover_review": {
     "language": "zh-CN",
     "python_modules_documented": 67,
@@ -442,11 +441,25 @@
     },
     "dockerfile_sha256": "c462949b5b7c872479c474005216da01eea086ce283d28e2adc8ab60f9d546bd",
     "deployment_check_sha256": "2841ecf002bbb0d4e20df0c5f6b7cae7940bf63fa6ab7304b2de9679d165598c",
-    "workflow_sha256": "34f89ba572dff5282648d845af205bf498ee1cd47d8c7a2d78443cba685baad4",
     "python_modules_documented": 85,
     "python_classes_documented": 67,
     "python_named_functions_documented": 488,
     "function_index_links_verified": 488,
+    "live_source_access_performed": false
+  },
+  "inventory_marker_review": {
+    "date": "2026-10-30",
+    "base_commit": "f482812",
+    "verified_implementation_hash": "64ecc64e6bfbb7c871f2e2266e4f70492857e8a9fcd8f26bc27c9005bccbabc8",
+    "report": "docs/DATA_BOUNDARY_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 5,
+    "initial_failures": 4,
+    "initial_passing_controls": 1,
+    "python_modules_documented": 85,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 490,
+    "function_index_links_verified": 490,
     "live_source_access_performed": false
   }
 }

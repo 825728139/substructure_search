@@ -102,7 +102,7 @@ implementation/
 │   ├── interfaces/             # CLI、SDK、HTTP、内部页面和结构图
 │   ├── evaluation/             # 真实目标选样、目标制备记录屏蔽、标注指标
 │   └── resources/              # 可执行有限规则与明确标记的合成示例
-├── contracts/                  # 导出的 JSON Schema / OpenAPI，CI 检查漂移
+├── contracts/                  # 导出的 JSON Schema / OpenAPI，本地检查漂移
 ├── configs/                    # 内部环境配置示例
 ├── tests/                      # 化学回归、来源/预算、API 生命周期与模块边界
 ├── evaluation/                 # 真实样本试跑报告；未经标注不计算方法召回率
@@ -120,7 +120,7 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 282 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 287 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 ### 真实来源和浏览器集成检查
 
@@ -167,6 +167,6 @@ Docker/Compose 配置位于 `deploy/`，在本目录可用 `docker compose -f de
 python scripts/check_deployment.py --base-url http://127.0.0.1:8000 --output /tmp/container-check.json
 ```
 
-CI 新增独立容器构建和 HTTP 检查任务，用于发现开发机系统库掩盖的依赖问题；远端执行结果仍需查看实际 Actions 状态。
+项目采用本地检查和手动部署，不配置持续集成。部署检查脚本按需运行，用于确认目标环境的依赖和接口可用。
 
 保护基/互变异构体自动展开、任意可变路径 Markush、金属配位处理、共同中间体主动补查、供应/危害外部资料接入、化学可行性和条件预测尚未实现，均有明确能力状态。现有材料身份关系只是已返回记录之间的线索。模板回放成功不证明选择性、实验可行性或条件可照搬。完整范围见 [STATUS](docs/STATUS.md)；产品和化学设计见[上层实现计划](../implementation_plan.md)。

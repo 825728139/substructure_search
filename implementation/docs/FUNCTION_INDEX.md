@@ -258,9 +258,9 @@
 | 函数 | 职责 |
 |---|---|
 | [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
-| [_priority](../src/reaction_reference/ranking/engine.py#L77) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L101) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L135) | 为单个参考生成可传递且稳定的排序元组。 |
+| [_priority](../src/reaction_reference/ranking/engine.py#L78) | 返回参考的方法/证据优先级，数值越小越优先。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L102) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L136) | 为单个参考生成可传递且稳定的排序元组。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -576,20 +576,22 @@
 | [test_alkyl_constraint_checks_the_attachment_bond](../tests/test_review_regressions.py#L87) | 烷基的核心连接键必须为单键，不能把双键或三键连接的碳误判为烷基。 |
 | [test_enriched_outcome_cannot_override_conflicting_observations](../tests/test_review_regressions.py#L100) | 同一产品有富集与失败、普通回收或冲突证据时，不能计算合格获得命中。 |
 | [test_dirty_material_does_not_hide_known_excluded_material](../tests/test_review_regressions.py#L122) | 某个材料解析失败时，仍须保留另一个已识别材料触发的明确禁用结论。 |
-| [test_whitespace_input_citation_does_not_create_use_evidence](../tests/test_review_regressions.py#L139) | 只有空白字符的审核引用不能把未知投料升级为确认使用。 |
-| [test_masking_uses_validated_products_and_skips_dirty_ones](../tests/test_review_regressions.py#L162) | 脏产品先于有效目标产品时，评测屏蔽仍应排除整条目标记录而非崩溃。 |
-| [test_source_index_capability_uses_indexed_columns](../tests/test_review_regressions.py#L181) | 索引名称提到产品列不能冒充该列已建索引，必须匹配实际索引键列。 |
-| [test_source_files_are_read_with_a_memory_bound](../tests/test_review_regressions.py#L195) | 来源和证据文件必须先限定读取字节数，不能把整个大文件读入内存后才检查大小。 |
-| [test_source_files_are_read_with_a_memory_bound.BoundedReader.read](../tests/test_review_regressions.py#L203) | 允许在声明大小上限内读取并留出一个溢出哨兵字节。 |
-| [test_source_files_are_read_with_a_memory_bound.open_file](../tests/test_review_regressions.py#L210) | 只替换被检查的输入路径，其余文件读取仍使用真实文件。 |
-| [saved_running_package](../tests/test_review_regressions.py#L221) | 保存仍在运行但已有完整范围快照的任务，模拟发布包后进程异常退出。 |
-| [test_restart_marks_retained_snapshot_partial](../tests/test_review_regressions.py#L245) | 重启恢复必须同步标记保留快照的范围和停止原因，并保留原快照不变。 |
-| [test_supervisor_exception_marks_retained_snapshot_partial](../tests/test_review_regressions.py#L261) | 监督过程自身异常时，兜底失败处理也必须更新已经保存的快照范围。 |
-| [test_supervisor_exception_marks_retained_snapshot_partial.fail_supervision](../tests/test_review_regressions.py#L268) | 模拟阶段包落盘后监督器自身发生异常。 |
-| [test_non_ascii_authorization_is_rejected_without_server_error](../tests/test_review_regressions.py#L280) | 错误令牌包含非 ASCII 字符时应返回未认证，不能触发字符串比较的服务器异常。 |
-| [test_rerank_succeeds_only_after_snapshot_is_saved](../tests/test_review_regressions.py#L289) | 重排必须在快照落盘后才标记成功；写盘失败时任务不能留下虚假的成功状态。 |
-| [test_rerank_succeeds_only_after_snapshot_is_saved.save_snapshot](../tests/test_review_regressions.py#L301) | 记录落盘前的任务状态，并可模拟文件写入失败。 |
-| [test_progress_snapshot_does_not_complete_unstarted_phases](../tests/test_review_regressions.py#L322) | 初始阶段包不能把尚未开始的输入检索或替换回放标记为已完成。 |
+| [test_only_explicit_boolean_inventory_completeness_can_pass_exclusions](../tests/test_review_regressions.py#L140) | 自由元数据中的真值字符串、数字和容器不能冒充已确认的完整材料清单。 |
+| [test_explicit_complete_inventory_still_passes_unmatched_exclusion](../tests/test_review_regressions.py#L148) | 明确的布尔完整标记和可识别清单仍可用于判断未出现被排除材料。 |
+| [test_whitespace_input_citation_does_not_create_use_evidence](../tests/test_review_regressions.py#L156) | 只有空白字符的审核引用不能把未知投料升级为确认使用。 |
+| [test_masking_uses_validated_products_and_skips_dirty_ones](../tests/test_review_regressions.py#L179) | 脏产品先于有效目标产品时，评测屏蔽仍应排除整条目标记录而非崩溃。 |
+| [test_source_index_capability_uses_indexed_columns](../tests/test_review_regressions.py#L198) | 索引名称提到产品列不能冒充该列已建索引，必须匹配实际索引键列。 |
+| [test_source_files_are_read_with_a_memory_bound](../tests/test_review_regressions.py#L212) | 来源和证据文件必须先限定读取字节数，不能把整个大文件读入内存后才检查大小。 |
+| [test_source_files_are_read_with_a_memory_bound.BoundedReader.read](../tests/test_review_regressions.py#L220) | 允许在声明大小上限内读取并留出一个溢出哨兵字节。 |
+| [test_source_files_are_read_with_a_memory_bound.open_file](../tests/test_review_regressions.py#L227) | 只替换被检查的输入路径，其余文件读取仍使用真实文件。 |
+| [saved_running_package](../tests/test_review_regressions.py#L238) | 保存仍在运行但已有完整范围快照的任务，模拟发布包后进程异常退出。 |
+| [test_restart_marks_retained_snapshot_partial](../tests/test_review_regressions.py#L262) | 重启恢复必须同步标记保留快照的范围和停止原因，并保留原快照不变。 |
+| [test_supervisor_exception_marks_retained_snapshot_partial](../tests/test_review_regressions.py#L278) | 监督过程自身异常时，兜底失败处理也必须更新已经保存的快照范围。 |
+| [test_supervisor_exception_marks_retained_snapshot_partial.fail_supervision](../tests/test_review_regressions.py#L285) | 模拟阶段包落盘后监督器自身发生异常。 |
+| [test_non_ascii_authorization_is_rejected_without_server_error](../tests/test_review_regressions.py#L297) | 错误令牌包含非 ASCII 字符时应返回未认证，不能触发字符串比较的服务器异常。 |
+| [test_rerank_succeeds_only_after_snapshot_is_saved](../tests/test_review_regressions.py#L306) | 重排必须在快照落盘后才标记成功；写盘失败时任务不能留下虚假的成功状态。 |
+| [test_rerank_succeeds_only_after_snapshot_is_saved.save_snapshot](../tests/test_review_regressions.py#L318) | 记录落盘前的任务状态，并可模拟文件写入失败。 |
+| [test_progress_snapshot_does_not_complete_unstarted_phases](../tests/test_review_regressions.py#L339) | 初始阶段包不能把尚未开始的输入检索或替换回放标记为已完成。 |
 
 ## tests/test_round1_chemistry.py
 

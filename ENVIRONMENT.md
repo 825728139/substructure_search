@@ -79,7 +79,7 @@ CONDA_PKGS_DIRS=.cache/conda conda create --prefix .runtime/cpython \
 
 ## 开发工具与依赖更新
 
-已声明 pytest、pytest-cov、pytest-asyncio、Ruff、mypy、Hypothesis、import-linter、JSON Schema 验证器及构建工具。业务实现的模块导入约束、类型检查、测试和 CI 已在 `implementation/` 配置；根目录环境继续用于设计探针与图表。
+已声明 pytest、pytest-cov、pytest-asyncio、Ruff、mypy、Hypothesis、import-linter、JSON Schema 验证器及构建工具。业务实现的模块导入约束、类型检查和本地测试已在 `implementation/` 配置；根目录环境继续用于设计探针与图表。
 
 新增或更新依赖时，先修改 `pyproject.toml`，再通过 `./scripts/project-uv lock` 解析，并用 `./scripts/project-uv sync --locked` 安装及重新验证。提交清单和锁文件；不能只手工修改本地 `.venv`。
 

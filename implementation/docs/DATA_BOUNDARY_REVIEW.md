@@ -67,3 +67,10 @@ implementation/.venv/bin/python implementation/scripts/check.py
 新增 7 项 pytest 回归，其中 6 项故障反例修复前失败、1 项合法数据对照通过；Node 增加原始字节及失败下载两项场景，合计 8 项前端场景。测试见 [test_serialization_integrity.py](../tests/test_serialization_integrity.py)、[test_browser_integration.py](../tests/test_browser_integration.py) 和 [check_frontend_state.cjs](../tests/check_frontend_state.cjs)。
 
 完整检查 **282 项测试通过、无跳过**，其中真实 PostgreSQL 15 项、真实浏览器 5 项。中文说明、静态检查、契约检查及 wheel 构建通过，24 项固定样本评测按当前实现哈希重跑。原生模型的自由字段仍允许保留各种合法 JSON 数据，来源适配器负责拒绝无法可靠进入结果包的数据。
+
+
+## 材料清单完整标记复核（2026-10-30）
+
+实验适配排序原先按 Python 真值解释自由元数据 `material_inventory_complete`。字符串 `"false"`、`"true"`、数字 `1` 和非空列表都会被误认为清单完整；当已列材料未命中用户排除项时，可能错误返回“通过”。现在只接受明确的布尔 `True`，其他值均保留“材料清单完整性未知”，已有命中排除项的拒绝逻辑继续生效。
+
+新增四个非法标记反例及一个合法布尔标记对照；修复前四个反例失败，对照通过，修复后全部通过。完整本地检查 **287 项测试通过、无跳过**，包括真实 PostgreSQL 和浏览器集成；静态检查、中文说明、契约及 wheel 构建通过。固定样本 12 个目标、24 种任务重新运行，本轮未访问现库。

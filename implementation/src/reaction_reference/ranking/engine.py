@@ -58,7 +58,8 @@ def lab_fit(reference, context):
         if identity_unknown:
             unknown.append("material_identity_unknown")
         # 来源材料列表不完整时，“没有列出禁用物”不能视为已确认符合限制。
-        if not reference.record.raw.get("material_inventory_complete", False):
+        # 自由元数据不做布尔强制转换，只有明确的 True 才能证明清单完整。
+        if reference.record.raw.get("material_inventory_complete") is not True:
             unknown.append("material_inventory_completeness_unknown")
     if context.available_equipment is not None:
         tested += 1

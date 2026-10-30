@@ -136,6 +136,23 @@ def test_dirty_material_does_not_hide_known_excluded_material(amide):
     assert "material_identity_unknown" in reasons
 
 
+@pytest.mark.parametrize("marker", ["false", "true", 1, ["incomplete"]])
+def test_only_explicit_boolean_inventory_completeness_can_pass_exclusions(amide, marker):
+    """自由元数据中的真值字符串、数字和容器不能冒充已确认的完整材料清单。"""
+    record = amide.model_copy(update={"raw": {**amide.raw, "material_inventory_complete": marker}})
+    fit, reasons = lab_fit(reference_for(record), LabContext(excluded_material_smiles=["CCO"]))
+    assert fit == "unknown"
+    assert "material_inventory_completeness_unknown" in reasons
+
+
+def test_explicit_complete_inventory_still_passes_unmatched_exclusion(amide):
+    """明确的布尔完整标记和可识别清单仍可用于判断未出现被排除材料。"""
+    record = amide.model_copy(update={"raw": {**amide.raw, "material_inventory_complete": True}})
+    fit, reasons = lab_fit(reference_for(record), LabContext(excluded_material_smiles=["CCO"]))
+    assert fit == "pass"
+    assert "material_inventory_completeness_unknown" not in reasons
+
+
 def test_whitespace_input_citation_does_not_create_use_evidence(source, amide, tmp_path):
     """只有空白字符的审核引用不能把未知投料升级为确认使用。"""
     materials = [m.model_copy(update={"actual_input": None}) for m in amide.materials]
