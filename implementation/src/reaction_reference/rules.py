@@ -59,7 +59,7 @@ def code_fingerprint():
 def load_rules():
     """读取随包 rules.json，严格校验契约并编译官能团及双向回放规则。
 
-    返回（普通规则字典、文件 SHA-256）；版本、重复官能团 ID 或编译错误抛出 ValueError，不静默忽略失效规则。
+    返回（普通规则字典、文件 SHA-256）；版本、重复规则 ID、编译错误或不兼容的回放输入数量抛出 ValueError。
     """
     payload = files("reaction_reference").joinpath("resources/rules.json").read_bytes()
     rules = RuleSet.model_validate_json(payload).model_dump()
@@ -70,11 +70,25 @@ def load_rules():
         if rule["id"] in seen or Chem.MolFromSmarts(rule["smarts"]) is None:
             raise ValueError("Invalid or duplicate functional-group rule")
         seen.add(rule["id"])
+    transfer_ids = set()
     for rule in rules["transfer_rules"]:
+        if rule["id"] in transfer_ids:
+            raise ValueError("Invalid or duplicate transfer rule")
+        transfer_ids.add(rule["id"])
+        reactions = {}
         for direction in ("forward", "retro"):
             reaction = rdChemReactions.ReactionFromSmarts(rule[direction])
             if reaction is None or reaction.Validate(silent=True)[1]:
                 raise ValueError("Invalid transfer rule")
+            reactions[direction] = reaction
+        # 运行时逆向回放只接收一个目标；所得整组输入必须与正向模板槽位一一对应。
+        inputs = reactions["forward"].GetNumReactantTemplates()
+        if (
+            not 1 <= inputs <= 4
+            or reactions["retro"].GetNumReactantTemplates() != 1
+            or reactions["retro"].GetNumProductTemplates() != inputs
+        ):
+            raise ValueError("Transfer rule arity is incompatible with single-target replay")
     return rules, hashlib.sha256(payload).hexdigest()
 
 

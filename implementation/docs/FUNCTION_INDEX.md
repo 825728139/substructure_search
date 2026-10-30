@@ -289,7 +289,7 @@
 |---|---|
 | [code_fingerprint](../src/reaction_reference/rules.py#L45) | 对包内 Python、规则/示例 JSON 和 HTML 的路径与原始内容计算 SHA-256。 |
 | [load_rules](../src/reaction_reference/rules.py#L59) | 读取随包 rules.json，严格校验契约并编译官能团及双向回放规则。 |
-| [capabilities](../src/reaction_reference/rules.py#L81) | 返回与当前规则版本绑定的查询形式、来源、分析能力和未支持清单。 |
+| [capabilities](../src/reaction_reference/rules.py#L95) | 返回与当前规则版本绑定的查询形式、来源、分析能力和未支持清单。 |
 
 ## src/reaction_reference/schema_export.py
 
@@ -611,6 +611,16 @@
 | [test_invalid_exclusion_is_rejected_before_creating_job](../tests/test_round3_boundaries.py#L161) | 无效排除结构必须在提交入口报错，不能先保存和调度一个必然失败的任务。 |
 | [test_invalid_exclusion_is_rejected_before_creating_job.unexpected_submission](../tests/test_round3_boundaries.py#L165) | 一旦越过请求校验进入调度，立即暴露回归。 |
 | [test_rerank_records_current_implementation_without_erasing_origin](../tests/test_round3_boundaries.py#L176) | 旧资料重排后须同时保留检索版本和本次排序版本，避免把新结果归给旧代码。 |
+
+## tests/test_rule_validation.py
+
+| 函数 | 职责 |
+|---|---|
+| [install_rules](../tests/test_rule_validation.py#L11) | 把受控回放规则写入临时资源根目录，保留其他已验证的规则配置。 |
+| [test_duplicate_transfer_ids_are_rejected](../tests/test_rule_validation.py#L21) | 重复回放规则 ID 会混淆建议去重与来源追溯，必须在加载时拒绝。 |
+| [test_transfer_arity_matches_single_target_runtime](../tests/test_rule_validation.py#L40) | 语法可编译但目标/输入数量不符合实际调用方式的规则不能被报告为有效。 |
+| [test_multiple_forward_products_remain_supported](../tests/test_rule_validation.py#L51) | 单目标逆向回放并不要求正向只生成一个产物，合法副产物不能被错误禁止。 |
+| [test_rule_validation_command_rejects_unsupported_replay](../tests/test_rule_validation.py#L64) | 命令行校验不能对运行时不支持的多目标逆向规则打印有效结果。 |
 
 ## tests/test_runtime_integrity.py
 
