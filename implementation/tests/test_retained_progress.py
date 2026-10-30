@@ -49,12 +49,13 @@ def test_interrupt_after_progress_preserves_evidence_and_stops_worker(
             "include_proposals": False,
             "directed_followups": False,
         },
-        budget={"max_tasks": 100, "time_ms": 5000},
+        # 本用例验证有阶段包后的中断，不把 spawn 和真实检索必须四秒完成作为前提。
+        budget={"max_tasks": 100, "time_ms": 15000},
     )
     with Client(settings) as client:
         manager = client.manager
         state = manager.submit(request)
-        deadline = time.monotonic() + 4
+        deadline = time.monotonic() + 12
         original = None
         while time.monotonic() < deadline:
             original = manager.store.package(state.run_id)
@@ -69,7 +70,7 @@ def test_interrupt_after_progress_preserves_evidence_and_stops_worker(
         if interruption == "cancel":
             terminal = manager.cancel(state.run_id)
         elif interruption == "deadline":
-            terminal = manager.wait(state.run_id, timeout=8)
+            terminal = manager.wait(state.run_id, timeout=20)
         else:
             client.close()
             terminal = manager.store.load(state.run_id)

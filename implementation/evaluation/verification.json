@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 448,
+    "tests_passed": 458,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -1296,5 +1296,53 @@
     "function_index_links_verified": 562,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
+  },
+  "atomic_publication_boundary_review": {
+    "date": "2026-10-30",
+    "base_commit": "9de524e",
+    "verified_implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "business_code_changed": false,
+    "regressions_added": 10,
+    "artifact_regressions_passed": 25,
+    "failure_phases": [
+      "file_sync",
+      "replace",
+      "directory_open",
+      "directory_sync"
+    ],
+    "new_and_existing_destination_checked": true,
+    "precommit_failure_preserves_previous_or_absent_destination": true,
+    "postcommit_failure_leaves_complete_new_file": true,
+    "original_error_identity_preserved": true,
+    "temporary_files_cleaned": true,
+    "existing_permissions_preserved": true,
+    "filesystem_name_max_checked_with_real_files": true,
+    "sample_report_reused_for_unchanged_implementation": true,
+    "python_modules_documented": 100,
+    "python_classes_documented": 68,
+    "python_named_functions_documented": 566,
+    "function_index_links_verified": 566,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false,
+    "initial_project_check_passed": false,
+    "initial_project_tests_passed": 456,
+    "initial_project_tests_failed": 2,
+    "initial_failure_tests": [
+      "retained_progress_cancel",
+      "retained_progress_shutdown"
+    ],
+    "unchanged_retained_progress_isolated_recheck_passed": 3,
+    "retained_progress_test_setup_wait_seconds": 12,
+    "retained_progress_test_request_budget_ms": 15000,
+    "retained_progress_test_terminal_wait_seconds": 20,
+    "production_timeout_policy_changed": false,
+    "final_project_check_passed": true,
+    "final_project_tests_passed": 458,
+    "final_project_tests_skipped": 0,
+    "postgres_integration_cases_passed": 37,
+    "real_browser_cases_passed": 7,
+    "node_scenarios_passed": 12
   }
 }

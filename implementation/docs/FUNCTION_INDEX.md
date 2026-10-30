@@ -356,13 +356,17 @@
 
 | 函数 | 职责 |
 |---|---|
-| [InterruptedWrite.__init__](../tests/test_artifact_writes.py#L18) | 保存真实文件和待抛异常，供所有导出路径使用同一故障。 |
-| [InterruptedWrite.write](../tests/test_artifact_writes.py#L22) | 确实落盘部分文本后失败，防止只测试序列化前错误而漏掉文件截断。 |
-| [InterruptedWrite.__getattr__](../tests/test_artifact_writes.py#L28) | 其余文件操作委托真实流，兼容刷新和文件描述符访问。 |
-| [render_artifact](../tests/test_artifact_writes.py#L33) | 调用各自真实导出入口，不用模拟业务结果代替实际报告或契约。 |
-| [test_export_artifact_is_complete_or_keeps_previous_file](../tests/test_artifact_writes.py#L47) | 五种导出在部分写入失败时保留旧文件或保持目标不存在，成功替换保持文件权限。 |
-| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault](../tests/test_artifact_writes.py#L67) | 只中断目标及同目录临时文件写入，其他打开操作直接返回真实流。 |
-| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault.partial_stream](../tests/test_artifact_writes.py#L77) | 仅为目标写入提供故障上下文，始终关闭实际文件描述符。 |
+| [InterruptedWrite.__init__](../tests/test_artifact_writes.py#L20) | 保存真实文件和待抛异常，供所有导出路径使用同一故障。 |
+| [InterruptedWrite.write](../tests/test_artifact_writes.py#L24) | 确实落盘部分文本后失败，防止只测试序列化前错误而漏掉文件截断。 |
+| [InterruptedWrite.__getattr__](../tests/test_artifact_writes.py#L30) | 其余文件操作委托真实流，兼容刷新和文件描述符访问。 |
+| [render_artifact](../tests/test_artifact_writes.py#L35) | 调用各自真实导出入口，不用模拟业务结果代替实际报告或契约。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file](../tests/test_artifact_writes.py#L49) | 五种导出在部分写入失败时保留旧文件或保持目标不存在，成功替换保持文件权限。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault](../tests/test_artifact_writes.py#L69) | 只中断目标及同目录临时文件写入，其他打开操作直接返回真实流。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault.partial_stream](../tests/test_artifact_writes.py#L79) | 仅为目标写入提供故障上下文，始终关闭实际文件描述符。 |
+| [test_atomic_publication_failure_boundary](../tests/test_artifact_writes.py#L107) | 验证替换前失败不发布、替换后失败留下完整新文件，并保留原异常及清理临时文件。 |
+| [test_atomic_publication_failure_boundary.sync_with_fault](../tests/test_artifact_writes.py#L118) | 按真实调用次序区分临时文件同步和替换后的父目录同步。 |
+| [test_atomic_publication_failure_boundary.fail](../tests/test_artifact_writes.py#L126) | 让真实发布流程在指定系统调用处失败。 |
+| [test_atomic_export_supports_filesystem_filename_limit](../tests/test_artifact_writes.py#L153) | 最长合法目标文件名也能导出，不因临时文件拼接后缀而超过文件系统限制。 |
 
 ## tests/test_browser_integration.py
 

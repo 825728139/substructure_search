@@ -1,12 +1,14 @@
 """导出文件完整性回归：写入中途失败不能截断旧结果，也不能发布新的半份 JSON。"""
 
 import json
+import os
 import stat
 from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
 
+from reaction_reference.adapters.files import atomic_write_text
 from reaction_reference.evaluation.runner import evaluate, select_targets
 from reaction_reference.interfaces.cli import _write
 from reaction_reference.schema_export import export_schemas
@@ -98,3 +100,61 @@ def test_export_artifact_is_complete_or_keeps_previous_file(tmp_path, monkeypatc
         assert content and "previous" not in content
         assert stat.S_IMODE(destination.stat().st_mode) == 0o600
     assert not list(destination.parent.glob("*.tmp"))
+
+
+@pytest.mark.parametrize("existing", [False, True])
+@pytest.mark.parametrize("phase", ["file_sync", "replace", "directory_open", "directory_sync"])
+def test_atomic_publication_failure_boundary(tmp_path, monkeypatch, existing, phase):
+    """验证替换前失败不发布、替换后失败留下完整新文件，并保留原异常及清理临时文件。"""
+    destination = tmp_path / "result.json"
+    old, new = '{"old":true}\n', '{"new":"完整结果"}\n'
+    if existing:
+        destination.write_text(old, encoding="utf-8")
+        destination.chmod(0o600)
+    error = OSError("模拟文件发布边界失败")
+    original_sync = os.fsync
+    calls = 0
+
+    def sync_with_fault(fd):
+        """按真实调用次序区分临时文件同步和替换后的父目录同步。"""
+        nonlocal calls
+        calls += 1
+        if calls == (1 if phase == "file_sync" else 2):
+            raise error
+        return original_sync(fd)
+
+    def fail(*args, **kwargs):
+        """让真实发布流程在指定系统调用处失败。"""
+        raise error
+
+    with monkeypatch.context() as fault:
+        if phase.endswith("sync"):
+            fault.setattr("reaction_reference.adapters.files.os.fsync", sync_with_fault)
+        else:
+            fault.setattr(
+                "reaction_reference.adapters.files.os."
+                + ("replace" if phase == "replace" else "open"),
+                fail,
+            )
+        with pytest.raises(OSError) as caught:
+            atomic_write_text(destination, new)
+        assert caught.value is error
+    committed = phase.startswith("directory_")
+    if committed or existing:
+        assert destination.read_text(encoding="utf-8") == (new if committed else old)
+        if existing:
+            assert stat.S_IMODE(destination.stat().st_mode) == 0o600
+    else:
+        assert not destination.exists()
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+@pytest.mark.parametrize("existing", [False, True])
+def test_atomic_export_supports_filesystem_filename_limit(tmp_path, existing):
+    """最长合法目标文件名也能导出，不因临时文件拼接后缀而超过文件系统限制。"""
+    destination = tmp_path / ("r" * os.pathconf(tmp_path, "PC_NAME_MAX"))
+    if existing:
+        destination.write_text("旧结果", encoding="utf-8")
+    _write({"current": "完整结果"}, destination)
+    assert json.loads(destination.read_text(encoding="utf-8")) == {"current": "完整结果"}
+    assert not list(tmp_path.glob("*.tmp"))
