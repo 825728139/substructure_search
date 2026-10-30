@@ -33,12 +33,18 @@ def evidence_for(record, material):
                 subject_id=material.instance_id,
                 predicate=observation.result,
                 support="synthetic_illustration" if record.source.synthetic else "source_reported",
-                source=record.source,
+                # 结论绑定当前观察的精确出处，来源记录本身的粗定位保持原样。
+                source=record.source.model_copy(update={"location": observation.source_location}),
                 evidence_text=observation.evidence_text,
                 limitations=["synthetic_fixture_not_literature"] if record.source.synthetic else [],
             )
         )
     if actual_use:
+        review = record.raw.get("evidence_review")
+        citations = review.get("input_evidence") if isinstance(review, dict) else None
+        citation = citations.get(material.instance_id) if isinstance(citations, dict) else None
+        # 只复制该材料已有的审核引用；未知或旧格式元数据不补造原文。
+        citation = citation if isinstance(citation, str) and citation.strip() else None
         claims.append(
             Claim(
                 id=digest([record.id, material.instance_id, "used"]),
@@ -46,6 +52,7 @@ def evidence_for(record, material):
                 predicate="used_as_input",
                 support="synthetic_illustration" if record.source.synthetic else "source_reported",
                 source=record.source,
+                evidence_text=citation,
                 limitations=["synthetic_fixture_not_literature"] if record.source.synthetic else [],
             )
         )

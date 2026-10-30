@@ -55,6 +55,7 @@ class AnnotatedSource:
         """将审核信息应用到一个来源记录的副本并缓存结果。
 
         来源哈希必须一致，输入证据必须指向实际反应物实例并有引用。仅覆盖明确提供的字段，未提供的观察和步骤信息保留；显式空列表可撤除旧观察。失败时返回原记录，合成来源标记始终保留。
+        输入引用按材料 ID 局部合并；空映射不撤销已有使用事实或引用。审核人、日期和补丁哈希描述本次更新。
         """
         if record.id in self._records:
             return self._records[record.id]
@@ -84,10 +85,17 @@ class AnnotatedSource:
             for material in data["materials"]:
                 if material["instance_id"] in annotation.actual_input_evidence:
                     material["actual_input"] = True
+            previous_review = data["raw"].get("evidence_review")
+            previous_inputs = (
+                previous_review.get("input_evidence") if isinstance(previous_review, dict) else None
+            )
             data["raw"]["evidence_review"] = {
                 "reviewer": annotation.reviewer,
                 "reviewed_at": annotation.reviewed_at,
-                "input_evidence": annotation.actual_input_evidence,
+                "input_evidence": {
+                    **(previous_inputs if isinstance(previous_inputs, dict) else {}),
+                    **annotation.actual_input_evidence,
+                },
                 "annotation_hash": digest(supplied, 64),
             }
             result = type(record).model_validate(data)

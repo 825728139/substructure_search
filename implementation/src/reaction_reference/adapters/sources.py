@@ -165,10 +165,13 @@ class JsonlSource:
         self.records = []
         identities: dict[str, str] = {}
         conflicted_ids = set()
-        lines = [line for line in payload.splitlines() if line.strip()]
+        # 额度按非空记录计数，诊断仍保留物理文件行号，不能在过滤空行后重新编号。
+        lines = [
+            (number, line) for number, line in enumerate(payload.splitlines(), 1) if line.strip()
+        ]
         if len(lines) > max_records:
             raise ValueError("The bounded JSONL adapter record limit was exceeded")
-        for number, line in enumerate(lines, 1):
+        for number, line in lines:
             try:
                 record = import_native(json.loads(line))
             except (ValueError, KeyError, TypeError) as exc:

@@ -27,9 +27,9 @@
 |---|---|
 | [AnnotatedSource.__init__](../src/reaction_reference/adapters/annotations.py#L28) | 读取有限 JSONL 审核文件并建立 record_id 索引，继承被包装来源的能力。 |
 | [AnnotatedSource._apply](../src/reaction_reference/adapters/annotations.py#L54) | 将审核信息应用到一个来源记录的副本并缓存结果。 |
-| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L106) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
-| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L110) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
-| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L114) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
+| [AnnotatedSource.candidate_page](../src/reaction_reference/adapters/annotations.py#L114) | 原样委托底层来源分页，不在候选召回时提前给产品赋予审核证据。 |
+| [AnnotatedSource.hydrate](../src/reaction_reference/adapters/annotations.py#L118) | 先委托底层加载详情，再按记录哈希附加审核信息，返回新的或原有记录。 |
+| [AnnotatedSource.close](../src/reaction_reference/adapters/annotations.py#L122) | 关闭被包装来源，其连接与缓存仍归原适配器管理。 |
 
 ## src/reaction_reference/adapters/execution.py
 
@@ -80,17 +80,17 @@
 |---|---|
 | [import_native](../src/reaction_reference/adapters/sources.py#L26) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
 | [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L148) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L216) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L262) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L266) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L299) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L346) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L353) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L358) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L392) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L458) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L477) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L519) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L219) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L265) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L269) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L302) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L349) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L356) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L361) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L395) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L461) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L480) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L522) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -175,7 +175,7 @@
 | 函数 | 职责 |
 |---|---|
 | [evidence_for](../src/reaction_reference/evidence/claims.py#L7) | 判断一个材料实例的来源支持，返回（制备命中、获得命中、使用命中、Claim 列表）。 |
-| [summary_items](../src/reaction_reference/evidence/claims.py#L62) | 把选中参考和建议转为受 UTF-8 字节预算约束的 JSON 摘要。 |
+| [summary_items](../src/reaction_reference/evidence/claims.py#L69) | 把选中参考和建议转为受 UTF-8 字节预算约束的 JSON 摘要。 |
 
 ## src/reaction_reference/evidence/relations.py
 
@@ -685,6 +685,16 @@
 | [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L116) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+
+## tests/test_traceability.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_partial_review_preserves_unmodified_input_citations](../tests/test_traceability.py#L17) | 只更新产品观察或另一个输入时，已审核且未修改的底物引用必须保留。 |
+| [test_absent_or_unrelated_citations_do_not_create_evidence_text](../tests/test_traceability.py#L58) | 缺失、旧格式或属于其他实例的引用保持未知，不把其他材料的引用填进当前结论。 |
+| [test_observation_claim_keeps_its_specific_source_location](../tests/test_traceability.py#L67) | 观察的精确出处不能被整条来源记录的粗定位替换，原记录也不能被改写。 |
+| [test_input_citations_survive_claim_and_summary_export](../tests/test_traceability.py#L85) | 已有审核输入引用应进入对应使用结论及模型摘要，不能被丢掉或串到另一底物上。 |
+| [test_jsonl_error_line_uses_physical_file_location](../tests/test_traceability.py#L120) | 空白行可以忽略，但坏记录诊断行号必须指向文件中的实际位置。 |
 
 ## ../reviews/audit_reaction_snapshot.py
 
