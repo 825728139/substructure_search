@@ -75,3 +75,47 @@ def test_unsupported_detail_name_does_not_replace_valid_target_identity(tmp_path
         assert not reference.preparation_hit
     finally:
         source.close()
+
+
+@pytest.mark.parametrize(
+    "names,expected",
+    [
+        (["乙醇"], "乙醇"),
+        ([None], None),
+        ([["乙醇"]], None),
+        ([{"text": "乙醇"}], None),
+        ([42], None),
+        ([" \t"], None),
+        (["乙醇", "乙醇"], "乙醇"),
+        (["乙醇", "另一名称"], None),
+        (["乙醇", ["乙醇"]], None),
+    ],
+)
+def test_unusable_optional_names_do_not_discard_structural_records(
+    tmp_path, request_factory, names, expected
+):
+    """名称类型异常或有歧义时保留有效反应和结构命中，不能由可选文本导致整条记录丢失。"""
+    row = {
+        "id": 1,
+        "product_smiles": ["CCO"],
+        "details": {"products": [{"smiles": "OCC", "name": name} for name in names]},
+    }
+    path = tmp_path / "optional-names.jsonl"
+    path.write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        assert len(source.records) == 1 and not source.issues
+        assert source.records[0].materials[0].name == expected
+        package = search(
+            request_factory(
+                "CCO",
+                options={"include_usage": False, "include_proposals": False},
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        reference = next(r for r in package.results if r.target_requirements_satisfied)
+        assert reference.material.name == expected
+        assert not reference.preparation_hit
+    finally:
+        source.close()

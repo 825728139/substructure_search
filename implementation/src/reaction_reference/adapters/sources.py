@@ -85,7 +85,12 @@ def import_native(row):
                         compatible.append(entry)
                 except ValueError:
                     continue
-            names = {entry.get("name") for entry in compatible}
+            # 详情名称是可选文本；异常类型不能使有效结构记录整体导入失败。
+            # 未知名称仍参与歧义判断，不能从部分可读条目中擅自选出一个确定名称。
+            names = {
+                value if isinstance(value := entry.get("name"), str) and value.strip() else None
+                for entry in compatible
+            }
             name = next(iter(names)) if len(names) == 1 else None
             materials.append(
                 Material(
