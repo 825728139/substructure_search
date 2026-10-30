@@ -78,7 +78,10 @@ def import_native(row):
                 if not isinstance(entry, dict) or not entry.get("smiles"):
                     continue
                 try:
-                    if canonical(entry["smiles"]) == canonical(smiles):
+                    # 名称也须绑定可支持的具体材料，不能先丢失增强立体组等语义再关联。
+                    if canonical(parse_material(entry["smiles"])) == canonical(
+                        parse_material(smiles)
+                    ):
                         compatible.append(entry)
                 except ValueError:
                     continue
