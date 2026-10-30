@@ -89,18 +89,18 @@
 | [_locator_value_present](../src/reaction_reference/adapters/sources.py#L26) | 检查定位字段是否有明确非空值；整数零有效，布尔值及含缺失项的数组无效。 |
 | [_compound_source_id](../src/reaction_reference/adapters/sources.py#L38) | 为复合来源标识转义百分号和冒号，避免字段边界碰撞；普通标识保持原有可读格式。 |
 | [import_native](../src/reaction_reference/adapters/sources.py#L43) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
-| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L171) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L243) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L289) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L293) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L326) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L373) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L380) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L385) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L419) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L485) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L504) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L549) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L174) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L246) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L292) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L296) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L329) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L376) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L383) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L388) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L422) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L488) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L507) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L552) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -470,6 +470,7 @@
 | [test_name_association_requires_supported_material_identity](../tests/test_material_names.py#L27) | 名称仅关联可支持且同身份的具体结构，合法同位素、电荷和注释表示仍可对应。 |
 | [test_unsupported_detail_name_does_not_replace_valid_target_identity](../tests/test_material_names.py#L44) | 有效目标产物仍可检索，但不附入只属于未支持立体组语义的详情名称。 |
 | [test_unusable_optional_names_do_not_discard_structural_records](../tests/test_material_names.py#L94) | 名称类型异常或有歧义时保留有效反应和结构命中，不能由可选文本导致整条记录丢失。 |
+| [test_optional_detail_container_types_preserve_valid_structures](../tests/test_material_names.py#L138) | 材料详情容器异常仅失去可选名称；五类角色的有效结构和目标命中继续保留。 |
 
 ## tests/test_pipeline.py
 
@@ -505,21 +506,22 @@
 | [postgres_cluster](../tests/test_postgres_integration.py#L18) | 使用本机二进制启动私有 Unix socket 测试库，退出时停止，不接受外部连接配置。 |
 | [indexed_source_dsn](../tests/test_postgres_integration.py#L79) | 为每项测试重建临时反应表、化学索引和三条示例，字段与生产适配器投影一致。 |
 | [carbon_family](../tests/test_postgres_integration.py#L137) | 构造固定一个碳的家族，用于区分来源分页与应用层完整核验的职责。 |
-| [test_indexed_cursor_pages_and_read_only_session](../tests/test_postgres_integration.py#L151) | 真实服务端游标按页返回全部材料，严格只读事务拒绝写入。 |
-| [test_knn_selection_and_detail_hydration](../tests/test_postgres_integration.py#L178) | 真实指纹近邻首项命中乙醇，详情名称通过结构对应，并可切换独立子结构通道。 |
-| [test_query_timeout_preserves_independent_query](../tests/test_postgres_integration.py#L202) | 真正的表锁等待触发查询超时，回滚保存点后另一个家族仍可使用同一来源会话。 |
-| [test_repeatable_read_keeps_material_fields_frozen](../tests/test_postgres_integration.py#L217) | 来源建立快照后其他会话更新原行，本次查询和详情仍必须对应旧材料结构。 |
-| [test_sql_row_paging_survives_dirty_and_multiple_materials](../tests/test_postgres_integration.py#L231) | SQL 游标按行推进，脏行不提前终结流，多产物行也不能跳过后一行。 |
-| [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L257) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
-| [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L293) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
-| [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
-| [test_bounded_export_preserves_source_replay_template](../tests/test_postgres_integration.py#L341) | 有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。 |
-| [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L374) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
-| [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L427) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
-| [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L474) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
-| [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L516) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
-| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L551) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
-| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L560) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
+| [test_malformed_optional_detail_container_keeps_other_details](../tests/test_postgres_integration.py#L151) | 异常材料详情容器不能使真实加载整体回退；其余材料名称和条件文本仍须保留。 |
+| [test_indexed_cursor_pages_and_read_only_session](../tests/test_postgres_integration.py#L180) | 真实服务端游标按页返回全部材料，严格只读事务拒绝写入。 |
+| [test_knn_selection_and_detail_hydration](../tests/test_postgres_integration.py#L207) | 真实指纹近邻首项命中乙醇，详情名称通过结构对应，并可切换独立子结构通道。 |
+| [test_query_timeout_preserves_independent_query](../tests/test_postgres_integration.py#L231) | 真正的表锁等待触发查询超时，回滚保存点后另一个家族仍可使用同一来源会话。 |
+| [test_repeatable_read_keeps_material_fields_frozen](../tests/test_postgres_integration.py#L246) | 来源建立快照后其他会话更新原行，本次查询和详情仍必须对应旧材料结构。 |
+| [test_sql_row_paging_survives_dirty_and_multiple_materials](../tests/test_postgres_integration.py#L260) | SQL 游标按行推进，脏行不提前终结流，多产物行也不能跳过后一行。 |
+| [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L286) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
+| [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L322) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
+| [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L350) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
+| [test_bounded_export_preserves_source_replay_template](../tests/test_postgres_integration.py#L370) | 有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。 |
+| [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L403) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
+| [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L456) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
+| [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L503) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
+| [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L545) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
+| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L580) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
+| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L589) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
 
 ## tests/test_query_input_planning.py
 

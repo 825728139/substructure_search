@@ -147,6 +147,35 @@ def carbon_family(*, layer="fragment", name="carbon"):
     )
 
 
+@pytest.mark.parametrize("column,value,name", [("products", True, None), ("reactants", 7, "乙醇")])
+def test_malformed_optional_detail_container_keeps_other_details(
+    indexed_source_dsn, column, value, name
+):
+    """异常材料详情容器不能使真实加载整体回退；其余材料名称和条件文本仍须保留。"""
+    from psycopg import sql
+
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute(
+            sql.SQL("UPDATE reaction.reaction_details SET {}=%s").format(sql.Identifier(column)),
+            (Jsonb(value),),
+        )
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        package = search(
+            SearchRequest(target=Target(value="CCO")),
+            source,
+        )
+        reference = next(r for r in package.results if r.target_requirements_satisfied)
+        assert reference.material.name == name
+        assert reference.record.conditions.text == "室温"
+        assert not any(
+            issue["code"] == "source_hydration_failed" for issue in package.source_issues
+        )
+        assert not reference.preparation_hit
+    finally:
+        source.close()
+
+
 @pytest.mark.parametrize("role", ["product", "reactant"])
 def test_indexed_cursor_pages_and_read_only_session(indexed_source_dsn, role):
     """真实服务端游标按页返回全部材料，严格只读事务拒绝写入。"""

@@ -64,7 +64,10 @@ def import_native(row):
         raise ValueError("Source details must be an object")
     materials = []
     for role in ("product", "reactant", "reagent", "catalyst", "solvent"):
-        entries = details.get(role + "s") or []
+        entries = details.get(role + "s")
+        # 可选详情只接受条目序列；错误标量不能阻断有效结构，也不能按字典键或字符遍历。
+        if not isinstance(entries, (list, tuple)):
+            entries = []
         structures = row.get(role + "_smiles")
         if structures is None:
             structures = []

@@ -119,3 +119,49 @@ def test_unusable_optional_names_do_not_discard_structural_records(
         assert not reference.preparation_hit
     finally:
         source.close()
+
+
+@pytest.mark.parametrize(
+    "role,entries,expected",
+    [
+        ("product", True, None),
+        ("reactant", 7, None),
+        ("reagent", {"smiles": "CCO", "name": "乙醇"}, None),
+        ("catalyst", "unexpected", None),
+        ("solvent", [{"smiles": "OCC", "name": "乙醇"}], "乙醇"),
+        ("product", None, None),
+        ("product", False, None),
+        ("reactant", 0, None),
+        ("product", [7, {"smiles": "OCC", "name": "乙醇"}], "乙醇"),
+    ],
+)
+def test_optional_detail_container_types_preserve_valid_structures(
+    tmp_path, request_factory, role, entries, expected
+):
+    """材料详情容器异常仅失去可选名称；五类角色的有效结构和目标命中继续保留。"""
+    row = {
+        "id": 1,
+        "product_smiles": ["CCO"],
+        role + "_smiles": ["CCO"],
+        "details": {role + "s": entries},
+    }
+    path = tmp_path / "detail-containers.jsonl"
+    path.write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        assert len(source.records) == 1 and not source.issues
+        material = next(m for m in source.records[0].materials if m.role == role)
+        assert material.name == expected
+        package = search(
+            request_factory(
+                "CCO",
+                options={"include_usage": False, "include_proposals": False},
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        reference = next(r for r in package.results if r.target_requirements_satisfied)
+        assert next(m for m in reference.record.materials if m.role == role).name == expected
+        assert not reference.preparation_hit
+    finally:
+        source.close()

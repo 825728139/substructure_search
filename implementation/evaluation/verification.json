@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94",
+  "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 395,
+    "tests_passed": 406,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94"
+    "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1013,6 +1013,29 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 532,
     "function_index_links_verified": 532,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "optional_detail_container_review": {
+    "date": "2026-10-30",
+    "base_commit": "17934c0",
+    "verified_implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+    "report": "docs/CODE_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 11,
+    "initial_baseline_cases": 9,
+    "initial_failures": 2,
+    "initial_passing_controls": 7,
+    "jsonl_structural_records_preserved": true,
+    "postgres_additional_detail_regressions": 2,
+    "postgres_other_names_and_condition_text_retained": true,
+    "postgres_integration_cases_passed": 26,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 94,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 534,
+    "function_index_links_verified": 534,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }
