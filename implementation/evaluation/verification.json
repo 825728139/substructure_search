@@ -596,5 +596,26 @@
     "function_index_links_verified": 504,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
+  },
+  "structure_invariance_review": {
+    "date": "2026-10-30",
+    "base_commit": "1d0e1d0",
+    "verified_implementation_hash": "9c23a40c627bfb66f870da5a7d6ac60aa3fd860486425e238b23e5c582cb8f2a",
+    "report": "docs/CODE_REVIEW.md",
+    "source_snapshot": "jsonl:2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
+    "targets_hash": "e47931a2783f546fd109c6c280c7e88c980b1382f95d0ab46f47507dc63ec0b9",
+    "target_selection": "first_100_distinct_valid_product_identities_in_source_order",
+    "targets": 100,
+    "families": 809,
+    "checks": 2427,
+    "random_smiles_per_target": 2,
+    "random_seed": 731,
+    "max_mappings": 2048,
+    "mapping_truncations": 0,
+    "failures": 0,
+    "local_elapsed_seconds": 33.289,
+    "scope": "self_match_pattern_screen_and_joint_coverage_under_smiles_traversal_changes",
+    "business_code_changed": false,
+    "live_source_access_performed": false
   }
 }
