@@ -242,9 +242,9 @@
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
 | [Client.preview](../src/reaction_reference/interfaces/sdk.py#L38) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
 | [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L49) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L129) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L133) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L137) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L131) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L135) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L139) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -749,13 +749,14 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_sdk_process_and_frozen_rerank](../tests/test_service.py#L16) | 确认 SDK 在独立进程检索后可对冻结候选重排，重排不能调用来源配置或重查。 |
-| [test_single_coordinator_lock](../tests/test_service.py#L36) | 确认同运行目录只允许一个协调器，关闭后另一实例才可接管。 |
-| [test_api_lifecycle_auth_idempotency_and_cursor](../tests/test_service.py#L44) | 确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。 |
-| [test_cancel_stops_job_and_is_terminal](../tests/test_service.py#L107) | 确认取消返回已落盘的实际终态，迟到完成不能再修改状态。 |
-| [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L116) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
-| [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
-| [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+| [test_sdk_process_and_frozen_rerank](../tests/test_service.py#L17) | 确认 SDK 在独立进程检索后可对冻结候选重排，重排不能调用来源配置或重查。 |
+| [test_rerank_preserves_target_context_when_feature_cache_is_absent](../tests/test_service.py#L38) | 可选排序特征缓存缺失时仍须使用资料包目标；已有特征和来源事实保持原样。 |
+| [test_single_coordinator_lock](../tests/test_service.py#L84) | 确认同运行目录只允许一个协调器，关闭后另一实例才可接管。 |
+| [test_api_lifecycle_auth_idempotency_and_cursor](../tests/test_service.py#L92) | 确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。 |
+| [test_cancel_stops_job_and_is_terminal](../tests/test_service.py#L155) | 确认取消返回已落盘的实际终态，迟到完成不能再修改状态。 |
+| [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L164) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
+| [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L178) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
+| [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L198) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
 
 ## tests/test_snapshot_pagination.py
 

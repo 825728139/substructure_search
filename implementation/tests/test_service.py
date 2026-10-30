@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from reaction_reference.adapters.run_store import FileRunStore, RevisionConflict
+from reaction_reference.application.search import search
 from reaction_reference.domain.models import RerankRequest, RunState
 from reaction_reference.interfaces.api import create_app
 from reaction_reference.interfaces.sdk import Client
@@ -31,6 +32,53 @@ def test_sdk_process_and_frozen_rerank(settings, request_factory, monkeypatch):
         assert frozen.source_snapshot == package.source_snapshot
         assert {r.id for r in frozen.results} == {r.id for r in package.results}
         assert reranked.parent_run_id == package.run_id
+
+
+@pytest.mark.parametrize("cached", [False, True])
+def test_rerank_preserves_target_context_when_feature_cache_is_absent(
+    settings, source, request_factory, cached
+):
+    """可选排序特征缓存缺失时仍须使用资料包目标；已有特征和来源事实保持原样。"""
+    request = request_factory(options={"include_proposals": False}, budget={"max_tasks": 100})
+    original = search(request, source)
+    references = (
+        original.results
+        if cached
+        else [
+            reference.model_copy(update={"ranking_features": {}}) for reference in original.results
+        ]
+    )
+    original = original.model_copy(update={"results": references})
+    now = datetime.now(UTC).isoformat()
+    state = RunState(
+        run_id=original.run_id,
+        lifecycle="succeeded",
+        request=request,
+        created_at=now,
+        updated_at=now,
+        snapshot_id=original.snapshot_id,
+    )
+    with Client(settings) as client:
+        client.manager.store.create(state)
+        client.manager.store.save_package(original)
+        # 以真实持久化往返后的快照为对照，自由特征字典中的元组会按 JSON 语义变为数组。
+        original = client.manager.store.package(state.run_id)
+        derived = client.rerank(state.run_id, RerankRequest(ranking_profile="process_reference"))
+        package = client.manager.store.package(derived.run_id)
+        assert package.target_smiles == original.target_smiles
+        by_id = {reference.id: reference for reference in original.results}
+        assert by_id
+        for reference in package.results:
+            burden = reference.ranking_features["transfer_burden"]["value"]
+            assert burden["target_molecular_weight"] is not None
+            assert burden["molecular_weight_ratio"] > 0
+            reactivity = reference.ranking_features["reactivity_selectivity"]["value"]
+            assert reactivity["target_group_counts"]["amide"] == 1
+            assert reference.record == by_id[reference.id].record
+            assert reference.witnesses == by_id[reference.id].witnesses
+            if cached:
+                assert reference.ranking_features == by_id[reference.id].ranking_features
+        assert client.manager.store.package(state.run_id) == original
 
 
 def test_single_coordinator_lock(settings):
