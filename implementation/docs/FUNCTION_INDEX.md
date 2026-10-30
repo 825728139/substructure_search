@@ -456,6 +456,12 @@
 | [test_valid_evaluation_labels_preserve_reviewed_only_scoring](../tests/test_global_review.py#L318) | 合法标签只在已审核时计分，屏蔽组剔除被屏蔽正例且不伪造零或满分。 |
 | [test_reordered_target_self_matches_keep_complete_joint_coverage](../tests/test_global_review.py#L343) | 对环系、无环、同位素及立体目标改变原子遍历顺序，核对预筛、身份和联合覆盖。 |
 
+## tests/test_lab_combined_constraints.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_combined_constraints_survive_sorting_summary_and_source_order](../tests/test_lab_combined_constraints.py#L13) | 通过真实导入与检索验证九种组合，压力/设备违规不能被缺失项掩盖，输入顺序不改变结论。 |
+
 ## tests/test_mapping_representation.py
 
 | 函数 | 职责 |

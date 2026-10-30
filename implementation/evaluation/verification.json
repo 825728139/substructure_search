@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 406,
+    "tests_passed": 408,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -1077,5 +1077,38 @@
     "live_source_access_performed": false,
     "wheel_sha256": "e7d9111a77a9aad78e86a34847a55020f15bd7fdafe09e03b76c577279c5c3ee",
     "services_stopped_and_run_directory_removed": true
+  },
+  "combined_lab_constraints_review": {
+    "date": "2026-10-30",
+    "base_commit": "d4042e9",
+    "verified_implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+    "report": "docs/CODE_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "regressions_added": 2,
+    "constraint_combinations": 9,
+    "ranking_profiles": [
+      "lab_fit",
+      "process_reference"
+    ],
+    "source_orders": [
+      "original",
+      "reversed"
+    ],
+    "scenario_evaluations": 36,
+    "known_failure_overrides_unknowns": true,
+    "missing_information_remains_unknown": true,
+    "known_boundary_controls_pass": true,
+    "summary_matches_reference_fit_and_reasons": true,
+    "final_order_independent_of_source_record_order": true,
+    "postgres_integration_cases_passed": 26,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 95,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 535,
+    "function_index_links_verified": 535,
+    "business_code_changed": false,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
   }
 }
