@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 390,
+    "tests_passed": 393,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -957,6 +957,37 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 529,
     "function_index_links_verified": 529,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "retained_progress_interruption_review": {
+    "date": "2026-10-30",
+    "base_commit": "df2b45b",
+    "verified_implementation_hash": "bcf15b62b9326c525e37cea9cb3cec7a2d16aa6d5b0de402092641b051574b10",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "regressions_added": 3,
+    "real_spawn_process": true,
+    "controlled_worker_publishes_real_search_package_then_waits": true,
+    "interruption_modes": [
+      "cancel",
+      "deadline",
+      "shutdown"
+    ],
+    "worker_alive_before_interruption": true,
+    "worker_pid_stopped_after_interruption": true,
+    "partial_snapshot_matches_terminal_reason": true,
+    "retained_results_and_summary_unchanged": true,
+    "original_snapshot_immutable": true,
+    "terminal_and_snapshots_unchanged_after_restart": true,
+    "postgres_integration_cases_passed": 24,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 94,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 531,
+    "function_index_links_verified": 531,
+    "business_code_changed": false,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }

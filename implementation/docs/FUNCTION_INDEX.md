@@ -621,6 +621,13 @@
 | [test_material_relation_limit_only_marks_real_omission](../tests/test_result_completeness.py#L75) | 实际关联少于、恰好等于或超过默认上限时，只有确实遗漏关联才报告截断。 |
 | [test_material_relations_respect_supported_identity_scope](../tests/test_result_completeness.py#L99) | 关联必须使用检索认可的具体材料身份；坏材料不抹掉有效关联，也不伪报枚举完整。 |
 
+## tests/test_retained_progress.py
+
+| 函数 | 职责 |
+|---|---|
+| [retained_progress_worker](../tests/test_retained_progress.py#L18) | 生成真实检索资料后仅发送阶段包并等待中断，隔离快照收尾与化学计算速度。 |
+| [test_interrupt_after_progress_preserves_evidence_and_stops_worker](../tests/test_retained_progress.py#L40) | 阶段包落盘后的三种中断均创建部分快照，保留原包及证据，重启不改终态。 |
+
 ## tests/test_review_regressions.py
 
 | 函数 | 职责 |
