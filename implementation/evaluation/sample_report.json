@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "implementation_hash": "bcf15b62b9326c525e37cea9cb3cec7a2d16aa6d5b0de402092641b051574b10",
+  "implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "rdkit_version": "2026.03.2",
   "source_snapshot": "jsonl:2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
@@ -13,7 +13,7 @@
       "target_smiles": "C=CCOc1cn(C)c2cc(F)ccc2c1=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 299.47,
+      "elapsed_ms": 272.71,
       "statistics": {
         "families": 6,
         "received_candidates": 70,
@@ -57,7 +57,7 @@
         "analyzed_reactions": 13,
         "proposals": 0,
         "display_items": 15,
-        "elapsed_ms": 287.612
+        "elapsed_ms": 265.994
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -96,7 +96,7 @@
       "excluded_record_ids": [
         "epo:106338"
       ],
-      "elapsed_ms": 259.9,
+      "elapsed_ms": 277.95,
       "statistics": {
         "families": 8,
         "received_candidates": 91,
@@ -140,7 +140,7 @@
         "analyzed_reactions": 12,
         "proposals": 0,
         "display_items": 14,
-        "elapsed_ms": 253.166
+        "elapsed_ms": 271.814
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -175,7 +175,7 @@
       "target_smiles": "O=C([O-])C(O)C(O)C(=O)[O-]",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 181.42,
+      "elapsed_ms": 161.99,
       "statistics": {
         "families": 7,
         "received_candidates": 89,
@@ -219,7 +219,7 @@
         "analyzed_reactions": 4,
         "proposals": 0,
         "display_items": 8,
-        "elapsed_ms": 176.058
+        "elapsed_ms": 157.92
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -250,7 +250,7 @@
       "excluded_record_ids": [
         "epo:106449"
       ],
-      "elapsed_ms": 149.22,
+      "elapsed_ms": 133.99,
       "statistics": {
         "families": 9,
         "received_candidates": 90,
@@ -294,7 +294,7 @@
         "analyzed_reactions": 3,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 145.52
+        "elapsed_ms": 130.651
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -321,7 +321,7 @@
       "target_smiles": "NC(=NO)c1cccc(Cl)n1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 661.32,
+      "elapsed_ms": 593.3,
       "statistics": {
         "families": 4,
         "received_candidates": 67,
@@ -365,7 +365,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 639.68
+        "elapsed_ms": 573.218
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -468,7 +468,7 @@
       "excluded_record_ids": [
         "uspto:96"
       ],
-      "elapsed_ms": 652.22,
+      "elapsed_ms": 600.41,
       "statistics": {
         "families": 4,
         "received_candidates": 66,
@@ -512,7 +512,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 630.009
+        "elapsed_ms": 579.915
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -613,7 +613,7 @@
       "target_smiles": "COC(=O)[C@H]1C[C@@H](CCC#N)CCN1C(=O)OC(C)(C)C",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1614.05,
+      "elapsed_ms": 1157.41,
       "statistics": {
         "families": 10,
         "received_candidates": 67,
@@ -657,7 +657,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1585.872
+        "elapsed_ms": 1130.853
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -760,7 +760,7 @@
       "excluded_record_ids": [
         "epo:106432"
       ],
-      "elapsed_ms": 1454.77,
+      "elapsed_ms": 1144.68,
       "statistics": {
         "families": 11,
         "received_candidates": 69,
@@ -804,7 +804,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1425.25
+        "elapsed_ms": 1119.949
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -905,7 +905,7 @@
       "target_smiles": "[C]=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 766.25,
+      "elapsed_ms": 508.2,
       "statistics": {
         "families": 4,
         "received_candidates": 178,
@@ -949,7 +949,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 734.006
+        "elapsed_ms": 487.02
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1051,7 +1051,7 @@
       "excluded_record_ids": [
         "epo:106408"
       ],
-      "elapsed_ms": 677.22,
+      "elapsed_ms": 426.69,
       "statistics": {
         "families": 4,
         "received_candidates": 177,
@@ -1095,7 +1095,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 646.13
+        "elapsed_ms": 409.127
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1195,7 +1195,7 @@
       "target_smiles": "O=C1CN2C(=O)CCC2N1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 130.81,
+      "elapsed_ms": 84.35,
       "statistics": {
         "families": 4,
         "received_candidates": 33,
@@ -1239,7 +1239,7 @@
         "analyzed_reactions": 8,
         "proposals": 0,
         "display_items": 9,
-        "elapsed_ms": 123.325
+        "elapsed_ms": 79.998
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1280,7 +1280,7 @@
         "epo:106282",
         "epo:106284"
       ],
-      "elapsed_ms": 91.64,
+      "elapsed_ms": 58.17,
       "statistics": {
         "families": 4,
         "received_candidates": 21,
@@ -1324,7 +1324,7 @@
         "analyzed_reactions": 5,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 86.828
+        "elapsed_ms": 55.273
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1355,7 +1355,7 @@
       "target_smiles": "Nc1ncnc2nc[nH]c12",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 33.47,
+      "elapsed_ms": 21.28,
       "statistics": {
         "families": 4,
         "received_candidates": 4,
@@ -1399,7 +1399,7 @@
         "analyzed_reactions": 1,
         "proposals": 0,
         "display_items": 1,
-        "elapsed_ms": 31.32
+        "elapsed_ms": 20.061
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1424,7 +1424,7 @@
       "excluded_record_ids": [
         "epo:106287"
       ],
-      "elapsed_ms": 8.22,
+      "elapsed_ms": 5.01,
       "statistics": {
         "families": 4,
         "received_candidates": 0,
@@ -1468,7 +1468,7 @@
         "analyzed_reactions": 0,
         "proposals": 0,
         "display_items": 0,
-        "elapsed_ms": 6.976
+        "elapsed_ms": 4.279
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1487,7 +1487,7 @@
       "target_smiles": "CC(CNS(=O)(=O)C(C)C)c1ccc(-c2ccc(C#N)cc2)cc1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 2012.55,
+      "elapsed_ms": 1343.02,
       "statistics": {
         "families": 10,
         "received_candidates": 64,
@@ -1531,7 +1531,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1964.404
+        "elapsed_ms": 1299.167
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1633,7 +1633,7 @@
       "excluded_record_ids": [
         "epo:106451"
       ],
-      "elapsed_ms": 1328.38,
+      "elapsed_ms": 1221.56,
       "statistics": {
         "families": 10,
         "received_candidates": 62,
@@ -1677,7 +1677,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1270.659
+        "elapsed_ms": 1176.689
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1777,7 +1777,7 @@
       "target_smiles": "CN(C)C(=O)Sc1nc(-c2ccccc2)cn1-c1ccc([N+](=O)[O-])cn1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1636.63,
+      "elapsed_ms": 1548.11,
       "statistics": {
         "families": 10,
         "received_candidates": 71,
@@ -1821,7 +1821,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1587.36
+        "elapsed_ms": 1498.849
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1924,7 +1924,7 @@
       "excluded_record_ids": [
         "epo:106412"
       ],
-      "elapsed_ms": 1559.05,
+      "elapsed_ms": 1424.86,
       "statistics": {
         "families": 12,
         "received_candidates": 74,
@@ -1968,7 +1968,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1494.191
+        "elapsed_ms": 1364.397
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2069,7 +2069,7 @@
       "target_smiles": "CCOCn1nccc1C(=O)c1cc2c(c(Cl)c1Cl)OC(C(=O)OCC)O2",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1086.84,
+      "elapsed_ms": 986.07,
       "statistics": {
         "families": 10,
         "received_candidates": 66,
@@ -2113,7 +2113,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1057.388
+        "elapsed_ms": 961.342
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2215,7 +2215,7 @@
       "excluded_record_ids": [
         "epo:106295"
       ],
-      "elapsed_ms": 1160.63,
+      "elapsed_ms": 987.96,
       "statistics": {
         "families": 11,
         "received_candidates": 66,
@@ -2259,7 +2259,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1137.165
+        "elapsed_ms": 961.386
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2359,7 +2359,7 @@
       "target_smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2C(O)C1)C(=O)c1c(O)cccc1C3=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1009.87,
+      "elapsed_ms": 989.59,
       "statistics": {
         "families": 7,
         "received_candidates": 180,
@@ -2403,7 +2403,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 982.71
+        "elapsed_ms": 960.898
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2500,7 +2500,7 @@
       "excluded_record_ids": [
         "epo:106416"
       ],
-      "elapsed_ms": 1088.72,
+      "elapsed_ms": 1044.21,
       "statistics": {
         "families": 8,
         "received_candidates": 265,
@@ -2544,7 +2544,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1045.283
+        "elapsed_ms": 1016.071
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2638,7 +2638,7 @@
       "target_smiles": "Cn1cnnc1CCCO",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1034.67,
+      "elapsed_ms": 928.52,
       "statistics": {
         "families": 6,
         "received_candidates": 599,
@@ -2682,7 +2682,7 @@
         "analyzed_reactions": 40,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1011.629
+        "elapsed_ms": 905.813
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2746,7 +2746,7 @@
       "excluded_record_ids": [
         "epo:106424"
       ],
-      "elapsed_ms": 887.17,
+      "elapsed_ms": 797.14,
       "statistics": {
         "families": 8,
         "received_candidates": 594,
@@ -2790,7 +2790,7 @@
         "analyzed_reactions": 39,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 864.947
+        "elapsed_ms": 774.841
       },
       "coverage_state": "partial",
       "stop_reasons": [

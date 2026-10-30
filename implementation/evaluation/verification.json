@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "bcf15b62b9326c525e37cea9cb3cec7a2d16aa6d5b0de402092641b051574b10",
+  "implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 393,
+    "tests_passed": 395,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "bcf15b62b9326c525e37cea9cb3cec7a2d16aa6d5b0de402092641b051574b10"
+    "implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -988,6 +988,31 @@
     "python_named_functions_documented": 531,
     "function_index_links_verified": 531,
     "business_code_changed": false,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "merged_mapping_limit_review": {
+    "date": "2026-10-30",
+    "base_commit": "ffdbaa3",
+    "verified_implementation_hash": "de87d7288faf9e64b3ea3ff6fa88b4359e3e9faade3b03a40ffa820cd4a61c94",
+    "report": "docs/CODE_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 2,
+    "initial_failures": 1,
+    "initial_passing_controls": 1,
+    "first_strict_family_enumeration_complete": true,
+    "later_family_limits": [
+      1,
+      128
+    ],
+    "merged_reference_and_summary_limitations_checked": true,
+    "postgres_integration_cases_passed": 24,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 94,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 532,
+    "function_index_links_verified": 532,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }

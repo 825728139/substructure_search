@@ -464,6 +464,17 @@ def search(request, source, *, run_id=None, on_progress=None):
                             "layers": sorted(set(previous.layers + [family.layer])),
                             "witnesses": list(witnesses.values()),
                             "coverage": coverage,
+                            # 后续家族的枚举缺口也须传给参考和模型摘要，不能只更新覆盖字段。
+                            "unresolved": sorted(
+                                set(
+                                    previous.unresolved
+                                    + (
+                                        ["mapping_enumeration_incomplete"]
+                                        if not coverage["enumeration_complete"]
+                                        else []
+                                    )
+                                )
+                            ),
                         }
                     )
                     continue

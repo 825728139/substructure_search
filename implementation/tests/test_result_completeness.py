@@ -13,6 +13,46 @@ from reaction_reference.evidence.relations import material_relations
 from reaction_reference.ports.sources import Candidate, CandidatePage
 
 
+@pytest.mark.parametrize("max_mappings", [1, 128])
+def test_later_family_mapping_gap_reaches_reference_and_model_summary(
+    tmp_path, request_factory, max_mappings
+):
+    """首次完整命中之后，其他家族的枚举缺口也必须进入该参考及模型摘要的限制列表。"""
+    smiles = "CCOCCOC"
+    path = tmp_path / "repeated-ethers.jsonl"
+    path.write_text(json.dumps({"id": 1, "product_smiles": [smiles]}) + "\n")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search_module.search(
+            request_factory(
+                smiles,
+                options={
+                    "include_usage": False,
+                    "include_proposals": False,
+                    "directed_followups": False,
+                    "exhaustive_fixture": True,
+                },
+                budget={"max_tasks": 100, "max_mappings": max_mappings},
+            ),
+            source,
+        )
+    finally:
+        source.close()
+    assert len(package.results) == 1
+    reference = package.results[0]
+    assert reference.target_requirements_satisfied and len(reference.family_ids) > 1
+    strict = next(family for family in package.families if family.relation == "strict")
+    assert package.family_states[f"{strict.id}:product:0"]["complete"]
+    limited = max_mappings == 1
+    assert reference.coverage["enumeration_complete"] is (not limited)
+    assert package.coverage_state == ("partial" if limited else "complete")
+    assert ("mapping_enumeration_incomplete" in reference.unresolved) is limited
+    entry = next(
+        item for item in json.loads(package.summary) if item.get("reference_id") == reference.id
+    )
+    assert ("mapping_enumeration_incomplete" in entry["limitations"]) is limited
+
+
 @pytest.mark.parametrize("gap", ["none", "mapping", "scope", "source_issue", "hydration"])
 def test_usage_status_respects_actual_evaluated_scope(request_factory, monkeypatch, gap):
     """输入通道已读完但核验、来源范围或详情有缺口时，只能声明部分完成。"""

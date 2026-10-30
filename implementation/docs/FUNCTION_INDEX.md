@@ -615,11 +615,12 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_usage_status_respects_actual_evaluated_scope](../tests/test_result_completeness.py#L17) | 输入通道已读完但核验、来源范围或详情有缺口时，只能声明部分完成。 |
-| [test_usage_status_respects_actual_evaluated_scope.Source.candidate_page](../tests/test_result_completeness.py#L38) | 返回已经耗尽的一页，可单独标记输入选择范围不完整。 |
-| [test_usage_status_respects_actual_evaluated_scope.Source.hydrate](../tests/test_result_completeness.py#L49) | 按用例模拟详情失败，其余情况返回同一个完整材料记录。 |
-| [test_material_relation_limit_only_marks_real_omission](../tests/test_result_completeness.py#L75) | 实际关联少于、恰好等于或超过默认上限时，只有确实遗漏关联才报告截断。 |
-| [test_material_relations_respect_supported_identity_scope](../tests/test_result_completeness.py#L99) | 关联必须使用检索认可的具体材料身份；坏材料不抹掉有效关联，也不伪报枚举完整。 |
+| [test_later_family_mapping_gap_reaches_reference_and_model_summary](../tests/test_result_completeness.py#L17) | 首次完整命中之后，其他家族的枚举缺口也必须进入该参考及模型摘要的限制列表。 |
+| [test_usage_status_respects_actual_evaluated_scope](../tests/test_result_completeness.py#L57) | 输入通道已读完但核验、来源范围或详情有缺口时，只能声明部分完成。 |
+| [test_usage_status_respects_actual_evaluated_scope.Source.candidate_page](../tests/test_result_completeness.py#L78) | 返回已经耗尽的一页，可单独标记输入选择范围不完整。 |
+| [test_usage_status_respects_actual_evaluated_scope.Source.hydrate](../tests/test_result_completeness.py#L89) | 按用例模拟详情失败，其余情况返回同一个完整材料记录。 |
+| [test_material_relation_limit_only_marks_real_omission](../tests/test_result_completeness.py#L115) | 实际关联少于、恰好等于或超过默认上限时，只有确实遗漏关联才报告截断。 |
+| [test_material_relations_respect_supported_identity_scope](../tests/test_result_completeness.py#L139) | 关联必须使用检索认可的具体材料身份；坏材料不抹掉有效关联，也不伪报枚举完整。 |
 
 ## tests/test_retained_progress.py
 
