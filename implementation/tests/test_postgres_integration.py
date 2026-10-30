@@ -368,3 +368,57 @@ def test_bounded_export_preserves_source_replay_template(indexed_source_dsn, tmp
             offline.close()
     finally:
         source.close()
+
+
+@pytest.mark.parametrize("link", ["reaction_id", "source_locator"])
+def test_ambiguous_details_are_not_arbitrarily_attached(indexed_source_dsn, link):
+    """详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        if link == "reaction_id":
+            writer.execute("ALTER TABLE reaction.reaction_details ADD COLUMN reaction_id bigint")
+            writer.execute("UPDATE reaction.reaction_details SET reaction_id=1")
+            writer.execute(
+                "INSERT INTO reaction.reaction_details "
+                "(paragraph_reaction_ordinal,reaction_id,products,temperature_text) "
+                "VALUES (99,1,%s,'另一条温度记录')",
+                (Jsonb([{"smiles": "CCO", "name": "另一个名称"}]),),
+            )
+        else:
+            writer.execute(
+                "ALTER TABLE reaction.reaction_details DROP CONSTRAINT reaction_details_pkey"
+            )
+            writer.execute(
+                "INSERT INTO reaction.reaction_details (products,temperature_text) "
+                "VALUES (%s,'另一条温度记录')",
+                (Jsonb([{"smiles": "CCO", "name": "另一个名称"}]),),
+            )
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
+        record = next(item.record for item in page.items if item.record.source.record_id == "1")
+        with pytest.raises(ValueError, match="Ambiguous"):
+            source.hydrate(record)
+        assert record.id not in source._hydrated
+        assert source.connection.execute("SELECT 1 AS ok").fetchone()["ok"] == 1
+        assert any(issue["code"] == "ambiguous_reaction_details" for issue in source.issues)
+    finally:
+        source.close()
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        package = search(
+            SearchRequest(
+                target=Target(value="CCO"),
+                options={"include_usage": False, "include_proposals": False},
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        exact = next(
+            reference for reference in package.results if reference.target_requirements_satisfied
+        )
+        assert exact.material.name is None and exact.record.conditions.text is None
+        assert package.coverage_state == "partial"
+        assert any(issue["code"] == "ambiguous_reaction_details" for issue in package.source_issues)
+        assert any(issue["code"] == "source_hydration_failed" for issue in package.source_issues)
+    finally:
+        source.close()

@@ -494,9 +494,9 @@ class PostgresSource:
         return result
 
     def _fetch_details(self, row):
-        """按完整来源组合键或 reaction_id 查询至多一条详情 JSON。
+        """按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。
 
-        先缓存表字段能力；缺字段或键值未知时返回空对象，不使用不充分条件拼接别的实验。参数值绑定传入，标识符由 psycopg.sql 安全组合。
+        先缓存表字段能力；缺字段或键值未知时返回空对象，多条详情记录问题并抛出 ValueError，不任取一条拼接别的实验。参数值绑定传入，标识符由 psycopg.sql 安全组合。
         """
         from psycopg import sql
 
@@ -529,11 +529,14 @@ class PostgresSource:
         )
         found = self.connection.execute(
             sql.SQL(
-                "SELECT to_jsonb(d) AS data FROM reaction.reaction_details d WHERE {} LIMIT 1"
+                "SELECT to_jsonb(d) AS data FROM reaction.reaction_details d WHERE {} LIMIT 2"
             ).format(condition),
             values,
-        ).fetchone()
-        return found["data"] if found else {}
+        ).fetchall()
+        if len(found) > 1:
+            self.issues.append({"record_id": str(row["id"]), "code": "ambiguous_reaction_details"})
+            raise ValueError("Ambiguous reaction details association")
+        return found[0]["data"] if found else {}
 
     def close(self):
         """回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。"""

@@ -99,8 +99,8 @@
 | [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L377) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
 | [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L411) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
 | [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L477) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L496) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L538) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L496) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L541) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -504,6 +504,7 @@
 | [test_incomplete_source_keys_do_not_attach_unidentified_details](../tests/test_postgres_integration.py#L293) | 两侧同为空定位不构成可靠实验关联，不能把未知归属的详情接到反应上。 |
 | [test_direct_reaction_id_link_does_not_require_paragraph_locator](../tests/test_postgres_integration.py#L321) | 明确反应 ID 已建立可靠关联时，段落定位缺失不应阻止读取对应详情。 |
 | [test_bounded_export_preserves_source_replay_template](../tests/test_postgres_integration.py#L341) | 有限导出再加载后必须保留在线来源的回放模板；缺失模板仍保持空值。 |
+| [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L374) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
 
 ## tests/test_query_input_planning.py
 
