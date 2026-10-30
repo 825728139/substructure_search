@@ -243,9 +243,9 @@
 | [Client.search](../src/reaction_reference/interfaces/sdk.py#L25) | 提交 SearchRequest 并等待执行完成，返回保留的 ReferencePackage。 |
 | [Client.preview](../src/reaction_reference/interfaces/sdk.py#L38) | 仅解析目标并生成与真实检索相同的初始家族列表，不查询来源。 |
 | [Client.rerank](../src/reaction_reference/interfaces/sdk.py#L49) | 在 owner 范围内，从已有资料快照创建一个立即完成的重排派生 run。 |
-| [Client.close](../src/reaction_reference/interfaces/sdk.py#L131) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
-| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L135) | 返回当前客户端，供 with 语句复用同一个协调器。 |
-| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L139) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
+| [Client.close](../src/reaction_reference/interfaces/sdk.py#L137) | 关闭协调器，停止其未完成任务并释放运行目录锁。 |
+| [Client.__enter__](../src/reaction_reference/interfaces/sdk.py#L141) | 返回当前客户端，供 with 语句复用同一个协调器。 |
+| [Client.__exit__](../src/reaction_reference/interfaces/sdk.py#L145) | 退出 with 时关闭客户端；不吞掉业务块抛出的异常。 |
 
 ## src/reaction_reference/ports/sources.py
 
@@ -618,6 +618,15 @@
 | [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L299) | 兼容有界队列初始化。 |
 | [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L303) | 返回结果之前推进时钟或设置取消事件。 |
 | [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L311) | 本地队列已控制接收结果，不需要独立读取。 |
+
+## tests/test_rerank_persistence_failure.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_rerank_persistence_boundaries_finish_or_preserve_original_error](../tests/test_rerank_persistence_failure.py#L13) | 对创建、成功终态及失败清理注入异常，验证可写派生任务终结且原任务不被修改。 |
+| [test_rerank_persistence_boundaries_finish_or_preserve_original_error.create_run](../tests/test_rerank_persistence_failure.py#L43) | 可在创建状态前或状态已写入后抛错，模拟不同持久化失败边界。 |
+| [test_rerank_persistence_boundaries_finish_or_preserve_original_error.save_package](../tests/test_rerank_persistence_failure.py#L52) | 失败清理场景先让快照保存失败，原错误应始终返回调用方。 |
+| [test_rerank_persistence_boundaries_finish_or_preserve_original_error.update_run](../tests/test_rerank_persistence_failure.py#L58) | 成功终态只失败一次；清理场景则阻断失败终态，确认异常不会被替换。 |
 
 ## tests/test_result_completeness.py
 

@@ -113,20 +113,26 @@ class Client:
                 owner=owner,
                 parent_run_id=run_id,
             )
-            self.manager.store.create(new_state)
             try:
+                self.manager.store.create(new_state)
                 self.manager.store.save_package(new_package)
-            except Exception:
-                self.manager._finish(
-                    new_id,
-                    "failed",
-                    {
-                        "code": "rerank_snapshot_failed",
-                        "message": "Reranked snapshot could not be saved",
-                    },
+                return self.manager._finish(
+                    new_id, "succeeded", snapshot_id=new_package.snapshot_id
                 )
+            except Exception:
+                try:
+                    self.manager._finish(
+                        new_id,
+                        "failed",
+                        {
+                            "code": "rerank_persistence_failed",
+                            "message": "Reranked run could not be finalized",
+                        },
+                    )
+                except (KeyError, OSError, ValueError):
+                    # 初始状态可能尚未创建，或存储仍不可写；保留最初错误，遗留状态由重启恢复。
+                    pass
                 raise
-            return self.manager._finish(new_id, "succeeded", snapshot_id=new_package.snapshot_id)
 
     def close(self):
         """关闭协调器，停止其未完成任务并释放运行目录锁。"""

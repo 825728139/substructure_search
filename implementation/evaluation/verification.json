@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "6df0ef7001a174ac4494899a5a01fdc91d21c2447ae37b35b98f359d6e3cec57",
+  "implementation_hash": "7715cbff21097b721d93fa9922af04ff2416d8f69211ec278eebbe35918b1fab",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 414,
+    "tests_passed": 419,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "6df0ef7001a174ac4494899a5a01fdc91d21c2447ae37b35b98f359d6e3cec57"
+    "implementation_hash": "7715cbff21097b721d93fa9922af04ff2416d8f69211ec278eebbe35918b1fab"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1142,6 +1142,36 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 538,
     "function_index_links_verified": 538,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "rerank_persistence_failure_review": {
+    "date": "2026-10-30",
+    "base_commit": "a241b59",
+    "verified_implementation_hash": "7715cbff21097b721d93fa9922af04ff2416d8f69211ec278eebbe35918b1fab",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "fixed_bug_categories": 2,
+    "regressions_added": 5,
+    "initial_failures": 3,
+    "initial_passing_controls": 2,
+    "fault_boundaries": [
+      "before_create",
+      "after_create",
+      "success_terminal_update",
+      "failure_cleanup"
+    ],
+    "writable_derived_states_finished": true,
+    "original_exception_identity_preserved": true,
+    "parent_state_bytes_and_package_unchanged": true,
+    "saved_derived_result_marked_partial_on_failure": true,
+    "unwritable_cleanup_recovers_after_restart": true,
+    "postgres_integration_cases_passed": 26,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 97,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 542,
+    "function_index_links_verified": 542,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }
