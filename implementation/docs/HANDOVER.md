@@ -179,7 +179,7 @@ API 同样复制配置，认证和就绪探测不会随外部对象修改而变�
 
 浏览器导出直接保存服务器返回的原始资料包字节，保留合法大整数等元数据；错误响应不会另存为资料包。JSONL 来源中的非有限数和无效 Unicode 会作为坏行隔离，详见[数据边界审查](DATA_BOUNDARY_REVIEW.md)。
 
-读资料包时依次检查 `coverage_state`、`stop_reasons`、`family_states`、`feature_status` 和 `source_issues`。然后看 `statistics.by_layer` 的生成/尝试/命中统计、`preparation_hits` 与 `usage_hits`。材料、实验、家族和建议各有不同去重口径，不能相加当成同一种“命中数”。
+读资料包时依次检查 `coverage_state`、`stop_reasons`、`family_states`、`feature_status` 和 `source_issues`。然后看 `statistics.by_layer` 的生成/尝试/命中统计、`preparation_hits` 与 `usage_hits`。材料、实验、家族和建议各有不同去重口径，不能相加当成同一种“命中数”。实验计数通过 `SourceRef.experiment_key` 使用 `(namespace, experiment_id)` 去重；同一来源内的重复抽取不增加实验数，不同来源的同名局部编号也不会被误合并。
 
 正常停止扩展的预算信号是 `BudgetExceeded`，由业务编排捕获并保留结果。来源失败、映射不足、未支持的查询语义有各自原因。父进程还有硬截止，可以终止卡住的原生计算；没有阶段快照时则没有可读取的参考包。
 

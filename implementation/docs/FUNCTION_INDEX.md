@@ -166,8 +166,9 @@
 | 函数 | 职责 |
 |---|---|
 | [LabContext.check_range](../src/reaction_reference/domain/models.py#L68) | 拒绝下限高于上限的温度范围，校验通过返回当前对象。 |
-| [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L171) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
-| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L230) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
+| [SourceRef.experiment_key](../src/reaction_reference/domain/models.py#L110) | 返回带来源命名空间的实验去重键；不同来源的同名编号不能自动认定为同一实验。 |
+| [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L176) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
+| [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L235) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
 
 ## src/reaction_reference/evaluation/runner.py
 
@@ -422,6 +423,12 @@
 | 函数 | 职责 |
 |---|---|
 | [test_masking_removes_target_records_and_unreviewed_is_not_scored](../tests/test_evaluation.py#L8) | 确认屏蔽移除全部目标来源产品，未审核相关性标签不会产生伪召回得分。 |
+
+## tests/test_experiment_counts.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_experiment_counts_include_source_namespace](../tests/test_experiment_counts.py#L17) | 全局及三层的实验、制备和使用统计必须统一采用带来源范围的实验身份。 |
 
 ## tests/test_frontend.py
 

@@ -140,9 +140,9 @@ def search(request, source, *, run_id=None, on_progress=None):
                 ),
                 "families_with_structural_hits": sum(f.id in hit_ids for f in layer_families),
                 "unique_product_structures": len({canonical(r.material.smiles) for r in hits}),
-                "unique_experiments": len({r.record.source.experiment_id for r in hits}),
+                "unique_experiments": len({r.record.source.experiment_key for r in hits}),
                 "qualified_preparation_experiments": len(
-                    {r.record.source.experiment_id for r in hits if r.preparation_hit}
+                    {r.record.source.experiment_key for r in hits if r.preparation_hit}
                 ),
                 "graph_connection_candidates": sum(
                     r.contribution in ("connection_method", "local_method") for r in hits
@@ -224,17 +224,17 @@ def search(request, source, *, run_id=None, on_progress=None):
                 "received_candidates": budget.received,
                 "unique_structures": len({canonical(r.material.smiles) for r in ranked}),
                 "by_layer": layer_summary,
-                "unique_experiments": len({r.record.source.experiment_id for r in ranked}),
+                "unique_experiments": len({r.record.source.experiment_key for r in ranked}),
                 "preparation_hits": len(
                     {
-                        (r.record.source.experiment_id, canonical(r.material.smiles))
+                        (r.record.source.experiment_key, canonical(r.material.smiles))
                         for r in ranked
                         if r.preparation_hit
                     }
                 ),
                 "usage_hits": len(
                     {
-                        (r.record.source.experiment_id, canonical(r.material.smiles))
+                        (r.record.source.experiment_key, canonical(r.material.smiles))
                         for r in ranked
                         if r.use_hit
                     }

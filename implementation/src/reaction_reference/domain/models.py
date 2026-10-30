@@ -96,7 +96,7 @@ class FeatureStatus(Model):
 
 
 class SourceRef(Model):
-    """来源实验定位；record_id 是来源记录身份，experiment_id 用于实验去重，synthetic 标记演示来源。"""
+    """来源实验定位；记录和实验编号属于 namespace 范围，synthetic 标记演示来源。"""
 
     namespace: str
     record_id: str
@@ -105,6 +105,11 @@ class SourceRef(Model):
     location: str | None = None
     url: str | None = None
     synthetic: bool = False
+
+    @property
+    def experiment_key(self) -> tuple[str, str]:
+        """返回带来源命名空间的实验去重键；不同来源的同名编号不能自动认定为同一实验。"""
+        return self.namespace, self.experiment_id
 
 
 class Material(Model):

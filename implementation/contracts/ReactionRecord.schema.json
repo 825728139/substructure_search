@@ -243,7 +243,7 @@
     },
     "SourceRef": {
       "additionalProperties": false,
-      "description": "来源实验定位；record_id 是来源记录身份，experiment_id 用于实验去重，synthetic 标记演示来源。",
+      "description": "来源实验定位；记录和实验编号属于 namespace 范围，synthetic 标记演示来源。",
       "properties": {
         "namespace": {
           "title": "Namespace",
