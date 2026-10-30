@@ -120,6 +120,21 @@ def evaluate(source_path, targets_path, output, *, max_tasks=100):
     ]
     if not 1 <= len(targets) <= 100:
         raise ValueError("Evaluation requires 1..100 explicit targets")
+    # 在执行检索前验证实际消费的字段，避免字符串或字典被当作正例集合静默计分。
+    for number, row in enumerate(targets, 1):
+        if not isinstance(row, dict):
+            raise ValueError(f"Evaluation target {number} must be an object")
+        for key in ("id", "target_smiles"):
+            if not isinstance(row.get(key), str) or not row[key].strip():
+                raise ValueError(f"Evaluation target {number} requires a nonempty {key} string")
+        gold = row.get("useful_method_record_ids")
+        if gold is not None and (
+            not isinstance(gold, list)
+            or any(not isinstance(value, str) or not value.strip() for value in gold)
+        ):
+            raise ValueError(
+                f"Evaluation target {number}: useful_method_record_ids must be a list of nonempty strings or null"
+            )
     source = JsonlSource(source_path, exhaustive=True)
     results = []
     for row in targets:

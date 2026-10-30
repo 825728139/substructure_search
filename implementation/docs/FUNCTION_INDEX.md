@@ -117,6 +117,7 @@
 | [search](../src/reaction_reference/application/search.py#L40) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
 | [search.package](../src/reaction_reference/application/search.py#L81) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
 | [search.publish](../src/reaction_reference/application/search.py#L257) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L267) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -398,6 +399,24 @@
 | 函数 | 职责 |
 |---|---|
 | [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、异常、下载与当前任务正常显示、串行轮询六个场景。 |
+
+## tests/test_global_review.py
+
+| 函数 | 职责 |
+|---|---|
+| [symmetric_reduction](../tests/test_global_review.py#L31) | 构造有完整输入/产物依据的对称酮还原示例，触发等价模板映射。 |
+| [test_symmetric_replay_returns_unique_proposals](../tests/test_global_review.py#L57) | 两个等价逆向映射不能占用两个建议名额或产生相同建议 ID。 |
+| [test_search_counts_and_displays_symmetric_proposal_once](../tests/test_global_review.py#L78) | 端到端资料包、统计与展示列表只能保留一次相同替换建议。 |
+| [test_evaluation_rejects_malformed_method_labels](../tests/test_global_review.py#L103) | 错误标签格式不能被 set 隐式转换成字符或字典键，再当作人工审核正例计分。 |
+| [test_minimum_task_budget_can_complete_one_reference](../tests/test_global_review.py#L130) | 合法的四/五任务预算足够取页、核验、可选详情和一次分析，不能在取页前耗尽。 |
+| [test_minimum_task_budget_can_complete_one_reference.Source.candidate_page](../tests/test_global_review.py#L148) | 一次返回完整有限来源，确保本例预算只需覆盖一次处理链。 |
+| [test_minimum_task_budget_can_complete_one_reference.Source.hydrate](../tests/test_global_review.py#L152) | 返回原记录，详情动作是否单独计数由来源能力声明控制。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion](../tests/test_global_review.py#L176) | 首条建议已通过正向回放后，下一条规则耗尽预算不能抹掉这条有效部分结果。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.candidate_page](../tests/test_global_review.py#L204) | 一次返回酰胺产物，检索链只使用三个任务额度。 |
+| [test_verified_proposal_survives_later_replay_budget_exhaustion.Source.hydrate](../tests/test_global_review.py#L210) | 完整示例无需额外详情读取。 |
+| [test_invalid_evaluation_row_is_rejected_before_source_access](../tests/test_global_review.py#L237) | 非法目标行在读取来源前得到输入错误，不泄漏类型异常或启动无效评测。 |
+| [test_valid_evaluation_labels_preserve_reviewed_only_scoring](../tests/test_global_review.py#L246) | 合法标签只在已审核时计分，屏蔽组剔除被屏蔽正例且不伪造零或满分。 |
+| [test_reordered_target_self_matches_keep_complete_joint_coverage](../tests/test_global_review.py#L271) | 对环系、无环、同位素及立体目标改变原子遍历顺序，核对预筛、身份和联合覆盖。 |
 
 ## tests/test_pipeline.py
 

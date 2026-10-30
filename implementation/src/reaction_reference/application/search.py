@@ -188,7 +188,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                     if request.budget.max_proposals == 0 and request.options.include_proposals
                     else "not_requested"
                     if not request.options.include_proposals
-                    else "not_evaluated"
+                    else ("partial" if proposals else "not_evaluated")
                     if not proposal_phase_finished
                     else "partial"
                     if stopped or any(proposal_reasons)
@@ -264,6 +264,18 @@ def search(request, source, *, run_id=None, on_progress=None):
             on_progress(package())
             last_progress = time.monotonic()
 
+    def retain_proposal(proposal):
+        """立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。
+
+        后续回放耗尽预算时，已接收建议仍留在最终部分包中；达到上限就通知生成器停止。
+        """
+        if len(proposals) >= request.budget.max_proposals:
+            return False
+        if all(existing.id != proposal.id for existing in proposals):
+            proposals.append(proposal)
+            publish()
+        return len(proposals) < request.budget.max_proposals
+
     # ② 先发布空的初始包，再按有限预算逐页推进，调用方可持续保存已有结果。
     publish(True)
     try:
@@ -285,8 +297,9 @@ def search(request, source, *, run_id=None, on_progress=None):
                 "selection_scope_id": scope,
                 "complete": False,
             }
-            # 给后面的核验和反应分析预留任务预算，避免召回阶段耗尽全部机会。
-            budget.task("source_page", scope, reserve=4)
+            # 预留一次核验、可选详情加载和反应分析；四任务预算也能处理一条参考。
+            hydration_reserve = int(getattr(source, "hydration_requires_io", False))
+            budget.task("source_page", scope, reserve=2 + hydration_reserve)
             try:
                 page = source.candidate_page(
                     family, role, cursor, request.budget.page_size, target_smiles, stage
@@ -312,7 +325,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                     "enumeration_kind": page.enumeration_kind,
                 }
             )
-            budget.task("match_batch", scope, reserve=3)
+            budget.task("match_batch", scope, reserve=1 + hydration_reserve)
             matching_complete = True
             # ③ 每个实际材料独立做完整 Markush 核验；记录整侧命中不能替代此步骤。
             for item in page.items:
@@ -340,7 +353,7 @@ def search(request, source, *, run_id=None, on_progress=None):
                 # ④ 只对真正结构命中的记录加载详情，并保持命中的材料实例不变。
                 if item.record.id not in hydrated:
                     if getattr(source, "hydration_requires_io", False):
-                        budget.task("source_hydration", item.record.id, reserve=3)
+                        budget.task("source_hydration", item.record.id, reserve=1)
                     try:
                         hydrated[item.record.id] = source.hydrate(item.record)
                     except Exception as exc:
@@ -605,12 +618,9 @@ def search(request, source, *, run_id=None, on_progress=None):
                 if len(proposals) >= request.budget.max_proposals:
                     proposal_reasons.append("proposal_count_budget")
                     break
-                created, reason = generate_proposals(ref, target, budget)
+                _, reason = generate_proposals(ref, target, budget, on_proposal=retain_proposal)
                 if reason:
                     proposal_reasons.append(reason)
-                known = {p.id for p in proposals}
-                proposals.extend(p for p in created if p.id not in known)
-                proposals = proposals[: request.budget.max_proposals]
         except BudgetExceeded as exc:
             proposal_reasons.append(str(exc))
             stopped.append(str(exc))

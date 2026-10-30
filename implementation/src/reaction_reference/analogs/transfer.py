@@ -64,12 +64,14 @@ def replay(reaction, inputs, max_sets=16):
     return output, len(groups) <= max_sets, invalid == 0
 
 
-def generate_proposals(reference, target, budget):
+def generate_proposals(reference, target, budget, *, on_proposal=None):
     """从一个来源参考生成只替换一个完整反应物的有限建议。
 
     reference 必须具有明确操作段落、有效映射、产品报告和实际输入使用证据。先用原输入自回放复现来源产物，再对目标逆向回放；仅接受与原输入恰有一个槽位不同且正向回放满足完整目标的组合。
 
     返回（Proposal 列表、跳过原因或 None），每个参考至多 2 条，消耗传入 budget；无额外原因不等于无截断，需读取建议自身的枚举/校验状态。保留条件、可获得性、竞争位点及未实测限制。
+    可选 on_proposal 在每条唯一建议验证后立即接收结果；返回 False 表示调用方已达到保留上限。
+    后续预算异常仍向上传播，但已交付的建议不会随当前函数的局部列表一起丢失。
     """
     record = reference.record
     if (
@@ -103,6 +105,7 @@ def generate_proposals(reference, target, budget):
     if len(actual) > 4 or not actual:
         return [], "reactant_assignment_unsupported"
     proposals = []
+    proposal_ids = set()
     target_key = canonical(target)
     for rule in source_rules(record):
         budget.check()
@@ -141,6 +144,10 @@ def generate_proposals(reference, target, budget):
                 ]
                 if len(changed) != 1:
                     continue
+                proposal_id = digest([reference.id, rule["id"], group, target_key])
+                # 对称映射可能给出同一组具体输入；已验证建议不再回放或占用名额。
+                if proposal_id in proposal_ids:
+                    continue
                 candidates = [parse(s) for s in group]
                 if any(a.GetAtomicNum() == 0 for m in candidates for a in m.GetAtoms()):
                     continue
@@ -167,7 +174,7 @@ def generate_proposals(reference, target, budget):
                     limitations.append("synthetic_source_illustration_not_literature")
                 proposals.append(
                     Proposal(
-                        id=digest([reference.id, rule["id"], group, target_key]),
+                        id=proposal_id,
                         source_reference_id=reference.id,
                         source=record.source,
                         source_step_ref=record.documented_step_ref,
@@ -183,6 +190,9 @@ def generate_proposals(reference, target, budget):
                         limitations=limitations,
                     )
                 )
+                proposal_ids.add(proposal_id)
+                if on_proposal is not None and on_proposal(proposals[-1]) is False:
+                    return proposals, "proposal_count_budget"
                 if len(proposals) >= 2:
                     return proposals, None
     return proposals, None
