@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "6263344f1c668ac809169ddd8d5eed2bdf47d21159ba5d332002380ed3c8f5aa",
+  "implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 433,
+    "tests_passed": 448,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "6263344f1c668ac809169ddd8d5eed2bdf47d21159ba5d332002380ed3c8f5aa"
+    "implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1262,6 +1262,38 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 554,
     "function_index_links_verified": 554,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "artifact_atomic_write_review": {
+    "date": "2026-10-30",
+    "base_commit": "cd46581",
+    "verified_implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 15,
+    "initial_failures": 10,
+    "initial_passing_controls": 5,
+    "export_paths": [
+      "cli",
+      "targets",
+      "evaluation",
+      "schema",
+      "openapi"
+    ],
+    "partial_write_fault_actually_flushes_content": true,
+    "previous_output_preserved_before_replace": true,
+    "new_partial_output_not_published": true,
+    "existing_permissions_preserved": true,
+    "each_file_commits_independently": true,
+    "source_export_no_overwrite_policy_preserved": true,
+    "postgres_integration_cases_passed": 37,
+    "real_browser_cases_passed": 7,
+    "node_scenarios_passed": 12,
+    "python_modules_documented": 100,
+    "python_classes_documented": 68,
+    "python_named_functions_documented": 562,
+    "function_index_links_verified": 562,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }

@@ -83,6 +83,7 @@ implementation/
 │   │   ├── sources.py          # 有限 JSONL / 只读索引来源的实现
 │   │   ├── annotations.py      # 绑定来源哈希的人工审核证据
 │   │   ├── execution.py        # 单协调器、监督/接收线程、spawn 子进程
+│   │   ├── files.py            # 完整文本原子发布，保留旧文件权限
 │   │   ├── run_store.py        # 运行目录锁、状态修订、原子文件快照
 │   │   └── export.py           # 有数量上限的只读来源导出
 │   ├── interfaces/

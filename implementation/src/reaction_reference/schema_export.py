@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 from reaction_reference.adapters.annotations import EvidenceAnnotation
+from reaction_reference.adapters.files import atomic_write_text
 from reaction_reference.domain.models import (
     QueryFamily,
     ReactionRecord,
@@ -30,8 +31,9 @@ def export_schemas(directory):
         RerankRequest,
         EvidenceAnnotation,
     ):
-        (directory / f"{model.__name__}.schema.json").write_text(
-            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2) + "\n"
+        atomic_write_text(
+            directory / f"{model.__name__}.schema.json",
+            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2) + "\n",
         )
     from reaction_reference.interfaces.api import create_app
     from reaction_reference.settings import Settings
@@ -46,8 +48,9 @@ def export_schemas(directory):
             )
         )
         try:
-            (directory / "openapi.json").write_text(
-                json.dumps(app.openapi(), ensure_ascii=False, indent=2) + "\n"
+            atomic_write_text(
+                directory / "openapi.json",
+                json.dumps(app.openapi(), ensure_ascii=False, indent=2) + "\n",
             )
         finally:
             app.state.client.close()

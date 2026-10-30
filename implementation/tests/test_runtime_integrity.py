@@ -153,7 +153,7 @@ def test_atomic_write_failure_removes_temporary_file(tmp_path, monkeypatch, fail
         """模拟替换或同步失败。"""
         raise OSError("模拟持久化失败")
 
-    monkeypatch.setattr(f"reaction_reference.adapters.run_store.os.{failure}", fail)
+    monkeypatch.setattr(f"reaction_reference.adapters.files.os.{failure}", fail)
     with pytest.raises(OSError):
         FileRunStore._atomic(path, "新内容")
     assert path.read_text(encoding="utf-8") == "原始内容"

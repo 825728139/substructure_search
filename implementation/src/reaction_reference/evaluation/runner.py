@@ -7,6 +7,7 @@ from pathlib import Path
 
 from rdkit import rdBase
 
+from reaction_reference.adapters.files import atomic_write_text
 from reaction_reference.adapters.sources import JsonlSource
 from reaction_reference.application.search import search
 from reaction_reference.chemistry.structures import (
@@ -105,7 +106,9 @@ def select_targets(source_path, output, count=12):
     ]
     destination = Path(output)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows))
+    atomic_write_text(
+        destination, "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows)
+    )
     source.close()
     return {"targets": len(rows), "label_state": "unreviewed", "path": str(destination)}
 
@@ -207,7 +210,7 @@ def evaluate(source_path, targets_path, output, *, max_tasks=100):
     }
     destination = Path(output)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    atomic_write_text(destination, json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     source.close()
     return {
         "targets": len(targets),

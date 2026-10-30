@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+from reaction_reference.adapters.files import atomic_write_text
 from reaction_reference.domain.models import (
     BudgetConfig,
     RerankRequest,
@@ -25,7 +26,7 @@ def _write(data, path=None):
     content = json.dumps(data, ensure_ascii=False, indent=2)
     if path:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        Path(path).write_text(content + "\n")
+        atomic_write_text(Path(path), content + "\n")
     else:
         print(content)
 

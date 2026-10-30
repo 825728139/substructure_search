@@ -2,13 +2,11 @@
 
 import fcntl
 import json
-import os
 import threading
-import uuid
-from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
 
+from reaction_reference.adapters.files import atomic_write_text
 from reaction_reference.chemistry.structures import digest
 from reaction_reference.domain.models import ReferencePackage, RunState
 
@@ -80,22 +78,7 @@ class FileRunStore:
 
         保证读者看到完整旧文件或完整新文件；本函数执行磁盘 I/O，写入错误向上传播。
         """
-        temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
-        try:
-            with temporary.open("w", encoding="utf-8") as stream:
-                stream.write(content)
-                stream.flush()
-                os.fsync(stream.fileno())
-            os.replace(temporary, path)
-            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
-            try:
-                os.fsync(directory)
-            finally:
-                os.close(directory)
-        finally:
-            # 失败时尽力清理未发布文件，清理异常不覆盖原始写入异常。
-            with suppress(OSError):
-                temporary.unlink(missing_ok=True)
+        atomic_write_text(path, content)
 
     def create(self, state):
         """创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。"""

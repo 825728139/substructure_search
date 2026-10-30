@@ -63,24 +63,30 @@
 |---|---|
 | [export_sample](../src/reaction_reference/adapters/export.py#L10) | 只读按主键导出 after_id 后至多 limit 条反应到新的 JSONL 文件。 |
 
+## src/reaction_reference/adapters/files.py
+
+| 函数 | 职责 |
+|---|---|
+| [atomic_write_text](../src/reaction_reference/adapters/files.py#L10) | 在已有父目录中写临时文件并同步，完整写入后替换目标，保留已有文件权限。 |
+
 ## src/reaction_reference/adapters/run_store.py
 
 | 函数 | 职责 |
 |---|---|
-| [FileRunStore.__init__](../src/reaction_reference/adapters/run_store.py#L25) | 建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。 |
-| [FileRunStore.acquire_coordinator](../src/reaction_reference/adapters/run_store.py#L33) | 获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。 |
-| [FileRunStore.close](../src/reaction_reference/adapters/run_store.py#L48) | 释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。 |
-| [FileRunStore._directory](../src/reaction_reference/adapters/run_store.py#L56) | 校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。 |
-| [FileRunStore._snapshot_path](../src/reaction_reference/adapters/run_store.py#L66) | 校验快照标识为至多 64 位的非空小写十六进制字符串，返回受限文件路径。 |
-| [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L78) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
-| [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L100) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
-| [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L107) | 读取并校验指定 run 的状态，返回 RunState。 |
-| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L126) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
-| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L141) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
-| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L163) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
-| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L200) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L228) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L249) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
+| [FileRunStore.__init__](../src/reaction_reference/adapters/run_store.py#L23) | 建立运行根目录和线程锁；跨进程互斥需额外调用 acquire_coordinator。 |
+| [FileRunStore.acquire_coordinator](../src/reaction_reference/adapters/run_store.py#L31) | 获取运行目录的非阻塞排他文件锁；已有协调器占用时抛出 RuntimeError。 |
+| [FileRunStore.close](../src/reaction_reference/adapters/run_store.py#L46) | 释放当前持有的协调器文件锁；未持锁或已关闭时不做操作。 |
+| [FileRunStore._directory](../src/reaction_reference/adapters/run_store.py#L54) | 校验 run_id 是 32 位小写十六进制字符串，返回对应目录路径。 |
+| [FileRunStore._snapshot_path](../src/reaction_reference/adapters/run_store.py#L64) | 校验快照标识为至多 64 位的非空小写十六进制字符串，返回受限文件路径。 |
+| [FileRunStore._atomic](../src/reaction_reference/adapters/run_store.py#L76) | 把文本写入同目录临时文件，经 fsync 后原子替换目标，再同步目录。 |
+| [FileRunStore.create](../src/reaction_reference/adapters/run_store.py#L83) | 创建一个新运行目录并持久化初始 RunState；同 ID 目录存在时拒绝覆盖。 |
+| [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L90) | 读取并校验指定 run 的状态，返回 RunState。 |
+| [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L109) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
+| [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L124) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
+| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L146) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L183) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L211) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L232) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
 
 ## src/reaction_reference/adapters/sources.py
 
@@ -175,12 +181,12 @@
 
 | 函数 | 职责 |
 |---|---|
-| [MaskedSource.__init__](../src/reaction_reference/evaluation/runner.py#L26) | 从固定样本已核验的产品候选找出满足 target 的记录 ID，建立派生来源快照。 |
-| [MaskedSource.candidate_page](../src/reaction_reference/evaluation/runner.py#L43) | 委托原来源取页后移除被屏蔽记录，保留原范围、耗尽状态与游标。 |
-| [MaskedSource.hydrate](../src/reaction_reference/evaluation/runner.py#L53) | 委托底层来源加载一个未被屏蔽的已命中记录，不创建新证据。 |
-| [MaskedSource.close](../src/reaction_reference/evaluation/runner.py#L57) | 不关闭底层共享来源；评测主函数负责在两种任务完成后统一释放。 |
-| [select_targets](../src/reaction_reference/evaluation/runner.py#L62) | 从有限非合成产品中用最远优先的指纹距离选出结构多样的目标。 |
-| [evaluate](../src/reaction_reference/evaluation/runner.py#L113) | 逐目标运行保留来源与屏蔽全部目标产物记录两种任务并写入 JSON 报告。 |
+| [MaskedSource.__init__](../src/reaction_reference/evaluation/runner.py#L27) | 从固定样本已核验的产品候选找出满足 target 的记录 ID，建立派生来源快照。 |
+| [MaskedSource.candidate_page](../src/reaction_reference/evaluation/runner.py#L44) | 委托原来源取页后移除被屏蔽记录，保留原范围、耗尽状态与游标。 |
+| [MaskedSource.hydrate](../src/reaction_reference/evaluation/runner.py#L54) | 委托底层来源加载一个未被屏蔽的已命中记录，不创建新证据。 |
+| [MaskedSource.close](../src/reaction_reference/evaluation/runner.py#L58) | 不关闭底层共享来源；评测主函数负责在两种任务完成后统一释放。 |
+| [select_targets](../src/reaction_reference/evaluation/runner.py#L63) | 从有限非合成产品中用最远优先的指纹距离选出结构多样的目标。 |
+| [evaluate](../src/reaction_reference/evaluation/runner.py#L116) | 逐目标运行保留来源与屏蔽全部目标产物记录两种任务并写入 JSON 报告。 |
 
 ## src/reaction_reference/evidence/claims.py
 
@@ -226,8 +232,8 @@
 
 | 函数 | 职责 |
 |---|---|
-| [_write](../src/reaction_reference/interfaces/cli.py#L20) | 把可 JSON 序列化数据写入指定文件或标准输出，保留中文并缩进。 |
-| [main](../src/reaction_reference/interfaces/cli.py#L33) | 解析 argv 并分派 CLI 命令，返回进程退出码。 |
+| [_write](../src/reaction_reference/interfaces/cli.py#L21) | 把可 JSON 序列化数据写入指定文件或标准输出，保留中文并缩进。 |
+| [main](../src/reaction_reference/interfaces/cli.py#L34) | 解析 argv 并分派 CLI 命令，返回进程退出码。 |
 
 ## src/reaction_reference/interfaces/depiction.py
 
@@ -307,7 +313,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [export_schemas](../src/reaction_reference/schema_export.py#L18) | 把请求、家族、反应、证据审核、资料包与状态 Schema 及 OpenAPI 写入 directory。 |
+| [export_schemas](../src/reaction_reference/schema_export.py#L19) | 把请求、家族、反应、证据审核、资料包与状态 Schema 及 OpenAPI 写入 directory。 |
 
 ## src/reaction_reference/settings.py
 
@@ -345,6 +351,18 @@
 | [test_domain_and_chemical_layers_do_not_import_adapters_or_interfaces](../tests/test_architecture.py#L13) | 检查领域、化学与应用模块不反向导入具体适配器/接口；领域也不依赖 RDKit、HTTP 或 PG。 |
 | [test_rules_compile_and_have_regression_scope](../tests/test_architecture.py#L39) | 确认随包规则可编译、含内容哈希并显式列出未支持范围。 |
 | [test_contract_schema_is_exported](../tests/test_architecture.py#L46) | 比较已提交请求 Schema 与当前模型导出，防止接口契约悄然漂移。 |
+
+## tests/test_artifact_writes.py
+
+| 函数 | 职责 |
+|---|---|
+| [InterruptedWrite.__init__](../tests/test_artifact_writes.py#L18) | 保存真实文件和待抛异常，供所有导出路径使用同一故障。 |
+| [InterruptedWrite.write](../tests/test_artifact_writes.py#L22) | 确实落盘部分文本后失败，防止只测试序列化前错误而漏掉文件截断。 |
+| [InterruptedWrite.__getattr__](../tests/test_artifact_writes.py#L28) | 其余文件操作委托真实流，兼容刷新和文件描述符访问。 |
+| [render_artifact](../tests/test_artifact_writes.py#L33) | 调用各自真实导出入口，不用模拟业务结果代替实际报告或契约。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file](../tests/test_artifact_writes.py#L47) | 五种导出在部分写入失败时保留旧文件或保持目标不存在，成功替换保持文件权限。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault](../tests/test_artifact_writes.py#L67) | 只中断目标及同目录临时文件写入，其他打开操作直接返回真实流。 |
+| [test_export_artifact_is_complete_or_keeps_previous_file.open_with_fault.partial_stream](../tests/test_artifact_writes.py#L77) | 仅为目标写入提供故障上下文，始终关闭实际文件描述符。 |
 
 ## tests/test_browser_integration.py
 
