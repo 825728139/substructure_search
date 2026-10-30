@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "391fd2133ff57409e88d9ef0613267ccbdc43d661290791ebf444a8187e0a30f",
+  "implementation_hash": "434a6ce1462d5ae8ca12f8b050a4f400248d230a042ca4fd1aaa1e3f7812fbb8",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,14 +17,14 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 275,
+    "tests_passed": 282,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
     "wheel_build": true,
     "chinese_comment_coverage": true,
     "tests_skipped": 0,
-    "frontend_async_scenarios": 6
+    "frontend_async_scenarios": 8
   },
   "wheel_install_smoke": {
     "passed": true,
@@ -58,7 +58,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "391fd2133ff57409e88d9ef0613267ccbdc43d661290791ebf444a8187e0a30f"
+    "implementation_hash": "434a6ce1462d5ae8ca12f8b050a4f400248d230a042ca4fd1aaa1e3f7812fbb8"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -364,6 +364,26 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 482,
     "function_index_links_verified": 482,
+    "live_source_access_performed": false
+  },
+  "serialization_integrity_review": {
+    "date": "2026-10-30",
+    "base_commit": "2d44f7e",
+    "verified_implementation_hash": "434a6ce1462d5ae8ca12f8b050a4f400248d230a042ca4fd1aaa1e3f7812fbb8",
+    "report": "docs/DATA_BOUNDARY_REVIEW.md",
+    "fixed_bug_categories": 2,
+    "regressions_added": 7,
+    "initial_failures": 6,
+    "initial_passing_controls": 1,
+    "node_cases_added": 2,
+    "node_counterexamples_failed_before_fix": 1,
+    "node_scenarios_passed": 8,
+    "postgres_integration_cases_passed": 15,
+    "real_browser_cases_passed": 5,
+    "python_modules_documented": 84,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 485,
+    "function_index_links_verified": 485,
     "live_source_access_performed": false
   }
 }

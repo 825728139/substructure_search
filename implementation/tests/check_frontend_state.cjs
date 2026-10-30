@@ -15,7 +15,7 @@ function deferred() {
 
 /** 模拟本页面用到的最小 DOM，记录展示变化和下载动作。 */
 function environment(fetch) {
-  const elements = new Map(), downloads = [], timers = new Map();
+  const elements = new Map(), downloads = [], blobs = [], timers = new Map();
   let timerId = 0;
   /** 构造普通显示元素及浏览器操作替身。 */
   function element(tag) {
@@ -35,7 +35,7 @@ function environment(fetch) {
     fetch, Blob, console,
     URL: {
       /** 返回一个无网络访问的临时图片或下载地址。 */
-      createObjectURL() { return 'blob:test'; },
+      createObjectURL(blob) { blobs.push(blob); return 'blob:test'; },
       /** 模拟浏览器释放临时地址。 */
       revokeObjectURL() {},
     },
@@ -54,11 +54,11 @@ function environment(fetch) {
     clearInterval(id) { timers.delete(id); },
   });
   vm.runInContext(script, context);
-  return {context, elements, downloads, timers};
+  return {context, elements, downloads, blobs, timers};
 }
 
 /** 生成成功的 JSON 接口响应。 */
-function response(value) { return {ok: true, json: async () => value}; }
+function response(value) { return {ok: true, json: async () => value, blob: async () => new Blob([JSON.stringify(value)], {type: 'application/json'})}; }
 
 /** 确认旧状态响应不能修改新任务的状态或终止其轮询。 */
 async function staleStatus() {
@@ -141,10 +141,37 @@ async function serialPolling() {
   assert.equal(app.timers.size, 1);
 }
 
+/** 确认下载保留服务器原始字节，避免大整数经过 JavaScript 数值解析后被舍入。 */
+async function originalDownloadBytes() {
+  const payload = '{"run_id":"current","counter":9007199254740993,"text":"原始资料"}\n';
+  const app = environment(/** 分别提供原始响应体与可能失真的 JSON 解析路径。 */ async () => ({
+    ok: true,
+    json: async () => JSON.parse(payload),
+    blob: async () => new Blob([payload], {type: 'application/json'}),
+  }));
+  vm.runInContext('run = "current"; generation = 1;', app.context);
+  await app.elements.get('download').onclick();
+  assert.deepEqual(app.downloads, ['reference-current.json']);
+  assert.equal(await app.blobs[0].text(), payload);
+}
+
+/** 下载接口失败时应显示错误，不把错误响应当成完整资料包保存。 */
+async function failedDownloadIsNotPublished() {
+  const app = environment(/** 模拟没有可用资料包的错误响应。 */ async () => ({
+    ok: false, json: async () => ({detail: 'not_ready'}),
+    blob: async () => new Blob(['错误响应']),
+  }));
+  vm.runInContext('run = "current"; generation = 1;', app.context);
+  await app.elements.get('download').onclick();
+  assert.deepEqual(app.downloads, []);
+  assert.equal(app.blobs.length, 0);
+  assert.match(app.elements.get('status').textContent, /not_ready/);
+}
+
 /** 汇总所有乱序响应场景，任何失败均以非零状态退出。 */
 async function main() {
   let failures = 0;
-  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling]) {
+  for (const test of [staleStatus, staleResults, staleFailure, staleDownload, currentResultsAndDownload, serialPolling, originalDownloadBytes, failedDownloadIsNotPublished]) {
     try { await test(); console.log('通过：' + test.name); }
     catch (error) { failures++; console.error('失败：' + test.name + '\n' + error.message); }
   }

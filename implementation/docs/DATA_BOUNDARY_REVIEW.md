@@ -56,3 +56,14 @@ implementation/.venv/bin/python implementation/scripts/check.py
 新增 14 项回归：13 项故障反例修复前失败，另增加明确反应 ID 的正常关联正例。检查包括 6 项真实 SQL 的不完整定位关联、4 项实验身份缺失、2 项标识碰撞、1 项最小来源协议及 1 项可靠关联；原有完整定位和序号零的对照继续通过。测试见 [test_postgres_integration.py](../tests/test_postgres_integration.py)、[test_data_boundaries.py](../tests/test_data_boundaries.py) 和 [test_annotations.py](../tests/test_annotations.py)。
 
 完整检查 **275 项测试通过、无跳过**，其中真实 PostgreSQL 集成共 15 项、真实浏览器共 4 项。中文说明、静态检查、契约检查及 wheel 构建通过；24 项固定样本评测按当前实现哈希重跑。本轮数据库操作仅发生在测试夹具创建的临时库中。
+
+## 补充复核：序列化与原样下载（2026-10-30）
+
+在 `2d44f7e` 基础上确认并修复两类数据完整性问题：
+
+1. **浏览器下载重编码导致大整数失真。** 下载原先先执行 JSON 解析，再用 JavaScript `JSON.stringify` 生成文件。合法整数 `9007199254740993` 会被舍入为 `9007199254740992`，使下载内容与服务器保存的证据不一致。现在成功响应直接作为 Blob 下载，保留服务器原始字节；失败响应仍解析错误并显示，不保存为资料包。任务/快照绑定及旧响应隔离继续有效。
+2. **原生记录的自由元数据绕过序列化边界。** `raw` 等自由字段中的 NaN/Infinity 或数值溢出可能在后续 Pydantic JSON 序列化时变成 `null`；无效 Unicode 又会在来源指纹计算时抛错，中断整份 JSONL。现在摘要计算拒绝非有限数，并把原生记录的指纹计算纳入逐行错误隔离。无法可靠序列化的行报告 `invalid_record`，随后有效记录继续处理；合法大整数、有限数、中文和空值仍可完整往返。
+
+新增 7 项 pytest 回归，其中 6 项故障反例修复前失败、1 项合法数据对照通过；Node 增加原始字节及失败下载两项场景，合计 8 项前端场景。测试见 [test_serialization_integrity.py](../tests/test_serialization_integrity.py)、[test_browser_integration.py](../tests/test_browser_integration.py) 和 [check_frontend_state.cjs](../tests/check_frontend_state.cjs)。
+
+完整检查 **282 项测试通过、无跳过**，其中真实 PostgreSQL 15 项、真实浏览器 5 项。中文说明、静态检查、契约检查及 wheel 构建通过，24 项固定样本评测按当前实现哈希重跑。原生模型的自由字段仍允许保留各种合法 JSON 数据，来源适配器负责拒绝无法可靠进入结果包的数据。

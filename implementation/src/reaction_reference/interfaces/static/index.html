@@ -152,8 +152,8 @@ function lab() {
   return $('temp').value === '' ? null : {max_temperature_c: Number($('temp').value)};
 }
 
-/** 统一请求 JSON 接口：无 body 为 GET，有 body 为 POST；非成功响应抛给调用者显示。 */
-async function api(path, body) {
+/** 统一请求接口：无 body 为 GET，有 body 为 POST；blob 模式保留成功响应原始字节，失败仍解析错误。 */
+async function api(path, body, responseType = 'json') {
   const h = {};
   if ($('token').value) h.Authorization = 'Bearer ' + $('token').value;
   if (body !== undefined) h['Content-Type'] = 'application/json';
@@ -162,6 +162,7 @@ async function api(path, body) {
     headers: h,
     body: body === undefined ? undefined : JSON.stringify(body)
   });
+  if (r.ok && responseType === 'blob') return await r.blob();
   let d;
   try {
     d = await r.json();
@@ -368,9 +369,9 @@ $('download').onclick = async () => {
   if (!expectedRun) return;
   try {
     const query = activeSnapshot ? '?snapshot=' + encodeURIComponent(activeSnapshot) : '';
-    const d = await api('/v1/search-runs/' + expectedRun + '/package' + query);
+    const data = await api('/v1/search-runs/' + expectedRun + '/package' + query, undefined, 'blob');
     if (!active(expectedRun, expectedGeneration)) return;
-    const u = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'}));
+    const u = URL.createObjectURL(data);
     const a = node('a');
     a.href = u;
     a.download = 'reference-' + expectedRun + '.json';

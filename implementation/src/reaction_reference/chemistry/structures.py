@@ -17,8 +17,11 @@ def digest(value, length=24):
     """为可 JSON 序列化的数据生成稳定 SHA-256 摘要。
 
     字典键排序后按 UTF-8 编码，返回前 length 个十六进制字符；用于对象身份和缓存键，不用于加密或口令保存。
+    非有限数和无法编码的 Unicode 抛出 ValueError，由调用方按来源边界处理。
     """
-    data = json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    data = json.dumps(
+        value, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False
+    )
     return hashlib.sha256(data.encode()).hexdigest()[:length]
 
 

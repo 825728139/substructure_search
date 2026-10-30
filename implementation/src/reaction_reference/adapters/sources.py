@@ -189,12 +189,13 @@ class JsonlSource:
         for number, line in lines:
             try:
                 record = import_native(json.loads(line))
+                # 自由元数据也必须可稳定序列化；错误属于当前行，不能阻断其余有效记录。
+                fingerprint = digest(record.model_dump(), 64)
             except (ValueError, KeyError, TypeError) as exc:
                 self.issues.append(
                     {"line": number, "code": "invalid_record", "reason": str(exc)[:300]}
                 )
                 continue
-            fingerprint = digest(record.model_dump(), 64)
             if record.id in identities:
                 if identities[record.id] != fingerprint:
                     conflicted_ids.add(record.id)

@@ -24,6 +24,7 @@ def browser_server(tmp_path_factory):
     root = tmp_path_factory.mktemp("browser-service")
     fixture = Path(Settings.model_fields["source_path"].get_default(call_default_factory=True))
     record = ReactionRecord.model_validate_json(fixture.read_text(encoding="utf-8").splitlines()[0])
+    record = record.model_copy(update={"raw": {**record.raw, "large_counter": 9007199254740993}})
     rows = [
         record.model_copy(
             update={
@@ -170,3 +171,20 @@ def test_browser_can_retry_after_authentication_failure(browser_page):
     page.locator("#submit").click()
     page.locator("#download:not([disabled])").wait_for()
     assert "succeeded" in page.locator("#status").inner_text()
+
+
+def test_browser_download_preserves_original_integer_metadata(browser_page, tmp_path):
+    """下载完整资料包时不能经过 JavaScript 数值重编码，避免合法大整数被舍入。"""
+    page = browser_page
+    page.locator("#submit").click()
+    page.locator("#download:not([disabled])").wait_for()
+    with page.expect_download() as pending:
+        page.locator("#download").click()
+    path = tmp_path / "original.json"
+    pending.value.save_as(path)
+    package = json.loads(path.read_text(encoding="utf-8"))
+    assert package["results"]
+    assert all(
+        reference["record"]["raw"]["large_counter"] == 9007199254740993
+        for reference in package["results"]
+    )

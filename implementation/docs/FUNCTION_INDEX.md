@@ -82,17 +82,17 @@
 | [_compound_source_id](../src/reaction_reference/adapters/sources.py#L38) | 为复合来源标识转义百分号和冒号，避免字段边界碰撞；普通标识保持原有可读格式。 |
 | [import_native](../src/reaction_reference/adapters/sources.py#L43) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
 | [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L163) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L234) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L280) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L284) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L317) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L364) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L371) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L376) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L410) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L476) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L495) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L537) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L235) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L281) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L285) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L318) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L365) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L372) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L377) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L411) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L477) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L496) | 按完整来源组合键或 reaction_id 查询至多一条详情 JSON。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L538) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -142,16 +142,16 @@
 | 函数 | 职责 |
 |---|---|
 | [digest](../src/reaction_reference/chemistry/structures.py#L16) | 为可 JSON 序列化的数据生成稳定 SHA-256 摘要。 |
-| [parse](../src/reaction_reference/chemistry/structures.py#L25) | 将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。 |
-| [parse_material](../src/reaction_reference/chemistry/structures.py#L53) | 解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。 |
-| [without_maps](../src/reaction_reference/chemistry/structures.py#L70) | 复制 Mol 并清除反应原子映射号，返回新分子。 |
-| [canonical](../src/reaction_reference/chemistry/structures.py#L81) | 为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。 |
-| [meets_target](../src/reaction_reference/chemistry/structures.py#L93) | 判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。 |
-| [similarity](../src/reaction_reference/chemistry/structures.py#L113) | 返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。 |
-| [descriptors](../src/reaction_reference/chemistry/structures.py#L126) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
-| [atom_table](../src/reaction_reference/chemistry/structures.py#L137) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
-| [fragment_key](../src/reaction_reference/chemistry/structures.py#L154) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
-| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L206) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
+| [parse](../src/reaction_reference/chemistry/structures.py#L28) | 将 SMILES 解析为 RDKit Mol；无效或空结构抛出 StructureError。 |
+| [parse_material](../src/reaction_reference/chemistry/structures.py#L56) | 解析一个来源材料，拒绝多组分、虚原子和当前不支持的增强立体组。 |
+| [without_maps](../src/reaction_reference/chemistry/structures.py#L73) | 复制 Mol 并清除反应原子映射号，返回新分子。 |
+| [canonical](../src/reaction_reference/chemistry/structures.py#L84) | 为 SMILES 或 Mol 生成去映射号的规范 SMILES 身份键。 |
+| [meets_target](../src/reaction_reference/chemistry/structures.py#L96) | 判断候选是否满足完整目标的连接、同位素、电荷及已指定的立体要求。 |
+| [similarity](../src/reaction_reference/chemistry/structures.py#L116) | 返回两个 Mol 的 radius=2、2048 位 Morgan 指纹 Tanimoto 相似度。 |
+| [descriptors](../src/reaction_reference/chemistry/structures.py#L129) | 计算具体 Mol 的平均摩尔质量（g/mol）和重原子数，返回字典。 |
+| [atom_table](../src/reaction_reference/chemistry/structures.py#L140) | 按传入 Mol 的原子顺序生成目标原子表，含 target:index、元素、同位素和电荷。 |
+| [fragment_key](../src/reaction_reference/chemistry/structures.py#L157) | 把指定片段转为带边界虚原子的结构签名，用于比较完整 R 块。 |
+| [outside_blocks](../src/reaction_reference/chemistry/structures.py#L209) | 从给定核心外提取完整连通 R 块及其所有连接位点。 |
 
 ## src/reaction_reference/domain/models.py
 
@@ -341,11 +341,12 @@
 | 函数 | 职责 |
 |---|---|
 | [browser_server](../tests/test_browser_integration.py#L22) | 启动私有运行目录和二十条合成记录的服务，监听预先分配的本机端口并统一清理。 |
-| [chromium](../tests/test_browser_integration.py#L89) | 打开本机已安装的 Chromium；缺少浏览器时明确跳过，不自动访问外部站点。 |
-| [browser_page](../tests/test_browser_integration.py#L103) | 为每项用例创建独立页面，默认提供正确内部令牌。 |
-| [test_fractional_temperature_can_submit](../tests/test_browser_integration.py#L116) | 后端允许的小数温度必须能通过浏览器表单校验，并按原数值发送请求。 |
-| [test_browser_pagination_structures_rerank_and_download](../tests/test_browser_integration.py#L127) | 真实页面的分页、图片、重排和下载必须始终绑定当前运行及快照。 |
-| [test_browser_can_retry_after_authentication_failure](../tests/test_browser_integration.py#L159) | 错误令牌得到可见错误后，修正令牌可再次提交，不沿用失败任务状态。 |
+| [chromium](../tests/test_browser_integration.py#L90) | 打开本机已安装的 Chromium；缺少浏览器时明确跳过，不自动访问外部站点。 |
+| [browser_page](../tests/test_browser_integration.py#L104) | 为每项用例创建独立页面，默认提供正确内部令牌。 |
+| [test_fractional_temperature_can_submit](../tests/test_browser_integration.py#L117) | 后端允许的小数温度必须能通过浏览器表单校验，并按原数值发送请求。 |
+| [test_browser_pagination_structures_rerank_and_download](../tests/test_browser_integration.py#L128) | 真实页面的分页、图片、重排和下载必须始终绑定当前运行及快照。 |
+| [test_browser_can_retry_after_authentication_failure](../tests/test_browser_integration.py#L160) | 错误令牌得到可见错误后，修正令牌可再次提交，不沿用失败任务状态。 |
+| [test_browser_download_preserves_original_integer_metadata](../tests/test_browser_integration.py#L176) | 下载完整资料包时不能经过 JavaScript 数值重编码，避免合法大整数被舍入。 |
 
 ## tests/test_chemistry.py
 
@@ -417,7 +418,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、异常、下载与当前任务正常显示、串行轮询六个场景。 |
+| [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序状态、分页、异常、下载精度与错误、正常显示及串行轮询八个场景。 |
 
 ## tests/test_global_review.py
 
@@ -693,6 +694,13 @@
 | [large_result_worker](../tests/test_runtime_integrity.py#L577) | 生成大于管道缓冲区的完整消息后立即退出，验证末包不会因进程退出而丢失。 |
 | [test_large_final_message_survives_worker_exit](../tests/test_runtime_integrity.py#L596) | 完整的大结果必须成功落盘，不能把正常进程退出误判为缺失结果。 |
 | [test_closed_manager_rejects_even_an_existing_idempotency_key](../tests/test_runtime_integrity.py#L605) | 关闭后的提交入口不能因幂等缓存命中而绕过生命周期检查。 |
+
+## tests/test_serialization_integrity.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_unserializable_native_metadata_is_isolated](../tests/test_serialization_integrity.py#L13) | 自由元数据中的非有限数和无效 Unicode 不得静默变值，也不能阻断下一条有效记录。 |
+| [test_supported_native_metadata_survives_json_roundtrip](../tests/test_serialization_integrity.py#L31) | 有限数、大整数、中文及空值在合法原生记录的 JSON 往返后保持内容与摘要一致。 |
 
 ## tests/test_service.py
 

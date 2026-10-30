@@ -176,6 +176,8 @@ API 同样复制配置，认证和就绪探测不会随外部对象修改而变�
 
 `RunState.lifecycle=succeeded` 表示本次任务正常返回结果，不代表全库穷尽。在线模式的 `coverage_state` 仍是 `partial`；有限 JSONL 的显式穷尽模式也只能承诺声明的来源/家族范围。
 
+浏览器导出直接保存服务器返回的原始资料包字节，保留合法大整数等元数据；错误响应不会另存为资料包。JSONL 来源中的非有限数和无效 Unicode 会作为坏行隔离，详见[数据边界审查](DATA_BOUNDARY_REVIEW.md)。
+
 读资料包时依次检查 `coverage_state`、`stop_reasons`、`family_states`、`feature_status` 和 `source_issues`。然后看 `statistics.by_layer` 的生成/尝试/命中统计、`preparation_hits` 与 `usage_hits`。材料、实验、家族和建议各有不同去重口径，不能相加当成同一种“命中数”。
 
 正常停止扩展的预算信号是 `BudgetExceeded`，由业务编排捕获并保留结果。来源失败、映射不足、未支持的查询语义有各自原因。父进程还有硬截止，可以终止卡住的原生计算；没有阶段快照时则没有可读取的参考包。
@@ -206,7 +208,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、275 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、282 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 
