@@ -702,5 +702,68 @@
     "function_index_links_verified": 511,
     "business_code_changed": false,
     "live_source_access_performed": false
+  },
+  "concurrent_process_review": {
+    "date": "2026-10-30",
+    "base_commit": "7c50657",
+    "verified_implementation_hash": "11fbaa5199c79dee1e2a59ec7bd9a78d1f8a77d44135794ffc8c470941a77d5f",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "source": "packaged_synthetic_fixture_only",
+    "configuration": {
+      "max_concurrent_runs": 2,
+      "max_queued_runs": 16,
+      "targets": [
+        "CCCNC(=O)c1ccccc1",
+        "CCO",
+        "NCCO",
+        "C1CCCO1"
+      ],
+      "target_repetitions_per_round": 3,
+      "cancellation_indices": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "cancellation_call_threads": 4
+    },
+    "rounds": [
+      {
+        "submitted": 12,
+        "cancellation_requests": 4,
+        "succeeded": 8,
+        "cancelled": 4,
+        "retained_snapshots": 8,
+        "restart_unchanged": true,
+        "no_leftover_workers_or_threads": true
+      },
+      {
+        "submitted": 12,
+        "cancellation_requests": 4,
+        "succeeded": 8,
+        "cancelled": 4,
+        "retained_snapshots": 8,
+        "restart_unchanged": true,
+        "no_leftover_workers_or_threads": true
+      },
+      {
+        "submitted": 12,
+        "cancellation_requests": 4,
+        "succeeded": 8,
+        "cancelled": 4,
+        "retained_snapshots": 8,
+        "restart_unchanged": true,
+        "no_leftover_workers_or_threads": true
+      }
+    ],
+    "submitted_total": 36,
+    "succeeded_total": 24,
+    "cancelled_total": 12,
+    "cancelled_tasks_with_retained_snapshots": 0,
+    "cancellation_after_partial_snapshot_newly_verified": false,
+    "temporary_directories_removed": true,
+    "business_code_changed": false,
+    "live_source_access_performed": false
   }
 }
