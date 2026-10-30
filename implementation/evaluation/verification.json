@@ -1038,5 +1038,44 @@
     "function_index_links_verified": 534,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
+  },
+  "current_wheel_runtime_review": {
+    "date": "2026-10-30",
+    "base_commit": "aa2768b",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "business_code_changed": false,
+    "container_rebuilt": false,
+    "compose_runtime_verified": false,
+    "mirror_documentation_scope_corrected": true,
+    "existing_full_project_tests_passed": 406,
+    "passed": true,
+    "authenticated_readiness": true,
+    "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+    "references": 5,
+    "proposals": 2,
+    "structure_svg": true,
+    "snapshot_pagination": true,
+    "frozen_rerank": true,
+    "scope": "packaged_synthetic_fixture_over_real_http",
+    "installed_environment": {
+      "python": "3.12.12",
+      "package_path": "/tmp/rr-wheel-review-env/lib/python3.12/site-packages/reaction_reference/__init__.py",
+      "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+      "versions": {
+        "rdkit": "2026.3.2",
+        "pydantic": "2.14.2",
+        "fastapi": "0.162.0",
+        "psycopg": "3.3.6"
+      },
+      "development_packages_absent": true
+    },
+    "fixed_secret_cursor_survives_restart": true,
+    "retained_run_states_and_packages": 2,
+    "restart_preserves_states_and_packages": true,
+    "source_is_packaged_fixture": true,
+    "live_source_access_performed": false,
+    "wheel_sha256": "e7d9111a77a9aad78e86a34847a55020f15bd7fdafe09e03b76c577279c5c3ee",
+    "services_stopped_and_run_directory_removed": true
   }
 }

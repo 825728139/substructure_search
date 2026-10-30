@@ -159,7 +159,7 @@ API 必须单协调进程、单 Uvicorn worker；目录锁会拒绝同时写同�
 
 重启时单个损坏状态或快照会单独记录到 `/health/ready` 的 `recovery_issues`，原文件保留，其他有效任务继续恢复；权限或真实磁盘 I/O 错误仍会报错。该机制用于隔离局部损坏，不会自动修复坏文件。
 
-Docker/Compose 配置位于 `deploy/`，在本目录可用 `docker compose -f deploy/compose.yaml up --build` 启动，默认只绑定本机端口。镜像安装 RDKit 绘图需要的系统共享库，并在构建阶段验证绘图模块导入。可通过构建参数 `PIP_INDEX_URL` 指定公开 Python 包镜像；默认使用 PyPI。
+Docker/Compose 配置位于 `deploy/`，在本目录可用 `docker compose -f deploy/compose.yaml up --build` 启动，默认只绑定本机端口。镜像安装 RDKit 绘图需要的系统共享库，并在构建阶段验证绘图模块导入。构建参数 `PIP_INDEX_URL` 仅指定 pip 安装 uv 时使用的镜像，默认使用 PyPI；它不会覆盖 `uv.lock` 中锁定的运行依赖下载地址，当前锁文件使用清华镜像。
 
 本机已使用无特权 Podman 按 Docker 格式构建镜像，并以 UID 10001、只读根目录、独立运行卷验证真实 HTTP、结构图、重排和重启保留。Docker daemon 权限仍不可用，因此 Compose 编排本身只做了配置检查。
 
