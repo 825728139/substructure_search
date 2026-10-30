@@ -144,6 +144,11 @@ class FileRunStore:
         同 snapshot_id 只能重写完全相同的内容；内容冲突抛出 RevisionConflict，防止分页已绑定快照发生变化。
         """
         with self._lock:
+            # model_copy 更新和嵌套列表修改不会重新触发模型校验，发布前再次检查引用关系。
+            try:
+                package.check_links()
+            except ValueError:
+                raise RevisionConflict("Snapshot candidate links are inconsistent") from None
             directory = self._directory(package.run_id)
             path = self._snapshot_path(directory, package.snapshot_id)
             content = package.model_dump_json()

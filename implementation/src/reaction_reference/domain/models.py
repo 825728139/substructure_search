@@ -426,6 +426,23 @@ class ReferencePackage(Model):
     summary_status: Literal["complete", "truncated", "unavailable"] = "complete"
     summary_omitted_items: int = 0
 
+    @model_validator(mode="after")
+    def check_links(self):
+        """保证候选编号唯一、展示引用有效且建议可追溯到本快照参考；损坏时拒绝整个快照。"""
+        reference_ids = {reference.id for reference in self.results}
+        proposal_ids = {proposal.id for proposal in self.proposals}
+        if len(reference_ids) != len(self.results) or len(proposal_ids) != len(self.proposals):
+            raise ValueError("Snapshot candidate IDs must be unique")
+        for displayed, available in (
+            (self.displayed_reference_ids, reference_ids),
+            (self.displayed_proposal_ids, proposal_ids),
+        ):
+            if len(set(displayed)) != len(displayed) or not set(displayed) <= available:
+                raise ValueError("Snapshot display IDs must be unique and reference retained items")
+        if any(proposal.source_reference_id not in reference_ids for proposal in self.proposals):
+            raise ValueError("Snapshot proposals must reference retained source items")
+        return self
+
 
 class RerankRequest(Model):
     """仅改变排序偏好和实验能力，禁止在冻结快照重排时更换目标或候选选择范围。"""

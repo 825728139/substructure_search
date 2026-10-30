@@ -77,10 +77,10 @@
 | [FileRunStore.load](../src/reaction_reference/adapters/run_store.py#L107) | 读取并校验指定 run 的状态，返回 RunState。 |
 | [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L126) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
 | [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L141) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
-| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L158) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
-| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L186) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L214) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L235) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
+| [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L163) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L191) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L219) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L240) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
 
 ## src/reaction_reference/adapters/sources.py
 
@@ -169,6 +169,7 @@
 | [SourceRef.experiment_key](../src/reaction_reference/domain/models.py#L112) | 返回带来源命名空间的实验去重键；不同来源的同名编号不能自动认定为同一实验。 |
 | [ReactionRecord.check_instances](../src/reaction_reference/domain/models.py#L178) | 验证材料 ID 唯一、观察确实指向产品、明确步骤有引文且不承载多步计数。 |
 | [QueryFamily.check_correspondence](../src/reaction_reference/domain/models.py#L237) | 要求非空且唯一的目标原子对应，校验 R 位置不超出核心长度。 |
+| [ReferencePackage.check_links](../src/reaction_reference/domain/models.py#L430) | 保证候选编号唯一、展示引用有效且建议可追溯到本快照参考；损坏时拒绝整个快照。 |
 
 ## src/reaction_reference/evaluation/runner.py
 
@@ -779,6 +780,13 @@
 | [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L164) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L178) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L198) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+
+## tests/test_snapshot_links.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_corrupt_snapshot_links_are_rejected_by_read_endpoints](../tests/test_snapshot_links.py#L28) | 真实检索快照的引用损坏时统一返回冲突，不能报不存在、重复卡片或导出错配内容。 |
+| [test_invalid_copied_snapshot_cannot_replace_latest](../tests/test_snapshot_links.py#L79) | 绕过模型构造的复制更新也须检查引用，写入失败后最新快照仍可完整读取。 |
 
 ## tests/test_snapshot_pagination.py
 
