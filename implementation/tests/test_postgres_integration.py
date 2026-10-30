@@ -510,3 +510,76 @@ def test_indexed_and_jsonl_sources_agree_after_full_family_verification(
         assert not offline.issues
     finally:
         offline.close()
+
+
+@pytest.mark.parametrize("overlay", ["malformed", "duplicate", "missing", "empty"])
+def test_overlay_initialization_releases_real_source_connection(
+    indexed_source_dsn, tmp_path, overlay, monkeypatch
+):
+    """审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。"""
+    import json
+    import time
+
+    from psycopg.conninfo import make_conninfo
+
+    from reaction_reference import bootstrap
+    from reaction_reference.settings import Settings
+
+    path = tmp_path / "review.jsonl"
+    if overlay == "malformed":
+        path.write_text("{broken\n", encoding="utf-8")
+    elif overlay == "duplicate":
+        row = {
+            "record_id": "integration:1",
+            "expected_source_hash": "a" * 64,
+            "reviewer": "资源清理测试",
+            "reviewed_at": "2026-10-30",
+        }
+        path.write_text((json.dumps(row) + "\n") * 2, encoding="utf-8")
+    elif overlay == "empty":
+        path.write_text("", encoding="utf-8")
+    application_name = "rr-overlay-connection-review"
+    settings = Settings(
+        source_kind="postgres",
+        postgres_dsn=make_conninfo(indexed_source_dsn, application_name=application_name),
+        evidence_path=path,
+        store_path=tmp_path / "runs",
+    )
+    opened = []
+    constructor = bootstrap.PostgresSource
+
+    def capture_source(*args, **kwargs):
+        """保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。"""
+        source = constructor(*args, **kwargs)
+        opened.append(source)
+        return source
+
+    monkeypatch.setattr(bootstrap, "PostgresSource", capture_source)
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as observer:
+
+        def connections():
+            """通过独立观察会话检查目标应用名是否仍持有真实数据库连接。"""
+            return observer.execute(
+                "SELECT count(*) FROM pg_stat_activity WHERE application_name=%s",
+                (application_name,),
+            ).fetchone()[0]
+
+        assert connections() == 0
+        if overlay == "empty":
+            source = bootstrap.open_source(settings)
+            try:
+                assert connections() == 1
+                assert not opened[0].connection.closed
+            finally:
+                source.close()
+        else:
+            expected = FileNotFoundError if overlay == "missing" else ValueError
+            with pytest.raises(expected) as failure:
+                bootstrap.open_source(settings)
+            assert failure.value.__traceback__ is not None
+        assert len(opened) == 1 and opened[0].connection.closed
+        # 客户端已经同步关闭；服务端移除会话条目允许有短暂的进程退出延迟。
+        deadline = time.monotonic() + 2
+        while connections():
+            assert time.monotonic() < deadline, "审核来源连接关闭后仍残留数据库会话"
+            time.sleep(0.01)

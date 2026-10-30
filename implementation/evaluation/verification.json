@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 356,
+    "tests_passed": 360,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -866,5 +866,33 @@
     "function_index_links_verified": 520,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
+  },
+  "overlay_resource_review": {
+    "date": "2026-10-30",
+    "base_commit": "7844ace",
+    "verified_implementation_hash": "dc6228b370a1cdee8512f1e98e19359ffc60fc6d2a226173af37f40600c41e52",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "regressions_added": 4,
+    "overlay_cases": [
+      "malformed_json",
+      "duplicate_annotation",
+      "missing_file",
+      "valid_empty_file"
+    ],
+    "real_source_retained_during_assertion": true,
+    "exception_traceback_retained": true,
+    "client_connection_explicitly_closed": true,
+    "no_server_sessions_retained": true,
+    "server_exit_allowance_seconds": 2,
+    "postgres_integration_cases_passed": 24,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 91,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 523,
+    "function_index_links_verified": 523,
+    "business_code_changed": false,
+    "live_source_access_performed": false
   }
 }

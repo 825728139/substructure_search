@@ -508,6 +508,9 @@
 | [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L374) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L427) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L474) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
+| [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L516) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
+| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L551) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
+| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L560) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
 
 ## tests/test_query_input_planning.py
 
