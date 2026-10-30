@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 340,
+    "tests_passed": 342,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -677,5 +677,30 @@
     "function_index_links_verified": 509,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
+  },
+  "snapshot_pagination_review": {
+    "date": "2026-10-30",
+    "base_commit": "f4f45ab",
+    "verified_implementation_hash": "11fbaa5199c79dee1e2a59ec7bd9a78d1f8a77d44135794ffc8c470941a77d5f",
+    "report": "docs/CODE_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "regressions_added": 2,
+    "latest_snapshot_changed_during_pagination": true,
+    "old_cursor_and_export_remain_snapshot_bound": true,
+    "restart_with_fixed_cursor_secret_verified": true,
+    "invalid_http_probe_cases": 13,
+    "http_probe_statuses": {
+      "400": 2,
+      "422": 11
+    },
+    "postgres_integration_cases_passed": 17,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 90,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 511,
+    "function_index_links_verified": 511,
+    "business_code_changed": false,
+    "live_source_access_performed": false
   }
 }

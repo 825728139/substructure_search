@@ -756,6 +756,13 @@
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L130) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L150) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
 
+## tests/test_snapshot_pagination.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_cursor_keeps_original_snapshot_after_latest_changes](../tests/test_snapshot_pagination.py#L15) | 发布新快照后，旧游标和指定快照导出仍读取旧内容；固定密钥使重启后行为一致。 |
+| [assert_snapshot_pages](../tests/test_snapshot_pagination.py#L63) | 核对旧游标、新首屏及指定快照导出各自绑定正确的不可变内容。 |
+
 ## tests/test_source_identifiers.py
 
 | 函数 | 职责 |
