@@ -330,6 +330,17 @@
 | [test_rules_compile_and_have_regression_scope](../tests/test_architecture.py#L39) | 确认随包规则可编译、含内容哈希并显式列出未支持范围。 |
 | [test_contract_schema_is_exported](../tests/test_architecture.py#L46) | 比较已提交请求 Schema 与当前模型导出，防止接口契约悄然漂移。 |
 
+## tests/test_browser_integration.py
+
+| 函数 | 职责 |
+|---|---|
+| [browser_server](../tests/test_browser_integration.py#L22) | 启动私有运行目录和二十条合成记录的服务，监听预先分配的本机端口并统一清理。 |
+| [chromium](../tests/test_browser_integration.py#L89) | 打开本机已安装的 Chromium；缺少浏览器时明确跳过，不自动访问外部站点。 |
+| [browser_page](../tests/test_browser_integration.py#L103) | 为每项用例创建独立页面，默认提供正确内部令牌。 |
+| [test_fractional_temperature_can_submit](../tests/test_browser_integration.py#L116) | 后端允许的小数温度必须能通过浏览器表单校验，并按原数值发送请求。 |
+| [test_browser_pagination_structures_rerank_and_download](../tests/test_browser_integration.py#L127) | 真实页面的分页、图片、重排和下载必须始终绑定当前运行及快照。 |
+| [test_browser_can_retry_after_authentication_failure](../tests/test_browser_integration.py#L159) | 错误令牌得到可见错误后，修正令牌可再次提交，不沿用失败任务状态。 |
+
 ## tests/test_chemistry.py
 
 | 函数 | 职责 |
@@ -443,6 +454,20 @@
 | [test_shared_structure_witness_is_bound_to_each_actual_experiment](../tests/test_pipeline.py#L339) | 确认结构核验可复用，但返回见证 ID 必须分别绑定不同实验来源。 |
 | [test_missing_operation_fields_do_not_rank_as_easy_conditions](../tests/test_pipeline.py#L375) | 确认缺失温度/时长不能在操作偏好下获得比已知条件更容易的优势。 |
 | [test_operation_preference_does_not_assume_zero_celsius_is_room_temperature](../tests/test_pipeline.py#L400) | 确认操作偏好以公开的 25°C 为参照，不把需要制冷的 0°C 当作室温。 |
+
+## tests/test_postgres_integration.py
+
+| 函数 | 职责 |
+|---|---|
+| [postgres_cluster](../tests/test_postgres_integration.py#L18) | 使用本机二进制启动私有 Unix socket 测试库，退出时停止，不接受外部连接配置。 |
+| [indexed_source_dsn](../tests/test_postgres_integration.py#L79) | 为每项测试重建临时反应表、化学索引和三条示例，字段与生产适配器投影一致。 |
+| [carbon_family](../tests/test_postgres_integration.py#L137) | 构造固定一个碳的家族，用于区分来源分页与应用层完整核验的职责。 |
+| [test_indexed_cursor_pages_and_read_only_session](../tests/test_postgres_integration.py#L151) | 真实服务端游标按页返回全部材料，严格只读事务拒绝写入。 |
+| [test_knn_selection_and_detail_hydration](../tests/test_postgres_integration.py#L178) | 真实指纹近邻首项命中乙醇，详情名称通过结构对应，并可切换独立子结构通道。 |
+| [test_query_timeout_preserves_independent_query](../tests/test_postgres_integration.py#L202) | 真正的表锁等待触发查询超时，回滚保存点后另一个家族仍可使用同一来源会话。 |
+| [test_repeatable_read_keeps_material_fields_frozen](../tests/test_postgres_integration.py#L217) | 来源建立快照后其他会话更新原行，本次查询和详情仍必须对应旧材料结构。 |
+| [test_sql_row_paging_survives_dirty_and_multiple_materials](../tests/test_postgres_integration.py#L231) | SQL 游标按行推进，脏行不提前终结流，多产物行也不能跳过后一行。 |
+| [test_indexed_source_runs_the_full_search_pipeline](../tests/test_postgres_integration.py#L257) | 真实 PG 候选、结构核验和详情共同生成资料包，产品字段不升级成制备证据。 |
 
 ## tests/test_reactions.py
 

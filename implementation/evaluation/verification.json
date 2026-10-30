@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "2e48790b2488dd868f4ce89bc2a34727eaacdb21bff68f5398acdc0387b13fe2",
+  "implementation_hash": "cf092b93edfdf5e56b097470963a8bf1edda4f51a092b313099c1fbbc85c898f",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 219,
+    "tests_passed": 231,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -58,7 +58,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "2e48790b2488dd868f4ce89bc2a34727eaacdb21bff68f5398acdc0387b13fe2"
+    "implementation_hash": "cf092b93edfdf5e56b097470963a8bf1edda4f51a092b313099c1fbbc85c898f"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -273,5 +273,29 @@
     "chemistry_rules_changed": false,
     "indexed_source_queries_executed": false,
     "container_runtime_verified": false
+  },
+  "real_integration_review": {
+    "date": "2026-10-30",
+    "base_commit": "d85eb3d",
+    "verified_implementation_hash": "cf092b93edfdf5e56b097470963a8bf1edda4f51a092b313099c1fbbc85c898f",
+    "report": "docs/CODE_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 12,
+    "initial_browser_counterexamples_failed": 2,
+    "postgres_integration_cases_passed": 8,
+    "real_browser_cases_passed": 4,
+    "postgres_version": "18.3",
+    "rdkit_sql_version": "0.77.0",
+    "playwright_version": "1.64.1",
+    "live_source_access_scope": "read_only_information_schema_column_types_only",
+    "live_reaction_rows_read": false,
+    "temporary_test_servers_stopped": true,
+    "python_modules_documented": 81,
+    "python_classes_documented": 66,
+    "python_named_functions_documented": 451,
+    "function_index_links_verified": 451,
+    "production_query_plan_verified": false,
+    "full_corpus_performance_verified": false,
+    "pixel_visual_regression_verified": false
   }
 }
