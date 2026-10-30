@@ -1040,18 +1040,9 @@
     "chemistry_rules_changed": false
   },
   "current_wheel_runtime_review": {
-    "date": "2026-10-30",
-    "base_commit": "aa2768b",
-    "report": "docs/RUNTIME_REVIEW.md",
-    "confirmed_new_bug_categories": 0,
-    "business_code_changed": false,
-    "container_rebuilt": false,
-    "compose_runtime_verified": false,
-    "mirror_documentation_scope_corrected": true,
-    "existing_full_project_tests_passed": 406,
     "passed": true,
     "authenticated_readiness": true,
-    "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+    "implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390",
     "references": 5,
     "proposals": 2,
     "structure_svg": true,
@@ -1061,7 +1052,7 @@
     "installed_environment": {
       "python": "3.12.12",
       "package_path": "/tmp/rr-wheel-review-env/lib/python3.12/site-packages/reaction_reference/__init__.py",
-      "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+      "implementation_hash": "b14820a327885b285b7b11c2df78117e99db40c57d01c9e20bdeaf96d7507390",
       "versions": {
         "rdkit": "2026.3.2",
         "pydantic": "2.14.2",
@@ -1075,8 +1066,25 @@
     "restart_preserves_states_and_packages": true,
     "source_is_packaged_fixture": true,
     "live_source_access_performed": false,
-    "wheel_sha256": "e7d9111a77a9aad78e86a34847a55020f15bd7fdafe09e03b76c577279c5c3ee",
-    "services_stopped_and_run_directory_removed": true
+    "wheel_sha256": "4060f46c1f06d67d76147f6f1981eacdca337ac483613dac9a5701a7bd9194ad",
+    "services_stopped_and_run_directory_removed": true,
+    "date": "2026-10-30",
+    "base_commit": "bd3f43d",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "business_code_changed": false,
+    "container_rebuilt": false,
+    "compose_runtime_verified": false,
+    "existing_full_project_tests_passed": 458,
+    "installed_cli_checks": {
+      "passed": true,
+      "installed_cli_preview": true,
+      "existing_output_mode_preserved": true,
+      "preview_does_not_create_run_store": true,
+      "installed_cli_schema_documents": 8,
+      "temporary_files_cleaned": true,
+      "isolated_work_directory_removed": true
+    }
   },
   "combined_lab_constraints_review": {
     "date": "2026-10-30",
@@ -1344,5 +1352,44 @@
     "postgres_integration_cases_passed": 37,
     "real_browser_cases_passed": 7,
     "node_scenarios_passed": 12
+  },
+  "previous_wheel_runtime_review_aa2768b": {
+    "date": "2026-10-30",
+    "base_commit": "aa2768b",
+    "report": "docs/RUNTIME_REVIEW.md",
+    "confirmed_new_bug_categories": 0,
+    "business_code_changed": false,
+    "container_rebuilt": false,
+    "compose_runtime_verified": false,
+    "mirror_documentation_scope_corrected": true,
+    "existing_full_project_tests_passed": 406,
+    "passed": true,
+    "authenticated_readiness": true,
+    "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+    "references": 5,
+    "proposals": 2,
+    "structure_svg": true,
+    "snapshot_pagination": true,
+    "frozen_rerank": true,
+    "scope": "packaged_synthetic_fixture_over_real_http",
+    "installed_environment": {
+      "python": "3.12.12",
+      "package_path": "/tmp/rr-wheel-review-env/lib/python3.12/site-packages/reaction_reference/__init__.py",
+      "implementation_hash": "2f89ea334f1d3939dc921bf21a5db9b8119761d1076635cea9a1e15703811662",
+      "versions": {
+        "rdkit": "2026.3.2",
+        "pydantic": "2.14.2",
+        "fastapi": "0.162.0",
+        "psycopg": "3.3.6"
+      },
+      "development_packages_absent": true
+    },
+    "fixed_secret_cursor_survives_restart": true,
+    "retained_run_states_and_packages": 2,
+    "restart_preserves_states_and_packages": true,
+    "source_is_packaged_fixture": true,
+    "live_source_access_performed": false,
+    "wheel_sha256": "e7d9111a77a9aad78e86a34847a55020f15bd7fdafe09e03b76c577279c5c3ee",
+    "services_stopped_and_run_directory_removed": true
   }
 }
