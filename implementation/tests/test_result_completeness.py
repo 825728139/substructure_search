@@ -1,12 +1,14 @@
 """结果范围回归：输入通道的局部缺口和材料关联上限不能被误报为完整或截断。"""
 
+import json
 from types import SimpleNamespace
 
 import pytest
 
 import reaction_reference.application.search as search_module
-from reaction_reference.adapters.sources import import_native
-from reaction_reference.domain.models import QueryFamily
+from reaction_reference.adapters.sources import JsonlSource, import_native
+from reaction_reference.chemistry.structures import canonical
+from reaction_reference.domain.models import Observation, QueryFamily
 from reaction_reference.evidence.relations import material_relations
 from reaction_reference.ports.sources import Candidate, CandidatePage
 
@@ -81,3 +83,76 @@ def test_material_relation_limit_only_marks_real_omission(count):
     relations, complete = material_relations(references)
     assert len(relations) == min(count, 100)
     assert complete is (count <= 100)
+
+
+@pytest.mark.parametrize(
+    "product,input_smiles,linked,complete",
+    [
+        ("*CC", "*CC", False, False),
+        ("CC.[Na+]", "CC.[Na+]", False, False),
+        ("C[C@H](F)Cl |&1:1|", "C[C@H](F)Cl", False, False),
+        ("invalid(", "invalid(", False, False),
+        ("[13CH3]CO", "[13CH3]CO", True, True),
+        ("C[C@H](F)Cl", "C[C@@H](F)Cl", False, True),
+    ],
+)
+def test_material_relations_respect_supported_identity_scope(
+    tmp_path, request_factory, product, input_smiles, linked, complete
+):
+    """关联必须使用检索认可的具体材料身份；坏材料不抹掉有效关联，也不伪报枚举完整。"""
+    producer = import_native({"id": "producer", "product_smiles": ["CCO", product]})
+    producer = producer.model_copy(
+        update={
+            "observations": [
+                Observation(
+                    product_instance_id=producer.materials[-1].instance_id,
+                    result="reported_prepared",
+                    evidence_text="仅用于验证关联支持的测试声明，不是真实实验。",
+                    source_location="测试资料",
+                )
+            ]
+        }
+    )
+    consumer = import_native({"id": "consumer", "reactant_smiles": ["CCO", input_smiles]})
+    consumer = consumer.model_copy(
+        update={
+            "materials": [m.model_copy(update={"actual_input": True}) for m in consumer.materials]
+        }
+    )
+    references = [SimpleNamespace(record=record) for record in (producer, consumer)]
+    relations, actual_complete = material_relations(references)
+    expected = {"CCO"} | ({canonical(product)} if linked else set())
+    assert {relation["material_smiles"] for relation in relations} == expected
+    assert actual_complete is complete
+    if linked:
+        matching = next(r for r in relations if r["material_smiles"] == canonical(product))
+        assert matching["support"] == "reported_preparation_and_use"
+    path = tmp_path / "records.jsonl"
+    path.write_text(
+        "\n".join(json.dumps(record.model_dump()) for record in (producer, consumer)) + "\n",
+        encoding="utf-8",
+    )
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search_module.search(
+            request_factory(
+                "CCO",
+                options={
+                    "include_proposals": False,
+                    "directed_followups": False,
+                    "exhaustive_fixture": True,
+                },
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        assert {reference.record.id for reference in package.results} == {
+            producer.id,
+            consumer.id,
+        }
+        assert {relation["material_smiles"] for relation in package.material_relations} == expected
+        assert package.feature_status["returned_material_relations"].state == (
+            "completed" if complete else "partial"
+        )
+    finally:
+        source.close()

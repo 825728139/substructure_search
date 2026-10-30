@@ -126,8 +126,8 @@
 |---|---|
 | [search](../src/reaction_reference/application/search.py#L40) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
 | [search.package](../src/reaction_reference/application/search.py#L81) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L257) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L267) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search.publish](../src/reaction_reference/application/search.py#L262) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L272) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -582,10 +582,11 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_usage_status_respects_actual_evaluated_scope](../tests/test_result_completeness.py#L15) | 输入通道已读完但核验、来源范围或详情有缺口时，只能声明部分完成。 |
-| [test_usage_status_respects_actual_evaluated_scope.Source.candidate_page](../tests/test_result_completeness.py#L36) | 返回已经耗尽的一页，可单独标记输入选择范围不完整。 |
-| [test_usage_status_respects_actual_evaluated_scope.Source.hydrate](../tests/test_result_completeness.py#L47) | 按用例模拟详情失败，其余情况返回同一个完整材料记录。 |
-| [test_material_relation_limit_only_marks_real_omission](../tests/test_result_completeness.py#L73) | 实际关联少于、恰好等于或超过默认上限时，只有确实遗漏关联才报告截断。 |
+| [test_usage_status_respects_actual_evaluated_scope](../tests/test_result_completeness.py#L17) | 输入通道已读完但核验、来源范围或详情有缺口时，只能声明部分完成。 |
+| [test_usage_status_respects_actual_evaluated_scope.Source.candidate_page](../tests/test_result_completeness.py#L38) | 返回已经耗尽的一页，可单独标记输入选择范围不完整。 |
+| [test_usage_status_respects_actual_evaluated_scope.Source.hydrate](../tests/test_result_completeness.py#L49) | 按用例模拟详情失败，其余情况返回同一个完整材料记录。 |
+| [test_material_relation_limit_only_marks_real_omission](../tests/test_result_completeness.py#L75) | 实际关联少于、恰好等于或超过默认上限时，只有确实遗漏关联才报告截断。 |
+| [test_material_relations_respect_supported_identity_scope](../tests/test_result_completeness.py#L99) | 关联必须使用检索认可的具体材料身份；坏材料不抹掉有效关联，也不伪报枚举完整。 |
 
 ## tests/test_review_regressions.py
 

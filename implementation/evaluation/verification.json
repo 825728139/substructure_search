@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-10-30",
-  "implementation_hash": "94d3264c700480791c5c83c9e03d20249c34916da83cf1a2b9a75cded23e7e26",
+  "implementation_hash": "9c23a40c627bfb66f870da5a7d6ac60aa3fd860486425e238b23e5c582cb8f2a",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 315,
+    "tests_passed": 321,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "94d3264c700480791c5c83c9e03d20249c34916da83cf1a2b9a75cded23e7e26"
+    "implementation_hash": "9c23a40c627bfb66f870da5a7d6ac60aa3fd860486425e238b23e5c582cb8f2a"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -575,6 +575,25 @@
     "python_classes_documented": 67,
     "python_named_functions_documented": 503,
     "function_index_links_verified": 503,
+    "live_source_access_performed": false,
+    "chemistry_rules_changed": false
+  },
+  "material_identity_review": {
+    "date": "2026-10-30",
+    "base_commit": "cabfb41",
+    "verified_implementation_hash": "9c23a40c627bfb66f870da5a7d6ac60aa3fd860486425e238b23e5c582cb8f2a",
+    "report": "docs/CODE_REVIEW.md",
+    "fixed_bug_categories": 1,
+    "regressions_added": 6,
+    "initial_failures": 4,
+    "initial_passing_controls": 2,
+    "postgres_integration_cases_passed": 15,
+    "real_browser_cases_passed": 6,
+    "node_scenarios_passed": 10,
+    "python_modules_documented": 87,
+    "python_classes_documented": 67,
+    "python_named_functions_documented": 504,
+    "function_index_links_verified": 504,
     "live_source_access_performed": false,
     "chemistry_rules_changed": false
   }

@@ -200,7 +200,12 @@ def search(request, source, *, run_id=None, on_progress=None):
                 ),
                 "returned_material_relations": FeatureStatus(
                     state="completed" if relations_complete else "partial",
-                    reason="scope_is_returned_records_only_not_route_validation",
+                    reason="scope_is_returned_records_only_not_route_validation"
+                    + (
+                        ";identity_or_relation_enumeration_incomplete"
+                        if not relations_complete
+                        else ""
+                    ),
                 ),
                 "advanced_chemical_views": FeatureStatus(
                     state="not_supported", reason=",".join(unsupported)
