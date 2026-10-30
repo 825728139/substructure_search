@@ -124,7 +124,7 @@ implementation/
 
 重排资料包保留原检索的 `manifest.implementation_hash`，另用 `rerank_implementation_hash` 和 `reranked_at` 标明本次排序的实现与时间。近期反例及修复见[三轮复审记录](MULTI_ROUND_REVIEW.md)。
 
-`active_writer` 登记同步重排的生命周期；关闭会等待已登记写操作结束再释放目录锁。排序期间不持有全局协调锁，其他任务仍可取消。排队任务直接取消 Future，SDK 默认等待包含排队时间；通信与持久化的故障路径见[执行层审查](RUNTIME_REVIEW.md)。
+`active_writer` 登记同步重排的生命周期；关闭会等待已登记写操作结束再释放目录锁。排序期间不持有全局协调锁，其他任务仍可取消。排队任务直接取消 Future，SDK 默认等待包含排队时间；关闭触发的取消即使先唤醒等待者、后执行完成回调，等待路径也会先保存取消终态再返回。损坏的幂等绑定返回冲突，不按新请求重复接纳；通信与持久化的故障路径见[执行层审查](RUNTIME_REVIEW.md)。
 
 客户端复制传入配置；任务接纳和重排时复制、重校验请求，返回状态也与后台对象隔离。调用方之后修改原对象的嵌套列表，不会改变已经接纳的任务；需要不同要求时创建新请求。
 
@@ -200,7 +200,7 @@ implementation/.venv/bin/python implementation/scripts/check_comments.py --write
 implementation/.venv/bin/python implementation/scripts/check.py
 ```
 
-检查包括中文说明覆盖、Ruff、mypy、231 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
+检查包括中文说明覆盖、Ruff、mypy、244 项回归、契约漂移和 wheel 构建。真实来源/浏览器集成需要额外测试环境，缺失会跳过；安装及运行方法见[项目说明](../README.md#真实来源和浏览器集成检查)。中文检查覆盖业务源码、测试、仓库根目录脚本、`reviews/` 和绘图脚本，逐行核对 docstring 并使用 Python 词法分析提取独立及行尾注释。只有 shebang、`type: ignore` 等工具指令按语法保留，其后附带的人工解释仍需使用中文。检查可以发现遗漏和纯英文说明，内容是否准确仍需对照实现审查。前端函数与匿名事件回调的中文说明在页面源码中人工维护；前端异步回归需要 Node.js，缺失时 pytest 会明确显示跳过。本轮问题与针对性测试见[整体代码审查记录](CODE_REVIEW.md)。
 
 Pydantic 类说明和 API 处理函数说明会进入 JSON Schema / OpenAPI。修改这些说明后，在仓库根目录执行导出：
 

@@ -2,15 +2,128 @@
 
 import threading
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 
 import pytest
 from fastapi.testclient import TestClient
 
 from reaction_reference.adapters import execution
+from reaction_reference.adapters.run_store import RevisionConflict
 from reaction_reference.domain.models import LabContext, ReferencePackage, RerankRequest, RunState
 from reaction_reference.interfaces.api import create_app
 from reaction_reference.interfaces.sdk import Client
+
+
+@pytest.mark.parametrize("conflicting_requests", [False, True])
+def test_simultaneous_idempotent_submissions_create_only_one_run(
+    settings, request_factory, monkeypatch, conflicting_requests
+):
+    """十二个线程同时使用同一幂等键，只能创建一个任务；不同请求必须明确冲突。"""
+    barrier, release = threading.Barrier(12), threading.Event()
+    with Client(settings) as client:
+
+        def held(state, cancellation):
+            """暂停唯一已接纳任务，防止完成速度影响并发提交验证。"""
+            assert release.wait(5)
+            client.manager._finish(state.run_id, "cancelled")
+
+        def submit(index):
+            """同时提交相同或冲突请求，保留结果与本次请求的对应关系。"""
+            smiles = "CCN" if conflicting_requests and index % 2 else "CCO"
+            barrier.wait(timeout=3)
+            try:
+                state = client.manager.submit(request_factory(smiles), idempotency_key="shared")
+                return smiles, state
+            except RevisionConflict:
+                return smiles, None
+
+        monkeypatch.setattr(client.manager, "_supervise", held)
+        try:
+            with ThreadPoolExecutor(max_workers=12) as callers:
+                results = list(callers.map(submit, range(12)))
+            accepted = [(smiles, state) for smiles, state in results if state is not None]
+            assert len(accepted) == (6 if conflicting_requests else 12)
+            assert len({state.run_id for _, state in accepted}) == 1
+            winner = accepted[0][1]
+            assert all(smiles == state.request.target.value for smiles, state in accepted)
+            assert all(
+                smiles != winner.request.target.value for smiles, state in results if state is None
+            )
+            assert len(list(settings.store_path.glob("*/state.json"))) == 1
+        finally:
+            release.set()
+
+
+@pytest.mark.parametrize("already_waiting", [False, True])
+def test_shutdown_cancelled_wait_returns_terminal_before_release_callback(
+    settings, request_factory, monkeypatch, already_waiting
+):
+    """关闭取消排队任务时，即使完成回调尚未执行，wait 也不能返回旧的 queued 状态。"""
+    entered, release_worker = threading.Event(), threading.Event()
+    callback_entered, release_callback = threading.Event(), threading.Event()
+    waiting = threading.Event()
+    results, errors = [], []
+    client = Client(settings.model_copy(update={"max_concurrent_runs": 1}))
+    manager = client.manager
+    original_release = manager._release
+
+    def blocked(state, cancellation):
+        """占用唯一执行线程，使后一个任务确定地停在队列中。"""
+        entered.set()
+        assert release_worker.wait(5)
+        manager._finish(state.run_id, "cancelled")
+
+    def delayed_release(run_id, future):
+        """暂停取消后的完成回调，暴露 Future 唤醒早于持久化终态的窗口。"""
+        if future.cancelled():
+            callback_entered.set()
+            assert release_callback.wait(5)
+        original_release(run_id, future)
+
+    def wait_for_run(run_id):
+        """收集等待结果和异常，供主线程检查实际返回的生命周期。"""
+        try:
+            results.append(manager.wait(run_id))
+        except Exception as exc:
+            errors.append(exc)
+
+    monkeypatch.setattr(manager, "_supervise", blocked)
+    monkeypatch.setattr(manager, "_release", delayed_release)
+    waiter = closer = None
+    try:
+        manager.submit(request_factory())
+        assert entered.wait(2)
+        queued = manager.submit(request_factory())
+        future = manager._futures[queued.run_id]
+        original_result = future.result
+
+        def observed_result(timeout=None):
+            """确认 wait 已取得 Future，并进入其正常等待路径。"""
+            waiting.set()
+            return original_result(timeout)
+
+        monkeypatch.setattr(future, "result", observed_result)
+        waiter = threading.Thread(target=wait_for_run, args=(queued.run_id,))
+        if already_waiting:
+            waiter.start()
+            assert waiting.wait(2)
+        closer = threading.Thread(target=client.close)
+        closer.start()
+        assert callback_entered.wait(2)
+        if not already_waiting:
+            waiter.start()
+        waiter.join(2)
+        assert not waiter.is_alive() and not errors
+        assert len(results) == 1 and results[0].lifecycle == "cancelled"
+    finally:
+        release_callback.set()
+        release_worker.set()
+        if waiter is not None and waiter.ident is not None:
+            waiter.join(3)
+        if closer is not None:
+            closer.join(3)
+        client.close()
 
 
 @pytest.mark.parametrize("mutate_returned", [False, True])

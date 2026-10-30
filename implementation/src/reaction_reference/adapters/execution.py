@@ -396,7 +396,9 @@ class RunManager:
             try:
                 future.result(timeout=timeout)
             except CancelledError:
-                pass
+                # Future 先唤醒等待者再执行完成回调；关闭线程可能尚未保存取消终态。
+                # 共用幂等收尾，避免把已取消任务的旧 queued 状态返回给调用方。
+                return self._finish(run_id, "cancelled")
         with self._lock:
             return self.store.load(run_id)
 

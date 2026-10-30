@@ -191,7 +191,19 @@ class FileRunStore:
         with self._lock:
             path = self.root / f"idempotency-{digest([owner, key])}.json"
             if path.is_file():
-                saved = json.loads(path.read_text(encoding="utf-8"))
+                try:
+                    saved = json.loads(path.read_text(encoding="utf-8"))
+                    if (
+                        not isinstance(saved, dict)
+                        or not isinstance(saved.get("request_hash"), str)
+                        or not saved["request_hash"]
+                        or not isinstance(saved.get("run_id"), str)
+                    ):
+                        raise ValueError()
+                    self._directory(saved["run_id"])
+                except (ValueError, KeyError):
+                    # 损坏的已有绑定不能当作未绑定，否则同一个重试键会重复创建任务。
+                    raise RevisionConflict("Stored idempotency binding is unreadable") from None
                 if saved["request_hash"] != request_hash:
                     raise RevisionConflict("Idempotency key is bound to a different request")
                 return saved["run_id"]

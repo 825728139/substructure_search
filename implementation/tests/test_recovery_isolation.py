@@ -9,9 +9,54 @@ from fastapi.testclient import TestClient
 
 from reaction_reference.adapters.run_store import FileRunStore, RevisionConflict
 from reaction_reference.adapters.sources import JsonlSource
+from reaction_reference.chemistry.structures import digest
 from reaction_reference.domain.models import ReferencePackage, RunState
 from reaction_reference.interfaces.api import create_app
 from reaction_reference.interfaces.sdk import Client
+
+
+@pytest.mark.parametrize("run_id", [None, "", False, [], "invalid-id"])
+def test_corrupt_idempotency_binding_cannot_be_treated_as_a_new_request(
+    settings, request_factory, run_id
+):
+    """幂等文件中的任务编号损坏时明确报冲突，不能把空编号视为未绑定而重复创建任务。"""
+    store = FileRunStore(settings.store_path)
+    request_hash = digest(request_factory().model_dump())
+    path = settings.store_path / f"idempotency-{digest(['internal', 'retry'])}.json"
+    content = json.dumps({"request_hash": request_hash, "run_id": run_id})
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(RevisionConflict, match="idempotency"):
+        store.idempotency("internal", "retry", request_hash)
+    assert path.read_text(encoding="utf-8") == content
+    assert store.idempotency("internal", "unrelated", request_hash) is None
+
+
+@pytest.mark.parametrize("content", ["{broken", "[]", "null"])
+def test_malformed_idempotency_file_has_a_controlled_error(settings, content):
+    """非法 JSON 或错误对象类型应转换为统一冲突错误，不泄漏解析异常和类型异常。"""
+    store = FileRunStore(settings.store_path)
+    path = settings.store_path / f"idempotency-{digest(['internal', 'retry'])}.json"
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(RevisionConflict, match="idempotency"):
+        store.idempotency("internal", "retry", "request-hash")
+
+
+def test_api_rejects_corrupt_idempotency_binding_without_creating_run(settings, request_factory):
+    """重试遇到损坏的幂等关联返回 409，不能再次接纳同一业务请求。"""
+    request = request_factory()
+    with TestClient(create_app(settings)) as client:
+        path = settings.store_path / f"idempotency-{digest(['internal', 'retry'])}.json"
+        path.write_text(
+            json.dumps({"request_hash": digest(request.model_dump()), "run_id": None}),
+            encoding="utf-8",
+        )
+        response = client.post(
+            "/v1/search-runs",
+            headers={"Idempotency-Key": "retry"},
+            json=request.model_dump(mode="json"),
+        )
+        assert response.status_code == 409
+        assert not list(settings.store_path.glob("*/state.json"))
 
 
 @pytest.mark.parametrize(

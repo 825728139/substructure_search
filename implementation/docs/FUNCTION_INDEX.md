@@ -46,8 +46,8 @@
 | [RunManager._finish](../src/reaction_reference/adapters/execution.py#L340) | 在锁内把非终态 run 写为给定终态并返回状态。 |
 | [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L364) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
 | [RunManager.wait](../src/reaction_reference/adapters/execution.py#L387) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L404) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L417) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L406) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L419) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
@@ -71,8 +71,8 @@
 | [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L141) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
 | [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L158) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
 | [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L186) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L202) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L223) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L214) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L235) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
 
 ## src/reaction_reference/adapters/sources.py
 
@@ -494,37 +494,48 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_invalid_row_is_isolated_and_valid_rows_survive](../tests/test_recovery_isolation.py#L32) | 非法行类型和伪空数组必须记录问题，随后合法记录继续进入候选池。 |
-| [test_optional_missing_or_null_source_fields_remain_supported](../tests/test_recovery_isolation.py#L47) | 可选字段缺失、显式 null 和合法空数组仍按既有来源约定接受。 |
-| [running_state](../tests/test_recovery_isolation.py#L55) | 保存可正常恢复的运行中状态。 |
-| [test_corrupt_run_is_reported_without_blocking_other_runs](../tests/test_recovery_isolation.py#L70) | 一个坏状态文件不能阻断另一有效任务的重启收尾，原坏文件保持原样。 |
-| [test_unrelated_directory_does_not_participate_in_recovery](../tests/test_recovery_isolation.py#L90) | 运行根目录下的备忘或备份目录不是任务，不能因同名状态文件阻断启动。 |
-| [test_corrupt_snapshot_does_not_block_terminal_recovery](../tests/test_recovery_isolation.py#L104) | 状态有效但阶段包损坏时仍能标记任务中断，明确快照不可读且不改写原坏文件。 |
-| [test_health_reports_isolated_recovery_issues](../tests/test_recovery_isolation.py#L140) | 服务就绪响应应披露被隔离的旧任务，不能静默掩盖本地损坏。 |
-| [test_real_storage_io_failure_still_blocks_startup](../tests/test_recovery_isolation.py#L156) | 真实权限或存储 I/O 错误不能当作单条数据损坏忽略，应明确阻止不可靠启动。 |
-| [test_real_storage_io_failure_still_blocks_startup.unreadable](../tests/test_recovery_isolation.py#L161) | 模拟文件系统拒绝读取。 |
+| [test_corrupt_idempotency_binding_cannot_be_treated_as_a_new_request](../tests/test_recovery_isolation.py#L19) | 幂等文件中的任务编号损坏时明确报冲突，不能把空编号视为未绑定而重复创建任务。 |
+| [test_malformed_idempotency_file_has_a_controlled_error](../tests/test_recovery_isolation.py#L35) | 非法 JSON 或错误对象类型应转换为统一冲突错误，不泄漏解析异常和类型异常。 |
+| [test_api_rejects_corrupt_idempotency_binding_without_creating_run](../tests/test_recovery_isolation.py#L44) | 重试遇到损坏的幂等关联返回 409，不能再次接纳同一业务请求。 |
+| [test_invalid_row_is_isolated_and_valid_rows_survive](../tests/test_recovery_isolation.py#L77) | 非法行类型和伪空数组必须记录问题，随后合法记录继续进入候选池。 |
+| [test_optional_missing_or_null_source_fields_remain_supported](../tests/test_recovery_isolation.py#L92) | 可选字段缺失、显式 null 和合法空数组仍按既有来源约定接受。 |
+| [running_state](../tests/test_recovery_isolation.py#L100) | 保存可正常恢复的运行中状态。 |
+| [test_corrupt_run_is_reported_without_blocking_other_runs](../tests/test_recovery_isolation.py#L115) | 一个坏状态文件不能阻断另一有效任务的重启收尾，原坏文件保持原样。 |
+| [test_unrelated_directory_does_not_participate_in_recovery](../tests/test_recovery_isolation.py#L135) | 运行根目录下的备忘或备份目录不是任务，不能因同名状态文件阻断启动。 |
+| [test_corrupt_snapshot_does_not_block_terminal_recovery](../tests/test_recovery_isolation.py#L149) | 状态有效但阶段包损坏时仍能标记任务中断，明确快照不可读且不改写原坏文件。 |
+| [test_health_reports_isolated_recovery_issues](../tests/test_recovery_isolation.py#L185) | 服务就绪响应应披露被隔离的旧任务，不能静默掩盖本地损坏。 |
+| [test_real_storage_io_failure_still_blocks_startup](../tests/test_recovery_isolation.py#L201) | 真实权限或存储 I/O 错误不能当作单条数据损坏忽略，应明确阻止不可靠启动。 |
+| [test_real_storage_io_failure_still_blocks_startup.unreadable](../tests/test_recovery_isolation.py#L206) | 模拟文件系统拒绝读取。 |
 
 ## tests/test_request_races.py
 
 | 函数 | 职责 |
 |---|---|
-| [test_submitted_request_is_detached_from_caller](../tests/test_request_races.py#L17) | 修改原请求或返回状态中的嵌套列表，都不能改变已经接纳的后台请求。 |
-| [test_submitted_request_is_detached_from_caller.hold](../tests/test_request_races.py#L25) | 暂停工作线程，捕获外部修改之后实际执行所见的请求。 |
-| [test_client_settings_are_detached_from_caller](../tests/test_request_races.py#L46) | 调用方修改传入 Settings 不能悄悄改变已有客户端的来源和执行配置。 |
-| [test_api_auth_configuration_is_detached_from_caller](../tests/test_request_races.py#L55) | 外部复用配置对象并清空令牌时，已创建应用仍必须拒绝未认证请求。 |
-| [test_api_readiness_uses_the_same_source_as_worker](../tests/test_request_races.py#L69) | 外部修改来源路径时，就绪探测仍须检查应用实际执行任务所用的原配置。 |
-| [test_rerank_freezes_request_before_computation](../tests/test_request_races.py#L79) | 重排正在计算时外部改变请求列表，不能改变派生任务保存的实验要求。 |
-| [test_rerank_freezes_request_before_computation.mutate_during_rank](../tests/test_request_races.py#L108) | 模拟另一调用方在排序过程中修改原请求，仍执行真实排序函数。 |
-| [test_final_message_cannot_override_interrupt_during_receive](../tests/test_request_races.py#L121) | 结果在等待消息期间触及截止或收到取消时，不得绕过二次检查标记成功。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Channel.close](../tests/test_request_races.py#L153) | 端点关闭不影响本例的接收时序。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.start](../tests/test_request_races.py#L160) | 模拟已启动。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.is_alive](../tests/test_request_races.py#L164) | 结果已就绪，没有仍在运行的进程。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Process.close](../tests/test_request_races.py#L168) | 模拟句柄清理。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Context.Pipe](../tests/test_request_races.py#L175) | 构造独立收发端。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Context.Process](../tests/test_request_races.py#L179) | 提供不消耗真实时间的进程。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L186) | 兼容有界队列初始化。 |
-| [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L190) | 返回结果之前推进时钟或设置取消事件。 |
-| [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L198) | 本地队列已控制接收结果，不需要独立读取。 |
+| [test_simultaneous_idempotent_submissions_create_only_one_run](../tests/test_request_races.py#L19) | 十二个线程同时使用同一幂等键，只能创建一个任务；不同请求必须明确冲突。 |
+| [test_simultaneous_idempotent_submissions_create_only_one_run.held](../tests/test_request_races.py#L26) | 暂停唯一已接纳任务，防止完成速度影响并发提交验证。 |
+| [test_simultaneous_idempotent_submissions_create_only_one_run.submit](../tests/test_request_races.py#L31) | 同时提交相同或冲突请求，保留结果与本次请求的对应关系。 |
+| [test_shutdown_cancelled_wait_returns_terminal_before_release_callback](../tests/test_request_races.py#L59) | 关闭取消排队任务时，即使完成回调尚未执行，wait 也不能返回旧的 queued 状态。 |
+| [test_shutdown_cancelled_wait_returns_terminal_before_release_callback.blocked](../tests/test_request_races.py#L71) | 占用唯一执行线程，使后一个任务确定地停在队列中。 |
+| [test_shutdown_cancelled_wait_returns_terminal_before_release_callback.delayed_release](../tests/test_request_races.py#L77) | 暂停取消后的完成回调，暴露 Future 唤醒早于持久化终态的窗口。 |
+| [test_shutdown_cancelled_wait_returns_terminal_before_release_callback.wait_for_run](../tests/test_request_races.py#L84) | 收集等待结果和异常，供主线程检查实际返回的生命周期。 |
+| [test_shutdown_cancelled_wait_returns_terminal_before_release_callback.observed_result](../tests/test_request_races.py#L101) | 确认 wait 已取得 Future，并进入其正常等待路径。 |
+| [test_submitted_request_is_detached_from_caller](../tests/test_request_races.py#L130) | 修改原请求或返回状态中的嵌套列表，都不能改变已经接纳的后台请求。 |
+| [test_submitted_request_is_detached_from_caller.hold](../tests/test_request_races.py#L138) | 暂停工作线程，捕获外部修改之后实际执行所见的请求。 |
+| [test_client_settings_are_detached_from_caller](../tests/test_request_races.py#L159) | 调用方修改传入 Settings 不能悄悄改变已有客户端的来源和执行配置。 |
+| [test_api_auth_configuration_is_detached_from_caller](../tests/test_request_races.py#L168) | 外部复用配置对象并清空令牌时，已创建应用仍必须拒绝未认证请求。 |
+| [test_api_readiness_uses_the_same_source_as_worker](../tests/test_request_races.py#L182) | 外部修改来源路径时，就绪探测仍须检查应用实际执行任务所用的原配置。 |
+| [test_rerank_freezes_request_before_computation](../tests/test_request_races.py#L192) | 重排正在计算时外部改变请求列表，不能改变派生任务保存的实验要求。 |
+| [test_rerank_freezes_request_before_computation.mutate_during_rank](../tests/test_request_races.py#L221) | 模拟另一调用方在排序过程中修改原请求，仍执行真实排序函数。 |
+| [test_final_message_cannot_override_interrupt_during_receive](../tests/test_request_races.py#L234) | 结果在等待消息期间触及截止或收到取消时，不得绕过二次检查标记成功。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Channel.close](../tests/test_request_races.py#L266) | 端点关闭不影响本例的接收时序。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.start](../tests/test_request_races.py#L273) | 模拟已启动。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.is_alive](../tests/test_request_races.py#L277) | 结果已就绪，没有仍在运行的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Process.close](../tests/test_request_races.py#L281) | 模拟句柄清理。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Pipe](../tests/test_request_races.py#L288) | 构造独立收发端。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Context.Process](../tests/test_request_races.py#L292) | 提供不消耗真实时间的进程。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.__init__](../tests/test_request_races.py#L299) | 兼容有界队列初始化。 |
+| [test_final_message_cannot_override_interrupt_during_receive.Messages.get](../tests/test_request_races.py#L303) | 返回结果之前推进时钟或设置取消事件。 |
+| [test_final_message_cannot_override_interrupt_during_receive.no_receiver](../tests/test_request_races.py#L311) | 本地队列已控制接收结果，不需要独立读取。 |
 
 ## tests/test_result_completeness.py
 
