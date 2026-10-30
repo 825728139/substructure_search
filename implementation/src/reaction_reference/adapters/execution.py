@@ -9,7 +9,7 @@ from concurrent.futures import CancelledError, ThreadPoolExecutor
 from contextlib import contextmanager
 from datetime import UTC, datetime
 
-from reaction_reference.adapters.run_store import FileRunStore
+from reaction_reference.adapters.run_store import FileRunStore, RevisionConflict
 from reaction_reference.chemistry.structures import canonical, digest, parse
 from reaction_reference.domain.models import ReferencePackage, RunState, SearchRequest
 
@@ -348,7 +348,20 @@ class RunManager:
                 return state
             # 正常监督与异常兜底共用同一收尾，避免任务失败但资料包仍宣称完整。
             if lifecycle != "succeeded":
-                snapshot_id = self.store.interrupt_snapshot(run_id, lifecycle)
+                try:
+                    snapshot_id = self.store.interrupt_snapshot(run_id, lifecycle)
+                except (OSError, KeyError, RevisionConflict) as exc:
+                    # 大快照或指针写入失败，不应阻止仍可写的小状态文件记录真实失败。
+                    # 默认结果读取据此拒绝旧指针；显式指定的历史快照仍保持原样。
+                    error = {
+                        "code": "snapshot_finalization_failed",
+                        "message": "Task stopped; interrupted snapshot could not be published",
+                        "snapshot_unavailable": True,
+                        "snapshot_error_type": type(exc).__name__,
+                        "requested_lifecycle": lifecycle,
+                        "cause": error,
+                    }
+                    lifecycle, snapshot_id = "failed", None
             return self.store.update(
                 state.model_copy(
                     update={

@@ -167,6 +167,15 @@ class FileRunStore:
         """
         directory = self._directory(run_id)
         if snapshot_id is None:
+            # 中断快照发布失败时，旧 latest 不能冒充该任务的最终结果；历史包可显式按 ID 读取。
+            if (directory / "state.json").is_file():
+                state = self.load(run_id)
+                if (
+                    state.lifecycle == "failed"
+                    and state.error
+                    and state.error.get("snapshot_unavailable") is True
+                ):
+                    raise RevisionConflict("The final evidence snapshot is unavailable")
             latest = directory / "latest.json"
             if not latest.is_file():
                 return None

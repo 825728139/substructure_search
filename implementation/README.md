@@ -122,7 +122,7 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 408 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 414 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 ### 真实来源和浏览器集成检查
 
@@ -158,6 +158,8 @@ API 必须单协调进程、单 Uvicorn worker；目录锁会拒绝同时写同�
 运行文件保存在 `RR_STORE_PATH`，默认 `var/runs`。当前没有自动到期清理，内部试用需监控并在停止服务后清理不再需要的运行目录；删除目录会使对应结果不可读。不要把运行目录当作永久资料归档。
 
 重启时单个损坏状态或快照会单独记录到 `/health/ready` 的 `recovery_issues`，原文件保留，其他有效任务继续恢复；权限或真实磁盘 I/O 错误仍会报错。该机制用于隔离局部损坏，不会自动修复坏文件。
+
+运行收尾时若中断快照无法发布、但状态文件仍可写，任务记为 `failed`，错误码为 `snapshot_finalization_failed`。状态仍可查询，默认结果读取返回 409；旧快照保留，可按原快照编号显式导出。此兜底不能保证整个运行目录不可写时仍能保存终态。
 
 Docker/Compose 配置位于 `deploy/`，在本目录可用 `docker compose -f deploy/compose.yaml up --build` 启动，默认只绑定本机端口。镜像安装 RDKit 绘图需要的系统共享库，并在构建阶段验证绘图模块导入。构建参数 `PIP_INDEX_URL` 仅指定 pip 安装 uv 时使用的镜像，默认使用 PyPI；它不会覆盖 `uv.lock` 中锁定的运行依赖下载地址，当前锁文件使用清华镜像。
 

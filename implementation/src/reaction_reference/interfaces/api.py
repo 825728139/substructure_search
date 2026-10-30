@@ -169,7 +169,17 @@ def create_app(settings=None):
         queued/running 也可能已有阶段包；latest_snapshot_id 供客户端判断是否切换显示。
         """
         state = client.manager.store.load(run_id, scope)
-        package = client.manager.store.package(run_id)
+        try:
+            package = client.manager.store.package(run_id)
+        except (KeyError, RevisionConflict):
+            # 已明确记录快照不可用的失败任务仍可查看终态，避免查询状态也被旧指针阻断。
+            if (
+                state.lifecycle != "failed"
+                or not state.error
+                or state.error.get("snapshot_unavailable") is not True
+            ):
+                raise
+            package = None
         return {
             **state.model_dump(),
             "coverage_state": package.coverage_state if package else None,

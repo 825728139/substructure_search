@@ -52,10 +52,10 @@
 | [RunManager._execute](../src/reaction_reference/adapters/execution.py#L222) | 执行监督边界并兜底保存 failed，避免启动/监督异常把状态永远留在 running。 |
 | [RunManager._supervise](../src/reaction_reference/adapters/execution.py#L240) | 监督独立进程及其接收线程，截止时间从启动准备开始计算。 |
 | [RunManager._finish](../src/reaction_reference/adapters/execution.py#L340) | 在锁内把非终态 run 写为给定终态并返回状态。 |
-| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L364) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
-| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L387) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
-| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L406) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
-| [RunManager.close](../src/reaction_reference/adapters/execution.py#L419) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
+| [RunManager.cancel](../src/reaction_reference/adapters/execution.py#L377) | 请求取消 owner 范围内的运行，短暂等待监督器停止工作后返回实际状态。 |
+| [RunManager.wait](../src/reaction_reference/adapters/execution.py#L400) | 等待本管理器登记的 future 结束，再从磁盘返回真实 RunState。 |
+| [RunManager.active_writer](../src/reaction_reference/adapters/execution.py#L419) | 登记同步写操作的生命周期；计算期间释放协调锁，关闭等待已登记操作完成后再释放目录锁。 |
+| [RunManager.close](../src/reaction_reference/adapters/execution.py#L432) | 停止接纳任务，向所有登记作业发取消信号，等待监督线程清理后释放目录锁。 |
 
 ## src/reaction_reference/adapters/export.py
 
@@ -78,9 +78,9 @@
 | [FileRunStore.update](../src/reaction_reference/adapters/run_store.py#L126) | 按 expected_revision 更新非终态运行并返回递增 revision 后的状态。 |
 | [FileRunStore.save_package](../src/reaction_reference/adapters/run_store.py#L141) | 保存不可变 ReferencePackage 快照，并原子更新 latest 指针。 |
 | [FileRunStore.package](../src/reaction_reference/adapters/run_store.py#L163) | 读取指定快照，或在未指定时读取 latest 指向的资料包。 |
-| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L191) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
-| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L219) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
-| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L240) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
+| [FileRunStore.idempotency](../src/reaction_reference/adapters/run_store.py#L200) | 查找或绑定 owner 范围内的幂等键，返回先前 run_id 或 None。 |
+| [FileRunStore.interrupt_snapshot](../src/reaction_reference/adapters/run_store.py#L228) | 为中断任务保存带停止原因的部分范围快照，返回新快照 ID 或 None。 |
+| [FileRunStore.recover_interrupted](../src/reaction_reference/adapters/run_store.py#L249) | 逐任务恢复遗留 queued/running；坏状态和快照隔离到 recovery_issues，保留原文件。 |
 
 ## src/reaction_reference/adapters/sources.py
 
@@ -215,12 +215,12 @@
 | [create_app.preview](../src/reaction_reference/interfaces/api.py#L147) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
 | [create_app.submit](../src/reaction_reference/interfaces/api.py#L152) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
 | [create_app.status](../src/reaction_reference/interfaces/api.py#L166) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
-| [create_app.results](../src/reaction_reference/interfaces/api.py#L181) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
-| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L235) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
-| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L257) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
-| [create_app.structure](../src/reaction_reference/interfaces/api.py#L269) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
-| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L293) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
-| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L298) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L191) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L245) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L267) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L279) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L303) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L308) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
 
 ## src/reaction_reference/interfaces/cli.py
 
@@ -797,6 +797,14 @@
 | [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L164) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
 | [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L178) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
 | [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L198) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+
+## tests/test_snapshot_finalization_failure.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_snapshot_finalization_failure_does_not_leave_a_running_task](../tests/test_snapshot_finalization_failure.py#L16) | 只阻断快照或指针写入，验证可写状态仍终结、默认读取明确拒绝、旧包不改且重启稳定。 |
+| [test_snapshot_finalization_failure_does_not_leave_a_running_task.write](../tests/test_snapshot_finalization_failure.py#L43) | 模拟大快照或最新指针不可写，但较小的任务状态文件仍可保存。 |
+| [test_snapshot_finalization_failure_does_not_leave_a_running_task.supervision_error](../tests/test_snapshot_finalization_failure.py#L51) | 模拟监督异常，确认实际执行兜底不会再次因收尾快照失败而遗留运行中状态。 |
 
 ## tests/test_snapshot_links.py
 
