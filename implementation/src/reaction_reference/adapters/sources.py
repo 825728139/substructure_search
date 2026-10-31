@@ -309,7 +309,8 @@ class PostgresSource:
     hydration_requires_io = True
     preferred_page_size = 2
     selection_failure_fallback = True
-    selection_policy = "final_score_ge_12_before_selection; core_filtered_knn_top512_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
+    fragment_selection_stages = True
+    selection_policy = "final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",
@@ -510,7 +511,7 @@ class PostgresSource:
         """在同一只读会话中读取一页候选，返回实例及范围标签。
 
         所有通道先在 SQL 中限制 final_score >= 12，缺失分数不参与召回。
-        具备指纹索引时，整体/核心首阶段复用前 512 条整侧 KNN 池；其他阶段用核心 mol 子结构服务端游标。cursor 校验顺序，limit 限制抓取行数。每次查询置于 savepoint，失败回滚局部事务并使相关游标失效。整侧相似/命中均不能替代逐产品 R 核验。
+        具备指纹索引时，三层首阶段复用前 512 条整侧 KNN 池；严格目标和其他阶段用核心 mol 子结构服务端游标。分片近邻为空或耗尽后仍可独立查询，不能把整分子相似度变成硬过滤。cursor 校验顺序，limit 限制抓取行数。每次查询置于 savepoint，失败回滚局部事务并使相关游标失效。整侧相似/命中均不能替代逐产品 R 核验。
         """
         from psycopg import Error, sql
 
@@ -521,12 +522,7 @@ class PostgresSource:
         key = (family.id, role, stage)
         self.connection.execute("SAVEPOINT rr_query")
         try:
-            nearest = (
-                stage == 0
-                and family.layer != "fragment"
-                and family.relation != "strict"
-                and self._has_index(fp_column)
-            )
+            nearest = stage == 0 and family.relation != "strict" and self._has_index(fp_column)
             if nearest:
                 pool_key = (role, target_smiles)
                 if pool_key not in self._knn:
@@ -543,7 +539,7 @@ class PostgresSource:
                     self._knn[pool_key] = self.connection.execute(
                         query, (target_smiles,)
                     ).fetchall()
-                family_pool_key = (pool_key, family.core_smarts)
+                family_pool_key = (pool_key, family.core_smarts, family.layer == "fragment")
                 if family_pool_key not in self._knn_core:
                     nearest_rows = self._knn[pool_key]
                     if nearest_rows:
@@ -576,7 +572,7 @@ class PostgresSource:
                             )
                     else:
                         self._knn_core[family_pool_key] = []
-                    if role == "product":
+                    if role == "product" and family.layer != "fragment":
                         # 至多补入两个产物含核心、已知输入不含同一核心的先例。
                         # 这是结构事实优先通道，不证明成环机制、迁移可行或立体结果。
                         self.connection.execute("SAVEPOINT rr_core_seed")
@@ -620,7 +616,11 @@ class PostgresSource:
                 pool = self._knn_core[family_pool_key]
                 rows = pool[cursor : cursor + limit]
                 done = cursor + len(rows) >= len(pool)
-                enumeration = "core_filtered_knn512_with_up_to2_input_core_absence_seeds_individual_verification_required"
+                enumeration = (
+                    "core_filtered_knn512_individual_verification_required"
+                    if family.layer == "fragment"
+                    else "core_filtered_knn512_with_up_to2_input_core_absence_seeds_individual_verification_required"
+                )
             else:
                 if key not in self._cursors:
                     if cursor:

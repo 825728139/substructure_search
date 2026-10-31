@@ -1,0 +1,81 @@
+[
+  {
+    "target": "U04",
+    "source_id": "2223370",
+    "source_namespace": "uspto",
+    "document_id": "US20030096853A1",
+    "paragraph_nums": [
+      "P-0049"
+    ],
+    "final_score": 15,
+    "reactant_smiles": [
+      "Cc1ccc(C#CC(=O)C(F)(F)F)cc1",
+      "Cl.NNc1ccc(S(N)(=O)=O)cc1"
+    ],
+    "product_smiles": [
+      "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+    ],
+    "judgment": "新增成环方法参考",
+    "reason": "原文为对甲苯基炔酮与对磺酰胺芳基肼盐酸盐成环，明确得到5-对甲苯基、3-CF3、N-芳基吡唑。与目标骨架和连接位点对应；炔酮的CF3改为CH3仍须验证反应性和区域选择性。不是此前二羰基缩合的重复表述。",
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "source_id": "8279156",
+    "source_namespace": "uspto",
+    "document_id": "US20200172489A1",
+    "paragraph_nums": [
+      "p-0175"
+    ],
+    "final_score": 17,
+    "reactant_smiles": [
+      "CCCCCN1C(=O)c2cccc3c(Br)ccc(c23)C1=O",
+      "CN(CCN)CCNC(=O)OC(C)(C)C"
+    ],
+    "product_smiles": [
+      "CCCCCN1C(=O)c2cccc3c(NCCN(C)CCNC(=O)OC(C)(C)C)ccc(c23)C1=O"
+    ],
+    "judgment": "相邻母核的胺取代线索",
+    "reason": "N-戊基溴代萘酰亚胺与带Boc保护的多胺反应，原文报告43%。提示芳位取代，但N-戊基到丁基、胺到肼是两项变化；不能证明肼与酰亚胺的相容性。",
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "source_id": "62248",
+    "source_namespace": "epo",
+    "document_id": "EP86303171A2",
+    "paragraph_nums": [
+      "p0100"
+    ],
+    "final_score": 13,
+    "reactant_smiles": [
+      "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)O)cc3)[nH]c2n(CCC)c1=O"
+    ],
+    "product_smiles": [
+      "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)OCC)cc3)[nH]c2n(CCC)c1=O",
+      "CCCn1c(=O)c2nc(-c3ccc(C#CC(=O)O)cc3)[nH]c2n(CCC)c1=O"
+    ],
+    "judgment": "不解决关键桥环问题",
+    "reason": "原文为肉桂酸侧链的乙酯化，只保留普通不饱和酯局部参考。未构建目标氮桥环，也不是目标环外烯胺酯形成的证据。抽取还列出额外炔酸产物，与本段描述不符。",
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "source_id": "62851",
+    "source_namespace": "epo",
+    "document_id": "EP86730018A2",
+    "paragraph_nums": [
+      "p0023"
+    ],
+    "final_score": 12,
+    "reactant_smiles": [
+      "CCOC(=O)c1ncc2[nH]c3cccc(OCc4cccc(Cl)c4)c3c2c1COC"
+    ],
+    "product_smiles": [
+      "CCOC(=O)C1NC(C(=O)O)c2[nH]c3cccc(OCc4cccc(Cl)c4)c3c2C1COC"
+    ],
+    "judgment": "反应方向抽取错误",
+    "reason": "原文从四氢β-咔啉二羧酸单乙酯经脱羧/脱氢得到芳香β-咔啉；记录却把该芳香物作为反应物、四氢二羧酸物作为产物，方向颠倒，不能作为目标制备参考。",
+    "experimental_validation": false
+  }
+]

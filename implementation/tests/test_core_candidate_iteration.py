@@ -8,6 +8,7 @@ import pytest
 from reaction_reference.adapters.sources import JsonlSource
 from reaction_reference.application.search import search
 from reaction_reference.domain.models import Reference
+from reaction_reference.ports.sources import CandidatePage
 from reaction_reference.ranking.engine import rank_references
 
 
@@ -64,5 +65,54 @@ def test_source_small_pages_give_other_families_a_turn(
             assert all(limit == 1 for _, limit in calls)
             assert len({family for family, _ in calls}) >= 2
         assert len({r.id for r in package.results}) == len(package.results)
+    finally:
+        source.close()
+
+
+@pytest.mark.parametrize("failure", [False, True])
+def test_fragment_empty_or_failed_near_pool_keeps_independent_search(
+    tmp_path, amide, request_factory, monkeypatch, failure
+):
+    """分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。"""
+    from importlib import import_module
+
+    from reaction_reference.chemistry.structures import parse
+    from reaction_reference.retrieval.planner import initial_families
+
+    module = import_module("reaction_reference.application.search")
+    smiles = next(m.smiles for m in amide.materials if m.role == "product")
+    family = next(f for f in initial_families(parse(smiles)) if f.layer == "fragment")
+    monkeypatch.setattr(module, "initial_families", lambda *_: [family])
+    path = tmp_path / "fragment.jsonl"
+    path.write_text(amide.model_dump_json() + "\n")
+    source = JsonlSource(path, exhaustive=False)
+    source.fragment_selection_stages = True
+    source.selection_failure_fallback = True
+    source.max_selection_stage = 1
+    original = source.candidate_page
+    stages = []
+
+    def page(family, role, cursor, limit, target, stage=0):
+        """仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。"""
+        stages.append(stage)
+        if stage == 0:
+            if failure:
+                raise TimeoutError("模拟近邻查询超时")
+            return CandidatePage([], None, True, True, "bounded_near_pool")
+        return original(family, role, cursor, limit, target, stage)
+
+    monkeypatch.setattr(source, "candidate_page", page)
+    try:
+        package = search(
+            request_factory(
+                smiles,
+                options={"include_usage": False, "include_proposals": False},
+            ),
+            source,
+        )
+        assert stages == [0, 1]
+        assert any(r.record.id == amide.id for r in package.results)
+        assert package.coverage_state == "partial"
+        assert bool(package.source_issues) == failure
     finally:
         source.close()

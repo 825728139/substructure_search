@@ -183,7 +183,7 @@ def test_indexed_cursor_pages_and_read_only_session(indexed_source_dsn, role):
     try:
         cursor, items = 0, []
         while True:
-            page = source.candidate_page(carbon_family(), role, cursor, 1, "CCO")
+            page = source.candidate_page(carbon_family(), role, cursor, 1, "CCO", stage=1)
             items.extend(page.items)
             if page.next_cursor is None:
                 assert page.stream_exhausted and page.scope_complete
@@ -212,7 +212,7 @@ def test_failed_page_closes_existing_cursor_and_allows_restart(
     source = PostgresSource(indexed_source_dsn, table="reactions")
     family = carbon_family(name="retry-existing-cursor")
     try:
-        first = source.candidate_page(family, role, 0, 1, "CCO")
+        first = source.candidate_page(family, role, 0, 1, "CCO", stage=1)
         assert first.next_cursor == 1
         names = source.connection.execute(
             "SELECT name FROM pg_cursors WHERE name LIKE 'rr_%'"
@@ -230,7 +230,7 @@ def test_failed_page_closes_existing_cursor_and_allows_restart(
                     fault.setattr(source, "_items", fail_processing)
                 with pytest.raises(ValueError if failure == "cursor_order" else RuntimeError):
                     source.candidate_page(
-                        family, role, 2 if failure == "cursor_order" else 1, 1, "CCO"
+                        family, role, 2 if failure == "cursor_order" else 1, 1, "CCO", stage=1
                     )
             remaining = source.connection.execute(
                 "SELECT name FROM pg_cursors WHERE name=%s", (names[0]["name"],)
@@ -240,7 +240,7 @@ def test_failed_page_closes_existing_cursor_and_allows_restart(
             items, cursor = list(first.items), first.next_cursor
         assert source.connection.execute("SELECT 1 AS value").fetchone()["value"] == 1
         while True:
-            page = source.candidate_page(family, role, cursor, 1, "CCO")
+            page = source.candidate_page(family, role, cursor, 1, "CCO", stage=1)
             items.extend(page.items)
             if page.next_cursor is None:
                 assert page.stream_exhausted and page.scope_complete
@@ -273,12 +273,12 @@ def test_first_page_processing_failure_does_not_poison_cursor_cleanup(
 
             fault.setattr(source, "_items", fail_processing)
             with pytest.raises(RuntimeError, match="模拟首个页面处理失败"):
-                source.candidate_page(family, "product", 0, 1, "CCO")
+                source.candidate_page(family, "product", 0, 1, "CCO", stage=1)
         assert not source.connection.execute(
             "SELECT name FROM pg_cursors WHERE name LIKE 'rr_%'"
         ).fetchall()
         assert source.connection.execute("SELECT 1 AS value").fetchone()["value"] == 1
-        page = source.candidate_page(family, "product", 0, 10, "CCO")
+        page = source.candidate_page(family, "product", 0, 10, "CCO", stage=1)
         assert page.stream_exhausted and page.scope_complete and len(page.items) == 3
     finally:
         source.close()
@@ -583,11 +583,13 @@ def test_indexed_and_jsonl_sources_agree_after_full_family_verification(
         encoding="utf-8",
     )
 
-    def verified_ids(source, family, target):
+    def verified_ids(source, family, target, stage=0):
         """逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。"""
         cursor, identities = 0, set()
         while True:
-            page = source.candidate_page(family, "product", cursor, 2, canonical(target))
+            page = source.candidate_page(
+                family, "product", cursor, 2, canonical(target), stage=stage
+            )
             for item in page.items:
                 result = match_family(
                     family,
@@ -614,7 +616,7 @@ def test_indexed_and_jsonl_sources_agree_after_full_family_verification(
                     # 本例比较完整候选流，禁用首阶段 KNN，避免把有界初选当成完整召回。
                     family = original.model_copy(update={"layer": "fragment"})
                     expected = verified_ids(offline, family, target)
-                    actual = verified_ids(indexed, family, target)
+                    actual = verified_ids(indexed, family, target, stage=1)
                     assert actual == expected, (smiles, original.rule_id)
                     assert (f"integration:{number}", f"{number}:product:0") in actual
             finally:
@@ -1053,10 +1055,11 @@ def test_unrelated_partial_index_does_not_claim_complete_substructure_support(in
         PostgresSource(indexed_source_dsn, table="reactions")
 
 
-def test_knn_core_filter_precedes_candidate_pagination(indexed_source_dsn):
+@pytest.mark.parametrize("layer", ["whole", "fragment"])
+def test_knn_core_filter_precedes_candidate_pagination(indexed_source_dsn, layer):
     """有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。"""
     source = PostgresSource(indexed_source_dsn, table="reactions")
-    family = carbon_family(layer="whole").model_copy(update={"core_smarts": "[#8]", "id": "oxygen"})
+    family = carbon_family(layer=layer).model_copy(update={"core_smarts": "[#8]", "id": "oxygen"})
     try:
         first = source.candidate_page(family, "product", 0, 1, "CCN")
         assert len(first.items) == 1
@@ -1105,5 +1108,13 @@ def test_core_change_seed_can_recover_outside_knn_without_dropping_nearby(indexe
             ids.extend(r.record.id for r in page.items)
             cursor = page.next_cursor
         assert len(ids) == 513 and len(set(ids)) == 513 and "integration:1002" not in ids
+        # 相同核心在分片层不复用整体层的池外种子，独立通道仍能找到近邻池之外的记录。
+        fragment = family.model_copy(update={"layer": "fragment", "id": "alcohol-fragment"})
+        near_fragment = source.candidate_page(fragment, "product", 0, 600, "CCO")
+        near_ids = {r.record.id for r in near_fragment.items}
+        assert len(near_ids) == 512 and "integration:1001" not in near_ids
+        independent = source.candidate_page(fragment, "product", 0, 600, "CCO", stage=1)
+        independent_ids = {r.record.id for r in independent.items}
+        assert "integration:1001" in independent_ids and "integration:1002" not in independent_ids
     finally:
         source.close()

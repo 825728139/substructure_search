@@ -1,0 +1,1346 @@
+[
+  {
+    "run": "U01-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:36.276406+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:3153963": "83a093bee33710d4fd2412a8",
+        "uspto:9033888": "c9310d7f8132b6031c3305ba",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:62248": "1a512a8bbe2e71358c0c3cd8",
+        "epo:62851": "c71e04bde48d8433138ed5ae",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df",
+        "uspto:5364845": "5856a476dd1f92dd20ee951f",
+        "uspto:10247420": "2f407697eb5fe9967653db2e"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 17,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 2001.858
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "3153963",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O"
+      },
+      {
+        "record_id": "62248",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)OCC)cc3)[nH]c2n(CCC)c1=O"
+      },
+      {
+        "record_id": "9033888",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C1NC(=O)C2(n3cc(CCCO)nn3)CC1C2"
+      },
+      {
+        "record_id": "62851",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCOC(=O)C1NC(C(=O)O)c2[nH]c3cccc(OCc4cccc(Cl)c4)c3c2C1COC"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "record_id": "5364845",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCC(c1ccc(C(=O)NCCC(=O)OC(C)(C)C)cc1)C(c1ccc(Cl)cc1)c1n[nH]c2c(Cl)cc(C(F)(F)F)cc12"
+      },
+      {
+        "record_id": "10247420",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1c(OCCC2CCN(CC3CCN(c4cc5c(cc4F)C(=O)N(C4CCC(=O)NC4=O)C5=O)CC3)CC2)cccc1-c1ccc(N2CCc3cccc(C(=O)Nc4nc5ccccc5s4)c3C2)nc1C(=O)O"
+      }
+    ]
+  },
+  {
+    "run": "U01-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:46.979844+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:3153963": "83a093bee33710d4fd2412a8",
+        "uspto:9033888": "c9310d7f8132b6031c3305ba",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:62248": "1a512a8bbe2e71358c0c3cd8",
+        "epo:62851": "c71e04bde48d8433138ed5ae",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df",
+        "uspto:5364845": "5856a476dd1f92dd20ee951f",
+        "uspto:10247420": "2f407697eb5fe9967653db2e"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 17,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1965.406
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "3153963",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O"
+      },
+      {
+        "record_id": "62248",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)OCC)cc3)[nH]c2n(CCC)c1=O"
+      },
+      {
+        "record_id": "9033888",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C1NC(=O)C2(n3cc(CCCO)nn3)CC1C2"
+      },
+      {
+        "record_id": "62851",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCOC(=O)C1NC(C(=O)O)c2[nH]c3cccc(OCc4cccc(Cl)c4)c3c2C1COC"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "record_id": "5364845",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCC(c1ccc(C(=O)NCCC(=O)OC(C)(C)C)cc1)C(c1ccc(Cl)cc1)c1n[nH]c2c(Cl)cc(C(F)(F)F)cc12"
+      },
+      {
+        "record_id": "10247420",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1c(OCCC2CCN(CC3CCN(c4cc5c(cc4F)C(=O)N(C4CCC(=O)NC4=O)C5=O)CC3)CC2)cccc1-c1ccc(N2CCc3cccc(C(=O)Nc4nc5ccccc5s4)c3C2)nc1C(=O)O"
+      }
+    ]
+  },
+  {
+    "run": "U02-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:38.774738+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2148857": "03caaba167a7f43069b5db11",
+        "uspto:4438348": "1ec90e82ce7c2fc0e226b8bb",
+        "uspto:8279156": "067b1e6f648a22f893bd9463",
+        "uspto:2142079": "fcdc14056445dcec9fc10436",
+        "uspto:4101990": "5ecf36ae163dc2b4de3e67ca",
+        "epo:835484": "4a88f1681331b615336dc895",
+        "uspto:2152598": "c97da4504230ab98898037e7",
+        "uspto:3340932": "4a71353044dd6149c5bef4f0"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 10,
+      "received_candidates": 24,
+      "unique_structures": 10,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 10,
+      "elapsed_ms": 1660.558
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "2148857",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCN1C(=O)c2cccc3c(NCCNC)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "2148857",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "CCCCN1C(=O)c2cccc3c(Cl)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "4438348",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C1NC(=O)c2cccc3cccc1c23"
+      },
+      {
+        "record_id": "8279156",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "CCCCCN1C(=O)c2cccc3c(Br)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "8279156",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCCN1C(=O)c2cccc3c(NCCN(C)CCNC(=O)OC(C)(C)C)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "2142079",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "Nc1c(S(=O)(=O)O)cc2c3c(cc(S(=O)(=O)O)cc13)C(=O)N(NC(=O)N/N=C/c1cccc(C=O)c1)C2=O"
+      },
+      {
+        "record_id": "4101990",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C(NCCC(O)c1cc(/C=C/C2(O)CCCCC2)ccc1Cl)C(F)(F)F"
+      },
+      {
+        "record_id": "835484",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "COC(=O)C1=CC(C(=O)c2cc(Cl)cc(Cl)c2O)=CN2CCc3c([nH]c4ccccc34)C12C(=O)OC"
+      },
+      {
+        "record_id": "2152598",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)N1C(=O)c2ccccc2C(NC(=O)[C@H](C)N)C(=O)N1C"
+      },
+      {
+        "record_id": "3340932",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCc1nc2ccc(C3=NN4CCCC4C3)cc2c(=O)n1-c1ccc(-c2ccccc2C#N)cc1"
+      }
+    ]
+  },
+  {
+    "run": "U02-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:49.342362+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2148857": "03caaba167a7f43069b5db11",
+        "uspto:4438348": "1ec90e82ce7c2fc0e226b8bb",
+        "uspto:8279156": "067b1e6f648a22f893bd9463",
+        "uspto:2142079": "fcdc14056445dcec9fc10436",
+        "uspto:4101990": "5ecf36ae163dc2b4de3e67ca",
+        "epo:835484": "4a88f1681331b615336dc895",
+        "uspto:2152598": "c97da4504230ab98898037e7",
+        "uspto:3340932": "4a71353044dd6149c5bef4f0"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 10,
+      "received_candidates": 24,
+      "unique_structures": 10,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 10,
+      "elapsed_ms": 1578.048
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "2148857",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCN1C(=O)c2cccc3c(NCCNC)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "2148857",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "CCCCN1C(=O)c2cccc3c(Cl)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "4438348",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C1NC(=O)c2cccc3cccc1c23"
+      },
+      {
+        "record_id": "8279156",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "CCCCCN1C(=O)c2cccc3c(Br)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "8279156",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCCN1C(=O)c2cccc3c(NCCN(C)CCNC(=O)OC(C)(C)C)ccc(c23)C1=O"
+      },
+      {
+        "record_id": "2142079",
+        "namespace": "uspto",
+        "role": "reactant",
+        "smiles": "Nc1c(S(=O)(=O)O)cc2c3c(cc(S(=O)(=O)O)cc13)C(=O)N(NC(=O)N/N=C/c1cccc(C=O)c1)C2=O"
+      },
+      {
+        "record_id": "4101990",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=C(NCCC(O)c1cc(/C=C/C2(O)CCCCC2)ccc1Cl)C(F)(F)F"
+      },
+      {
+        "record_id": "835484",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "COC(=O)C1=CC(C(=O)c2cc(Cl)cc(Cl)c2O)=CN2CCc3c([nH]c4ccccc34)C12C(=O)OC"
+      },
+      {
+        "record_id": "2152598",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)N1C(=O)c2ccccc2C(NC(=O)[C@H](C)N)C(=O)N1C"
+      },
+      {
+        "record_id": "3340932",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCCCc1nc2ccc(C3=NN4CCCC4C3)cc2c(=O)n1-c1ccc(-c2ccccc2C#N)cc1"
+      }
+    ]
+  },
+  {
+    "run": "U03-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:41.163118+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2924148": "5f9881be199809f96a52427f",
+        "uspto:10210576": "1e4f37ea94cf23cc8f577642",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:978944": "51b418c32b9f445d43a578d4",
+        "epo:2030567": "bd96e9aa12b4d452dadacbb1",
+        "uspto:7914649": "873d76aab1bda343399b0afa",
+        "uspto:7703526": "3a4949537d8ead087e6855db",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 12,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1617.549
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "10210576",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "COC(=O)C12CC(CI)(C1)OC2(C)C"
+      },
+      {
+        "record_id": "2924148",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1cc(C)n(C(=O)CCNS(=O)(=O)c2ccccc2)n1"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "978944",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CC(C)c1cc(C(=O)n2nc(C(C)C)cc2C(=O)N[C@@H](C)Cn2ccc(-c3ccc(C#N)c(Cl)c3)n2)[nH]n1"
+      },
+      {
+        "record_id": "2030567",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "COC(=O)c1ccc(N)c(NC23COC(C2)C3)c1"
+      },
+      {
+        "record_id": "7914649",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1cc(C)n(-c2cc(C(O)Cc3cnn(C)n3)cc(NC3CCC(F)(F)CC3)n2)n1"
+      },
+      {
+        "record_id": "7703526",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)(C)OC(=O)CCCc1cccc(C2(C(=O)O[C@H]3CN4CCC3CC4)CCCCC2)c1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      }
+    ]
+  },
+  {
+    "run": "U03-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:51.571244+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2924148": "5f9881be199809f96a52427f",
+        "uspto:10210576": "1e4f37ea94cf23cc8f577642",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:978944": "51b418c32b9f445d43a578d4",
+        "epo:2030567": "bd96e9aa12b4d452dadacbb1",
+        "uspto:7914649": "873d76aab1bda343399b0afa",
+        "uspto:7703526": "3a4949537d8ead087e6855db",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 12,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1492.748
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "10210576",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "COC(=O)C12CC(CI)(C1)OC2(C)C"
+      },
+      {
+        "record_id": "2924148",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1cc(C)n(C(=O)CCNS(=O)(=O)c2ccccc2)n1"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "978944",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CC(C)c1cc(C(=O)n2nc(C(C)C)cc2C(=O)N[C@@H](C)Cn2ccc(-c3ccc(C#N)c(Cl)c3)n2)[nH]n1"
+      },
+      {
+        "record_id": "2030567",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "COC(=O)c1ccc(N)c(NC23COC(C2)C3)c1"
+      },
+      {
+        "record_id": "7914649",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1cc(C)n(-c2cc(C(O)Cc3cnn(C)n3)cc(NC3CCC(F)(F)CC3)n2)n1"
+      },
+      {
+        "record_id": "7703526",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)(C)OC(=O)CCCc1cccc(C2(C(=O)O[C@H]3CN4CCC3CC4)CCCCC2)c1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      }
+    ]
+  },
+  {
+    "run": "U04-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:44.265377+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2223370": "4998595f308e2cd0b8b5832d",
+        "epo:623405": "aba22fc2e12b3a1a48e9e745",
+        "uspto:2192223": "143e58537ce9db786de7cd2b",
+        "uspto:2144174": "885fc8e78d49dbf056ec241d",
+        "uspto:3638216": "939ae5967416b2ae795cf538",
+        "uspto:4327902": "c44c7cd0eded00da626c4356",
+        "uspto:3814593": "8995db0d76bd2a6e7e199634",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:272703": "91b5d131e85f0b6989b8b5eb",
+        "epo:2063064": "543bb284341fb63b9e11132a",
+        "uspto:2304597": "9c2d2f4d4b431bf125c23363",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2288.831
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "623405",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1"
+      },
+      {
+        "record_id": "2144174",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1"
+      },
+      {
+        "record_id": "2223370",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+      },
+      {
+        "record_id": "2192223",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "3638216",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)CCOc1c(-c2ccc(S(N)(=O)=O)cc2)cnn(-c2cccc(Cl)c2)c1=O"
+      },
+      {
+        "record_id": "2304597",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCc1ccc(-c2cc(CC(=O)c3ccccn3)ccn2)cc1"
+      },
+      {
+        "record_id": "4327902",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "C=CCN(CCO)S(=O)(=O)c1ccc(OCCC)c(-c2nn3c(CCC)nc(C)c3c(=O)[nH]2)c1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "record_id": "3814593",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "OC(c1ccc(OC2CCCCO2)cc1)c1cnco1"
+      },
+      {
+        "record_id": "272703",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCCCC(CC)COC(=O)C=Cc1ccc(OC)cc1"
+      },
+      {
+        "record_id": "2063064",
+        "namespace": "epo",
+        "role": "reactant",
+        "smiles": "COC(=O)[C@H](Cc1ccc(Br)c2ncccc12)NC(=O)c1c(F)cc(NS(=O)(=O)c2ccc(-c3ccnc(F)c3)cc2)cc1F"
+      }
+    ]
+  },
+  {
+    "run": "U04-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-10-31T20:41:54.587653+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "ee4af1e59bf1bf65a1c8733ae8fd9148e31924c90ebf075b9b755860593fb479",
+      "rule_version": "organic-reference-1.0",
+      "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2223370": "4998595f308e2cd0b8b5832d",
+        "epo:623405": "aba22fc2e12b3a1a48e9e745",
+        "uspto:2192223": "143e58537ce9db786de7cd2b",
+        "uspto:2144174": "885fc8e78d49dbf056ec241d",
+        "uspto:3638216": "939ae5967416b2ae795cf538",
+        "uspto:4327902": "c44c7cd0eded00da626c4356",
+        "uspto:3814593": "8995db0d76bd2a6e7e199634",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "epo:272703": "91b5d131e85f0b6989b8b5eb",
+        "epo:2063064": "543bb284341fb63b9e11132a",
+        "uspto:2304597": "9c2d2f4d4b431bf125c23363",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2236.696
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "displayed_sources": [
+      {
+        "record_id": "623405",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1"
+      },
+      {
+        "record_id": "2144174",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1"
+      },
+      {
+        "record_id": "2223370",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+      },
+      {
+        "record_id": "2192223",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl"
+      },
+      {
+        "record_id": "4381854",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "record_id": "3638216",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CC(C)CCOc1c(-c2ccc(S(N)(=O)=O)cc2)cnn(-c2cccc(Cl)c2)c1=O"
+      },
+      {
+        "record_id": "2304597",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCc1ccc(-c2cc(CC(=O)c3ccccn3)ccn2)cc1"
+      },
+      {
+        "record_id": "4327902",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "C=CCN(CCO)S(=O)(=O)c1ccc(OCCC)c(-c2nn3c(CCC)nc(C)c3c(=O)[nH]2)c1"
+      },
+      {
+        "record_id": "6327800",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "record_id": "3814593",
+        "namespace": "uspto",
+        "role": "product",
+        "smiles": "OC(c1ccc(OC2CCCCO2)cc1)c1cnco1"
+      },
+      {
+        "record_id": "272703",
+        "namespace": "epo",
+        "role": "product",
+        "smiles": "CCCCC(CC)COC(=O)C=Cc1ccc(OC)cc1"
+      },
+      {
+        "record_id": "2063064",
+        "namespace": "epo",
+        "role": "reactant",
+        "smiles": "COC(=O)[C@H](Cc1ccc(Br)c2ncccc12)NC(=O)c1c(F)cc(NS(=O)(=O)c2ccc(-c3ccnc(F)c3)cc2)cc1F"
+      }
+    ]
+  }
+]

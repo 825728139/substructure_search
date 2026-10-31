@@ -99,12 +99,12 @@
 | [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L251) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
 | [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L297) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
 | [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L301) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L335) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L410) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L417) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L422) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L458) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L509) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L336) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L411) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L418) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L423) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L459) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L510) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
 | [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L666) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
 | [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L685) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
 | [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L758) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
@@ -420,9 +420,11 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_unverified_method_label_does_not_hide_more_relevant_core](../tests/test_core_candidate_iteration.py#L14) | 真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。 |
-| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L27) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
-| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L42) | 记录真实来源取页参数，不模拟核验和返回数据。 |
+| [test_unverified_method_label_does_not_hide_more_relevant_core](../tests/test_core_candidate_iteration.py#L15) | 真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。 |
+| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L28) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
+| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L43) | 记录真实来源取页参数，不模拟核验和返回数据。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L73) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L95) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
 
 ## tests/test_data_boundaries.py
 
@@ -562,21 +564,21 @@
 | [test_ambiguous_details_are_not_arbitrarily_attached](../tests/test_postgres_integration.py#L486) | 详情关联命中多行时不能任取其一；事务继续可用，检索保留原始轻量参考。 |
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L539) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L586) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
-| [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L628) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
-| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L664) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
-| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L673) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L703) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L728) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L735) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
-| [test_quality_score_gate_applies_to_every_database_recall](../tests/test_postgres_integration.py#L775) | 所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。 |
-| [test_quality_filter_runs_before_knn_pool_limit](../tests/test_postgres_integration.py#L813) | 六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。 |
-| [v3_source_dsn](../tests/test_postgres_integration.py#L843) | 在私有测试库建去重组和真实来源；低分代表、高分并列及无合格来源均有覆盖。 |
-| [test_v3_selects_qualified_source_before_matching_and_details](../tests/test_postgres_integration.py#L929) | 所有召回通道使用合格实验身份和事实；低分代表、并列其他来源和失效组不混入。 |
-| [test_v3_pipeline_matches_selected_material_order_and_keeps_source_on_detail_failure](../tests/test_postgres_integration.py#L982) | 端到端匹配按所选来源材料顺序；详情失败时仍只保留该合格来源的图事实。 |
-| [test_v3_missing_views_never_falls_back_to_old_table](../tests/test_postgres_integration.py#L1031) | 默认v3依赖缺失应显式报错，不能悄悄读取仍存在的旧反应表。 |
-| [test_unrelated_partial_index_does_not_claim_complete_substructure_support](../tests/test_postgres_integration.py#L1039) | 任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。 |
-| [test_knn_core_filter_precedes_candidate_pagination](../tests/test_postgres_integration.py#L1056) | 有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。 |
-| [test_core_change_seed_can_recover_outside_knn_without_dropping_nearby](../tests/test_postgres_integration.py#L1075) | 近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。 |
+| [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L630) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
+| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L666) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
+| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L675) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L705) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L730) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L737) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
+| [test_quality_score_gate_applies_to_every_database_recall](../tests/test_postgres_integration.py#L777) | 所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。 |
+| [test_quality_filter_runs_before_knn_pool_limit](../tests/test_postgres_integration.py#L815) | 六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。 |
+| [v3_source_dsn](../tests/test_postgres_integration.py#L845) | 在私有测试库建去重组和真实来源；低分代表、高分并列及无合格来源均有覆盖。 |
+| [test_v3_selects_qualified_source_before_matching_and_details](../tests/test_postgres_integration.py#L931) | 所有召回通道使用合格实验身份和事实；低分代表、并列其他来源和失效组不混入。 |
+| [test_v3_pipeline_matches_selected_material_order_and_keeps_source_on_detail_failure](../tests/test_postgres_integration.py#L984) | 端到端匹配按所选来源材料顺序；详情失败时仍只保留该合格来源的图事实。 |
+| [test_v3_missing_views_never_falls_back_to_old_table](../tests/test_postgres_integration.py#L1033) | 默认v3依赖缺失应显式报错，不能悄悄读取仍存在的旧反应表。 |
+| [test_unrelated_partial_index_does_not_claim_complete_substructure_support](../tests/test_postgres_integration.py#L1041) | 任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。 |
+| [test_knn_core_filter_precedes_candidate_pagination](../tests/test_postgres_integration.py#L1059) | 有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。 |
+| [test_core_change_seed_can_recover_outside_knn_without_dropping_nearby](../tests/test_postgres_integration.py#L1078) | 近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。 |
 
 ## tests/test_query_input_planning.py
 

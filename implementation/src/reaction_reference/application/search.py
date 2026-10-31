@@ -319,7 +319,10 @@ def search(request, source, *, run_id=None, on_progress=None):
                 if (
                     getattr(source, "selection_failure_fallback", False)
                     and role == "product"
-                    and family.layer != "fragment"
+                    and (
+                        family.layer != "fragment"
+                        or getattr(source, "fragment_selection_stages", False)
+                    )
                     and family.relation != "strict"
                     and stage < getattr(source, "max_selection_stage", 0)
                 ):
@@ -584,7 +587,10 @@ def search(request, source, *, run_id=None, on_progress=None):
                 stage < getattr(source, "max_selection_stage", 2)
                 and not request.options.exhaustive_fixture
                 and role == "product"
-                and family.layer != "fragment"
+                and (
+                    family.layer != "fragment"
+                    or getattr(source, "fragment_selection_stages", False)
+                )
                 and family.relation != "strict"
             ):
                 useful = [
