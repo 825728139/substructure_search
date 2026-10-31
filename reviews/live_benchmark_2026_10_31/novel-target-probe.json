@@ -1,0 +1,23 @@
+[
+  {
+    "id": "T09",
+    "smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2cc(F)c(OC(F)F)cc2Cl)CC1",
+    "canonical_smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2cc(F)c(OC(F)F)cc2Cl)CC1",
+    "exact_record": null,
+    "probe_complete": true
+  },
+  {
+    "id": "T10",
+    "smiles": "COc1cc(F)c(-c2cc(C(=O)NCCO)cnc2)cc1",
+    "canonical_smiles": "COc1ccc(-c2cncc(C(=O)NCCO)c2)c(F)c1",
+    "exact_record": null,
+    "probe_complete": true
+  },
+  {
+    "id": "T11",
+    "smiles": "CCOC(=O)C(C)(F)CCN",
+    "canonical_smiles": "CCOC(=O)C(C)(F)CCN",
+    "exact_record": null,
+    "probe_complete": true
+  }
+]

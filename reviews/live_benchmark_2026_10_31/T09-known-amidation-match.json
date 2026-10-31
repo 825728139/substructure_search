@@ -1,0 +1,107 @@
+{
+  "target_smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2cc(F)c(OC(F)F)cc2Cl)CC1",
+  "source_record_id": "uspto:4372752",
+  "source_smiles": "COc1cccc(C(=O)NC2CCN(C(=O)OC(C)(C)C)CC2)c1",
+  "families": [
+    {
+      "id": "c42640cf368eda1f8bf0f455",
+      "layer": "whole",
+      "relation": "strict",
+      "rule": "strict_target_requirements",
+      "state": "no_match",
+      "reasons": [],
+      "fixed_atoms": 28,
+      "smarts": "[#6:1]-[#6:2](-[#6:3])(-[#6:4])-[#8:5]-[#6:6](=[#8:7])-[#7:8]1-[#6:9]-[#6:10]-[#6:11](-[#7:12]-[#6:13](=[#8:14])-[#6:15]2:[#6:16]:[#6:17](-[#9:18]):[#6:19](-[#8:20]-[#6:21](-[#9:22])-[#9:23]):[#6:24]:[#6:25]:2-[#17:26])-[#6:27]-[#6:28]-1"
+    },
+    {
+      "id": "c6e97f9a49402eea71c6e50a",
+      "layer": "whole",
+      "relation": "structural_family",
+      "rule": "whole_murcko_with_adjacent_functional_units",
+      "state": "no_match",
+      "reasons": [],
+      "fixed_atoms": 21,
+      "smarts": "[#6&A&+0:2]-[#8&A&+0:5]-[#6&A&+0:6](=[#8&A&+0:7])-[#7&A&+0:8]1-[#6&A&+0:9]-[#6&A&+0:10]-[#6&A&+0:11](-[#7&A&+0:12]-[#6&A&+0:13](=[#8&A&+0:14])-[#6&a&+0:15]2:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:19](-[#8&A&+0:20]-[#6&A&+0:21]):[#6&a&+0:24]:[#6&a&+0:25]:2)-[#6&A&+0:27]-[#6&A&+0:28]-1"
+    },
+    {
+      "id": "9353f90f8243699324431389",
+      "layer": "core",
+      "relation": "structural_family",
+      "rule": "complete_ring_system",
+      "state": "match",
+      "reasons": [],
+      "fixed_atoms": 10,
+      "smarts": "[#6&A&+0:2]-[#8&A&+0:5]-[#6&A&+0:6](=[#8&A&+0:7])-[#7&A&+0:8]1-[#6&A&+0:9]-[#6&A&+0:10]-[#6&A&+0:11]-[#6&A&+0:27]-[#6&A&+0:28]-1"
+    },
+    {
+      "id": "bb4577e674b5b57bd551af32",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "functional_neighborhood:amide",
+      "state": "match",
+      "reasons": [],
+      "fixed_atoms": 10,
+      "smarts": "[#6&A&+0:2]-[#8&A&+0:5]-[#6&A&+0:6](=[#8&A&+0:7])-[#7&A&+0:8]1-[#6&A&+0:9]-[#6&A&+0:10]-[#6&A&+0:11]-[#6&A&+0:27]-[#6&A&+0:28]-1"
+    },
+    {
+      "id": "3bccf2865fe0b5b7948c53cb",
+      "layer": "core",
+      "relation": "structural_family",
+      "rule": "complete_ring_system",
+      "state": "match",
+      "reasons": [],
+      "fixed_atoms": 8,
+      "smarts": "[#6&a&+0:15]1:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:19](-[#8&A&+0:20]-[#6&A&+0:21]):[#6&a&+0:24]:[#6&a&+0:25]:1"
+    },
+    {
+      "id": "4cf15f57aad0dc5495d0c3bd",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "functional_neighborhood:amide",
+      "state": "no_match",
+      "reasons": [],
+      "fixed_atoms": 21,
+      "smarts": "[#6&A&+0:2]-[#8&A&+0:5]-[#6&A&+0:6](=[#8&A&+0:7])-[#7&A&+0:8]1-[#6&A&+0:9]-[#6&A&+0:10]-[#6&A&+0:11](-[#7&A&+0:12]-[#6&A&+0:13](=[#8&A&+0:14])-[#6&a&+0:15]2:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:19](-[#8&A&+0:20]-[#6&A&+0:21]):[#6&a&+0:24]:[#6&a&+0:25]:2)-[#6&A&+0:27]-[#6&A&+0:28]-1"
+    },
+    {
+      "id": "9b576b0121b058785060943d",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "functional_neighborhood:ester",
+      "state": "match",
+      "reasons": [],
+      "fixed_atoms": 13,
+      "smarts": "[#6&A&+0:1]-[#6&A&+0:2](-[#6&A&+0:3])(-[#6&A&+0:4])-[#8&A&+0:5]-[#6&A&+0:6](=[#8&A&+0:7])-[#7&A&+0:8]1-[#6&A&+0:9]-[#6&A&+0:10]-[#6&A&+0:11]-[#6&A&+0:27]-[#6&A&+0:28]-1"
+    },
+    {
+      "id": "be98cba904e41a64f6cfbf0b",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "functional_neighborhood:carbonyl",
+      "state": "no_match",
+      "reasons": [],
+      "fixed_atoms": 11,
+      "smarts": "[#7&A&+0:12]-[#6&A&+0:13](=[#8&A&+0:14])-[#6&a&+0:15]1:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:19](-[#8&A&+0:20]-[#6&A&+0:21]):[#6&a&+0:24]:[#6&a&+0:25]:1"
+    },
+    {
+      "id": "5eaf49125ee348d48c6737bb",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "functional_neighborhood:ether",
+      "state": "no_match",
+      "reasons": [],
+      "fixed_atoms": 10,
+      "smarts": "[#6&a&+0:15]1:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:19](-[#8&A&+0:20]-[#6&A&+0:21](-[#9&A&+0:22])-[#9&A&+0:23]):[#6&a&+0:24]:[#6&a&+0:25]:1"
+    },
+    {
+      "id": "52faff844e38ee7a655ff507",
+      "layer": "fragment",
+      "relation": "structural_family",
+      "rule": "nonring_boundary_fragment",
+      "state": "match",
+      "reasons": [],
+      "fixed_atoms": 7,
+      "smarts": "[#6&A&+0:1]-[#6&A&+0:2](-[#6&A&+0:3])(-[#6&A&+0:4])-[#8&A&+0:5]-[#6&A&+0:6]=[#8&A&+0:7]"
+    }
+  ]
+}

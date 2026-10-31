@@ -1419,5 +1419,29 @@
     "python_modules_documented": 100,
     "python_classes_documented": 68,
     "python_named_functions_documented": 568
+  },
+  "live_database_benchmark_20261031": {
+    "report": "../../reviews/live_benchmark_2026_10_31/report.md",
+    "verified_implementation_hash": "ba5f7d03281393aed3f2d41daedecb7a302e4a5145ba27f10585c452741b12e1",
+    "database_table": "reaction.reaction_v2",
+    "minimum_final_score": 12,
+    "targets": 11,
+    "default_runs": 22,
+    "expanded_runs": 5,
+    "chemical_review_positions": 80,
+    "default_positive_method_fraction": 0.5454545454545454,
+    "default_latency_seconds": {
+      "min": 1.5294,
+      "median": 3.0712,
+      "p95": 5.0084,
+      "max": 5.6626
+    },
+    "full_corpus_recall_measured": false,
+    "experimental_validation": false,
+    "database_written": false,
+    "production_code_changed": false,
+    "python_modules_documented": 101,
+    "python_classes_documented": 70,
+    "python_named_functions_documented": 582
   }
 }
