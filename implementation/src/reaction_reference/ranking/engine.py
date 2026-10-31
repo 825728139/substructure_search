@@ -1,6 +1,6 @@
 """参考排序和实验能力适配：先区分方法资格与证据，再按明确偏好组织展示，保留所有已评估候选。"""
 
-from reaction_reference.chemistry.structures import canonical
+from reaction_reference.chemistry.structures import canonical, parse
 from reaction_reference.ranking.features import condition_issues, features
 
 
@@ -95,11 +95,8 @@ def _priority(reference):
     if reference.target_requirements_satisfied and reference.obtainment_hit:
         return 0
     if not reference.obtainment_hit and not reference.use_hit:
-        return (
-            5
-            if reference.contribution in ("connection_method", "local_method", "modification")
-            else 6
-        )
+        # 图推定的方法标签不构成实验支持，不能先于结构覆盖把相关骨架压在无关小片段后面。
+        return 6
     return {
         "connection_method": 1,
         "local_method": 2,
@@ -119,6 +116,7 @@ def rank_references(
     profile 选择参考优先、实验适配或操作偏好；context 只改变适配判断，不改结构和来源事实。补充九方向字段后采用确定性排序，保留完整目标获得记录并轮流分配三层展示位置；max_display 只裁剪展示，不删除候选池。
     """
     enriched = []
+    target_heavy_atoms = parse(target_smiles).GetNumHeavyAtoms() if target_smiles else None
     for reference in references:
         fit, reasons = lab_fit(reference, context)
         ranking_features = reference.ranking_features or features(reference, target_smiles)
@@ -151,6 +149,16 @@ def rank_references(
         先排方法与证据，再在明确偏好下比较已知信息组及温度偏离 25°C/时长；实验适配模式增加能力分组。未知条件不填成容易操作，最终使用参考 ID 固定并列顺序。
         """
         joint = ref.coverage.get("joint_witness") or {}
+        coverage = joint.get("atom_coverage", 0)
+        # 用同一见证的共享重原子同时衡量两侧覆盖，避免“大分子包含目标小片段”获得虚高优先级。
+        balanced_coverage = (
+            2
+            * coverage
+            * target_heavy_atoms
+            / (target_heavy_atoms + parse(ref.material.smiles).GetNumHeavyAtoms())
+            if target_heavy_atoms
+            else coverage
+        )
         evidence = (
             0
             if ref.obtainment_hit
@@ -186,6 +194,7 @@ def rank_references(
         base = (
             _priority(ref),
             evidence,
+            -balanced_coverage,
             -joint.get("atom_coverage", 0),
             *process,
             -ref.similarity,

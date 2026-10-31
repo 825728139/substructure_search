@@ -1,0 +1,38 @@
+[
+  {
+    "id": "U01",
+    "label": "用户目标1",
+    "smiles": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1",
+    "selection_reason": "用户指定原始SMILES；不按命中结果挑选",
+    "molecular_weight": 451.52300000000014,
+    "heavy_atoms": 33,
+    "rings": 5
+  },
+  {
+    "id": "U02",
+    "label": "用户目标2",
+    "smiles": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN",
+    "selection_reason": "用户指定原始SMILES；不按命中结果挑选",
+    "molecular_weight": 283.33099999999996,
+    "heavy_atoms": 21,
+    "rings": 3
+  },
+  {
+    "id": "U03",
+    "label": "用户目标3",
+    "smiles": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1",
+    "selection_reason": "用户指定原始SMILES；不按命中结果挑选",
+    "molecular_weight": 358.44100000000003,
+    "heavy_atoms": 27,
+    "rings": 6
+  },
+  {
+    "id": "U04",
+    "label": "用户目标4",
+    "smiles": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N",
+    "selection_reason": "用户指定原始SMILES；不按命中结果挑选",
+    "molecular_weight": 327.40900000000005,
+    "heavy_atoms": 23,
+    "rings": 3
+  }
+]

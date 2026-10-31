@@ -1,0 +1,68 @@
+"""核心候选迭代回归：家族公平处理与未经实验证实候选的结构排序。"""
+
+import json
+from pathlib import Path
+
+import pytest
+
+from reaction_reference.adapters.sources import JsonlSource
+from reaction_reference.application.search import search
+from reaction_reference.domain.models import Reference
+from reaction_reference.ranking.engine import rank_references
+
+
+def test_unverified_method_label_does_not_hide_more_relevant_core():
+    """真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。"""
+    payload = json.loads((Path(__file__).parent / "fixtures/graph_clue_ranking.json").read_text())
+    references = [Reference.model_validate_json(json.dumps(r)) for r in payload["references"]]
+    for ordering in [references, list(reversed(references))]:
+        ranked, displayed = rank_references(ordering, target_smiles=payload["target_smiles"])
+        assert ranked[0].record.source.record_id == "3153963"
+        assert ranked[0].contribution == "structure_clue"
+        assert not ranked[0].preparation_hit and not ranked[0].obtainment_hit
+        assert displayed[0] == ranked[0].id
+
+
+@pytest.mark.parametrize("exhaustive", [False, True])
+def test_source_small_pages_give_other_families_a_turn(
+    tmp_path, amide, request_factory, monkeypatch, exhaustive
+):
+    """在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。"""
+    path = tmp_path / "many.jsonl"
+    path.write_text(
+        "\n".join(amide.model_copy(update={"id": f"copy-{i}"}).model_dump_json() for i in range(20))
+        + "\n"
+    )
+    source = JsonlSource(path, exhaustive=exhaustive)
+    source.preferred_page_size = 1
+    source.hydration_requires_io = True
+    calls = []
+    original = source.candidate_page
+
+    def record_page(family, role, cursor, limit, target, stage=0):
+        """记录真实来源取页参数，不模拟核验和返回数据。"""
+        calls.append((family.id, limit))
+        return original(family, role, cursor, limit, target, stage)
+
+    monkeypatch.setattr(source, "candidate_page", record_page)
+    try:
+        package = search(
+            request_factory(
+                options={
+                    "include_usage": False,
+                    "include_proposals": False,
+                    "exhaustive_fixture": exhaustive,
+                },
+                budget={"max_tasks": 40, "page_size": 100},
+            ),
+            source,
+        )
+        assert package.results and calls
+        if exhaustive:
+            assert all(limit == 100 for _, limit in calls)
+        else:
+            assert all(limit == 1 for _, limit in calls)
+            assert len({family for family, _ in calls}) >= 2
+        assert len({r.id for r in package.results}) == len(package.results)
+    finally:
+        source.close()

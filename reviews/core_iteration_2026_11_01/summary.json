@@ -1,0 +1,62 @@
+[
+  {
+    "id": "U01",
+    "baseline_seconds": 3.5051184250041842,
+    "iteration_seconds": 2.502343243919313,
+    "retained_references": 9,
+    "family_attempts": {
+      "whole": 2,
+      "core": 4,
+      "fragment": 6
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "implementation_hash": "08709818dd03286549a73b32850b406205198e879b5410fe6bd5e553f562387b"
+  },
+  {
+    "id": "U02",
+    "baseline_seconds": 5.635327297262847,
+    "iteration_seconds": 1.8722735699266195,
+    "retained_references": 11,
+    "family_attempts": {
+      "whole": 2,
+      "core": 2,
+      "fragment": 6
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "implementation_hash": "08709818dd03286549a73b32850b406205198e879b5410fe6bd5e553f562387b"
+  },
+  {
+    "id": "U03",
+    "baseline_seconds": 5.498566664755344,
+    "iteration_seconds": 2.7252317499369383,
+    "retained_references": 8,
+    "family_attempts": {
+      "whole": 2,
+      "core": 6,
+      "fragment": 4
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "implementation_hash": "08709818dd03286549a73b32850b406205198e879b5410fe6bd5e553f562387b"
+  },
+  {
+    "id": "U04",
+    "baseline_seconds": 7.0558426938951015,
+    "iteration_seconds": 2.6139268251135945,
+    "retained_references": 15,
+    "family_attempts": {
+      "whole": 3,
+      "core": 4,
+      "fragment": 4
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "implementation_hash": "08709818dd03286549a73b32850b406205198e879b5410fe6bd5e553f562387b"
+  }
+]

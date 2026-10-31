@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "implementation_hash": "e9f536a262257227ab299c0a5ed69429e27bc819553b914d7b22f4a0b830c5d9",
+  "implementation_hash": "08709818dd03286549a73b32850b406205198e879b5410fe6bd5e553f562387b",
   "rule_hash": "98bbeaeaa6d4ec576955151a5fdc761ebcd7ce308c8b0fe42ef97515a41e0848",
   "rdkit_version": "2026.03.2",
   "source_snapshot": "jsonl:2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
@@ -13,7 +13,7 @@
       "target_smiles": "C=CCOc1cn(C)c2cc(F)ccc2c1=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 279.64,
+      "elapsed_ms": 262.15,
       "statistics": {
         "families": 6,
         "received_candidates": 70,
@@ -57,7 +57,7 @@
         "analyzed_reactions": 13,
         "proposals": 0,
         "display_items": 15,
-        "elapsed_ms": 272.208
+        "elapsed_ms": 255.27
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -96,7 +96,7 @@
       "excluded_record_ids": [
         "epo:106338"
       ],
-      "elapsed_ms": 253.68,
+      "elapsed_ms": 245.32,
       "statistics": {
         "families": 8,
         "received_candidates": 91,
@@ -140,7 +140,7 @@
         "analyzed_reactions": 12,
         "proposals": 0,
         "display_items": 14,
-        "elapsed_ms": 246.584
+        "elapsed_ms": 235.535
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -175,7 +175,7 @@
       "target_smiles": "O=C([O-])C(O)C(O)C(=O)[O-]",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 178.8,
+      "elapsed_ms": 190.11,
       "statistics": {
         "families": 7,
         "received_candidates": 89,
@@ -219,7 +219,7 @@
         "analyzed_reactions": 4,
         "proposals": 0,
         "display_items": 8,
-        "elapsed_ms": 174.551
+        "elapsed_ms": 186.096
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -250,7 +250,7 @@
       "excluded_record_ids": [
         "epo:106449"
       ],
-      "elapsed_ms": 136.2,
+      "elapsed_ms": 129.43,
       "statistics": {
         "families": 9,
         "received_candidates": 90,
@@ -294,7 +294,7 @@
         "analyzed_reactions": 3,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 132.754
+        "elapsed_ms": 126.246
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -321,7 +321,7 @@
       "target_smiles": "NC(=NO)c1cccc(Cl)n1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 648.12,
+      "elapsed_ms": 640.87,
       "statistics": {
         "families": 4,
         "received_candidates": 67,
@@ -365,7 +365,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 612.944
+        "elapsed_ms": 618.054
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -436,30 +436,30 @@
         "uspto:96"
       ],
       "displayed_record_ids": [
-        "epo:106311",
-        "epo:106322",
-        "epo:106325",
-        "epo:106326",
-        "epo:106335",
-        "epo:106351",
-        "epo:106358",
+        "epo:106312",
+        "epo:106330",
+        "epo:106336",
+        "epo:106346",
+        "epo:106352",
         "epo:106367",
         "epo:106368",
-        "epo:106373",
-        "epo:106387",
-        "epo:106392",
-        "epo:106393",
-        "epo:106412",
+        "epo:106374",
         "epo:106421",
+        "epo:106427",
         "epo:106428",
-        "epo:106440",
-        "epo:106442"
+        "epo:106429",
+        "uspto:4",
+        "uspto:5",
+        "uspto:83",
+        "uspto:84",
+        "uspto:85",
+        "uspto:96"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39592
+      "summary_bytes": 32123
     },
     {
       "target_id": "real-target-03",
@@ -468,7 +468,7 @@
       "excluded_record_ids": [
         "uspto:96"
       ],
-      "elapsed_ms": 581.54,
+      "elapsed_ms": 587.1,
       "statistics": {
         "families": 4,
         "received_candidates": 66,
@@ -512,7 +512,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 560.331
+        "elapsed_ms": 566.316
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -583,37 +583,37 @@
         "uspto:85"
       ],
       "displayed_record_ids": [
-        "epo:106311",
-        "epo:106322",
-        "epo:106325",
-        "epo:106326",
-        "epo:106335",
-        "epo:106351",
-        "epo:106358",
+        "epo:106312",
+        "epo:106323",
+        "epo:106330",
+        "epo:106336",
+        "epo:106346",
+        "epo:106352",
         "epo:106367",
         "epo:106368",
-        "epo:106373",
-        "epo:106387",
-        "epo:106392",
-        "epo:106393",
-        "epo:106412",
+        "epo:106374",
         "epo:106421",
+        "epo:106427",
         "epo:106428",
-        "epo:106440",
-        "epo:106442"
+        "epo:106429",
+        "uspto:4",
+        "uspto:5",
+        "uspto:83",
+        "uspto:84",
+        "uspto:85"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39592
+      "summary_bytes": 32422
     },
     {
       "target_id": "real-target-04",
       "target_smiles": "COC(=O)[C@H]1C[C@@H](CCC#N)CCN1C(=O)OC(C)(C)C",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1163.62,
+      "elapsed_ms": 1170.54,
       "statistics": {
         "families": 10,
         "received_candidates": 67,
@@ -657,7 +657,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1137.022
+        "elapsed_ms": 1144.647
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -740,7 +740,7 @@
         "uspto:21",
         "uspto:26",
         "uspto:3",
-        "uspto:39",
+        "uspto:42",
         "uspto:51",
         "uspto:58",
         "uspto:59",
@@ -751,7 +751,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 36274
+      "summary_bytes": 36863
     },
     {
       "target_id": "real-target-04",
@@ -760,7 +760,7 @@
       "excluded_record_ids": [
         "epo:106432"
       ],
-      "elapsed_ms": 1207.6,
+      "elapsed_ms": 1162.24,
       "statistics": {
         "families": 11,
         "received_candidates": 69,
@@ -804,7 +804,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1167.567
+        "elapsed_ms": 1138.817
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -886,8 +886,8 @@
         "uspto:21",
         "uspto:26",
         "uspto:3",
-        "uspto:30",
-        "uspto:39",
+        "uspto:37",
+        "uspto:42",
         "uspto:51",
         "uspto:58",
         "uspto:59",
@@ -898,14 +898,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 36407
+      "summary_bytes": 37626
     },
     {
       "target_id": "real-target-05",
       "target_smiles": "[C]=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 497.95,
+      "elapsed_ms": 487.85,
       "statistics": {
         "families": 4,
         "received_candidates": 178,
@@ -949,7 +949,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 478.61
+        "elapsed_ms": 469.108
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1020,29 +1020,29 @@
         "uspto:8"
       ],
       "displayed_record_ids": [
-        "epo:106276",
+        "epo:1",
+        "epo:106273",
+        "epo:106282",
+        "epo:106284",
         "epo:106286",
-        "epo:106300",
-        "epo:106319",
-        "epo:106343",
-        "epo:106370",
+        "epo:106314",
         "epo:106394",
+        "epo:106398",
         "epo:106404",
         "epo:106405",
         "epo:106406",
         "epo:106408",
         "epo:106409",
-        "epo:106410",
-        "epo:106420",
-        "epo:106421",
-        "epo:106446",
-        "uspto:5"
+        "epo:106449",
+        "uspto:4",
+        "uspto:6",
+        "uspto:8"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33520
+      "summary_bytes": 31681
     },
     {
       "target_id": "real-target-05",
@@ -1051,7 +1051,7 @@
       "excluded_record_ids": [
         "epo:106408"
       ],
-      "elapsed_ms": 499.64,
+      "elapsed_ms": 460.03,
       "statistics": {
         "families": 4,
         "received_candidates": 177,
@@ -1095,7 +1095,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 479.508
+        "elapsed_ms": 441.316
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1166,36 +1166,36 @@
         "uspto:8"
       ],
       "displayed_record_ids": [
-        "epo:106276",
+        "epo:1",
+        "epo:106273",
+        "epo:106282",
+        "epo:106284",
         "epo:106286",
-        "epo:106300",
-        "epo:106319",
-        "epo:106343",
-        "epo:106370",
+        "epo:106314",
         "epo:106394",
-        "epo:106401",
+        "epo:106398",
         "epo:106404",
         "epo:106405",
         "epo:106406",
         "epo:106409",
-        "epo:106410",
-        "epo:106420",
-        "epo:106421",
-        "epo:106446",
-        "uspto:5"
+        "epo:106449",
+        "uspto:4",
+        "uspto:5",
+        "uspto:6",
+        "uspto:8"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33695
+      "summary_bytes": 31725
     },
     {
       "target_id": "real-target-06",
       "target_smiles": "O=C1CN2C(=O)CCC2N1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 90.4,
+      "elapsed_ms": 86.67,
       "statistics": {
         "families": 4,
         "received_candidates": 33,
@@ -1239,7 +1239,7 @@
         "analyzed_reactions": 8,
         "proposals": 0,
         "display_items": 9,
-        "elapsed_ms": 85.6
+        "elapsed_ms": 82.114
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1280,7 +1280,7 @@
         "epo:106282",
         "epo:106284"
       ],
-      "elapsed_ms": 58.15,
+      "elapsed_ms": 58.57,
       "statistics": {
         "families": 4,
         "received_candidates": 21,
@@ -1324,7 +1324,7 @@
         "analyzed_reactions": 5,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 55.311
+        "elapsed_ms": 55.797
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1355,7 +1355,7 @@
       "target_smiles": "Nc1ncnc2nc[nH]c12",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 32.25,
+      "elapsed_ms": 21.24,
       "statistics": {
         "families": 4,
         "received_candidates": 4,
@@ -1399,7 +1399,7 @@
         "analyzed_reactions": 1,
         "proposals": 0,
         "display_items": 1,
-        "elapsed_ms": 30.122
+        "elapsed_ms": 20.003
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1424,7 +1424,7 @@
       "excluded_record_ids": [
         "epo:106287"
       ],
-      "elapsed_ms": 5.72,
+      "elapsed_ms": 7.51,
       "statistics": {
         "families": 4,
         "received_candidates": 0,
@@ -1468,7 +1468,7 @@
         "analyzed_reactions": 0,
         "proposals": 0,
         "display_items": 0,
-        "elapsed_ms": 4.903
+        "elapsed_ms": 6.199
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1487,7 +1487,7 @@
       "target_smiles": "CC(CNS(=O)(=O)C(C)C)c1ccc(-c2ccc(C#N)cc2)cc1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1357.55,
+      "elapsed_ms": 1359.65,
       "statistics": {
         "families": 10,
         "received_candidates": 64,
@@ -1531,7 +1531,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1307.6
+        "elapsed_ms": 1307.302
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1603,28 +1603,28 @@
       ],
       "displayed_record_ids": [
         "epo:106286",
-        "epo:106311",
+        "epo:106313",
         "epo:106314",
+        "epo:106325",
+        "epo:106326",
+        "epo:106332",
         "epo:106342",
+        "epo:106352",
         "epo:106360",
-        "epo:106361",
-        "epo:106389",
-        "epo:106392",
-        "epo:106393",
+        "epo:106376",
         "epo:106395",
         "epo:106398",
-        "epo:106417",
-        "epo:106440",
-        "epo:106442",
+        "epo:106410",
+        "epo:106422",
+        "epo:106426",
         "epo:106451",
-        "uspto:60",
-        "uspto:63"
+        "uspto:60"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 37284
+      "summary_bytes": 33871
     },
     {
       "target_id": "real-target-08",
@@ -1633,7 +1633,7 @@
       "excluded_record_ids": [
         "epo:106451"
       ],
-      "elapsed_ms": 1285.06,
+      "elapsed_ms": 1205.26,
       "statistics": {
         "families": 10,
         "received_candidates": 62,
@@ -1677,7 +1677,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1239.565
+        "elapsed_ms": 1161.674
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1749,20 +1749,20 @@
       ],
       "displayed_record_ids": [
         "epo:106286",
-        "epo:106311",
+        "epo:106313",
         "epo:106314",
+        "epo:106325",
+        "epo:106326",
+        "epo:106332",
         "epo:106342",
+        "epo:106352",
         "epo:106360",
-        "epo:106361",
-        "epo:106389",
-        "epo:106392",
-        "epo:106393",
+        "epo:106376",
         "epo:106395",
         "epo:106398",
-        "epo:106417",
-        "epo:106420",
-        "epo:106440",
-        "epo:106442",
+        "epo:106410",
+        "epo:106422",
+        "epo:106426",
         "uspto:60",
         "uspto:63"
       ],
@@ -1770,14 +1770,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 35505
+      "summary_bytes": 32134
     },
     {
       "target_id": "real-target-09",
       "target_smiles": "CN(C)C(=O)Sc1nc(-c2ccccc2)cn1-c1ccc([N+](=O)[O-])cn1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1544.67,
+      "elapsed_ms": 1472.08,
       "statistics": {
         "families": 10,
         "received_candidates": 71,
@@ -1821,7 +1821,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1491.189
+        "elapsed_ms": 1425.899
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1892,30 +1892,30 @@
         "uspto:99"
       ],
       "displayed_record_ids": [
-        "epo:106287",
-        "epo:106307",
+        "epo:106312",
         "epo:106314",
-        "epo:106322",
-        "epo:106351",
+        "epo:106315",
+        "epo:106316",
+        "epo:106329",
+        "epo:106348",
+        "epo:106352",
         "epo:106367",
         "epo:106368",
-        "epo:106373",
-        "epo:106392",
+        "epo:106396",
         "epo:106398",
-        "epo:106410",
         "epo:106411",
         "epo:106412",
         "epo:106413",
         "epo:106414",
-        "epo:106440",
-        "epo:106442",
-        "uspto:12"
+        "epo:106422",
+        "epo:106423",
+        "uspto:60"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 38191
+      "summary_bytes": 33087
     },
     {
       "target_id": "real-target-09",
@@ -1924,7 +1924,7 @@
       "excluded_record_ids": [
         "epo:106412"
       ],
-      "elapsed_ms": 1398.86,
+      "elapsed_ms": 1398.74,
       "statistics": {
         "families": 12,
         "received_candidates": 74,
@@ -1968,7 +1968,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1352.654
+        "elapsed_ms": 1345.372
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2039,37 +2039,37 @@
         "uspto:99"
       ],
       "displayed_record_ids": [
-        "epo:106287",
-        "epo:106307",
+        "epo:106312",
         "epo:106314",
-        "epo:106322",
-        "epo:106351",
+        "epo:106315",
+        "epo:106316",
+        "epo:106325",
+        "epo:106329",
+        "epo:106348",
+        "epo:106352",
         "epo:106367",
         "epo:106368",
-        "epo:106373",
-        "epo:106392",
+        "epo:106396",
         "epo:106398",
-        "epo:106410",
         "epo:106411",
         "epo:106413",
         "epo:106414",
+        "epo:106422",
         "epo:106423",
-        "epo:106440",
-        "epo:106442",
-        "uspto:12"
+        "uspto:60"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 38180
+      "summary_bytes": 33266
     },
     {
       "target_id": "real-target-10",
       "target_smiles": "CCOCn1nccc1C(=O)c1cc2c(c(Cl)c1Cl)OC(C(=O)OCC)O2",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 996.82,
+      "elapsed_ms": 999.15,
       "statistics": {
         "families": 10,
         "received_candidates": 66,
@@ -2113,7 +2113,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 969.489
+        "elapsed_ms": 973.975
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2184,29 +2184,29 @@
         "uspto:99"
       ],
       "displayed_record_ids": [
+        "epo:106288",
         "epo:106289",
+        "epo:106290",
+        "epo:106291",
         "epo:106292",
         "epo:106293",
         "epo:106294",
         "epo:106295",
+        "epo:106296",
         "epo:106297",
+        "epo:106298",
         "epo:106301",
+        "epo:106302",
+        "epo:106304",
         "epo:106440",
         "epo:106442",
-        "uspto:13",
-        "uspto:16",
-        "uspto:20",
-        "uspto:25",
-        "uspto:27",
-        "uspto:29",
-        "uspto:48",
         "uspto:51"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 39301
+      "summary_bytes": 35747
     },
     {
       "target_id": "real-target-10",
@@ -2215,7 +2215,7 @@
       "excluded_record_ids": [
         "epo:106295"
       ],
-      "elapsed_ms": 999.83,
+      "elapsed_ms": 961.33,
       "statistics": {
         "families": 11,
         "received_candidates": 66,
@@ -2259,7 +2259,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 972.169
+        "elapsed_ms": 936.554
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2330,36 +2330,36 @@
         "uspto:99"
       ],
       "displayed_record_ids": [
+        "epo:106288",
         "epo:106289",
+        "epo:106290",
         "epo:106291",
         "epo:106292",
         "epo:106293",
         "epo:106294",
+        "epo:106296",
         "epo:106297",
+        "epo:106298",
         "epo:106301",
+        "epo:106302",
+        "epo:106304",
         "epo:106440",
+        "epo:106441",
         "epo:106442",
-        "uspto:13",
-        "uspto:16",
-        "uspto:20",
-        "uspto:25",
-        "uspto:27",
-        "uspto:29",
-        "uspto:48",
         "uspto:51"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 38994
+      "summary_bytes": 35479
     },
     {
       "target_id": "real-target-11",
       "target_smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2C(O)C1)C(=O)c1c(O)cccc1C3=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1148.19,
+      "elapsed_ms": 966.37,
       "statistics": {
         "families": 7,
         "received_candidates": 180,
@@ -2403,7 +2403,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1121.4
+        "elapsed_ms": 939.138
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2469,29 +2469,18 @@
         "uspto:7"
       ],
       "displayed_record_ids": [
-        "epo:106276",
+        "epo:1",
         "epo:106286",
-        "epo:106316",
-        "epo:106317",
-        "epo:106320",
-        "epo:106334",
-        "epo:106344",
-        "epo:106349",
-        "epo:106350",
-        "epo:106369",
-        "epo:106371",
-        "epo:106378",
+        "epo:106314",
         "epo:106394",
-        "epo:106397",
-        "epo:106416",
-        "epo:106421",
-        "uspto:3"
+        "epo:106398",
+        "epo:106416"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 34011
+      "summary_bytes": 32830
     },
     {
       "target_id": "real-target-11",
@@ -2500,7 +2489,7 @@
       "excluded_record_ids": [
         "epo:106416"
       ],
-      "elapsed_ms": 1053.09,
+      "elapsed_ms": 1006.49,
       "statistics": {
         "families": 8,
         "received_candidates": 265,
@@ -2544,7 +2533,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1025.302
+        "elapsed_ms": 979.695
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2609,36 +2598,25 @@
         "uspto:7"
       ],
       "displayed_record_ids": [
-        "epo:106276",
+        "epo:1",
         "epo:106286",
-        "epo:106316",
-        "epo:106317",
-        "epo:106320",
-        "epo:106334",
-        "epo:106344",
-        "epo:106349",
-        "epo:106350",
-        "epo:106369",
-        "epo:106371",
-        "epo:106378",
+        "epo:106314",
+        "epo:106328",
         "epo:106394",
-        "epo:106397",
-        "epo:106420",
-        "epo:106421",
-        "uspto:3"
+        "epo:106398"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33915
+      "summary_bytes": 32742
     },
     {
       "target_id": "real-target-12",
       "target_smiles": "Cn1cnnc1CCCO",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 949.79,
+      "elapsed_ms": 903.92,
       "statistics": {
         "families": 6,
         "received_candidates": 599,
@@ -2682,7 +2660,7 @@
         "analyzed_reactions": 40,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 927.103
+        "elapsed_ms": 882.375
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2718,26 +2696,20 @@
         "uspto:10"
       ],
       "displayed_record_ids": [
-        "epo:106290",
-        "epo:106292",
-        "epo:106298",
-        "epo:106299",
-        "epo:106418",
-        "epo:106419",
+        "epo:106278",
+        "epo:106279",
         "epo:106423",
         "epo:106424",
         "epo:106425",
         "epo:106427",
         "epo:106430",
-        "epo:106431",
-        "epo:106433",
-        "uspto:10"
+        "epo:106449"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33774
+      "summary_bytes": 32974
     },
     {
       "target_id": "real-target-12",
@@ -2790,7 +2762,7 @@
         "analyzed_reactions": 39,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 782.007
+        "elapsed_ms": 782.962
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2825,25 +2797,20 @@
         "uspto:10"
       ],
       "displayed_record_ids": [
-        "epo:106290",
-        "epo:106292",
-        "epo:106298",
-        "epo:106299",
-        "epo:106418",
-        "epo:106419",
+        "epo:106277",
+        "epo:106278",
+        "epo:106279",
         "epo:106423",
         "epo:106425",
         "epo:106427",
         "epo:106430",
-        "epo:106431",
-        "epo:106433",
-        "uspto:10"
+        "epo:106449"
       ],
       "method_relevance_label_state": "unreviewed_not_scored",
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33660
+      "summary_bytes": 32685
     }
   ],
   "limits": [

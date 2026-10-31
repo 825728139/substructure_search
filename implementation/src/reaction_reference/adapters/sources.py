@@ -307,8 +307,9 @@ class PostgresSource:
     """现库只读来源，使用有界 KNN 候选和独立子结构会话游标，不按全量命中排序计数。"""
 
     hydration_requires_io = True
+    preferred_page_size = 2
     selection_failure_fallback = True
-    selection_policy = "final_score_ge_12_before_selection; optional_indexed_side_fp_knn_top512_then_independent_indexed_core_cursor; no_server_mass_window"
+    selection_policy = "final_score_ge_12_before_selection; core_filtered_knn_top512_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",
@@ -356,6 +357,7 @@ class PostgresSource:
         self.issues = []
         self._details_columns = None
         self._cursors, self._rows, self._hydrated, self._knn = {}, {}, {}, {}
+        self._knn_core = {}
         try:
             self.connection.execute("BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             self.connection.execute(
@@ -541,10 +543,84 @@ class PostgresSource:
                     self._knn[pool_key] = self.connection.execute(
                         query, (target_smiles,)
                     ).fetchall()
-                pool = self._knn[pool_key]
+                family_pool_key = (pool_key, family.core_smarts)
+                if family_pool_key not in self._knn_core:
+                    nearest_rows = self._knn[pool_key]
+                    if nearest_rows:
+                        # 只在有界近邻池内核验必要核心，不能让不同家族重复消耗无关材料额度。
+                        matched_ids = {
+                            row["id"]: row["absent_from_inputs"]
+                            for row in self.connection.execute(
+                                sql.SQL(
+                                    "SELECT id, reactants_mol IS NOT NULL AND NOT "
+                                    "(reactants_mol @> %s::qmol) AS absent_from_inputs "
+                                    "FROM {table} WHERE id=ANY(%s) "
+                                    "AND {column} IS NOT NULL AND {column} @> %s::qmol"
+                                ).format(
+                                    table=sql.Identifier("reaction", self.table),
+                                    column=sql.Identifier(column),
+                                ),
+                                (
+                                    family.core_smarts,
+                                    [row["id"] for row in nearest_rows],
+                                    family.core_smarts,
+                                ),
+                            ).fetchall()
+                        }
+                        self._knn_core[family_pool_key] = [
+                            row for row in nearest_rows if row["id"] in matched_ids
+                        ]
+                        if role == "product":
+                            self._knn_core[family_pool_key].sort(
+                                key=lambda row: not matched_ids[row["id"]]
+                            )
+                    else:
+                        self._knn_core[family_pool_key] = []
+                    if role == "product":
+                        # 至多补入两个产物含核心、已知输入不含同一核心的先例。
+                        # 这是结构事实优先通道，不证明成环机制、迁移可行或立体结果。
+                        self.connection.execute("SAVEPOINT rr_core_seed")
+                        try:
+                            seeds = self.connection.execute(
+                                sql.SQL(
+                                    "SELECT {projection} FROM {table} "
+                                    "WHERE final_score>=12 AND products_mol @> %s::qmol "
+                                    "AND reactants_mol IS NOT NULL "
+                                    "AND NOT (reactants_mol @> %s::qmol) LIMIT 2"
+                                ).format(
+                                    projection=projection,
+                                    table=sql.Identifier("reaction", self.table),
+                                ),
+                                (family.core_smarts, family.core_smarts),
+                            ).fetchall()
+                        except Error as exc:
+                            self.connection.execute("ROLLBACK TO SAVEPOINT rr_core_seed")
+                            seeds = []
+                            self.issues.append(
+                                {
+                                    "family_id": family.id,
+                                    "code": "core_seed_query_failed",
+                                    "type": type(exc).__name__,
+                                }
+                            )
+                        self.connection.execute("RELEASE SAVEPOINT rr_core_seed")
+                        seed_ids = {row["id"] for row in seeds}
+                        nearest_matches = [
+                            row
+                            for row in self._knn_core[family_pool_key]
+                            if row["id"] not in seed_ids
+                        ]
+                        # 两类候选交替：核心变化线索不能独占首轮，也不能挤掉同母核局部修饰。
+                        merged = []
+                        for index in range(max(len(seeds), len(nearest_matches))):
+                            for stream in (seeds, nearest_matches):
+                                if index < len(stream):
+                                    merged.append(stream[index])
+                        self._knn_core[family_pool_key] = merged
+                pool = self._knn_core[family_pool_key]
                 rows = pool[cursor : cursor + limit]
                 done = cursor + len(rows) >= len(pool)
-                enumeration = "side_aggregate_fp_knn_top512_individual_graph_verification_required"
+                enumeration = "core_filtered_knn512_with_up_to2_input_core_absence_seeds_individual_verification_required"
             else:
                 if key not in self._cursors:
                     if cursor:

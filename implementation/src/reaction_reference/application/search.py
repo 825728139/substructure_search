@@ -306,9 +306,11 @@ def search(request, source, *, run_id=None, on_progress=None):
             hydration_reserve = int(getattr(source, "hydration_requires_io", False))
             budget.task("source_page", scope, reserve=2 + hydration_reserve)
             try:
-                page = source.candidate_page(
-                    family, role, cursor, request.budget.page_size, target_smiles, stage
-                )
+                # 在线来源一页少取，先给不同家族实际处理机会；后续仍沿游标继续，不丢弃候选。
+                page_size = request.budget.page_size
+                if not request.options.exhaustive_fixture:
+                    page_size = min(page_size, getattr(source, "preferred_page_size", page_size))
+                page = source.candidate_page(family, role, cursor, page_size, target_smiles, stage)
             except Exception as exc:
                 source_issues.append(
                     {"scope": scope, "code": "source_query_failed", "type": type(exc).__name__}
@@ -589,7 +591,11 @@ def search(request, source, *, run_id=None, on_progress=None):
                     r for r in references.values() if family.id in r.family_ids and r.obtainment_hit
                 ]
                 if len(useful) < 4:
-                    queue.append((family, role, 0, stage + 1))
+                    # 近邻池完全没有该核心时立即尝试独立子结构通道，避免罕见骨架被通用片段挤掉。
+                    if not page.items:
+                        queue.appendleft((family, role, 0, stage + 1))
+                    else:
+                        queue.append((family, role, 0, stage + 1))
             if (
                 request.options.directed_followups
                 and role == "product"

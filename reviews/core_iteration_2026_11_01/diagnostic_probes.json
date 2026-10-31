@@ -1,0 +1,1440 @@
+[
+  {
+    "target": "U01",
+    "query": "exact",
+    "family": null,
+    "elapsed_ms": 8.885126560926437,
+    "rows": [],
+    "error": null
+  },
+  {
+    "target": "U01",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "e30c64e8c8c80fcb12da1662",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2",
+      "target_atoms": [
+        6,
+        7,
+        8,
+        14,
+        15,
+        16,
+        17
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [6, 7, 8, 14, 15, 16, 17]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 54.90586906671524,
+    "rows": [
+      {
+        "id": 9033905,
+        "product_smiles": [
+          "O=C1NC(=O)C2(n3c(=O)[nH]c4ccccc43)CC1C2"
+        ],
+        "reactant_smiles": [
+          "Nc1ccccc1NC12CC(C1)C(=O)NC2=O",
+          "O=C(n1ccnc1)n1ccnc1"
+        ],
+        "reaction_smiles": "CCN(CC)CC.Nc1ccccc1NC12CC(C1)C(=O)NC2=O.O=C(n1ccnc1)n1ccnc1>>O=C1NC(=O)C2(n3c(=O)[nH]c4ccccc43)CC1C2",
+        "final_score": 12
+      },
+      {
+        "id": 10249727,
+        "product_smiles": [
+          "C=CC(=O)N1CC2CC(C1)C2=O"
+        ],
+        "reactant_smiles": [
+          "CC(C)(C)OC(=O)N1CC2CC(C1)C2=O"
+        ],
+        "reaction_smiles": "CC(C)(C)OC(=O)N1CC2CC(C1)C2=O>>C=CC(=O)N1CC2CC(C1)C2=O",
+        "final_score": 13
+      },
+      {
+        "id": 1680163,
+        "product_smiles": [
+          "COC(=O)CC1C2CNCC1C2"
+        ],
+        "reactant_smiles": [
+          "COC(=O)C=C1C2CC1CN(Cc1ccccc1)C2"
+        ],
+        "reaction_smiles": "COC(=O)C=C1C2CC1CN(Cc1ccccc1)C2.[H][H]>>COC(=O)CC1C2CNCC1C2",
+        "final_score": 12
+      },
+      {
+        "id": 1703843,
+        "product_smiles": [
+          "CCOC(=O)CC1C2CNCC1C2"
+        ],
+        "reactant_smiles": [
+          "CCOC(=O)C=C1C2CC1CN(Cc1ccccc1)C2"
+        ],
+        "reaction_smiles": "CCOC(=O)C=C1C2CC1CN(Cc1ccccc1)C2.[H][H]>>CCOC(=O)CC1C2CNCC1C2",
+        "final_score": 16
+      },
+      {
+        "id": 9727331,
+        "product_smiles": [
+          "N#CCN1CC2CC(C2)C1"
+        ],
+        "reactant_smiles": [
+          "C1NCC2CC1C2.Cl",
+          "N#CCBr"
+        ],
+        "reaction_smiles": "C1NCC2CC1C2.Cl.N#CCBr.O=C([O-])[O-].[K+].[K+]>>N#CCN1CC2CC(C2)C1",
+        "final_score": 17
+      },
+      {
+        "id": 9727333,
+        "product_smiles": [
+          "NCCN1CC2CC(C2)C1"
+        ],
+        "reactant_smiles": [
+          "N#CCN1CC2CC(C2)C1"
+        ],
+        "reaction_smiles": "N#CCN1CC2CC(C2)C1.[AlH4-].[Li+]>>NCCN1CC2CC(C2)C1",
+        "final_score": 17
+      },
+      {
+        "id": 9033927,
+        "product_smiles": [
+          "Cc1nc2cccc([N+](=O)[O-])c2c(=O)n1C12CC(C1)C(=O)NC2=O"
+        ],
+        "reactant_smiles": [
+          "Cc1nc2cccc([N+](=O)[O-])c2c(=O)o1",
+          "NC12CC(C1)C(=O)NC2=O"
+        ],
+        "reaction_smiles": "Cc1nc2cccc([N+](=O)[O-])c2c(=O)o1.NC12CC(C1)C(=O)NC2=O.c1ccncc1>>Cc1nc2cccc([N+](=O)[O-])c2c(=O)n1C12CC(C1)C(=O)NC2=O",
+        "final_score": 16
+      },
+      {
+        "id": 3153963,
+        "product_smiles": [
+          "CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O"
+        ],
+        "reactant_smiles": [
+          "C=C(C(=O)N(CCC)C(=O)C(=C)c1ccc([N+](=O)[O-])cc1)c1ccccc1"
+        ],
+        "reaction_smiles": "C=C(C(=O)N(CCC)C(=O)C(=C)c1ccc([N+](=O)[O-])cc1)c1ccccc1>>CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+        "final_score": 16
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U01",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "43dd02397b8fc700322a3a7c",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#7&a&+0:20]1:[#7&a&+0:21]:[#6&a&+0:22]:[#6&a&+0:24]:[#6&a&+0:25]:1",
+      "target_atoms": [
+        19,
+        20,
+        21,
+        23,
+        24
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [19, 20, 21, 23, 24]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 1.794883981347084,
+    "rows": [
+      {
+        "id": 1174673,
+        "product_smiles": [
+          "CS(=O)(=O)c1n[nH]c2cnccc12"
+        ],
+        "reactant_smiles": [
+          "CSc1n[nH]c2cnccc12",
+          "O=S(=O)([O-])OO.[K+]"
+        ],
+        "reaction_smiles": "CSc1n[nH]c2cnccc12.O=S(=O)([O-])OO.[K+]>>CS(=O)(=O)c1n[nH]c2cnccc12",
+        "final_score": 16
+      },
+      {
+        "id": 926366,
+        "product_smiles": [
+          "CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C"
+        ],
+        "reactant_smiles": [
+          "CNc1cn(-c2cccnc2)nc1C.Cl.Cl",
+          "CSCCC(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cn(-c2cccnc2)nc1C.Cl.Cl.CSCCC(=O)O>>CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C",
+        "final_score": 20
+      },
+      {
+        "id": 10102842,
+        "product_smiles": [
+          "CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reactant_smiles": [
+          "CS(=O)(=O)CC(=O)O",
+          "Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F.CS(=O)(=O)CC(=O)O.Nc1ccn2ncc(Br)c2c1>>CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1",
+        "final_score": 18
+      },
+      {
+        "id": 926374,
+        "product_smiles": [
+          "CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1"
+        ],
+        "reactant_smiles": [
+          "CNc1cnn(-c2cccnc2)c1.Cl.Cl",
+          "CSCC(C)C(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cnn(-c2cccnc2)c1.Cl.Cl.CSCC(C)C(=O)O>>CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1",
+        "final_score": 18
+      },
+      {
+        "id": 1886745,
+        "product_smiles": [
+          "CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl>>CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl",
+        "final_score": 19
+      },
+      {
+        "id": 6243484,
+        "product_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCNC1(Cl)C=CN(c2cccnc2)N1",
+          "O=C(O)CCSCCC(F)(F)F"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CCNC1(Cl)C=CN(c2cccnc2)N1.O=C(O)CCSCCC(F)(F)F>>CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      },
+      {
+        "id": 6162710,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CC(=O)O",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CC(=O)O.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 15
+      },
+      {
+        "id": 6543082,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "OO"
+        ],
+        "reaction_smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.OO>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U01",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "398631fb32d061bf8ad0a044",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:28]1:[#6&a&+0:29]:[#6&a&+0:30]:[#6&a&+0:31]:[#6&a&+0:32]:[#6&a&+0:33]:1",
+      "target_atoms": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [27, 28, 29, 30, 31, 32]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 1.863745041191578,
+    "rows": [
+      {
+        "id": 9438448,
+        "product_smiles": [
+          "COC(c1cccc(Br)c1)c1nncn1C"
+        ],
+        "reactant_smiles": [
+          "CI",
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reaction_smiles": "CI.Cn1cnnc1C(O)c1cccc(Br)c1.[H-].[Na+]>>COC(c1cccc(Br)c1)c1nncn1C",
+        "final_score": 18
+      },
+      {
+        "id": 9438424,
+        "product_smiles": [
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reactant_smiles": [
+          "Cn1cnnc1",
+          "O=Cc1cccc(Br)c1"
+        ],
+        "reaction_smiles": "Cn1cnnc1.O=Cc1cccc(Br)c1.[Li][CH2]CCC>>Cn1cnnc1C(O)c1cccc(Br)c1",
+        "final_score": 20
+      },
+      {
+        "id": 506739,
+        "product_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc(N)cc1"
+        ],
+        "reactant_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1"
+        ],
+        "reaction_smiles": "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1.Cl.[H][H]>>CN(C)CC(O)CN(C)c1ccc(N)cc1",
+        "final_score": 15
+      },
+      {
+        "id": 1193781,
+        "product_smiles": [
+          "COCC(O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "COCC(=O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reaction_smiles": "COCC(=O)c1ccc(-n2cccc2)c(F)c1.[BH4-].[Na+]>>COCC(O)c1ccc(-n2cccc2)c(F)c1",
+        "final_score": 22
+      },
+      {
+        "id": 1819939,
+        "product_smiles": [
+          "CCCCNCC(O)c1ccc(F)c(N)c1F"
+        ],
+        "reactant_smiles": [
+          "CCCCN",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CCCCN.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1ccc(F)c(N)c1F",
+        "final_score": 20
+      },
+      {
+        "id": 997016,
+        "product_smiles": [
+          "COC1CN(c2cccc(CO)c2F)C1"
+        ],
+        "reactant_smiles": [
+          "COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1"
+        ],
+        "reaction_smiles": "CCCC[N+](CCCC)(CCCC)CCCC.[F-].COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1>>COC1CN(c2cccc(CO)c2F)C1",
+        "final_score": 15
+      },
+      {
+        "id": 8322990,
+        "product_smiles": [
+          "CCCCNCC(O)c1cc(F)c(N)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F",
+          "CCCCNCC(O)c1ccc(F)c(N)c1F",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F.CCCCNCC(O)c1ccc(F)c(N)c1F.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1cc(F)c(N)c(F)c1",
+        "final_score": 12
+      },
+      {
+        "id": 3401146,
+        "product_smiles": [
+          "C[C@@H](O)Cn1ccc2cc(F)ccc21"
+        ],
+        "reactant_smiles": [
+          "C[C@@H]1CO1",
+          "Fc1ccc2[nH]ccc2c1"
+        ],
+        "reaction_smiles": "C[C@@H]1CO1.Fc1ccc2[nH]ccc2c1.[H-].[Na+]>>C[C@@H](O)Cn1ccc2cc(F)ccc21",
+        "final_score": 20
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U02",
+    "query": "exact",
+    "family": null,
+    "elapsed_ms": 0.598871149122715,
+    "rows": [],
+    "error": null
+  },
+  {
+    "target": "U02",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "6b50f6758e2e442e6eb6b9c3",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]2-[#6&A&+0:4](=[#8&A&+0:5])-[#7&A&+0:6]-[#6&A&+0:11](=[#8&A&+0:12])-[#6&a&+0:13]3:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:2:3):[#6&a&+0:19]:1",
+      "target_atoms": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 16, 17, 18]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 2.14197114109993,
+    "rows": [
+      {
+        "id": 4438348,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "CCO",
+          "CN(C)c1ccc2c3c(cccc13)C(=O)OC2=O",
+          "NCCO",
+          "NCCO"
+        ],
+        "reaction_smiles": "CCO.CN(C)c1ccc2c3c(cccc13)C(=O)OC2=O.NCCO.NCCO>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 15
+      },
+      {
+        "id": 4028914,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "CC(=O)O.O=C(O)CCc1ccccc1",
+          "CCCCCCCCCC(N)CCCCCCCCC",
+          "O=C1OC(=O)c2cccc3cccc1c23"
+        ],
+        "reaction_smiles": "CC(=O)O.O=C(O)CCc1ccccc1.CCCCCCCCCC(N)CCCCCCCCC.O=C1OC(=O)c2cccc3cccc1c23>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 16
+      },
+      {
+        "id": 4028913,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "O=C1NC(=O)c2ccc3c4cccc5cccc(c6ccc1c2c63)c54",
+          "O=C1OC(=O)c2cccc3cccc1c23"
+        ],
+        "reaction_smiles": "O=C1NC(=O)c2ccc3c4cccc5cccc(c6ccc1c2c63)c54.O=C1OC(=O)c2cccc3cccc1c23>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 12
+      },
+      {
+        "id": 3890795,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "NCCO",
+          "O=C(OC(=O)c1cccc2ccccc12)c1cccc2ccccc12",
+          "O=C1OC(=O)c2cccc3cccc1c23"
+        ],
+        "reaction_smiles": "NCCO.O=C(OC(=O)c1cccc2ccccc12)c1cccc2ccccc12.O=C1OC(=O)c2cccc3cccc1c23>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 13
+      },
+      {
+        "id": 3890794,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "C=Cc1ccccc1.O=C1C=CC(=O)N1"
+        ],
+        "reaction_smiles": "C=Cc1ccccc1.O=C1C=CC(=O)N1>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 12
+      },
+      {
+        "id": 3890793,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "O=C1C2=C(CCCC2)C(=O)N1c1ccc(Br)cc1",
+          "O=C1C=CC(=O)O1",
+          "O=C1OC(=O)c2cccc3cccc1c23",
+          "O=C1OC(=O)c2ccccc21"
+        ],
+        "reaction_smiles": "O=C1C2=C(CCCC2)C(=O)N1c1ccc(Br)cc1.O=C1C=CC(=O)O1.O=C1OC(=O)c2cccc3cccc1c23.O=C1OC(=O)c2ccccc21>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 12
+      },
+      {
+        "id": 2429594,
+        "product_smiles": [
+          "O=C1NC(=O)c2cccc3cccc1c23"
+        ],
+        "reactant_smiles": [
+          "CN1C(=O)c2cccc3cccc(c23)C1=O",
+          "CO",
+          "Cc1ccc(C)cc1"
+        ],
+        "reaction_smiles": "CN1C(=O)c2cccc3cccc(c23)C1=O.CO.Cc1ccc(C)cc1>>O=C1NC(=O)c2cccc3cccc1c23",
+        "final_score": 16
+      },
+      {
+        "id": 2895769,
+        "product_smiles": [
+          "O=C1c2cccc3cccc(c23)C(=O)N1CN1CCc2ccccc2C1"
+        ],
+        "reactant_smiles": [
+          "C=O",
+          "O=C1NC(=O)c2cccc3cccc1c23",
+          "c1ccc2c(c1)CCNC2"
+        ],
+        "reaction_smiles": "C=O.O=C1NC(=O)c2cccc3cccc1c23.c1ccc2c(c1)CCNC2>>O=C1c2cccc3cccc(c23)C(=O)N1CN1CCc2ccccc2C1",
+        "final_score": 17
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U03",
+    "query": "exact",
+    "family": null,
+    "elapsed_ms": 0.8299620822072029,
+    "rows": [],
+    "error": null
+  },
+  {
+    "target": "U03",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "236b64275ef4bf5de87f1ab0",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&A&+0:10]12-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2",
+      "target_atoms": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [9, 10, 11, 12, 13, 14]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 6.668328307569027,
+    "rows": [
+      {
+        "id": 10234759,
+        "product_smiles": [
+          "CC(C)Oc1cc2nn(C34COC(C3)C4)cc2cc1Br"
+        ],
+        "reactant_smiles": [
+          "CC(C)Oc1cc([N+](=O)[O-])c(/C=N/C23COC(C2)C3)cc1Br"
+        ],
+        "reaction_smiles": "CC(C)Oc1cc([N+](=O)[O-])c(/C=N/C23COC(C2)C3)cc1Br.CCCCP(CCCC)CCCC>>CC(C)Oc1cc2nn(C34COC(C3)C4)cc2cc1Br",
+        "final_score": 18
+      },
+      {
+        "id": 9835115,
+        "product_smiles": [
+          "Cn1nc(Cl)c(CO)c(CC(=O)NC23COC(C)(C2)C3)c1=O"
+        ],
+        "reactant_smiles": [
+          "CC12CC(N)(CO1)C2.Cl",
+          "Cn1nc(Cl)c2c(c1=O)CC(=O)OC2"
+        ],
+        "reaction_smiles": "CC12CC(N)(CO1)C2.Cl.CCN(CC)CC.Cn1nc(Cl)c2c(c1=O)CC(=O)OC2>>Cn1nc(Cl)c(CO)c(CC(=O)NC23COC(C)(C2)C3)c1=O",
+        "final_score": 18
+      },
+      {
+        "id": 10234817,
+        "product_smiles": [
+          "CCC(C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)Nc1cccn(C2CC2)c1=O",
+          "CC[C@@H](C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)Nc1cccn(C2CC2)c1=O"
+        ],
+        "reactant_smiles": [
+          "CCC(C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)O",
+          "Nc1cccn(C2CC2)c1=O"
+        ],
+        "reaction_smiles": "CCC(C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)O.CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1.Nc1cccn(C2CC2)c1=O>>CCC(C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)Nc1cccn(C2CC2)c1=O.CC[C@@H](C)Oc1nc2nn(C34COC(C)(C3)C4)cc2cc1C(=O)Nc1cccn(C2CC2)c1=O",
+        "final_score": 12
+      },
+      {
+        "id": 10231189,
+        "product_smiles": [
+          "CC(C)(C)OC(=O)N1[C@@H]2CC[C@H]1C1CCOc3nc(Cl)c(F)c4nc(OCC56COC(C5)C6)nc(c34)N1C2"
+        ],
+        "reactant_smiles": [
+          "CS(=O)c1nc2c3c(nc(Cl)c(F)c3n1)OCCC1[C@@H]3CC[C@H](CN21)N3C(=O)OC(C)(C)C",
+          "OCC12COC(C1)C2"
+        ],
+        "reaction_smiles": "CS(=O)c1nc2c3c(nc(Cl)c(F)c3n1)OCCC1[C@@H]3CC[C@H](CN21)N3C(=O)OC(C)(C)C.C[Si](C)(C)[N-][Si](C)(C)C.[Li+].OCC12COC(C1)C2>>CC(C)(C)OC(=O)N1[C@@H]2CC[C@H]1C1CCOc3nc(Cl)c(F)c4nc(OCC56COC(C5)C6)nc(c34)N1C2",
+        "final_score": 18
+      },
+      {
+        "id": 10231201,
+        "product_smiles": [
+          "C=Cc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F"
+        ],
+        "reactant_smiles": [
+          "C=C[B-](F)(F)F.[K+]",
+          "CC(C)(C)OC(=O)N1[C@@H]2CC[C@H]1[C@H]1CCOc3nc(-c4cc(N)cc(Cl)c4C(F)(F)F)c(F)c4nc(OCC56COC(C5)C6)nc(c34)N1C2"
+        ],
+        "reaction_smiles": "C=C[B-](F)(F)F.[K+].CC(C)(C)OC(=O)N1[C@@H]2CC[C@H]1[C@H]1CCOc3nc(-c4cc(N)cc(Cl)c4C(F)(F)F)c(F)c4nc(OCC56COC(C5)C6)nc(c34)N1C2.O=C([O-])O.[Na+]>>C=Cc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F",
+        "final_score": 18
+      },
+      {
+        "id": 10231202,
+        "product_smiles": [
+          "CCc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F"
+        ],
+        "reactant_smiles": [
+          "C=Cc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F"
+        ],
+        "reaction_smiles": "C=Cc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F.[H][H]>>CCc1cc(N)cc(-c2nc3c4c(nc(OCC56COC(C5)C6)nc4c2F)N2C[C@H]4CC[C@@H]([C@H]2CCO3)N4C(=O)OC(C)(C)C)c1C(F)(F)F",
+        "final_score": 18
+      },
+      {
+        "id": 10234761,
+        "product_smiles": [
+          "CC(C)Oc1cc([N+](=O)[O-])c(/C=N/C23COC(CF)(C2)C3)cc1Br"
+        ],
+        "reactant_smiles": [
+          "CC(C)Oc1cc([N+](=O)[O-])c(C=O)cc1Br",
+          "NC12COC(CF)(C1)C2"
+        ],
+        "reaction_smiles": "CC(C)Oc1cc([N+](=O)[O-])c(C=O)cc1Br.NC12COC(CF)(C1)C2>>CC(C)Oc1cc([N+](=O)[O-])c(/C=N/C23COC(CF)(C2)C3)cc1Br",
+        "final_score": 18
+      },
+      {
+        "id": 9929564,
+        "product_smiles": [
+          "Cn1cc(-c2cccc(F)c2-c2nc3cc(C(=O)NC45COC(C)(C4)C5)ccn3c2C#N)c(F)n1"
+        ],
+        "reactant_smiles": [
+          "CC12CC(N)(CO1)C2.Cl",
+          "Cn1cc(-c2cccc(F)c2-c2nc3cc(C(=O)O)ccn3c2C#N)c(F)n1"
+        ],
+        "reaction_smiles": "CC12CC(N)(CO1)C2.Cl.CCN(C(C)C)C(C)C.CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F.Cn1cc(-c2cccc(F)c2-c2nc3cc(C(=O)O)ccn3c2C#N)c(F)n1>>Cn1cc(-c2cccc(F)c2-c2nc3cc(C(=O)NC45COC(C)(C4)C5)ccn3c2C#N)c(F)n1",
+        "final_score": 17
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U03",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "6a8b000b8654b845bc11fd07",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:2]1:[#7&a&+0:3]:[#7&a&+0:4]:[#6&a&+0:5]:[#6&a&+0:6]:1",
+      "target_atoms": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [1, 2, 3, 4, 5]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 2.0918017253279686,
+    "rows": [
+      {
+        "id": 1174673,
+        "product_smiles": [
+          "CS(=O)(=O)c1n[nH]c2cnccc12"
+        ],
+        "reactant_smiles": [
+          "CSc1n[nH]c2cnccc12",
+          "O=S(=O)([O-])OO.[K+]"
+        ],
+        "reaction_smiles": "CSc1n[nH]c2cnccc12.O=S(=O)([O-])OO.[K+]>>CS(=O)(=O)c1n[nH]c2cnccc12",
+        "final_score": 16
+      },
+      {
+        "id": 926366,
+        "product_smiles": [
+          "CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C"
+        ],
+        "reactant_smiles": [
+          "CNc1cn(-c2cccnc2)nc1C.Cl.Cl",
+          "CSCCC(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cn(-c2cccnc2)nc1C.Cl.Cl.CSCCC(=O)O>>CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C",
+        "final_score": 20
+      },
+      {
+        "id": 10102842,
+        "product_smiles": [
+          "CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reactant_smiles": [
+          "CS(=O)(=O)CC(=O)O",
+          "Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F.CS(=O)(=O)CC(=O)O.Nc1ccn2ncc(Br)c2c1>>CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1",
+        "final_score": 18
+      },
+      {
+        "id": 926374,
+        "product_smiles": [
+          "CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1"
+        ],
+        "reactant_smiles": [
+          "CNc1cnn(-c2cccnc2)c1.Cl.Cl",
+          "CSCC(C)C(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cnn(-c2cccnc2)c1.Cl.Cl.CSCC(C)C(=O)O>>CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1",
+        "final_score": 18
+      },
+      {
+        "id": 1886745,
+        "product_smiles": [
+          "CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl>>CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl",
+        "final_score": 19
+      },
+      {
+        "id": 6243484,
+        "product_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCNC1(Cl)C=CN(c2cccnc2)N1",
+          "O=C(O)CCSCCC(F)(F)F"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CCNC1(Cl)C=CN(c2cccnc2)N1.O=C(O)CCSCCC(F)(F)F>>CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      },
+      {
+        "id": 6162710,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CC(=O)O",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CC(=O)O.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 15
+      },
+      {
+        "id": 6543082,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "OO"
+        ],
+        "reaction_smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.OO>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U03",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "d4cc0bc949d36bd1e1213e56",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:16]1:[#6&a&+0:17]:[#6&a&+0:18]:[#6&a&+0:19]:[#6&a&+0:20]:[#6&a&+0:21]:1",
+      "target_atoms": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [15, 16, 17, 18, 19, 20]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 1.5850551426410675,
+    "rows": [
+      {
+        "id": 9438448,
+        "product_smiles": [
+          "COC(c1cccc(Br)c1)c1nncn1C"
+        ],
+        "reactant_smiles": [
+          "CI",
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reaction_smiles": "CI.Cn1cnnc1C(O)c1cccc(Br)c1.[H-].[Na+]>>COC(c1cccc(Br)c1)c1nncn1C",
+        "final_score": 18
+      },
+      {
+        "id": 9438424,
+        "product_smiles": [
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reactant_smiles": [
+          "Cn1cnnc1",
+          "O=Cc1cccc(Br)c1"
+        ],
+        "reaction_smiles": "Cn1cnnc1.O=Cc1cccc(Br)c1.[Li][CH2]CCC>>Cn1cnnc1C(O)c1cccc(Br)c1",
+        "final_score": 20
+      },
+      {
+        "id": 506739,
+        "product_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc(N)cc1"
+        ],
+        "reactant_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1"
+        ],
+        "reaction_smiles": "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1.Cl.[H][H]>>CN(C)CC(O)CN(C)c1ccc(N)cc1",
+        "final_score": 15
+      },
+      {
+        "id": 1193781,
+        "product_smiles": [
+          "COCC(O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "COCC(=O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reaction_smiles": "COCC(=O)c1ccc(-n2cccc2)c(F)c1.[BH4-].[Na+]>>COCC(O)c1ccc(-n2cccc2)c(F)c1",
+        "final_score": 22
+      },
+      {
+        "id": 1819939,
+        "product_smiles": [
+          "CCCCNCC(O)c1ccc(F)c(N)c1F"
+        ],
+        "reactant_smiles": [
+          "CCCCN",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CCCCN.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1ccc(F)c(N)c1F",
+        "final_score": 20
+      },
+      {
+        "id": 997016,
+        "product_smiles": [
+          "COC1CN(c2cccc(CO)c2F)C1"
+        ],
+        "reactant_smiles": [
+          "COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1"
+        ],
+        "reaction_smiles": "CCCC[N+](CCCC)(CCCC)CCCC.[F-].COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1>>COC1CN(c2cccc(CO)c2F)C1",
+        "final_score": 15
+      },
+      {
+        "id": 8322990,
+        "product_smiles": [
+          "CCCCNCC(O)c1cc(F)c(N)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F",
+          "CCCCNCC(O)c1ccc(F)c(N)c1F",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F.CCCCNCC(O)c1ccc(F)c(N)c1F.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1cc(F)c(N)c(F)c1",
+        "final_score": 12
+      },
+      {
+        "id": 3401146,
+        "product_smiles": [
+          "C[C@@H](O)Cn1ccc2cc(F)ccc21"
+        ],
+        "reactant_smiles": [
+          "C[C@@H]1CO1",
+          "Fc1ccc2[nH]ccc2c1"
+        ],
+        "reaction_smiles": "C[C@@H]1CO1.Fc1ccc2[nH]ccc2c1.[H-].[Na+]>>C[C@@H](O)Cn1ccc2cc(F)ccc21",
+        "final_score": 20
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U03",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "3a01153add5d3ce13a75901c",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:22]1:[#6&a&+0:23]:[#6&a&+0:24]:[#6&a&+0:25]:[#6&a&+0:26]:[#6&a&+0:27]:1",
+      "target_atoms": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [21, 22, 23, 24, 25, 26]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 1.6304096207022667,
+    "rows": [
+      {
+        "id": 9438448,
+        "product_smiles": [
+          "COC(c1cccc(Br)c1)c1nncn1C"
+        ],
+        "reactant_smiles": [
+          "CI",
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reaction_smiles": "CI.Cn1cnnc1C(O)c1cccc(Br)c1.[H-].[Na+]>>COC(c1cccc(Br)c1)c1nncn1C",
+        "final_score": 18
+      },
+      {
+        "id": 9438424,
+        "product_smiles": [
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reactant_smiles": [
+          "Cn1cnnc1",
+          "O=Cc1cccc(Br)c1"
+        ],
+        "reaction_smiles": "Cn1cnnc1.O=Cc1cccc(Br)c1.[Li][CH2]CCC>>Cn1cnnc1C(O)c1cccc(Br)c1",
+        "final_score": 20
+      },
+      {
+        "id": 506739,
+        "product_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc(N)cc1"
+        ],
+        "reactant_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1"
+        ],
+        "reaction_smiles": "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1.Cl.[H][H]>>CN(C)CC(O)CN(C)c1ccc(N)cc1",
+        "final_score": 15
+      },
+      {
+        "id": 1193781,
+        "product_smiles": [
+          "COCC(O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "COCC(=O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reaction_smiles": "COCC(=O)c1ccc(-n2cccc2)c(F)c1.[BH4-].[Na+]>>COCC(O)c1ccc(-n2cccc2)c(F)c1",
+        "final_score": 22
+      },
+      {
+        "id": 1819939,
+        "product_smiles": [
+          "CCCCNCC(O)c1ccc(F)c(N)c1F"
+        ],
+        "reactant_smiles": [
+          "CCCCN",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CCCCN.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1ccc(F)c(N)c1F",
+        "final_score": 20
+      },
+      {
+        "id": 997016,
+        "product_smiles": [
+          "COC1CN(c2cccc(CO)c2F)C1"
+        ],
+        "reactant_smiles": [
+          "COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1"
+        ],
+        "reaction_smiles": "CCCC[N+](CCCC)(CCCC)CCCC.[F-].COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1>>COC1CN(c2cccc(CO)c2F)C1",
+        "final_score": 15
+      },
+      {
+        "id": 8322990,
+        "product_smiles": [
+          "CCCCNCC(O)c1cc(F)c(N)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F",
+          "CCCCNCC(O)c1ccc(F)c(N)c1F",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F.CCCCNCC(O)c1ccc(F)c(N)c1F.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1cc(F)c(N)c(F)c1",
+        "final_score": 12
+      },
+      {
+        "id": 3401146,
+        "product_smiles": [
+          "C[C@@H](O)Cn1ccc2cc(F)ccc21"
+        ],
+        "reactant_smiles": [
+          "C[C@@H]1CO1",
+          "Fc1ccc2[nH]ccc2c1"
+        ],
+        "reaction_smiles": "C[C@@H]1CO1.Fc1ccc2[nH]ccc2c1.[H-].[Na+]>>C[C@@H](O)Cn1ccc2cc(F)ccc21",
+        "final_score": 20
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U04",
+    "query": "exact",
+    "family": null,
+    "elapsed_ms": 0.8880030363798141,
+    "rows": [],
+    "error": null
+  },
+  {
+    "target": "U04",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "0f0df4792cb3a9f5839cc513",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#7&a&+0:1]1:[#7&a&+0:2]:[#6&a&+0:3]:[#6&a&+0:4]:[#6&a&+0:5]:1",
+      "target_atoms": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [0, 1, 2, 3, 4]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 1.8882565200328827,
+    "rows": [
+      {
+        "id": 1174673,
+        "product_smiles": [
+          "CS(=O)(=O)c1n[nH]c2cnccc12"
+        ],
+        "reactant_smiles": [
+          "CSc1n[nH]c2cnccc12",
+          "O=S(=O)([O-])OO.[K+]"
+        ],
+        "reaction_smiles": "CSc1n[nH]c2cnccc12.O=S(=O)([O-])OO.[K+]>>CS(=O)(=O)c1n[nH]c2cnccc12",
+        "final_score": 16
+      },
+      {
+        "id": 926366,
+        "product_smiles": [
+          "CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C"
+        ],
+        "reactant_smiles": [
+          "CNc1cn(-c2cccnc2)nc1C.Cl.Cl",
+          "CSCCC(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cn(-c2cccnc2)nc1C.Cl.Cl.CSCCC(=O)O>>CSCCC(=O)N(C)c1cn(-c2cccnc2)nc1C",
+        "final_score": 20
+      },
+      {
+        "id": 10102842,
+        "product_smiles": [
+          "CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reactant_smiles": [
+          "CS(=O)(=O)CC(=O)O",
+          "Nc1ccn2ncc(Br)c2c1"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F.CS(=O)(=O)CC(=O)O.Nc1ccn2ncc(Br)c2c1>>CS(=O)(=O)CC(=O)Nc1ccn2ncc(Br)c2c1",
+        "final_score": 18
+      },
+      {
+        "id": 926374,
+        "product_smiles": [
+          "CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1"
+        ],
+        "reactant_smiles": [
+          "CNc1cnn(-c2cccnc2)c1.Cl.Cl",
+          "CSCC(C)C(=O)O"
+        ],
+        "reaction_smiles": "CCN(CC)CC.CCN=C=NCCCN(C)C.Cl.CNc1cnn(-c2cccnc2)c1.Cl.Cl.CSCC(C)C(=O)O>>CSCC(C)C(=O)N(C)c1cnn(-c2cccnc2)c1",
+        "final_score": 18
+      },
+      {
+        "id": 1886745,
+        "product_smiles": [
+          "CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CSCC(=O)N(C)c1cn(-c2cccnc2)nc1Cl>>CSC(C)C(=O)Nc1cn(-c2cccnc2)nc1Cl",
+        "final_score": 19
+      },
+      {
+        "id": 6243484,
+        "product_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCNC1(Cl)C=CN(c2cccnc2)N1",
+          "O=C(O)CCSCCC(F)(F)F"
+        ],
+        "reaction_smiles": "CCN(C(C)C)C(C)C.CCNC1(Cl)C=CN(c2cccnc2)N1.O=C(O)CCSCCC(F)(F)F>>CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      },
+      {
+        "id": 6162710,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CC(=O)O",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reaction_smiles": "CC(=O)O.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 15
+      },
+      {
+        "id": 6543082,
+        "product_smiles": [
+          "CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+        ],
+        "reactant_smiles": [
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+          "OO"
+        ],
+        "reaction_smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl.OO>>CCN(C(=O)CCS(=O)CCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl",
+        "final_score": 17
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U04",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "e094017550c3c49b4f40d91b",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:7]1:[#6&a&+0:8]:[#6&a&+0:9]:[#6&a&+0:10]:[#6&a&+0:12]:[#6&a&+0:13]:1",
+      "target_atoms": [
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [6, 7, 8, 9, 11, 12]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 2.030770294368267,
+    "rows": [
+      {
+        "id": 9438448,
+        "product_smiles": [
+          "COC(c1cccc(Br)c1)c1nncn1C"
+        ],
+        "reactant_smiles": [
+          "CI",
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reaction_smiles": "CI.Cn1cnnc1C(O)c1cccc(Br)c1.[H-].[Na+]>>COC(c1cccc(Br)c1)c1nncn1C",
+        "final_score": 18
+      },
+      {
+        "id": 9438424,
+        "product_smiles": [
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reactant_smiles": [
+          "Cn1cnnc1",
+          "O=Cc1cccc(Br)c1"
+        ],
+        "reaction_smiles": "Cn1cnnc1.O=Cc1cccc(Br)c1.[Li][CH2]CCC>>Cn1cnnc1C(O)c1cccc(Br)c1",
+        "final_score": 20
+      },
+      {
+        "id": 506739,
+        "product_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc(N)cc1"
+        ],
+        "reactant_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1"
+        ],
+        "reaction_smiles": "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1.Cl.[H][H]>>CN(C)CC(O)CN(C)c1ccc(N)cc1",
+        "final_score": 15
+      },
+      {
+        "id": 1193781,
+        "product_smiles": [
+          "COCC(O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "COCC(=O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reaction_smiles": "COCC(=O)c1ccc(-n2cccc2)c(F)c1.[BH4-].[Na+]>>COCC(O)c1ccc(-n2cccc2)c(F)c1",
+        "final_score": 22
+      },
+      {
+        "id": 1819939,
+        "product_smiles": [
+          "CCCCNCC(O)c1ccc(F)c(N)c1F"
+        ],
+        "reactant_smiles": [
+          "CCCCN",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CCCCN.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1ccc(F)c(N)c1F",
+        "final_score": 20
+      },
+      {
+        "id": 997016,
+        "product_smiles": [
+          "COC1CN(c2cccc(CO)c2F)C1"
+        ],
+        "reactant_smiles": [
+          "COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1"
+        ],
+        "reaction_smiles": "CCCC[N+](CCCC)(CCCC)CCCC.[F-].COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1>>COC1CN(c2cccc(CO)c2F)C1",
+        "final_score": 15
+      },
+      {
+        "id": 8322990,
+        "product_smiles": [
+          "CCCCNCC(O)c1cc(F)c(N)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F",
+          "CCCCNCC(O)c1ccc(F)c(N)c1F",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F.CCCCNCC(O)c1ccc(F)c(N)c1F.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1cc(F)c(N)c(F)c1",
+        "final_score": 12
+      },
+      {
+        "id": 3401146,
+        "product_smiles": [
+          "C[C@@H](O)Cn1ccc2cc(F)ccc21"
+        ],
+        "reactant_smiles": [
+          "C[C@@H]1CO1",
+          "Fc1ccc2[nH]ccc2c1"
+        ],
+        "reaction_smiles": "C[C@@H]1CO1.Fc1ccc2[nH]ccc2c1.[H-].[Na+]>>C[C@@H](O)Cn1ccc2cc(F)ccc21",
+        "final_score": 20
+      }
+    ],
+    "error": null
+  },
+  {
+    "target": "U04",
+    "query": "core:complete_ring_system",
+    "family": {
+      "id": "777e5be44ab0597cf7a4d053",
+      "parent_id": null,
+      "layer": "core",
+      "core_smarts": "[#6&a&+0:14]1:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17]:[#6&a&+0:18]:[#6&a&+0:19]:1",
+      "target_atoms": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "rule_id": "complete_ring_system",
+      "rule_version": "organic-reference-1.0",
+      "r_constraints": [],
+      "equal_r_positions": [],
+      "core_topology_policy": "forbid_extra_internal_edges",
+      "allow_extra_substitution": true,
+      "use_generic_matchers": true,
+      "relation": "structural_family",
+      "description": "core: complete_ring_system; fixed atoms [13, 14, 15, 16, 17, 18]; other substituents variable",
+      "trigger": null
+    },
+    "elapsed_ms": 2.113964408636093,
+    "rows": [
+      {
+        "id": 9438448,
+        "product_smiles": [
+          "COC(c1cccc(Br)c1)c1nncn1C"
+        ],
+        "reactant_smiles": [
+          "CI",
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reaction_smiles": "CI.Cn1cnnc1C(O)c1cccc(Br)c1.[H-].[Na+]>>COC(c1cccc(Br)c1)c1nncn1C",
+        "final_score": 18
+      },
+      {
+        "id": 9438424,
+        "product_smiles": [
+          "Cn1cnnc1C(O)c1cccc(Br)c1"
+        ],
+        "reactant_smiles": [
+          "Cn1cnnc1",
+          "O=Cc1cccc(Br)c1"
+        ],
+        "reaction_smiles": "Cn1cnnc1.O=Cc1cccc(Br)c1.[Li][CH2]CCC>>Cn1cnnc1C(O)c1cccc(Br)c1",
+        "final_score": 20
+      },
+      {
+        "id": 506739,
+        "product_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc(N)cc1"
+        ],
+        "reactant_smiles": [
+          "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1"
+        ],
+        "reaction_smiles": "CN(C)CC(O)CN(C)c1ccc([N+](=O)[O-])cc1.Cl.[H][H]>>CN(C)CC(O)CN(C)c1ccc(N)cc1",
+        "final_score": 15
+      },
+      {
+        "id": 1193781,
+        "product_smiles": [
+          "COCC(O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "COCC(=O)c1ccc(-n2cccc2)c(F)c1"
+        ],
+        "reaction_smiles": "COCC(=O)c1ccc(-n2cccc2)c(F)c1.[BH4-].[Na+]>>COCC(O)c1ccc(-n2cccc2)c(F)c1",
+        "final_score": 22
+      },
+      {
+        "id": 1819939,
+        "product_smiles": [
+          "CCCCNCC(O)c1ccc(F)c(N)c1F"
+        ],
+        "reactant_smiles": [
+          "CCCCN",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CCCCN.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1ccc(F)c(N)c1F",
+        "final_score": 20
+      },
+      {
+        "id": 997016,
+        "product_smiles": [
+          "COC1CN(c2cccc(CO)c2F)C1"
+        ],
+        "reactant_smiles": [
+          "COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1"
+        ],
+        "reaction_smiles": "CCCC[N+](CCCC)(CCCC)CCCC.[F-].COC1CN(c2cccc(CO[Si](C)(C)C(C)(C)C)c2F)C1>>COC1CN(c2cccc(CO)c2F)C1",
+        "final_score": 15
+      },
+      {
+        "id": 8322990,
+        "product_smiles": [
+          "CCCCNCC(O)c1cc(F)c(N)c(F)c1"
+        ],
+        "reactant_smiles": [
+          "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F",
+          "CCCCNCC(O)c1ccc(F)c(N)c1F",
+          "Nc1c(F)ccc(C2CO2)c1F"
+        ],
+        "reaction_smiles": "CC(=O)Nc1c(F)ccc(C(=O)CBr)c1F.CCCCNCC(O)c1ccc(F)c(N)c1F.Nc1c(F)ccc(C2CO2)c1F>>CCCCNCC(O)c1cc(F)c(N)c(F)c1",
+        "final_score": 12
+      },
+      {
+        "id": 3401146,
+        "product_smiles": [
+          "C[C@@H](O)Cn1ccc2cc(F)ccc21"
+        ],
+        "reactant_smiles": [
+          "C[C@@H]1CO1",
+          "Fc1ccc2[nH]ccc2c1"
+        ],
+        "reaction_smiles": "C[C@@H]1CO1.Fc1ccc2[nH]ccc2c1.[H-].[Na+]>>C[C@@H](O)Cn1ccc2cc(F)ccc21",
+        "final_score": 20
+      }
+    ],
+    "error": null
+  }
+]

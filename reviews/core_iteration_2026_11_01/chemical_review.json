@@ -1,0 +1,362 @@
+[
+  {
+    "target": "U01",
+    "rank": 1,
+    "source_id": "3153963",
+    "label": "骨架构建线索",
+    "reason": "原文US4677129A例15(b)核实为二烯酰亚胺光照生成3-氮杂双环[3.1.1]庚烷二酮。确实构建相关桥环，但目标是不同氧化态、N取代、双酯/环外双键及立体组合；不能把它当作目标可直接套用的路线。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3153963",
+      "experiment_id": "uspto:US04677129:['p-0222']:1",
+      "document_id": "US04677129",
+      "location": "['p-0222']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "rank": 2,
+    "source_id": "264583",
+    "label": "不解决关键问题",
+    "reason": "丙二酸单乙酯盐到酸的转换不构建目标桥环，仅共有酯/酸局部片段。",
+    "source": {
+      "namespace": "epo",
+      "record_id": "264583",
+      "experiment_id": "epo:EP97902712A1:['p0281']:1",
+      "document_id": "EP97902712A1",
+      "location": "['p0281']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "rank": 3,
+    "source_id": "9033888",
+    "label": "存疑的骨架线索",
+    "reason": "源图显示环丁烷酰胺/酯闭合为桥环酰亚胺，但原文还把三唑上的丁基变为羟丙基，KOtBu操作不能据此证明这项链变化；保留闭环线索但需核对源结构。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "9033888",
+      "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+      "document_id": "US20220251061A1",
+      "location": "['p-1349']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 13,
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "rank": 4,
+    "source_id": "5977156",
+    "label": "不解决关键问题",
+    "reason": "丙烯酸与乙酸形成简单酯相关产物，不提供目标含氮桥环或立体构建。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "5977156",
+      "experiment_id": "uspto:US20140378702A1:['p-0115']:1",
+      "document_id": "US20140378702A1",
+      "location": "['p-0115']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U01",
+    "rank": 5,
+    "source_id": "4381854",
+    "label": "不相关",
+    "reason": "苯并杂环的转换不能解决目标含氮桥环及酰基吡唑连接。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4381854",
+      "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+      "document_id": "US20100098634A1",
+      "location": "['p-0661']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 12,
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "rank": 1,
+    "source_id": "2148857",
+    "label": "局部可参考但缺关键验证",
+    "reason": "同一N-丁基萘酰亚胺母核的芳氯被二胺取代，原文76%，说明对应芳位可作亲核取代。目标要换成肼，N-N保留与酰亚胺耐受性仍需肼本身的先例，不能由二胺反应直接证明。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2148857",
+      "experiment_id": "uspto:US20020010279A1:['P-0200']:1",
+      "document_id": "US20020010279A1",
+      "location": "['P-0200']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 19,
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "rank": 2,
+    "source_id": "4438348",
+    "label": "来源结构错误",
+    "reason": "原文为带二甲氨基的酸酐与乙醇胺生成N-羟乙基萘酰亚胺，库中产物却是无取代NH酰亚胺，丢失多个明确取代基，不应作为该目标正例。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4438348",
+      "experiment_id": "uspto:US20100168428A1:['p-0198']:1",
+      "document_id": "US20100168428A1",
+      "location": "['p-0198']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 15,
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "rank": 3,
+    "source_id": "4028914",
+    "label": "来源结构错误",
+    "reason": "原文使用长链伯胺制N-长链萘酰亚胺，产物图却丢掉N侧链，不可按该图做目标前体或转化推断。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4028914",
+      "experiment_id": "uspto:US20090056793A1:['p-0088']:1",
+      "document_id": "US20090056793A1",
+      "location": "['p-0088']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "rank": 4,
+    "source_id": "463408",
+    "label": "方向不合适",
+    "reason": "材料是在反应物使用通道出现；原文LiAlH4还原酰亚胺羰基，目标需要保留酰亚胺，不能当作目标制备。",
+    "source": {
+      "namespace": "epo",
+      "record_id": "463408",
+      "experiment_id": "epo:EP98966352B1:['p0137']:1",
+      "document_id": "EP98966352B1",
+      "location": "['p0137']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 18,
+    "experimental_validation": false
+  },
+  {
+    "target": "U02",
+    "rank": 5,
+    "source_id": "3309268",
+    "label": "尚未证实",
+    "reason": "此条仍未定位原段落，底物/产物图不能提供明确芳位肼基安装依据。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3309268",
+      "experiment_id": "uspto:US05202318:['p-0172']:1",
+      "document_id": "US05202318",
+      "location": "['p-0172']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U03",
+    "rank": 1,
+    "source_id": "10210576",
+    "label": "真实骨架构建但不能直接迁移",
+    "reason": "原文I2促带醇的亚甲基环丁烷闭环为2-氧杂双环[2.1.1]己烷，确实形成O桥。但产物是碘甲基/二甲基/甲酯取代，目标是双苯基和酰基吡唑；取代位置及后续变换未证实，不能称目标已找到直接方法。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "10210576",
+      "experiment_id": "uspto:US20250221996A1:['p-0442']:1",
+      "document_id": "US20250221996A1",
+      "location": "['p-0442']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 18,
+    "experimental_validation": false
+  },
+  {
+    "target": "U03",
+    "rank": 2,
+    "source_id": "2924148",
+    "label": "局部把手线索",
+    "reason": "酰肼与乙酰丙酮形成N-酰基二甲基吡唑具有目标把手对应，但当前原段落未定位，输入磺酰基位置还有疑点；即使成立也不解决含氧桥环的建立。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2924148",
+      "experiment_id": "uspto:US04007201:['p-0050']:1",
+      "document_id": "US04007201",
+      "location": "['p-0050']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 15,
+    "experimental_validation": false
+  },
+  {
+    "target": "U03",
+    "rank": 3,
+    "source_id": "4381854",
+    "label": "不相关",
+    "reason": "苯并杂环转换没有建立目标O桥环或其取代图式。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4381854",
+      "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+      "document_id": "US20100098634A1",
+      "location": "['p-0661']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 12,
+    "experimental_validation": false
+  },
+  {
+    "target": "U03",
+    "rank": 4,
+    "source_id": "978944",
+    "label": "来源或转化存疑",
+    "reason": "列出的羧酸与脂肪胺按常见酰胺化应得到该胺的酰胺，库中却出现不同N-酰基吡唑连接，当前不足以认定为目标把手制备。",
+    "source": {
+      "namespace": "epo",
+      "record_id": "978944",
+      "experiment_id": "epo:EP10781918B1:['p0385']:1",
+      "document_id": "EP10781918B1",
+      "location": "['p0385']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U03",
+    "rank": 5,
+    "source_id": "2030567",
+    "label": "引用替换解析错误",
+    "reason": "原文明确用氧桥环胺替换模板中的甲氧乙胺；抽取仍保留甲氧乙胺与旧底物，使图上凭空出现桥环。这不是桥环形成反应。",
+    "source": {
+      "namespace": "epo",
+      "record_id": "2030567",
+      "experiment_id": "epo:EP22723850B1:['p0601']:1",
+      "document_id": "EP22723850B1",
+      "location": "['p0601']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 13,
+    "experimental_validation": false
+  },
+  {
+    "target": "U04",
+    "rank": 1,
+    "source_id": "623405",
+    "label": "侧链操作线索",
+    "reason": "原文磺酰氯与羟胺生成N-羟基磺酰胺，目标是NH2磺酰胺且3位甲基；该例不能证明目标吡唑成环或所需终产物已制得。",
+    "source": {
+      "namespace": "epo",
+      "record_id": "623405",
+      "experiment_id": "epo:EP06765404B1:['p0056']:1",
+      "document_id": "EP06765404B1",
+      "location": "['p0056']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 21,
+    "experimental_validation": false
+  },
+  {
+    "target": "U04",
+    "rank": 2,
+    "source_id": "2144174",
+    "label": "明确成环参考",
+    "reason": "原文明确芳基肼与芳基1,3-二酮缩合构建N-芳基吡唑，并给出5-对甲苯基/3-CF3的连接。目标须更换为相应甲基二酮及磺酰胺芳基肼，区域选择性仍要验证。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2144174",
+      "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+      "document_id": "US20010047023A1",
+      "location": "['P-0035']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 15,
+    "experimental_validation": false
+  },
+  {
+    "target": "U04",
+    "rank": 3,
+    "source_id": "2698959",
+    "label": "尚缺转化的中间体线索",
+    "reason": "酯水解得到吡唑乙酸，而目标需要该位甲基；本条不包含把侧链转成甲基的证据，不能自行补出脱羧成功结论。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2698959",
+      "experiment_id": "uspto:US20070060629A1:['p-0286']:1",
+      "document_id": "US20070060629A1",
+      "location": "['p-0286']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 16,
+    "experimental_validation": false
+  },
+  {
+    "target": "U04",
+    "rank": 4,
+    "source_id": "2192223",
+    "label": "明确成环参考",
+    "reason": "原文磺酰胺芳基肼与芳基1,3-二酮缩合形成同一连接类型的吡唑，报告53%。与目标的关键N-N及N-芳基位置一致；CHF2换CH3及芳环取代变化可能影响区域选择性，不能等同目标成功率。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2192223",
+      "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+      "document_id": "US20020183362A1",
+      "location": "['P-1771']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 17,
+    "experimental_validation": false
+  },
+  {
+    "target": "U04",
+    "rank": 5,
+    "source_id": "4381854",
+    "label": "不相关",
+    "reason": "苯并杂环转换不解决目标吡唑或芳磺酰胺的构建。",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4381854",
+      "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+      "document_id": "US20100098634A1",
+      "location": "['p-0661']",
+      "url": null,
+      "synthetic": false
+    },
+    "selected_source_score": 12,
+    "experimental_validation": false
+  }
+]

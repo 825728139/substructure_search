@@ -1051,3 +1051,59 @@ def test_unrelated_partial_index_does_not_claim_complete_substructure_support(in
         )
     with pytest.raises(ValueError, match="GiST on products_mol"):
         PostgresSource(indexed_source_dsn, table="reactions")
+
+
+def test_knn_core_filter_precedes_candidate_pagination(indexed_source_dsn):
+    """有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。"""
+    source = PostgresSource(indexed_source_dsn, table="reactions")
+    family = carbon_family(layer="whole").model_copy(update={"core_smarts": "[#8]", "id": "oxygen"})
+    try:
+        first = source.candidate_page(family, "product", 0, 1, "CCN")
+        assert len(first.items) == 1
+        found = list(first.items)
+        cursor = first.next_cursor
+        while cursor is not None:
+            page = source.candidate_page(family, "product", cursor, 1, "CCN")
+            found.extend(page.items)
+            cursor = page.next_cursor
+        assert {r.record.id for r in found} == {"integration:1", "integration:3"}
+        assert len(found) == 2
+    finally:
+        source.close()
+
+
+def test_core_change_seed_can_recover_outside_knn_without_dropping_nearby(indexed_source_dsn):
+    """近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("SET rdkit.morgan_fp_size=2048")
+        writer.execute("DELETE FROM reaction.reactions")
+        writer.execute("""
+            INSERT INTO reaction.reactions
+            (id,product_smiles,reactant_smiles,products_mol,reactants_mol,product_fp,final_score)
+            SELECT n,ARRAY['CCO'],ARRAY['CCO'],'CCO'::mol,'CCO'::mol,morganbv_fp('CCO'::mol,2),12
+            FROM generate_series(1,520) n
+        """)
+        writer.execute("""
+            INSERT INTO reaction.reactions
+            (id,product_smiles,reactant_smiles,products_mol,reactants_mol,product_fp,final_score)
+            VALUES(1001,ARRAY['CCCO'],ARRAY['CCC=O'],'CCCO'::mol,'CCC=O'::mol,morganbv_fp('CCCO'::mol,2),12),
+                  (1002,ARRAY['CCCCO'],ARRAY['CCCC=O'],'CCCCO'::mol,'CCCC=O'::mol,morganbv_fp('CCCCO'::mol,2),11)
+        """)
+    family = carbon_family(layer="whole").model_copy(
+        update={"core_smarts": "[#6]-[#8]", "id": "alcohol-core"}
+    )
+    source = PostgresSource(indexed_source_dsn, table="reactions")
+    try:
+        page = source.candidate_page(family, "product", 0, 2, "CCO")
+        assert page.items[0].record.id == "integration:1001"
+        assert page.items[1].material.smiles == "CCO"
+        assert len(source._knn[("product", "CCO")]) == 512
+        ids = [r.record.id for r in page.items]
+        cursor = page.next_cursor
+        while cursor is not None:
+            page = source.candidate_page(family, "product", cursor, 100, "CCO")
+            ids.extend(r.record.id for r in page.items)
+            cursor = page.next_cursor
+        assert len(ids) == 513 and len(set(ids)) == 513 and "integration:1002" not in ids
+    finally:
+        source.close()

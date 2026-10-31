@@ -99,15 +99,15 @@
 | [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L251) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
 | [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L297) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
 | [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L301) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L334) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L408) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L415) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L420) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L456) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L507) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L590) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L609) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L682) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L335) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L410) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L417) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L422) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L458) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L509) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L666) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L685) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L758) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -268,8 +268,8 @@
 |---|---|
 | [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
 | [_priority](../src/reaction_reference/ranking/engine.py#L90) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L114) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L148) | 为单个参考生成可传递且稳定的排序元组。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L111) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L146) | 为单个参考生成可传递且稳定的排序元组。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -415,6 +415,14 @@
 | [test_cli_rejects_incompatible_source_path](../tests/test_cli.py#L79) | 示例或 PG 模式不能同时指定 JSONL 路径，避免悄悄使用与命令含义不同的来源。 |
 | [test_inspect_run_reads_while_coordinator_is_active](../tests/test_cli.py#L87) | 服务持有协调锁时，命令行仍能只读查看任务，且不更改任务生命周期。 |
 | [test_preview_does_not_acquire_coordinator_or_recover_runs](../tests/test_cli.py#L109) | 预览在服务运行时可用，在服务停止时也不能把遗留任务标记为恢复失败。 |
+
+## tests/test_core_candidate_iteration.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_unverified_method_label_does_not_hide_more_relevant_core](../tests/test_core_candidate_iteration.py#L14) | 真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。 |
+| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L27) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
+| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L42) | 记录真实来源取页参数，不模拟核验和返回数据。 |
 
 ## tests/test_data_boundaries.py
 
@@ -567,6 +575,8 @@
 | [test_v3_pipeline_matches_selected_material_order_and_keeps_source_on_detail_failure](../tests/test_postgres_integration.py#L982) | 端到端匹配按所选来源材料顺序；详情失败时仍只保留该合格来源的图事实。 |
 | [test_v3_missing_views_never_falls_back_to_old_table](../tests/test_postgres_integration.py#L1031) | 默认v3依赖缺失应显式报错，不能悄悄读取仍存在的旧反应表。 |
 | [test_unrelated_partial_index_does_not_claim_complete_substructure_support](../tests/test_postgres_integration.py#L1039) | 任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。 |
+| [test_knn_core_filter_precedes_candidate_pagination](../tests/test_postgres_integration.py#L1056) | 有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。 |
+| [test_core_change_seed_can_recover_outside_knn_without_dropping_nearby](../tests/test_postgres_integration.py#L1075) | 近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。 |
 
 ## tests/test_query_input_planning.py
 
@@ -964,6 +974,12 @@
 | [canonical](../../reviews/check_single_reactant_transfer.py#L20) | 复制或解析结构、清除映射号，返回保留立体和同位素的规范 SMILES。 |
 | [replay](../../reviews/check_single_reactant_transfer.py#L25) | 对两个示例输入执行有上限的反应回放，保留完整产物组与枚举状态；结构校验失败直接抛错。 |
 | [contains](../../reviews/check_single_reactant_transfer.py#L41) | 判断某个完整产物组是否包含指定具体目标，返回布尔值；不合并不同组来凑目标。 |
+
+## ../reviews/core_iteration_2026_11_01/run_targets.py
+
+| 函数 | 职责 |
+|---|---|
+| [main](../../reviews/core_iteration_2026_11_01/run_targets.py#L11) | 加载归档的原始四目标，沿用基准脚本的连接、预算和计时，不修改业务查询。 |
 
 ## ../reviews/live_benchmark_2026_10_31/benchmark.py
 
