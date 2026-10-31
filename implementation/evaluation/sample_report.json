@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
-  "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
-  "rule_hash": "e263d15d78fd675ba3b62411ec53404a8d555e5ebf21b43d791a212e254cf3f1",
+  "implementation_hash": "1e39f099d5c030cbd3488ed2b53c8cfdc4599609f08b4c9e7bb3577bb2b1fd4e",
+  "rule_hash": "a01f6f93508f120e23db6f0c4597ff333d3eb683e29fd3f9ae05503e60a4d793",
   "rdkit_version": "2026.03.2",
   "source_snapshot": "jsonl:2593db6a5e70dc56b2039c6d81b227de4ae44c5fd0ce021dcee7d1ac82f45e02",
   "targets_hash": "342d7cb460a99155c984ad59d58c8caa75272bf86e4561a667fe1e439eacc74f",
@@ -13,10 +13,10 @@
       "target_smiles": "C=CCOc1cn(C)c2cc(F)ccc2c1=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 264.96,
+      "elapsed_ms": 322.57,
       "statistics": {
-        "families": 6,
-        "received_candidates": 70,
+        "families": 10,
+        "received_candidates": 90,
         "unique_structures": 9,
         "by_layer": {
           "whole": {
@@ -30,9 +30,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 5,
+            "attempted_product_families": 5,
+            "families_with_structural_hits": 5,
             "unique_product_structures": 8,
             "unique_experiments": 8,
             "qualified_preparation_experiments": 0,
@@ -57,7 +57,7 @@
         "analyzed_reactions": 13,
         "proposals": 0,
         "display_items": 15,
-        "elapsed_ms": 258.078
+        "elapsed_ms": 314.769
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -96,10 +96,10 @@
       "excluded_record_ids": [
         "epo:106338"
       ],
-      "elapsed_ms": 247.98,
+      "elapsed_ms": 329.08,
       "statistics": {
-        "families": 8,
-        "received_candidates": 91,
+        "families": 12,
+        "received_candidates": 107,
         "unique_structures": 9,
         "by_layer": {
           "whole": {
@@ -113,9 +113,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
-            "attempted_product_families": 2,
-            "families_with_structural_hits": 1,
+            "generated_families": 6,
+            "attempted_product_families": 6,
+            "families_with_structural_hits": 5,
             "unique_product_structures": 7,
             "unique_experiments": 7,
             "qualified_preparation_experiments": 0,
@@ -140,7 +140,7 @@
         "analyzed_reactions": 12,
         "proposals": 0,
         "display_items": 14,
-        "elapsed_ms": 241.864
+        "elapsed_ms": 318.071
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -168,17 +168,17 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 25739
+      "summary_bytes": 25736
     },
     {
       "target_id": "real-target-02",
       "target_smiles": "O=C([O-])C(O)C(O)C(=O)[O-]",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 168.21,
+      "elapsed_ms": 186.89,
       "statistics": {
-        "families": 7,
-        "received_candidates": 89,
+        "families": 10,
+        "received_candidates": 92,
         "unique_structures": 7,
         "by_layer": {
           "whole": {
@@ -192,9 +192,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 4,
+            "attempted_product_families": 4,
+            "families_with_structural_hits": 4,
             "unique_product_structures": 1,
             "unique_experiments": 1,
             "qualified_preparation_experiments": 0,
@@ -219,7 +219,7 @@
         "analyzed_reactions": 4,
         "proposals": 0,
         "display_items": 8,
-        "elapsed_ms": 164.098
+        "elapsed_ms": 182.641
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -250,9 +250,9 @@
       "excluded_record_ids": [
         "epo:106449"
       ],
-      "elapsed_ms": 128.33,
+      "elapsed_ms": 127.79,
       "statistics": {
-        "families": 9,
+        "families": 12,
         "received_candidates": 90,
         "unique_structures": 5,
         "by_layer": {
@@ -267,8 +267,8 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
+            "generated_families": 4,
+            "attempted_product_families": 4,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
             "unique_experiments": 0,
@@ -294,7 +294,7 @@
         "analyzed_reactions": 3,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 124.985
+        "elapsed_ms": 124.159
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -321,9 +321,9 @@
       "target_smiles": "NC(=NO)c1cccc(Cl)n1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 646.93,
+      "elapsed_ms": 620.56,
       "statistics": {
-        "families": 4,
+        "families": 7,
         "received_candidates": 67,
         "unique_structures": 52,
         "by_layer": {
@@ -338,7 +338,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -365,7 +365,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 624.996
+        "elapsed_ms": 599.474
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -468,9 +468,9 @@
       "excluded_record_ids": [
         "uspto:96"
       ],
-      "elapsed_ms": 662.38,
+      "elapsed_ms": 630.77,
       "statistics": {
-        "families": 4,
+        "families": 7,
         "received_candidates": 66,
         "unique_structures": 52,
         "by_layer": {
@@ -485,7 +485,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -512,7 +512,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 637.473
+        "elapsed_ms": 607.927
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -613,7 +613,7 @@
       "target_smiles": "COC(=O)[C@H]1C[C@@H](CCC#N)CCN1C(=O)OC(C)(C)C",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1218.92,
+      "elapsed_ms": 1173.09,
       "statistics": {
         "families": 10,
         "received_candidates": 67,
@@ -630,7 +630,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 58,
@@ -640,7 +640,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 7,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -657,7 +657,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1192.299
+        "elapsed_ms": 1146.667
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -760,7 +760,7 @@
       "excluded_record_ids": [
         "epo:106432"
       ],
-      "elapsed_ms": 1273.44,
+      "elapsed_ms": 1168.94,
       "statistics": {
         "families": 11,
         "received_candidates": 69,
@@ -777,7 +777,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 58,
@@ -787,7 +787,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 7,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -804,7 +804,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1248.906
+        "elapsed_ms": 1145.235
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -905,7 +905,7 @@
       "target_smiles": "[C]=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 548.17,
+      "elapsed_ms": 518.39,
       "statistics": {
         "families": 4,
         "received_candidates": 178,
@@ -949,7 +949,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 527.679
+        "elapsed_ms": 498.161
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1051,7 +1051,7 @@
       "excluded_record_ids": [
         "epo:106408"
       ],
-      "elapsed_ms": 471.99,
+      "elapsed_ms": 450.19,
       "statistics": {
         "families": 4,
         "received_candidates": 177,
@@ -1095,7 +1095,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 454.135
+        "elapsed_ms": 432.032
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1195,7 +1195,7 @@
       "target_smiles": "O=C1CN2C(=O)CCC2N1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 100.09,
+      "elapsed_ms": 143.53,
       "statistics": {
         "families": 4,
         "received_candidates": 33,
@@ -1239,7 +1239,7 @@
         "analyzed_reactions": 8,
         "proposals": 0,
         "display_items": 9,
-        "elapsed_ms": 95.424
+        "elapsed_ms": 94.273
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1280,7 +1280,7 @@
         "epo:106282",
         "epo:106284"
       ],
-      "elapsed_ms": 112.64,
+      "elapsed_ms": 61.53,
       "statistics": {
         "families": 4,
         "received_candidates": 21,
@@ -1324,7 +1324,7 @@
         "analyzed_reactions": 5,
         "proposals": 0,
         "display_items": 6,
-        "elapsed_ms": 60.399
+        "elapsed_ms": 58.671
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1355,10 +1355,10 @@
       "target_smiles": "Nc1ncnc2nc[nH]c12",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 30.23,
+      "elapsed_ms": 23.54,
       "statistics": {
-        "families": 4,
-        "received_candidates": 4,
+        "families": 5,
+        "received_candidates": 5,
         "unique_structures": 1,
         "by_layer": {
           "whole": {
@@ -1372,9 +1372,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 2,
+            "attempted_product_families": 2,
+            "families_with_structural_hits": 2,
             "unique_product_structures": 1,
             "unique_experiments": 1,
             "qualified_preparation_experiments": 0,
@@ -1399,7 +1399,7 @@
         "analyzed_reactions": 1,
         "proposals": 0,
         "display_items": 1,
-        "elapsed_ms": 28.378
+        "elapsed_ms": 22.257
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1424,9 +1424,9 @@
       "excluded_record_ids": [
         "epo:106287"
       ],
-      "elapsed_ms": 7.55,
+      "elapsed_ms": 5.81,
       "statistics": {
-        "families": 4,
+        "families": 5,
         "received_candidates": 0,
         "unique_structures": 0,
         "by_layer": {
@@ -1441,8 +1441,8 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
+            "generated_families": 2,
+            "attempted_product_families": 2,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
             "unique_experiments": 0,
@@ -1468,7 +1468,7 @@
         "analyzed_reactions": 0,
         "proposals": 0,
         "display_items": 0,
-        "elapsed_ms": 6.383
+        "elapsed_ms": 5.057
       },
       "coverage_state": "partial",
       "stop_reasons": [],
@@ -1487,7 +1487,7 @@
       "target_smiles": "CC(CNS(=O)(=O)C(C)C)c1ccc(-c2ccc(C#N)cc2)cc1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1414.9,
+      "elapsed_ms": 1311.71,
       "statistics": {
         "families": 10,
         "received_candidates": 64,
@@ -1504,7 +1504,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 50,
@@ -1514,7 +1514,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 6,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -1531,7 +1531,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1337.429
+        "elapsed_ms": 1266.741
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1633,7 +1633,7 @@
       "excluded_record_ids": [
         "epo:106451"
       ],
-      "elapsed_ms": 1328.12,
+      "elapsed_ms": 1247.35,
       "statistics": {
         "families": 10,
         "received_candidates": 62,
@@ -1650,7 +1650,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 50,
@@ -1660,7 +1660,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 6,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -1677,7 +1677,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1260.969
+        "elapsed_ms": 1197.577
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1777,10 +1777,10 @@
       "target_smiles": "CN(C)C(=O)Sc1nc(-c2ccccc2)cn1-c1ccc([N+](=O)[O-])cn1",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1599.51,
+      "elapsed_ms": 1489.63,
       "statistics": {
         "families": 10,
-        "received_candidates": 71,
+        "received_candidates": 75,
         "unique_structures": 49,
         "by_layer": {
           "whole": {
@@ -1794,9 +1794,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 3,
-            "attempted_product_families": 2,
-            "families_with_structural_hits": 2,
+            "generated_families": 4,
+            "attempted_product_families": 3,
+            "families_with_structural_hits": 3,
             "unique_product_structures": 49,
             "unique_experiments": 60,
             "qualified_preparation_experiments": 0,
@@ -1804,9 +1804,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 5,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 4,
+            "attempted_product_families": 2,
+            "families_with_structural_hits": 2,
             "unique_product_structures": 3,
             "unique_experiments": 3,
             "qualified_preparation_experiments": 0,
@@ -1821,7 +1821,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1552.581
+        "elapsed_ms": 1444.939
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -1915,7 +1915,7 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33442
+      "summary_bytes": 33440
     },
     {
       "target_id": "real-target-09",
@@ -1924,10 +1924,10 @@
       "excluded_record_ids": [
         "epo:106412"
       ],
-      "elapsed_ms": 1451.78,
+      "elapsed_ms": 1422.12,
       "statistics": {
         "families": 12,
-        "received_candidates": 74,
+        "received_candidates": 76,
         "unique_structures": 49,
         "by_layer": {
           "whole": {
@@ -1941,9 +1941,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 4,
-            "attempted_product_families": 3,
-            "families_with_structural_hits": 2,
+            "generated_families": 5,
+            "attempted_product_families": 4,
+            "families_with_structural_hits": 3,
             "unique_product_structures": 49,
             "unique_experiments": 60,
             "qualified_preparation_experiments": 0,
@@ -1951,8 +1951,8 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 6,
-            "attempted_product_families": 2,
+            "generated_families": 5,
+            "attempted_product_families": 3,
             "families_with_structural_hits": 1,
             "unique_product_structures": 2,
             "unique_experiments": 2,
@@ -1968,7 +1968,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1405.287
+        "elapsed_ms": 1376.479
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2062,14 +2062,14 @@
       "annotated_method_recall": null,
       "annotated_display_recall": null,
       "annotation_exhaustiveness": "positive_only_precision_not_inferred",
-      "summary_bytes": 33621
+      "summary_bytes": 33619
     },
     {
       "target_id": "real-target-10",
       "target_smiles": "CCOCn1nccc1C(=O)c1cc2c(c(Cl)c1Cl)OC(C(=O)OCC)O2",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1142.98,
+      "elapsed_ms": 1022.11,
       "statistics": {
         "families": 10,
         "received_candidates": 66,
@@ -2086,7 +2086,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 55,
@@ -2096,7 +2096,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 6,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -2113,7 +2113,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1112.579
+        "elapsed_ms": 997.562
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2215,7 +2215,7 @@
       "excluded_record_ids": [
         "epo:106295"
       ],
-      "elapsed_ms": 1060.03,
+      "elapsed_ms": 1068.11,
       "statistics": {
         "families": 11,
         "received_candidates": 66,
@@ -2232,7 +2232,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
+            "generated_families": 4,
             "attempted_product_families": 1,
             "families_with_structural_hits": 1,
             "unique_product_structures": 55,
@@ -2242,7 +2242,7 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "fragment": {
-            "generated_families": 6,
+            "generated_families": 4,
             "attempted_product_families": 0,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
@@ -2259,7 +2259,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1036.495
+        "elapsed_ms": 1043.402
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2359,10 +2359,10 @@
       "target_smiles": "CC(=O)[C@]1(O)Cc2c(O)c3c(c(O)c2C(O)C1)C(=O)c1c(O)cccc1C3=O",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1021.75,
+      "elapsed_ms": 937.18,
       "statistics": {
-        "families": 7,
-        "received_candidates": 180,
+        "families": 8,
+        "received_candidates": 181,
         "unique_structures": 64,
         "by_layer": {
           "whole": {
@@ -2376,9 +2376,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 2,
+            "attempted_product_families": 2,
+            "families_with_structural_hits": 2,
             "unique_product_structures": 1,
             "unique_experiments": 1,
             "qualified_preparation_experiments": 0,
@@ -2403,7 +2403,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 991.886
+        "elapsed_ms": 911.687
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2489,9 +2489,9 @@
       "excluded_record_ids": [
         "epo:106416"
       ],
-      "elapsed_ms": 1098.59,
+      "elapsed_ms": 1049.62,
       "statistics": {
-        "families": 8,
+        "families": 9,
         "received_candidates": 265,
         "unique_structures": 64,
         "by_layer": {
@@ -2506,8 +2506,8 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
+            "generated_families": 2,
+            "attempted_product_families": 2,
             "families_with_structural_hits": 0,
             "unique_product_structures": 0,
             "unique_experiments": 0,
@@ -2533,7 +2533,7 @@
         "analyzed_reactions": 60,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 1070.581
+        "elapsed_ms": 1023.171
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2616,10 +2616,10 @@
       "target_smiles": "Cn1cnnc1CCCO",
       "mode": "observed_target",
       "excluded_record_ids": [],
-      "elapsed_ms": 1011.51,
+      "elapsed_ms": 925.28,
       "statistics": {
-        "families": 6,
-        "received_candidates": 599,
+        "families": 9,
+        "received_candidates": 604,
         "unique_structures": 37,
         "by_layer": {
           "whole": {
@@ -2633,9 +2633,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 1,
-            "attempted_product_families": 1,
-            "families_with_structural_hits": 1,
+            "generated_families": 4,
+            "attempted_product_families": 4,
+            "families_with_structural_hits": 4,
             "unique_product_structures": 3,
             "unique_experiments": 3,
             "qualified_preparation_experiments": 0,
@@ -2660,7 +2660,7 @@
         "analyzed_reactions": 40,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 988.917
+        "elapsed_ms": 902.963
       },
       "coverage_state": "partial",
       "stop_reasons": [
@@ -2718,10 +2718,10 @@
       "excluded_record_ids": [
         "epo:106424"
       ],
-      "elapsed_ms": 851.6,
+      "elapsed_ms": 797.81,
       "statistics": {
-        "families": 8,
-        "received_candidates": 594,
+        "families": 11,
+        "received_candidates": 596,
         "unique_structures": 35,
         "by_layer": {
           "whole": {
@@ -2735,9 +2735,9 @@
             "count_scope": "evaluated_candidates_only_not_full_corpus_total"
           },
           "core": {
-            "generated_families": 2,
-            "attempted_product_families": 2,
-            "families_with_structural_hits": 1,
+            "generated_families": 5,
+            "attempted_product_families": 5,
+            "families_with_structural_hits": 2,
             "unique_product_structures": 2,
             "unique_experiments": 2,
             "qualified_preparation_experiments": 0,
@@ -2762,7 +2762,7 @@
         "analyzed_reactions": 39,
         "proposals": 0,
         "display_items": 18,
-        "elapsed_ms": 816.487
+        "elapsed_ms": 776.507
       },
       "coverage_state": "partial",
       "stop_reasons": [

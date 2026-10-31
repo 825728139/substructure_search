@@ -1,0 +1,51 @@
+[
+  {
+    "id": "4044389",
+    "namespace": "uspto",
+    "document_id": "US20090082368A1",
+    "paragraph_nums": [
+      "p-0381"
+    ],
+    "reactants": [
+      "NCCCC(=O)O",
+      "O=C(O)c1cc2c3c(cc([N+](=O)[O-])cc3c1)C(=O)OC2=O"
+    ],
+    "products": [
+      "O=C(O)CCCN1C(=O)c2cc(C(=O)O)cc3cc([N+](=O)[O-])cc(c23)C1=O"
+    ],
+    "review": "原文支持带取代的萘酸酐与氨基丁酸形成酰亚胺，提供酰亚胺形成方向；目标用丁胺且要保留肼基，来源硝基/羧基布局不同，不能直接迁移。"
+  },
+  {
+    "id": "358769",
+    "namespace": "epo",
+    "document_id": "EP01921386A1",
+    "paragraph_nums": [
+      "p0178"
+    ],
+    "reactants": [
+      "Cl.NNc1ccc(S(N)(=O)=O)cc1",
+      "O=C(CC(=O)C(F)(F)F)c1ccc([N+](=O)[O-])cc1"
+    ],
+    "products": [
+      "NS(=O)(=O)c1ccc(-n2nc(C(F)(F)F)cc2-c2ccc([N+](=O)[O-])cc2)cc1"
+    ],
+    "review": "原文支持磺酰胺芳基肼与含CF3的芳基二酮缩合成吡唑。与已知方法同类，增加底物范围参考；硝基芳基与目标对甲苯基、CF3与CH3均不同。"
+  },
+  {
+    "id": "4498222",
+    "namespace": "uspto",
+    "document_id": "US20100256357A1",
+    "paragraph_nums": [
+      "p-0604"
+    ],
+    "reactants": [
+      "CC(=O)Cc1ccc(Br)cc1",
+      "COC(=O)C(=O)OC",
+      "NNc1ccc(S(N)(=O)=O)cc1F"
+    ],
+    "products": [
+      "COC(=O)c1cc(Cc2ccc(Br)cc2)n(-c2ccc(S(N)(=O)=O)cc2F)n1"
+    ],
+    "review": "原文以芳基丙酮、草酸二甲酯和芳基肼获得取代吡唑；产物芳基经额外CH2连接且有酯取代，与目标直接芳基连接不同，只是较远方法线索。"
+  }
+]

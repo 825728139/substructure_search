@@ -1,0 +1,57 @@
+"""关键支链组合查询：核对真实连接位置、整体功能单元与组合数量边界。"""
+
+from reaction_reference.chemistry.markush import match_family
+from reaction_reference.chemistry.structures import parse
+from reaction_reference.domain.models import QueryFamily
+from reaction_reference.retrieval.planner import (
+    _attachment_seeds,
+    _core_smarts,
+    functional_matches,
+    plan_families,
+)
+
+
+def test_two_substituent_query_preserves_relative_positions():
+    """同时保留芳基酯与腈时不能把邻位异构体当作对位先例。"""
+    target = parse("COC(=O)c1ccc(C#N)cc1")
+    core = {a.GetIdx() for a in target.GetAtoms() if a.GetIsAromatic()}
+    groups = functional_matches(target)
+    atoms, rule = next(
+        seed for seed in _attachment_seeds(target, core, groups) if seed[1].endswith(":2")
+    )
+    smarts, ids = _core_smarts(target, atoms, groups)
+    family = QueryFamily(
+        id="pair",
+        layer="core",
+        core_smarts=smarts,
+        target_atoms=ids,
+        rule_id=rule,
+        rule_version="test",
+        description="保留酯和腈相对位置",
+    )
+    assert match_family(family, target, target, "self").state == "match"
+    assert match_family(family, parse("COC(=O)c1ccccc1C#N"), target, "ortho").state == "no_match"
+
+
+def test_attachment_combinations_have_bounded_unique_connected_queries():
+    """支链组合有数量上限且全部属于目标连通子图，不能生成不存在的拼接结构。"""
+    from rdkit import Chem
+
+    target = parse("CC1C(C)C(C)C(C)C(C)C1C")
+    core = set(target.GetRingInfo().AtomRings()[0])
+    seeds = _attachment_seeds(target, core, functional_matches(target), limit=5)
+    assert len(seeds) == 5
+    assert len({tuple(sorted(atoms)) for atoms, _ in seeds}) == 5
+    for atoms, _ in seeds:
+        smarts, _ = _core_smarts(target, atoms, [])
+        query = Chem.MolFromSmarts(smarts)
+        assert len(Chem.GetMolFrags(query)) == 1
+        assert target.HasSubstructMatch(query)
+
+
+def test_public_planner_includes_attachment_query_and_keeps_bare_core():
+    """正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。"""
+    families = plan_families(parse("COC(=O)c1ccc(C#N)cc1"), max_families=12)
+    assert len(families) <= 12
+    assert any(f.rule_id == "complete_ring_system" for f in families)
+    assert any(f.rule_id == "core_attachment_combination:2" for f in families)

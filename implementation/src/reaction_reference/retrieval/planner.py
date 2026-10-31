@@ -1,5 +1,7 @@
 """目标驱动的有限查询规划：按三层规则生成可解释家族，保留原子对应；不预先猜测开闭环反应位置。"""
 
+from itertools import combinations
+
 from rdkit import Chem
 from rdkit.Chem import BRICS
 from rdkit.Chem.Scaffolds import MurckoScaffold
@@ -103,10 +105,60 @@ def _aromatic_domains(mol):
     return domains
 
 
+def _attachment_seeds(target, core, groups, limit=12):
+    """生成核心与一条、两条实际支链的连通组合，保持原始连接位置。
+
+    同一桥连块完整加入，不能把多端口块拆成互不相关的支链。组合按轮次交替，最多返回limit项，防止大分子的支链子集指数爆炸；不预测切断反应，也不声明取代可迁移。
+    """
+    blocks = outside_blocks(target, sorted(core))
+    # 优先包含已识别功能单元的块，其次是含杂原子的块；只是查询机会分配，不是活性评分。
+    blocks.sort(
+        key=lambda block: (
+            -max(
+                (
+                    priority
+                    for _, atoms, priority in groups
+                    if set(atoms) & set(block["atom_indices"])
+                ),
+                default=0,
+            ),
+            -sum(
+                target.GetAtomWithIdx(i).GetAtomicNum() not in (1, 6) for i in block["atom_indices"]
+            ),
+            len(block["atom_indices"]),
+            tuple(block["atom_indices"]),
+        )
+    )
+    singles = iter((block,) for block in blocks)
+    pairs = combinations(blocks, 2)
+    result: list[tuple[set[int], str]] = []
+    seen: set[tuple[int, ...]] = set()
+    while len(result) < limit:
+        added = False
+        for stream, count in ((singles, 1), (pairs, 2)):
+            choice = next(stream, None)
+            if choice is None:
+                continue
+            added = True
+            atoms = set(core)
+            for block in choice:
+                atoms.update(block["atom_indices"])
+            atoms = _close_units(atoms, groups, target)
+            key = tuple(sorted(atoms))
+            if key not in seen and atoms != set(core):
+                seen.add(key)
+                result.append((atoms, f"core_attachment_combination:{count}"))
+            if len(result) >= limit:
+                break
+        if not added:
+            break
+    return result
+
+
 def plan_families(target, max_families=12):
     """自动生成整体、核心、分片三层的有限 QueryFamily 列表。
 
-    环状目标使用 Murcko 骨架、完整环系和官能团邻域；无环目标使用全框架或功能锚点路径；分片补充 BRICS 非环边界。轮流取各层种子以保留各层机会，按层和目标原子集合去重，最多返回 max_families 个家族；这不是所有可能骨架的穷举。
+    环状目标使用 Murcko 骨架、完整环系和官能团邻域；无环目标使用全框架或功能锚点路径。核心补充完整支链的单项与双项组合，分片补充 BRICS 非环边界。轮流取各层种子以保留各层机会，按层和目标原子集合去重，最多返回 max_families 个家族；这不是所有可能骨架或专家查询策略的穷举。
     """
     rules, _ = load_rules()
     groups = functional_matches(target)
@@ -202,6 +254,25 @@ def plan_families(target, max_families=12):
         seeds["fragment"].append((all_atoms, "full_chain_local_fallback"))
     if not seeds["core"]:
         seeds["core"].append((whole, "framework_core_fallback"))
+    # 裸核心与保留实际支链连接的查询交替；至少先保留各个不同核心的机会。
+    bare_cores = list(seeds["core"])
+    attachment_streams = [
+        iter(_attachment_seeds(target, core, groups, limit=max_families)) for core, _ in bare_cores
+    ]
+    attachments = []
+    for _ in range(max_families):
+        for stream in attachment_streams:
+            candidate = next(stream, None)
+            if candidate is not None:
+                attachments.append(candidate)
+        if len(attachments) >= max_families:
+            break
+    seeds["core"] = []
+    for index in range(max(len(bare_cores), len(attachments))):
+        if index < len(bare_cores):
+            seeds["core"].append(bare_cores[index])
+        if index < len(attachments):
+            seeds["core"].append(attachments[index])
     families: list[QueryFamily] = []
     seen: set[tuple] = set()
     # 按层轮流取种子，使整体、核心、分片都有进入有限家族预算的机会。

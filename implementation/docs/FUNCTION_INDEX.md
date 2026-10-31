@@ -295,14 +295,15 @@
 
 | 函数 | 职责 |
 |---|---|
-| [functional_matches](../src/reaction_reference/retrieval/planner.py#L12) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
-| [_close_units](../src/reaction_reference/retrieval/planner.py#L28) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
-| [_core_smarts](../src/reaction_reference/retrieval/planner.py#L47) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
-| [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L83) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
-| [plan_families](../src/reaction_reference/retrieval/planner.py#L106) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L234) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L263) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L286) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [functional_matches](../src/reaction_reference/retrieval/planner.py#L14) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
+| [_close_units](../src/reaction_reference/retrieval/planner.py#L30) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
+| [_core_smarts](../src/reaction_reference/retrieval/planner.py#L49) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
+| [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L85) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
+| [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L108) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
+| [plan_families](../src/reaction_reference/retrieval/planner.py#L158) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L305) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L334) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L357) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -370,6 +371,14 @@
 | [test_atomic_publication_failure_boundary.sync_with_fault](../tests/test_artifact_writes.py#L118) | 按真实调用次序区分临时文件同步和替换后的父目录同步。 |
 | [test_atomic_publication_failure_boundary.fail](../tests/test_artifact_writes.py#L126) | 让真实发布流程在指定系统调用处失败。 |
 | [test_atomic_export_supports_filesystem_filename_limit](../tests/test_artifact_writes.py#L153) | 最长合法目标文件名也能导出，不因临时文件拼接后缀而超过文件系统限制。 |
+
+## tests/test_attachment_planning.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_two_substituent_query_preserves_relative_positions](../tests/test_attachment_planning.py#L14) | 同时保留芳基酯与腈时不能把邻位异构体当作对位先例。 |
+| [test_attachment_combinations_have_bounded_unique_connected_queries](../tests/test_attachment_planning.py#L36) | 支链组合有数量上限且全部属于目标连通子图，不能生成不存在的拼接结构。 |
+| [test_public_planner_includes_attachment_query_and_keeps_bare_core](../tests/test_attachment_planning.py#L52) | 正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。 |
 
 ## tests/test_browser_integration.py
 
