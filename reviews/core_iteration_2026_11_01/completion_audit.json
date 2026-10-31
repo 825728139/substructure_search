@@ -1,0 +1,31 @@
+{
+  "objective": "迭代核心代码，为用户原始四目标寻找有化学参考价值的合成先例并逐例核查",
+  "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+  "requirements": {
+    "original_four_smiles_unchanged": true,
+    "general_runtime_changes_without_target_or_source_whitelist": true,
+    "all_four_targets_have_manually_reviewed_method_references": true,
+    "all_eight_live_runs_retain_reviewed_sources_in_display": true,
+    "all_returned_sources_score_at_least_12": true,
+    "chemical_judgments_based_on_source_reactants_products_and_original_text": true,
+    "target_transfer_limits_documented_per_reference": true,
+    "production_database_read_only": true,
+    "full_project_check_passed": true,
+    "tests_passed": 512,
+    "postgres_tests_passed": 64,
+    "source_comments_and_function_index_verified": true
+  },
+  "not_claimed": [
+    "四个完整目标已有经验证的合成路线",
+    "来源条件和产率可直接迁移到目标",
+    "所有返回候选均有效",
+    "全库穷尽或并发性能已验证"
+  ],
+  "evidence": [
+    "iteration6/chemical_review.json",
+    "iteration6/summary.json",
+    "iteration6/bridge_heading_verification.json",
+    "iteration6/report.md",
+    "../../implementation/evaluation/verification.json"
+  ]
+}

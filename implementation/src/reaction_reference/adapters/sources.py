@@ -310,7 +310,7 @@ class PostgresSource:
     preferred_page_size = 2
     selection_failure_fallback = True
     fragment_selection_stages = True
-    selection_policy = "final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
+    selection_policy = "final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",
@@ -520,6 +520,7 @@ class PostgresSource:
         self._assert_index(column)
         projection = sql.SQL(",").join(sql.Identifier(c) for c in self.lightweight_columns)
         key = (family.id, role, stage)
+        priority_continuation = False
         self.connection.execute("SAVEPOINT rr_query")
         try:
             nearest = stage == 0 and family.relation != "strict" and self._has_index(fp_column)
@@ -539,7 +540,18 @@ class PostgresSource:
                     self._knn[pool_key] = self.connection.execute(
                         query, (target_smiles,)
                     ).fetchall()
-                family_pool_key = (pool_key, family.core_smarts, family.layer == "fragment")
+                expandable_core = (
+                    role == "product"
+                    and family.layer == "core"
+                    and family.parent_id is None
+                    and not family.r_constraints
+                )
+                family_pool_key = (
+                    pool_key,
+                    family.core_smarts,
+                    family.layer == "fragment",
+                    expandable_core,
+                )
                 if family_pool_key not in self._knn_core:
                     nearest_rows = self._knn[pool_key]
                     if nearest_rows:
@@ -573,8 +585,11 @@ class PostgresSource:
                     else:
                         self._knn_core[family_pool_key] = []
                     if role == "product" and family.layer != "fragment":
-                        # 至多补入两个产物含核心、已知输入不含同一核心的先例。
+                        # 近邻池缺失的初始核心至多补入八条，其余至多两条，避免扩大无益查询成本。
                         # 这是结构事实优先通道，不证明成环机制、迁移可行或立体结果。
+                        seed_limit = (
+                            8 if expandable_core and not self._knn_core[family_pool_key] else 2
+                        )
                         self.connection.execute("SAVEPOINT rr_core_seed")
                         try:
                             seeds = self.connection.execute(
@@ -582,12 +597,12 @@ class PostgresSource:
                                     "SELECT {projection} FROM {table} "
                                     "WHERE final_score>=12 AND products_mol @> %s::qmol "
                                     "AND reactants_mol IS NOT NULL "
-                                    "AND NOT (reactants_mol @> %s::qmol) LIMIT 2"
+                                    "AND NOT (reactants_mol @> %s::qmol) LIMIT %s"
                                 ).format(
                                     projection=projection,
                                     table=sql.Identifier("reaction", self.table),
                                 ),
-                                (family.core_smarts, family.core_smarts),
+                                (family.core_smarts, family.core_smarts, seed_limit),
                             ).fetchall()
                         except Error as exc:
                             self.connection.execute("ROLLBACK TO SAVEPOINT rr_core_seed")
@@ -616,10 +631,19 @@ class PostgresSource:
                 pool = self._knn_core[family_pool_key]
                 rows = pool[cursor : cursor + limit]
                 done = cursor + len(rows) >= len(pool)
+                # 初始核心在近邻池中完全缺失时，允许最多连续处理前三个小页。
+                # 这只增加近邻池缺失核心的探索机会，不证明池外候选确实发生了骨架构建。
+                nearest_ids = {row["id"] for row in self._knn[pool_key]}
+                priority_continuation = (
+                    expandable_core
+                    and not done
+                    and cursor < 4
+                    and not any(row["id"] in nearest_ids for row in pool)
+                )
                 enumeration = (
                     "core_filtered_knn512_individual_verification_required"
                     if family.layer == "fragment"
-                    else "core_filtered_knn512_with_up_to2_input_core_absence_seeds_individual_verification_required"
+                    else "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required"
                 )
             else:
                 if key not in self._cursors:
@@ -660,7 +684,12 @@ class PostgresSource:
             self.connection.execute("RELEASE SAVEPOINT rr_query")
             raise
         return CandidatePage(
-            items, None if done else cursor + len(rows), done, done and not self.issues, enumeration
+            items,
+            None if done else cursor + len(rows),
+            done,
+            done and not self.issues,
+            enumeration,
+            priority_continuation,
         )
 
     def hydrate(self, record):

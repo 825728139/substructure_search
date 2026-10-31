@@ -137,3 +137,62 @@ def test_fragment_empty_or_failed_near_pool_keeps_independent_search(
         assert bool(package.source_issues) == failure
     finally:
         source.close()
+
+
+@pytest.mark.parametrize("exhaustive", [False, True])
+def test_priority_pages_are_bounded_and_other_families_still_run(
+    tmp_path, amide, request_factory, monkeypatch, exhaustive
+):
+    """来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。"""
+    from dataclasses import replace
+    from importlib import import_module
+
+    from reaction_reference.chemistry.structures import parse
+    from reaction_reference.retrieval.planner import initial_families
+
+    module = import_module("reaction_reference.application.search")
+    smiles = next(m.smiles for m in amide.materials if m.role == "product")
+    first = next(f for f in initial_families(parse(smiles)) if f.layer == "core")
+    second = first.model_copy(update={"id": "second-core"})
+    monkeypatch.setattr(module, "initial_families", lambda *_: [first, second])
+    path = tmp_path / "priority.jsonl"
+    path.write_text(
+        "\n".join(amide.model_copy(update={"id": f"copy-{i}"}).model_dump_json() for i in range(5))
+        + "\n"
+    )
+    source = JsonlSource(path, exhaustive=True)
+    source.max_selection_stage = 0
+    original = source.candidate_page
+    calls = []
+
+    def page(family, role, cursor, limit, target, stage=0):
+        """给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。"""
+        calls.append(family.id)
+        return replace(
+            original(family, role, cursor, limit, target, stage), priority_continuation=True
+        )
+
+    monkeypatch.setattr(source, "candidate_page", page)
+    try:
+        package = search(
+            request_factory(
+                smiles,
+                options={
+                    "include_usage": False,
+                    "include_proposals": False,
+                    "directed_followups": False,
+                    "exhaustive_fixture": exhaustive,
+                },
+                budget={"max_tasks": 100, "page_size": 1},
+            ),
+            source,
+        )
+        assert (
+            calls[:2] == [first.id, second.id]
+            if exhaustive
+            else calls[:4] == [first.id, first.id, first.id, second.id]
+        )
+        assert all(s.get("priority_continuations", 0) <= 2 for s in package.family_states.values())
+        assert len(package.results) == 5
+    finally:
+        source.close()

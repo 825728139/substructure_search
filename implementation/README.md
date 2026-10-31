@@ -53,7 +53,7 @@ JSONL 可以采用本项目 [ReactionRecord 契约](contracts/ReactionRecord.sch
 
 服务切换到 JSONL：设置 `RR_SOURCE_KIND=jsonl` 和 `RR_SOURCE_PATH=/absolute/path/reactions.jsonl` 后启动。适配器限定为 20,000 条、256 MiB 的开发/评测来源，不把 Python 顺序读取当作千万级在线方案。
 
-PostgreSQL 通过环境变量 `RR_POSTGRES_DSN` 接入，命令使用 `--source postgres`。默认 `RR_POSTGRES_TABLE=reaction_v3`；仅需显式兼容旧表时设为 `reactions`，不自动降级。凭据不写入代码、结果包或 Git。读取使用 Repeatable Read 和只读事务；要求有效的 mol GiST 索引。可用的指纹 GiST 索引提供整侧 KNN 初选，随后独立的 mol 子结构游标和逐材料 Markush 核验补充参考。近邻池先检查当前必要核心，最多补入两个已知输入不含该核心的有界候选，交替处理；在线小页轮转让不同家族先得到处理机会。这个核心变化线索不证明反应机制或目标迁移可行。KNN 池不是全量子结构筛选保证；现有整侧指纹也不冒充具体产物的指纹。每条 SQL 有超时，不执行全量 COUNT 或对全量命中做排序。接口依据为 [RDKit Cartridge 官方说明](https://www.rdkit.org/docs/Cartridge.html#operators)。当前来源未提供具体材料质量索引，因此不在源 SQL 内临时全表计算分子量。
+PostgreSQL 通过环境变量 `RR_POSTGRES_DSN` 接入，命令使用 `--source postgres`。默认 `RR_POSTGRES_TABLE=reaction_v3`；仅需显式兼容旧表时设为 `reactions`，不自动降级。凭据不写入代码、结果包或 Git。读取使用 Repeatable Read 和只读事务；要求有效的 mol GiST 索引。可用的指纹 GiST 索引提供整侧 KNN 初选，随后独立的 mol 子结构游标和逐材料 Markush 核验补充参考。近邻池先检查当前必要核心，一般最多补入两个已知输入不含该核心的有界候选，交替处理。初始核心在近邻池完全缺失时，最多补八条并允许两次优先续页，之后恢复小页轮转；定向查询和固定样本穷尽模式不借此连续占用预算。这个核心变化线索不证明反应机制或目标迁移可行。KNN 池不是全量子结构筛选保证；现有整侧指纹也不冒充具体产物的指纹。每条 SQL 有超时，不执行全量 COUNT 或对全量命中做排序。接口依据为 [RDKit Cartridge 官方说明](https://www.rdkit.org/docs/Cartridge.html#operators)。当前来源未提供具体材料质量索引，因此不在源 SQL 内临时全表计算分子量。
 
 数据库召回先限制 v3 组最高分 `final_score >= 12`，再按 `reaction_v3_source_scores` 选择实际达到12分的最高分来源，并列按最小来源ID。先只取来源ID，再按主键从 `reaction_v2` 读取该实验的结构、映射、模板、条件和出处；通过 `(reaction_v3_id, source_reaction_id)` 从 `reaction_v3_details` 读取同一实验详情。来源绑定发生在材料匹配前，避免代表行材料与其他实验详情混用。其他组内来源仍保留在库中，但当前每组只评估一条，最高分不等于化学参考价值最高。结果 `record.raw.dedup_source_selection` 记录组ID、组最高分、实际来源ID/分数和选择范围。
 
@@ -126,7 +126,7 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 507 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 512 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 ### 真实来源和浏览器集成检查
 

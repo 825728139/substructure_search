@@ -1,0 +1,530 @@
+{
+  "id": "4d218864dc3227d488033d10",
+  "record": {
+    "id": "uspto:10255161",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "10255161",
+      "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+      "document_id": "US20250304535A1",
+      "location": "['p-0643']",
+      "url": null,
+      "synthetic": false
+    },
+    "materials": [
+      {
+        "instance_id": "10255161:product:0",
+        "role": "product",
+        "smiles": "COc1ccc(C23COC(C2)C3)cc1",
+        "name": "4-(4-methoxyphenyl)-2-oxabicyclo[2.1.1]hexane",
+        "actual_input": null
+      },
+      {
+        "instance_id": "10255161:reactant:0",
+        "role": "reactant",
+        "smiles": "CO",
+        "name": "MeOH",
+        "actual_input": null
+      },
+      {
+        "instance_id": "10255161:reactant:1",
+        "role": "reactant",
+        "smiles": "COc1ccc(C2(COS(=O)(=O)c3ccc(C)cc3)CC(O)C2)cc1",
+        "name": "(3-hydroxy-1-(4-methoxyphenyl)cyclobutyl)methyl 4-methylbenzenesulfonate",
+        "actual_input": null
+      },
+      {
+        "instance_id": "10255161:reactant:2",
+        "role": "reactant",
+        "smiles": "[H-].[Na+]",
+        "name": null,
+        "actual_input": null
+      },
+      {
+        "instance_id": "10255161:solvent:0",
+        "role": "solvent",
+        "smiles": "C1CCOC1",
+        "name": "THF",
+        "actual_input": null
+      }
+    ],
+    "observations": [
+      {
+        "product_instance_id": "10255161:product:0",
+        "result": "unknown",
+        "evidence_text": null,
+        "source_location": null,
+        "isolated": null,
+        "yield_pct": null,
+        "yield_type": "unknown"
+      }
+    ],
+    "mapped_reaction_smiles": "CO.Cc1ccc(S(=O)(=O)O[CH2:8][C:7]2([c:6]3[cH:5][cH:4][c:3]([O:2][CH3:1])[cH:14][cH:13]3)[CH2:11][CH:10]([OH:9])[CH2:12]2)cc1.[H-].[Na+]>>[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([C:7]23[CH2:8][O:9][CH:10]([CH2:11]2)[CH2:12]3)[cH:13][cH:14]1",
+    "reaction_smiles": "CO.COc1ccc(C2(COS(=O)(=O)c3ccc(C)cc3)CC(O)C2)cc1.[H-].[Na+]>>COc1ccc(C23COC(C2)C3)cc1",
+    "event_scope": "unknown",
+    "documented_step_ref": null,
+    "step_count": null,
+    "one_pot": null,
+    "conditions": {
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "pressure_max_kpa": null,
+      "duration_seconds": null,
+      "equipment": null,
+      "stage_id": null,
+      "text": ""
+    },
+    "reaction_class": null,
+    "retro_template": "[O&H0&+0&D2:1]1-[C&H2&+0&D2:5]-[C:7]2(-[c:2])-[C:3]-[C:6]-1-[C:4]-2>>[O&H1&+0&D1:1]-[C:6]1-[C:3]-[C:7](-[c:2])(-[C:4]-1)-[C&H2&+0&D2:5]-O-S(=O)(=O)-c1:c:c:c(-C):c:c:1",
+    "raw": {
+      "source_record_hash": "21a4b1ae1265e3596f84831250566d9522ae6f056cbf30ca331e90a003863660",
+      "source_locator": {
+        "id": 10255161,
+        "source_namespace": "uspto",
+        "document_id": "US20250304535A1",
+        "paragraph_nums": [
+          "p-0643"
+        ],
+        "paragraph_reaction_ordinal": 1
+      },
+      "raw_details_retained_in_source": true,
+      "dedup_source_selection": {
+        "group_id": 10255161,
+        "group_max_score": 12,
+        "group_source_count": 1,
+        "source_reaction_id": 10255161,
+        "source_final_score": 12,
+        "policy": "highest_qualified_score_then_lowest_source_id",
+        "other_sources_evaluated": false
+      }
+    }
+  },
+  "material": {
+    "instance_id": "10255161:product:0",
+    "role": "product",
+    "smiles": "COc1ccc(C23COC(C2)C3)cc1",
+    "name": "4-(4-methoxyphenyl)-2-oxabicyclo[2.1.1]hexane",
+    "actual_input": null
+  },
+  "family_ids": [
+    "236b64275ef4bf5de87f1ab0"
+  ],
+  "layers": [
+    "core"
+  ],
+  "witnesses": [
+    {
+      "id": "a74f2911765034ce8bb6b6b1",
+      "structural_witness_id": "28f396961bb66a9afc401891",
+      "family_id": "236b64275ef4bf5de87f1ab0",
+      "source_structure_id": "477c6c52bbda077289c0ae58",
+      "matched_role": "product",
+      "target_to_source": [
+        [
+          9,
+          6
+        ],
+        [
+          10,
+          7
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          12,
+          9
+        ],
+        [
+          13,
+          10
+        ],
+        [
+          14,
+          11
+        ]
+      ],
+      "core_source_atoms": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "blocks": [
+        {
+          "core_positions": [
+            0
+          ],
+          "atom_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            12,
+            13
+          ],
+          "fragment": "COc1ccc([*:1])cc1",
+          "boundary_bonds": [
+            "SINGLE"
+          ],
+          "heavy_atoms": 8,
+          "category": "other"
+        }
+      ],
+      "matched_r_positions": [],
+      "extra_core_edges": [],
+      "target_atom_coverage": 0.2222222222222222,
+      "target_bond_coverage": 0.22580645161290322,
+      "mapping_status": "alternative_witness"
+    },
+    {
+      "id": "777bd8de877a78223d570f96",
+      "structural_witness_id": "023b05eb727fd57e36373b9d",
+      "family_id": "236b64275ef4bf5de87f1ab0",
+      "source_structure_id": "477c6c52bbda077289c0ae58",
+      "matched_role": "product",
+      "target_to_source": [
+        [
+          9,
+          6
+        ],
+        [
+          10,
+          7
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          12,
+          9
+        ],
+        [
+          13,
+          11
+        ],
+        [
+          14,
+          10
+        ]
+      ],
+      "core_source_atoms": [
+        6,
+        7,
+        8,
+        9,
+        11,
+        10
+      ],
+      "blocks": [
+        {
+          "core_positions": [
+            0
+          ],
+          "atom_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            12,
+            13
+          ],
+          "fragment": "COc1ccc([*:1])cc1",
+          "boundary_bonds": [
+            "SINGLE"
+          ],
+          "heavy_atoms": 8,
+          "category": "other"
+        }
+      ],
+      "matched_r_positions": [],
+      "extra_core_edges": [],
+      "target_atom_coverage": 0.2222222222222222,
+      "target_bond_coverage": 0.22580645161290322,
+      "mapping_status": "alternative_witness"
+    }
+  ],
+  "exact_record_identity": false,
+  "target_requirements_satisfied": false,
+  "preparation_hit": false,
+  "obtainment_hit": false,
+  "use_hit": false,
+  "contribution": "local_method",
+  "contribution_support": "graph_only",
+  "analysis": {
+    "state": "partial",
+    "formed": [
+      {
+        "maps": [
+          8,
+          9
+        ],
+        "before": null,
+        "after": "SINGLE"
+      }
+    ],
+    "broken": [],
+    "order_changed": [],
+    "representation_only": [],
+    "atom_property_changes": [
+      {
+        "map": 9,
+        "property": "hydrogen_count",
+        "before": 1,
+        "after": 0
+      }
+    ],
+    "untracked_input_bonds": [],
+    "detached_boundaries": [],
+    "atom_sources": {
+      "8": 1,
+      "7": 1,
+      "6": 1,
+      "5": 1,
+      "4": 1,
+      "3": 1,
+      "2": 1,
+      "1": 1,
+      "14": 1,
+      "13": 1,
+      "11": 1,
+      "10": 1,
+      "9": 1,
+      "12": 1
+    },
+    "topology": [
+      "ring_closure"
+    ],
+    "reaction_classes": [
+      "bond_formation",
+      "sp3_C_O_connection"
+    ],
+    "mapping_support": "single_mapping_inference",
+    "event_scope": "unknown",
+    "reasons": [
+      "partial_mapping",
+      "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+    ]
+  },
+  "claims": [],
+  "similarity": 0.140625,
+  "molecular_weight": 190.242,
+  "coverage": {
+    "joint_witness": {
+      "witness_id": "a74f2911765034ce8bb6b6b1",
+      "atom_coverage": 0.2222222222222222,
+      "bond_coverage": 0.22580645161290322,
+      "r_positions": []
+    },
+    "sitewise_union": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "sitewise_union_atom_coverage": 0.2222222222222222,
+    "enumeration_complete": true,
+    "best_found_is_proven_maximum": false,
+    "maximum_scope": "best_found_within_evaluated_families_and_mappings",
+    "coverage_semantics": "connectivity_with_elements_isotopes_and_bond_types; stereo_validated_separately_for_complete_target",
+    "projected_changes": {
+      "formed_target_bonds": [
+        [
+          10,
+          11
+        ]
+      ],
+      "changed_target_atoms": [
+        10,
+        11
+      ],
+      "support": "single_mapping_inference",
+      "mapping_alternatives_checked": 4
+    },
+    "method_witness_id": "a74f2911765034ce8bb6b6b1",
+    "method_witness_atom_coverage": 0.2222222222222222
+  },
+  "ranking_features": {
+    "method_relevance": {
+      "state": "known",
+      "value": {
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              10,
+              11
+            ]
+          ],
+          "changed_target_atoms": [
+            10,
+            11
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 4
+        },
+        "classes": [
+          "bond_formation",
+          "sp3_C_O_connection"
+        ],
+        "joint_coverage": {
+          "witness_id": "a74f2911765034ce8bb6b6b1",
+          "atom_coverage": 0.2222222222222222,
+          "bond_coverage": 0.22580645161290322,
+          "r_positions": []
+        }
+      },
+      "support": "graph_inference_and_scoped_observation",
+      "limitations": []
+    },
+    "transfer_burden": {
+      "state": "partial",
+      "value": {
+        "source_molecular_weight": 190.242,
+        "target_molecular_weight": 358.44100000000003,
+        "molecular_weight_ratio": 0.5307484355863308,
+        "target_requirements_satisfied": false
+      },
+      "support": "computed_from_concrete_material",
+      "limitations": [
+        "mass_similarity_does_not_establish_method_transfer",
+        "new_input_feasibility_unverified"
+      ]
+    },
+    "reactivity_selectivity": {
+      "state": "partial",
+      "value": {
+        "source_group_counts": {
+          "ether": 2
+        },
+        "target_group_counts": {
+          "carbonyl": 1,
+          "ether": 1
+        },
+        "additional_target_functional_units": {
+          "carbonyl": 1
+        }
+      },
+      "support": "reviewed_functional_group_patterns",
+      "limitations": [
+        "overlapping_patterns_are_not_independent_reaction_sites",
+        "electronic_steric_and_selectivity_effects_not_predicted"
+      ]
+    },
+    "evidence_quality": {
+      "state": "known",
+      "value": {
+        "preparation_hit": false,
+        "obtainment_hit": false,
+        "use_hit": false,
+        "synthetic": false,
+        "claims": [],
+        "mapping_support": "single_mapping_inference",
+        "source": {
+          "record_id": "uspto:10255161",
+          "material_instance_id": "10255161:product:0",
+          "event_scope": "unknown",
+          "stage_id": null
+        }
+      },
+      "support": "source_annotations_and_mapping_validation",
+      "limitations": []
+    },
+    "material_supply": {
+      "state": "unknown",
+      "value": null,
+      "support": "no_provider",
+      "limitations": [
+        "structure_presence_does_not_establish_availability_or_price"
+      ]
+    },
+    "operation_equipment": {
+      "state": "partial",
+      "value": {
+        "conditions": {
+          "temperature_min_c": null,
+          "temperature_max_c": null,
+          "pressure_max_kpa": null,
+          "duration_seconds": null,
+          "equipment": null,
+          "stage_id": null,
+          "text": ""
+        },
+        "one_pot": null,
+        "step_count": null,
+        "reactant_count": 3,
+        "source": {
+          "record_id": "uspto:10255161",
+          "material_instance_id": "10255161:product:0",
+          "event_scope": "unknown",
+          "stage_id": null
+        }
+      },
+      "support": "source_reported_fields",
+      "limitations": [
+        "missing_workup_and_stage_requirements_not_inferred"
+      ]
+    },
+    "hazard_process_regulation": {
+      "state": "unknown",
+      "value": null,
+      "support": "no_provider",
+      "limitations": [
+        "not_a_safety_assessment",
+        "missing_hazard_information_is_not_a_pass"
+      ]
+    },
+    "output_isolation": {
+      "state": "partial",
+      "value": [
+        {
+          "product_instance_id": "10255161:product:0",
+          "result": "unknown",
+          "evidence_text": null,
+          "source_location": null,
+          "isolated": null,
+          "yield_pct": null,
+          "yield_type": "unknown"
+        }
+      ],
+      "support": "product_bound_observations",
+      "limitations": [
+        "purification_and_scale_comparability_not_inferred"
+      ]
+    },
+    "scale_resource_waste": {
+      "state": "unknown",
+      "value": null,
+      "support": "no_quantified_process_inventory",
+      "limitations": [
+        "no_scale_extrapolation_or_PMI_from_reaction_formula"
+      ]
+    }
+  },
+  "lab_fit": "not_applicable",
+  "lab_reasons": [
+    "lab_context_not_configured"
+  ],
+  "reasons": [
+    "same_instance_markush_witness",
+    "event_scope:unknown",
+    "target_contribution:local_method"
+  ],
+  "unresolved": [
+    "changes_apply_to_source_record_endpoints_not_an_assigned_step",
+    "no_qualified_literature_outcome_or_usage_witness",
+    "partial_mapping",
+    "temperature_unknown"
+  ],
+  "display_position": 2
+}

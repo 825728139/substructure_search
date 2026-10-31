@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-11-01",
-  "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af",
+  "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
   "rule_hash": "e263d15d78fd675ba3b62411ec53404a8d555e5ebf21b43d791a212e254cf3f1",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 507,
+    "tests_passed": 512,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af"
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1602,5 +1602,28 @@
     "python_modules_documented": 103,
     "python_classes_documented": 70,
     "python_named_functions_documented": 606
+  },
+  "core_candidate_iteration_6": {
+    "date": "2026-11-01",
+    "verified_implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "report": "../../reviews/core_iteration_2026_11_01/iteration6/report.md",
+    "completion_audit": "../../reviews/core_iteration_2026_11_01/completion_audit.json",
+    "full_tests_passed": 512,
+    "postgres_tests_passed": 64,
+    "new_tests": 5,
+    "live_runs": 8,
+    "production_database_written": false,
+    "all_four_targets_have_reviewed_method_references": true,
+    "all_target_syntheses_validated": false,
+    "reviewed_sources": {
+      "U01": "uspto:6766761",
+      "U02": "epo:1969751",
+      "U03": "uspto:10255161",
+      "U04": "uspto:2223370"
+    },
+    "target_specific_runtime_rules_added": false,
+    "python_modules_documented": 103,
+    "python_classes_documented": 70,
+    "python_named_functions_documented": 609
   }
 }

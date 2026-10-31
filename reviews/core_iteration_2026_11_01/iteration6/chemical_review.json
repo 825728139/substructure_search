@@ -1,0 +1,82 @@
+[
+  {
+    "target": "U01",
+    "target_smiles": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1",
+    "reference_id": "89fe047e296d19e8957b954b",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "6766761",
+      "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+      "document_id": "US20160304517A1",
+      "location": "['p-0591']",
+      "url": null,
+      "synthetic": false
+    },
+    "score": 22,
+    "display_position": 7,
+    "judgment": "含氮桥环的分子内C—C闭环参考",
+    "chemical_basis": "带溴甲基的取代哌啶酮经强碱处理构建3-氮杂双环[3.1.1]骨架；原文报告80%，下一段明确使用该桥环产物脱除N保护基。",
+    "transfer_limits": "目标的苯基位置、双酯、环外双键及立体要求尚未被该例验证，不能按原条件直接迁移。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "U02",
+    "target_smiles": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN",
+    "reference_id": "9cdef7945837c598f9172711",
+    "source": {
+      "namespace": "epo",
+      "record_id": "1969751",
+      "experiment_id": "epo:EP22915126A1:['p0122']:1",
+      "document_id": "EP22915126A1",
+      "location": "['p0122']",
+      "url": null,
+      "synthetic": false
+    },
+    "score": 19,
+    "display_position": 4,
+    "judgment": "相近芳香母核上的肼基安装参考",
+    "chemical_basis": "原文钯/膦配体条件下以水合肼替换芳基溴，保留内酰胺羰基，报告93%。实际形成芳基—NH—NH2。",
+    "transfer_limits": "单羰基内酰胺与目标双羰基酰亚胺、N取代及稠环连接均有差异；目标相容性仍须验证。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "U03",
+    "target_smiles": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1",
+    "reference_id": "4d218864dc3227d488033d10",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "10255161",
+      "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+      "document_id": "US20250304535A1",
+      "location": "['p-0643']",
+      "url": null,
+      "synthetic": false
+    },
+    "score": 12,
+    "display_position": 2,
+    "judgment": "含芳基氧桥环的分子内C—O闭环参考",
+    "chemical_basis": "原文先制备羟基环丁基甲基磺酸酯，再以NaH促闭环得到2-氧杂双环[2.1.1]骨架，报告19%；标题与产物身份相符。",
+    "transfer_limits": "目标两个苯基及酰基吡唑的位置不同，闭环端的取代与位阻也不同；新例不证明目标酰基吡唑耐受性或选择性。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "U04",
+    "target_smiles": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N",
+    "reference_id": "5e575c2d7a4337cb292fd264",
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2223370",
+      "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+      "document_id": "US20030096853A1",
+      "location": "['P-0049']",
+      "url": null,
+      "synthetic": false
+    },
+    "score": 15,
+    "display_position": 1,
+    "judgment": "芳基肼与炔酮构建吡唑参考",
+    "chemical_basis": "原文明确芳基肼盐酸盐与芳基炔酮成环，形成目标所需类型的N-芳基和5-芳基连接，并保留磺酰胺。",
+    "transfer_limits": "先例3位CF3换成目标CH3会改变电子效应；区域选择性和目标底物反应性仍待验证。",
+    "target_synthesis_validated": false
+  }
+]

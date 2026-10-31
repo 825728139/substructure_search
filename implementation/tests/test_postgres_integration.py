@@ -1118,3 +1118,55 @@ def test_core_change_seed_can_recover_outside_knn_without_dropping_nearby(indexe
         assert "integration:1001" in independent_ids and "integration:1002" not in independent_ids
     finally:
         source.close()
+
+
+@pytest.mark.parametrize(
+    "layer,parent,priority",
+    [("core", None, True), ("whole", None, False), ("core", "parent", False)],
+)
+def test_seed_only_initial_core_can_request_bounded_priority_pages(
+    indexed_source_dsn, layer, parent, priority
+):
+    """近邻池不含查询核心时仅初始核心请求短暂连续分页；整体与定向家族不借此独占预算。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("SET rdkit.morgan_fp_size=2048")
+        writer.execute("DELETE FROM reaction.reactions")
+        writer.execute("""
+            INSERT INTO reaction.reactions
+            (id,product_smiles,reactant_smiles,products_mol,reactants_mol,product_fp,final_score)
+            SELECT n,ARRAY['CCO'],ARRAY['CCO'],'CCO'::mol,'CCO'::mol,morganbv_fp('CCO'::mol,2),12
+            FROM generate_series(1,520) n
+        """)
+        for number, smiles in enumerate(["CN", "CCN", "CCCN", "CCCCN", "CCCCCN", "CCCCCCN"], 1001):
+            writer.execute(
+                "INSERT INTO reaction.reactions "
+                "(id,product_smiles,reactant_smiles,products_mol,reactants_mol,product_fp,final_score) "
+                "VALUES(%s,%s,ARRAY['CCO'],%s::mol,'CCO'::mol,morganbv_fp(%s::mol,2),12)",
+                (number, [smiles], smiles, smiles),
+            )
+    family = carbon_family(layer=layer).model_copy(
+        update={"core_smarts": "[#7]", "id": "rare-nitrogen", "parent_id": parent}
+    )
+    source = PostgresSource(indexed_source_dsn, table="reactions")
+    try:
+        seen = []
+        for cursor in (0, 2, 4) if priority else (0,):
+            page = source.candidate_page(family, "product", cursor, 2, "CCO")
+            assert page.priority_continuation == (priority and cursor < 4)
+            seen.extend(item.record.id for item in page.items)
+        assert len(set(seen)) == (6 if priority else 2)
+        assert page.stream_exhausted
+        independent = source.candidate_page(family, "product", 0, 20, "CCO", stage=1)
+        assert len(independent.items) == 6
+        # 同一核心在不同扩展资格下的池不能复用错误上限，也不能由调用先后决定策略。
+        alternative = family.model_copy(
+            update={
+                "id": "alternate-core",
+                "layer": "whole" if priority else "core",
+                "parent_id": None,
+            }
+        )
+        alternate_page = source.candidate_page(alternative, "product", 0, 20, "CCO")
+        assert len(alternate_page.items) == (2 if priority else 6)
+    finally:
+        source.close()

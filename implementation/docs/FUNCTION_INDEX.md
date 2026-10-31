@@ -105,9 +105,9 @@
 | [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L423) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
 | [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L459) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
 | [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L510) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L666) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L685) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L758) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L695) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L714) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L787) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -132,9 +132,9 @@
 | 函数 | 职责 |
 |---|---|
 | [search](../src/reaction_reference/application/search.py#L40) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
-| [search.package](../src/reaction_reference/application/search.py#L81) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L262) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L272) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search.package](../src/reaction_reference/application/search.py#L82) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
+| [search.publish](../src/reaction_reference/application/search.py#L263) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L273) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -258,9 +258,9 @@
 
 | 函数 | 职责 |
 |---|---|
-| [CompoundSource.candidate_page](../src/reaction_reference/ports/sources.py#L35) | 读取家族在指定角色和选择阶段中的一页候选，返回 CandidatePage。 |
-| [CompoundSource.close](../src/reaction_reference/ports/sources.py#L50) | 释放来源连接、游标或缓存；使用方应在 finally 中调用。 |
-| [CompoundSource.hydrate](../src/reaction_reference/ports/sources.py#L54) | 为已命中的轻量记录补读详情并返回 ReactionRecord。 |
+| [CompoundSource.candidate_page](../src/reaction_reference/ports/sources.py#L39) | 读取家族在指定角色和选择阶段中的一页候选，返回 CandidatePage。 |
+| [CompoundSource.close](../src/reaction_reference/ports/sources.py#L54) | 释放来源连接、游标或缓存；使用方应在 finally 中调用。 |
+| [CompoundSource.hydrate](../src/reaction_reference/ports/sources.py#L58) | 为已命中的轻量记录补读详情并返回 ReactionRecord。 |
 
 ## src/reaction_reference/ranking/engine.py
 
@@ -428,6 +428,8 @@
 | [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L64) | 记录真实来源取页参数，不模拟核验和返回数据。 |
 | [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L94) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
 | [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L116) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run](../tests/test_core_candidate_iteration.py#L143) | 来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run.page](../tests/test_core_candidate_iteration.py#L168) | 给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。 |
 
 ## tests/test_data_boundaries.py
 
@@ -586,6 +588,7 @@
 | [test_unrelated_partial_index_does_not_claim_complete_substructure_support](../tests/test_postgres_integration.py#L1041) | 任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。 |
 | [test_knn_core_filter_precedes_candidate_pagination](../tests/test_postgres_integration.py#L1059) | 有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。 |
 | [test_core_change_seed_can_recover_outside_knn_without_dropping_nearby](../tests/test_postgres_integration.py#L1078) | 近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。 |
+| [test_seed_only_initial_core_can_request_bounded_priority_pages](../tests/test_postgres_integration.py#L1127) | 近邻池不含查询核心时仅初始核心请求短暂连续分页；整体与定向家族不借此独占预算。 |
 
 ## tests/test_query_input_planning.py
 

@@ -17,13 +17,17 @@ class Candidate:
 
 @dataclass(frozen=True)
 class CandidatePage:
-    """一页候选、会话游标与完整性说明；流读完不等于全库或全部家族已查完。"""
+    """一页候选、会话游标与完整性说明；流读完不等于全库或全部家族已查完。
+
+    priority_continuation 可请求下一页优先，但编排器仍限制连续次数及总预算，不代表化学价值或允许无限续页。
+    """
 
     items: list[Candidate]
     next_cursor: int | None
     stream_exhausted: bool
     scope_complete: bool
     enumeration_kind: str
+    priority_continuation: bool = False
 
 
 class CompoundSource(Protocol):

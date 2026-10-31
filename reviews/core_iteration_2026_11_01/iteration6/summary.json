@@ -1,0 +1,506 @@
+[
+  {
+    "run": "U01-10000-r1.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "6766761",
+      "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+      "document_id": "US20160304517A1",
+      "location": "['p-0591']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 22,
+    "display_position": 7,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 18,
+      "unique_structures": 11,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 9,
+          "unique_experiments": 9,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 11,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 11,
+      "proposals": 0,
+      "display_items": 11,
+      "elapsed_ms": 1969.283
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U01-10000-r2.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "6766761",
+      "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+      "document_id": "US20160304517A1",
+      "location": "['p-0591']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 22,
+    "display_position": 7,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 18,
+      "unique_structures": 11,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 9,
+          "unique_experiments": 9,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 11,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 11,
+      "proposals": 0,
+      "display_items": 11,
+      "elapsed_ms": 2121.364
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U02-10000-r1.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "epo",
+      "record_id": "1969751",
+      "experiment_id": "epo:EP22915126A1:['p0122']:1",
+      "document_id": "EP22915126A1",
+      "location": "['p0122']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 19,
+    "display_position": 4,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 14,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 7,
+          "attempted_product_families": 7,
+          "families_with_structural_hits": 5,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1718.644
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U02-10000-r2.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "epo",
+      "record_id": "1969751",
+      "experiment_id": "epo:EP22915126A1:['p0122']:1",
+      "document_id": "EP22915126A1",
+      "location": "['p0122']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 19,
+    "display_position": 4,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 14,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 7,
+          "attempted_product_families": 7,
+          "families_with_structural_hits": 5,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1665.07
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U03-10000-r1.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "10255161",
+      "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+      "document_id": "US20250304535A1",
+      "location": "['p-0643']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 12,
+    "display_position": 2,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 14,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 8,
+          "unique_experiments": 9,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 6,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 9,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 9,
+      "proposals": 0,
+      "display_items": 9,
+      "elapsed_ms": 1579.083
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U03-10000-r2.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "10255161",
+      "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+      "document_id": "US20250304535A1",
+      "location": "['p-0643']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 12,
+    "display_position": 2,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 14,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 8,
+          "unique_experiments": 9,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 6,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 9,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 9,
+      "proposals": 0,
+      "display_items": 9,
+      "elapsed_ms": 1762.964
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U04-10000-r1.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "2223370",
+      "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+      "document_id": "US20030096853A1",
+      "location": "['P-0049']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 15,
+    "display_position": 1,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 7,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2401.7
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  },
+  {
+    "run": "U04-10000-r2.package",
+    "implementation_hash": "6b15d6da97c7bab0c360857e2bbb5cc770b2b6a44a6beea9b83ad858b0534395",
+    "selected_source": {
+      "namespace": "uspto",
+      "record_id": "2223370",
+      "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+      "document_id": "US20030096853A1",
+      "location": "['P-0049']",
+      "url": null,
+      "synthetic": false
+    },
+    "source_final_score": 15,
+    "display_position": 1,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 7,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2420.481
+    },
+    "stop_reasons": [
+      "task_budget"
+    ]
+  }
+]

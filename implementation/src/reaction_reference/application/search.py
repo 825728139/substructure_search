@@ -55,6 +55,7 @@ def search(request, source, *, run_id=None, on_progress=None):
     )
     family_lookup = {f.id: f for f in families}
     states: dict[str, dict] = {}
+    priority_continuations: dict[str, int] = {}
     references: dict[str, Reference] = {}
     # 结构核验可跨实验共享；反应分析和最终引用必须仍绑定各自来源记录。
     match_cache, analysis_cache = {}, {}
@@ -582,7 +583,18 @@ def search(request, source, *, run_id=None, on_progress=None):
             )
             # ⑥ 分页后仍有预算才继续；缺少合格获得记录时再放宽候选优先范围。
             if page.next_cursor is not None:
-                queue.append((family, role, page.next_cursor, stage))
+                continuation = (family, role, page.next_cursor, stage)
+                # 来源提示也不能无限占用队列；每个流最多两次连续补页，之后恢复轮转。
+                if (
+                    page.priority_continuation
+                    and not request.options.exhaustive_fixture
+                    and priority_continuations.get(state_key, 0) < 2
+                ):
+                    priority_continuations[state_key] = priority_continuations.get(state_key, 0) + 1
+                    states[state_key]["priority_continuations"] = priority_continuations[state_key]
+                    queue.appendleft(continuation)
+                else:
+                    queue.append(continuation)
             elif (
                 stage < getattr(source, "max_selection_stage", 2)
                 and not request.options.exhaustive_fixture
