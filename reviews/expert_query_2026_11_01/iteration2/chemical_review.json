@@ -1,0 +1,32 @@
+[
+  {
+    "source_id": "6726425",
+    "document_id": "US20160229850A1",
+    "paragraph_nums": [
+      "p-0111"
+    ],
+    "reactants": [
+      "CC(N)=CC#N",
+      "NNc1ccccc1"
+    ],
+    "products": [
+      "Cc1cc(N)n(-c2ccccc2)n1"
+    ],
+    "judgment": "原文为氨基烯腈与苯肼生成氨基吡唑，支持不同的吡唑成环，但产物5位为氨基且N芳基无磺酰胺，与目标5芳基布局不同，不能当作直接替换底物即可得到目标。"
+  },
+  {
+    "source_id": "7923085",
+    "document_id": "US20190241558A1",
+    "paragraph_nums": [
+      "p-0482"
+    ],
+    "reactants": [
+      "CC(=O)N1CCc2c(c(Br)nn2[C@H]2CCOC2)C1",
+      "CC1(C)OB(c2cccc3ncccc23)OC1(C)C"
+    ],
+    "products": [
+      "CC(=O)N1CCc2c(c(-c3cccc4ncccc34)nn2[C@H]2CCOC2)C1"
+    ],
+    "judgment": "原文为溴代稠合吡唑与喹啉硼酸酯的钯催化偶联，支持吡唑上形成C—芳基连接的局部方法；N取代、稠合骨架和芳基类型与目标不同，属于较远参考。"
+  }
+]

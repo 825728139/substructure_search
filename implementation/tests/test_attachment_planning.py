@@ -1,5 +1,7 @@
 """关键支链组合查询：核对真实连接位置、整体功能单元与组合数量边界。"""
 
+import pytest
+
 from reaction_reference.chemistry.markush import match_family
 from reaction_reference.chemistry.structures import parse
 from reaction_reference.domain.models import QueryFamily
@@ -55,3 +57,42 @@ def test_public_planner_includes_attachment_query_and_keeps_bare_core():
     assert len(families) <= 12
     assert any(f.rule_id == "complete_ring_system" for f in families)
     assert any(f.rule_id == "core_attachment_combination:2" for f in families)
+
+
+@pytest.mark.parametrize(
+    "candidate,expected",
+    [
+        ("c1ccccc1NCCO", "match"),
+        ("Cc1ccc(NCCO)cc1", "match"),
+        ("c1ccccc1N(C)CCO", "no_match"),
+        ("c1ccccc1OCCO", "no_match"),
+    ],
+)
+def test_attachment_environment_relaxes_tail_but_preserves_nitrogen_role(candidate, expected):
+    """远端烷链可变且核心仍可加取代，但连接端仲胺不能静默变成叔胺或醚。"""
+    target = parse("c1ccccc1NCCCCC")
+    family = next(
+        f for f in plan_families(target, 30) if f.rule_id == "core_attachment_environment:1"
+    )
+    assert match_family(family, parse(candidate), target, "local").state == expected
+
+
+def test_attachment_environment_closes_functional_units_and_rings():
+    """酰胺邻域保持C=O与N，苄基连接邻域保留完整苯环而放开对位远端烷链。"""
+    from rdkit import Chem
+
+    for smiles, required in [
+        ("c1ccccc1C(=O)NCCCCC", "C(=O)N"),
+        ("C1CCCCC1Cc1ccc(CCCCC)cc1", "Cc1ccccc1"),
+    ]:
+        target = parse(smiles)
+        family = next(
+            f for f in plan_families(target, 30) if f.rule_id == "core_attachment_environment:1"
+        )
+        atoms = set(family.target_atoms)
+        assert any(
+            set(match) <= atoms
+            for match in target.GetSubstructMatches(Chem.MolFromSmarts(required))
+        )
+        assert match_family(family, target, target, "self").state == "match"
+        assert len(atoms) < target.GetNumHeavyAtoms()

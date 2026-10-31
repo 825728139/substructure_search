@@ -105,10 +105,40 @@ def _aromatic_domains(mol):
     return domains
 
 
+def _attachment_environment(target, core, block, groups):
+    """保留支链连接原子及其一层重原子邻域，并补齐相交官能团和完整环。
+
+    仅在该实际连通块内扩展，不沿核心把其他支链带入。闭包直到稳定，避免规则顺序截断酰胺、酯或稠环；多端口桥连块完整保留。远端变化只是查询放宽，不证明化学等价。
+    """
+    allowed = set(block["atom_indices"])
+    if len(block["core_positions"]) > 1:
+        return allowed
+    roots = {
+        i
+        for i in allowed
+        if any(n.GetIdx() in core for n in target.GetAtomWithIdx(i).GetNeighbors())
+    }
+    local = roots | {
+        n.GetIdx()
+        for i in roots
+        for n in target.GetAtomWithIdx(i).GetNeighbors()
+        if n.GetIdx() in allowed
+    }
+    units = [set(atoms) & allowed for _, atoms, _ in groups]
+    units += [set(ring) & allowed for ring in target.GetRingInfo().AtomRings()]
+    while True:
+        previous = set(local)
+        for unit in units:
+            if unit & local:
+                local.update(unit)
+        if local == previous:
+            return local
+
+
 def _attachment_seeds(target, core, groups, limit=12):
     """生成核心与一条、两条实际支链的连通组合，保持原始连接位置。
 
-    同一桥连块完整加入，不能把多端口块拆成互不相关的支链。组合按轮次交替，最多返回limit项，防止大分子的支链子集指数爆炸；不预测切断反应，也不声明取代可迁移。
+    每项先尝试连接端环境，再保留完整块；同一桥连块完整加入，不能把多端口块拆成互不相关的支链。单项与双项组合交替，最多返回limit项，防止支链子集指数爆炸；不预测切断反应，也不声明取代可迁移。
     """
     blocks = outside_blocks(target, sorted(core))
     # 优先包含已识别功能单元的块，其次是含杂原子的块；只是查询机会分配，不是活性评分。
@@ -140,14 +170,21 @@ def _attachment_seeds(target, core, groups, limit=12):
             if choice is None:
                 continue
             added = True
-            atoms = set(core)
-            for block in choice:
-                atoms.update(block["atom_indices"])
-            atoms = _close_units(atoms, groups, target)
-            key = tuple(sorted(atoms))
-            if key not in seen and atoms != set(core):
-                seen.add(key)
-                result.append((atoms, f"core_attachment_combination:{count}"))
+            full = set(core).union(*(set(block["atom_indices"]) for block in choice))
+            local = set(core).union(
+                *(_attachment_environment(target, core, block, groups) for block in choice)
+            )
+            variants = (
+                [(local, f"core_attachment_environment:{count}")] if local != full else []
+            ) + [(full, f"core_attachment_combination:{count}")]
+            for atoms, rule in variants:
+                atoms = _close_units(atoms, groups, target)
+                key = tuple(sorted(atoms))
+                if key not in seen and atoms != set(core):
+                    seen.add(key)
+                    result.append((atoms, rule))
+                if len(result) >= limit:
+                    break
             if len(result) >= limit:
                 break
         if not added:
@@ -256,9 +293,17 @@ def plan_families(target, max_families=12):
         seeds["core"].append((whole, "framework_core_fallback"))
     # 裸核心与保留实际支链连接的查询交替；至少先保留各个不同核心的机会。
     bare_cores = list(seeds["core"])
-    attachment_streams = [
-        iter(_attachment_seeds(target, core, groups, limit=max_families)) for core, _ in bare_cores
-    ]
+    attachment_streams = []
+    environment_atoms: dict[tuple, set[int]] = {}
+    for core, _ in bare_cores:
+        candidates = _attachment_seeds(target, core, groups, limit=max_families)
+        attachment_streams.append(iter(candidates))
+        for atoms, rule in candidates:
+            if rule.startswith("core_attachment_environment:"):
+                identity = (tuple(sorted(atoms)), rule)
+                # 相同查询由不同核心派生时，只约束共同的支链部分，不能误锁核心R位点。
+                local = set(atoms) - set(core)
+                environment_atoms[identity] = environment_atoms.get(identity, local) & local
     attachments = []
     for _ in range(max_families):
         for stream in attachment_streams:
@@ -284,6 +329,23 @@ def plan_families(target, max_families=12):
             if not atoms:
                 continue
             smarts, ids = _core_smarts(target, atoms, groups)
+            if rule.startswith("core_attachment_environment:"):
+                # 完全包含其重原子邻居的局部原子锁定H/X；边界原子仍允许远端变化。
+                # 这是目标连接端的结构约束，避免CH3与CF3、一级与三级中心静默等同。
+                query = Chem.MolFromSmarts(smarts)
+                fixed = set(ids)
+                local = environment_atoms[(tuple(sorted(atoms)), rule)]
+                for position, original in enumerate(ids):
+                    atom = target.GetAtomWithIdx(original)
+                    if original in local and all(
+                        n.GetAtomicNum() == 1 or n.GetIdx() in fixed for n in atom.GetNeighbors()
+                    ):
+                        query.GetAtomWithIdx(position).ExpandQuery(
+                            Chem.AtomFromSmarts(
+                                f"[H{atom.GetTotalNumHs(includeNeighbors=True)};X{atom.GetTotalDegree()}]"
+                            )
+                        )
+                smarts = Chem.MolToSmarts(query)
             key = (layer, tuple(ids), smarts)
             if key in seen:
                 continue
