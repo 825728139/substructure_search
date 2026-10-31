@@ -24,6 +24,27 @@ def test_unverified_method_label_does_not_hide_more_relevant_core():
         assert displayed[0] == ranked[0].id
 
 
+@pytest.mark.parametrize("limit", [1, 3, 18])
+def test_display_follows_rank_instead_of_query_layer_quota(limit):
+    """真实成环先例不能因分片入口被整体层侧链改造挤掉，展示应保持实际排序。"""
+    payload = json.loads(
+        (Path(__file__).parent / "fixtures/display_order_ranking.json").read_text()
+    )
+    references = [Reference.model_validate_json(json.dumps(r)) for r in payload["references"]]
+    for ordering in (references, list(reversed(references))):
+        ranked, displayed = rank_references(
+            ordering, target_smiles=payload["target_smiles"], max_display=limit
+        )
+        assert ranked[0].record.source.record_id == "2223370"
+        assert displayed == [r.id for r in ranked[:limit]]
+        assert [r.display_position for r in ranked[:limit]] == list(
+            range(1, min(limit, len(ranked)) + 1)
+        )
+        assert all(r.display_position is None for r in ranked[limit:])
+        assert len(ranked) == len(references)
+        assert not any(r.obtainment_hit for r in ranked)
+
+
 @pytest.mark.parametrize("exhaustive", [False, True])
 def test_source_small_pages_give_other_families_a_turn(
     tmp_path, amide, request_factory, monkeypatch, exhaustive

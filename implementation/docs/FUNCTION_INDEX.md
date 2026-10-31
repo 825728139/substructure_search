@@ -423,10 +423,11 @@
 | 函数 | 职责 |
 |---|---|
 | [test_unverified_method_label_does_not_hide_more_relevant_core](../tests/test_core_candidate_iteration.py#L15) | 真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。 |
-| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L28) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
-| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L43) | 记录真实来源取页参数，不模拟核验和返回数据。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L73) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L95) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
+| [test_display_follows_rank_instead_of_query_layer_quota](../tests/test_core_candidate_iteration.py#L28) | 真实成环先例不能因分片入口被整体层侧链改造挤掉，展示应保持实际排序。 |
+| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L49) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
+| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L64) | 记录真实来源取页参数，不模拟核验和返回数据。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L94) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L116) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
 
 ## tests/test_data_boundaries.py
 

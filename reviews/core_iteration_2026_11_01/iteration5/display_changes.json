@@ -1,0 +1,786 @@
+[
+  {
+    "target": "U01",
+    "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af",
+    "same_candidate_ids_as_previous": true,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 17,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1908.461
+    },
+    "display_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153963",
+          "experiment_id": "uspto:US04677129:['p-0222']:1",
+          "document_id": "US04677129",
+          "location": "['p-0222']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 1,
+        "after_position": 1,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9033888",
+          "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+          "document_id": "US20220251061A1",
+          "location": "['p-1349']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 3,
+        "after_position": 2,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 5,
+        "after_position": 3,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62248",
+          "experiment_id": "epo:EP86303171A2:['p0100']:1",
+          "document_id": "EP86303171A2",
+          "location": "['p0100']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 2,
+        "after_position": 4,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62851",
+          "experiment_id": "epo:EP86730018A2:['p0023']:1",
+          "document_id": "EP86730018A2",
+          "location": "['p0023']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 4,
+        "after_position": 5,
+        "contribution": "modification",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 6,
+        "after_position": 6,
+        "contribution": "modification",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "5364845",
+          "experiment_id": "uspto:US08318667:['p-0185']:1",
+          "document_id": "US08318667",
+          "location": "['p-0185']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 7,
+        "after_position": 7,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10247420",
+          "experiment_id": "uspto:US20250282771A1:['p-1030']:1",
+          "document_id": "US20250282771A1",
+          "location": "['p-1030']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 8,
+        "after_position": 8,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      }
+    ]
+  },
+  {
+    "target": "U02",
+    "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af",
+    "same_candidate_ids_as_previous": true,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 14,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 7,
+          "attempted_product_families": 7,
+          "families_with_structural_hits": 5,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1544.561
+    },
+    "display_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2148857",
+          "experiment_id": "uspto:US20020010279A1:['P-0200']:1",
+          "document_id": "US20020010279A1",
+          "location": "['P-0200']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 1,
+        "after_position": 1,
+        "contribution": "modification",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4438348",
+          "experiment_id": "uspto:US20100168428A1:['p-0198']:1",
+          "document_id": "US20100168428A1",
+          "location": "['p-0198']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 3,
+        "after_position": 2,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "8279156",
+          "experiment_id": "uspto:US20200172489A1:['p-0175']:1",
+          "document_id": "US20200172489A1",
+          "location": "['p-0175']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 2,
+        "after_position": 3,
+        "contribution": "modification",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1969751",
+          "experiment_id": "epo:EP22915126A1:['p0122']:1",
+          "document_id": "EP22915126A1",
+          "location": "['p0122']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 4,
+        "after_position": 4,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4101990",
+          "experiment_id": "uspto:US20090170841A1:['p-1367']:1",
+          "document_id": "US20090170841A1",
+          "location": "['p-1367']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 5,
+        "after_position": 5,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "835484",
+          "experiment_id": "epo:EP11075135A1:['p0095']:1",
+          "document_id": "EP11075135A1",
+          "location": "['p0095']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 6,
+        "after_position": 6,
+        "contribution": "modification",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2152598",
+          "experiment_id": "uspto:US20020022621A1:['P-0072', 'P-0073']:1",
+          "document_id": "US20020022621A1",
+          "location": "['P-0072', 'P-0073']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 7,
+        "after_position": 7,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3340932",
+          "experiment_id": "uspto:US05292742:['p-0029']:1",
+          "document_id": "US05292742",
+          "location": "['p-0029']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 8,
+        "after_position": 8,
+        "contribution": "modification",
+        "obtainment_hit": false
+      }
+    ]
+  },
+  {
+    "target": "U03",
+    "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af",
+    "same_candidate_ids_as_previous": true,
+    "statistics": {
+      "families": 12,
+      "received_candidates": 12,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1480.335
+    },
+    "display_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2924148",
+          "experiment_id": "uspto:US04007201:['p-0050']:1",
+          "document_id": "US04007201",
+          "location": "['p-0050']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 2,
+        "after_position": 1,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10210576",
+          "experiment_id": "uspto:US20250221996A1:['p-0442']:1",
+          "document_id": "US20250221996A1",
+          "location": "['p-0442']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 1,
+        "after_position": 2,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 3,
+        "after_position": 3,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "978944",
+          "experiment_id": "epo:EP10781918B1:['p0385']:1",
+          "document_id": "EP10781918B1",
+          "location": "['p0385']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 4,
+        "after_position": 4,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2030567",
+          "experiment_id": "epo:EP22723850B1:['p0601']:1",
+          "document_id": "EP22723850B1",
+          "location": "['p0601']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 5,
+        "after_position": 5,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "7914649",
+          "experiment_id": "uspto:US20190218200A1:['p-2474']:1",
+          "document_id": "US20190218200A1",
+          "location": "['p-2474']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 6,
+        "after_position": 6,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "7703526",
+          "experiment_id": "uspto:US10005771:['p-0156']:1",
+          "document_id": "US10005771",
+          "location": "['p-0156']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 7,
+        "after_position": 7,
+        "contribution": "structure_clue",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 8,
+        "after_position": 8,
+        "contribution": "modification",
+        "obtainment_hit": false
+      }
+    ]
+  },
+  {
+    "target": "U04",
+    "implementation_hash": "dd03aad92af89dc7a031b58edfa525c913e2c5b2e94b9c5cc66edbc6b6b829af",
+    "same_candidate_ids_as_previous": true,
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 7,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2360.763
+    },
+    "display_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 3,
+        "after_position": 1,
+        "contribution": "connection_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 1,
+        "after_position": 2,
+        "contribution": "connection_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2192223",
+          "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+          "document_id": "US20020183362A1",
+          "location": "['P-1771']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 4,
+        "after_position": 3,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 2,
+        "after_position": 4,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638216",
+          "experiment_id": "uspto:US07001895:['p-1568']:1",
+          "document_id": "US07001895",
+          "location": "['p-1568']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 6,
+        "after_position": 5,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4327902",
+          "experiment_id": "uspto:US20100016323A1:['p-0445']:1",
+          "document_id": "US20100016323A1",
+          "location": "['p-0445']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 8,
+        "after_position": 6,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3814593",
+          "experiment_id": "uspto:US20080119511A1:['p-0503']:1",
+          "document_id": "US20080119511A1",
+          "location": "['p-0503']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 10,
+        "after_position": 7,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 5,
+        "after_position": 8,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "272703",
+          "experiment_id": "epo:EP95908267B1:['p0038', 'p0039']:1",
+          "document_id": "EP95908267B1",
+          "location": "['p0038', 'p0039']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 11,
+        "after_position": 9,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2063064",
+          "experiment_id": "epo:EP24216400A2:['p0540']:1",
+          "document_id": "EP24216400A2",
+          "location": "['p0540']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "reactant",
+        "before_position": 12,
+        "after_position": 10,
+        "contribution": "usage",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2304597",
+          "experiment_id": "uspto:US20040087623A1:['P-0193']:1",
+          "document_id": "US20040087623A1",
+          "location": "['P-0193']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 7,
+        "after_position": 11,
+        "contribution": "local_method",
+        "obtainment_hit": false
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "role": "product",
+        "before_position": 9,
+        "after_position": 12,
+        "contribution": "modification",
+        "obtainment_hit": false
+      }
+    ]
+  }
+]

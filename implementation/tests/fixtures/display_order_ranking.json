@@ -1,0 +1,1852 @@
+{
+  "target_smiles": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N",
+  "references": [
+    {
+      "id": "5e575c2d7a4337cb292fd264",
+      "record": {
+        "id": "uspto:2223370",
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "2223370:product:0",
+            "role": "product",
+            "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1",
+            "name": "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2223370:reactant:0",
+            "role": "reactant",
+            "smiles": "Cc1ccc(C#CC(=O)C(F)(F)F)cc1",
+            "name": "1,1,1-trifluoro-4-(methylphenyl)-3-butyn-2-one",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2223370:reactant:1",
+            "role": "reactant",
+            "smiles": "Cl.NNc1ccc(S(N)(=O)=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "2223370:solvent:0",
+            "role": "solvent",
+            "smiles": "CCO",
+            "name": "ethanol",
+            "actual_input": null
+          }
+        ],
+        "observations": [
+          {
+            "product_instance_id": "2223370:product:0",
+            "result": "unknown",
+            "evidence_text": null,
+            "source_location": null,
+            "isolated": null,
+            "yield_pct": null,
+            "yield_type": "unknown"
+          }
+        ],
+        "mapped_reaction_smiles": "O=[C:8]([C:7]#[C:6][c:5]1[cH:4][cH:3][c:2]([CH3:1])[cH:26][cH:25]1)[C:9]([F:10])([F:11])[F:12].Cl.[NH2:13][NH:14][c:15]1[cH:16][cH:17][c:18]([S:19]([NH2:20])(=[O:21])=[O:22])[cH:23][cH:24]1>>[CH3:1][c:2]1[cH:3][cH:4][c:5](-[c:6]2[cH:7][c:8]([C:9]([F:10])([F:11])[F:12])[n:13][n:14]2-[c:15]2[cH:16][cH:17][c:18]([S:19]([NH2:20])(=[O:21])=[O:22])[cH:23][cH:24]2)[cH:25][cH:26]1",
+        "reaction_smiles": "Cc1ccc(C#CC(=O)C(F)(F)F)cc1.Cl.NNc1ccc(S(N)(=O)=O)cc1>>Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1",
+        "event_scope": "unknown",
+        "documented_step_ref": null,
+        "step_count": null,
+        "one_pot": null,
+        "conditions": {
+          "temperature_min_c": null,
+          "temperature_max_c": null,
+          "pressure_max_kpa": null,
+          "duration_seconds": null,
+          "equipment": null,
+          "stage_id": null,
+          "text": ""
+        },
+        "reaction_class": null,
+        "retro_template": "[F&H0&D1:1]-[C:19](-[F&H0&D1:2])(-[F&H0&D1:3])-[c&H0&+0&D3:16]1:[n&H0&+0&D2:4]:[n&H0&+0&D3:11](:[c&H0&+0&D3:9](:[c&H1&+0&D2:10]:1)-[c&H0&+0&D3:18](:[c:14]:[c:8]):[c:15]:[c:7])-[c&H0&+0&D3:17](:[c:12]:[c:6]):[c:13]:[c:5]>>[F&H0&D1:1]-[C:19](-[F&H0&D1:2])(-[F&H0&D1:3])-[C&H0&+0&D3:16](-[C&H0&+0&D2:10]#[C&H0&+0&D2:9]-[c&H0&+0&D3:18](:[c:14]:[c:8]):[c:15]:[c:7])=O.[N&H2&+0&D1:4]-[N&H1&+0&D2:11]-[c&H0&+0&D3:17](:[c:12]:[c:6]):[c:13]:[c:5]",
+        "raw": {}
+      },
+      "material": {
+        "instance_id": "2223370:product:0",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1",
+        "name": "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+        "actual_input": null
+      },
+      "family_ids": [
+        "89e282ad378a5d075e902f74",
+        "f5285f576803259451b04c7c"
+      ],
+      "layers": [
+        "fragment"
+      ],
+      "witnesses": [
+        {
+          "id": "db5f9f128f8a710efc644a00",
+          "structural_witness_id": "c801aaa9314658d40ec105b1",
+          "family_id": "f5285f576803259451b04c7c",
+          "source_structure_id": "b652a6e5c839c0f320b4b945",
+          "matched_role": "product",
+          "target_to_source": [
+            [
+              0,
+              12
+            ],
+            [
+              1,
+              13
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              25
+            ],
+            [
+              12,
+              24
+            ],
+            [
+              13,
+              14
+            ],
+            [
+              14,
+              23
+            ],
+            [
+              15,
+              22
+            ],
+            [
+              16,
+              17
+            ],
+            [
+              17,
+              16
+            ],
+            [
+              18,
+              15
+            ],
+            [
+              19,
+              18
+            ],
+            [
+              20,
+              21
+            ],
+            [
+              21,
+              20
+            ],
+            [
+              22,
+              19
+            ]
+          ],
+          "core_source_atoms": [
+            12,
+            13,
+            5,
+            6,
+            7,
+            8,
+            14,
+            23,
+            22,
+            17,
+            16,
+            15,
+            18,
+            21,
+            20,
+            19
+          ],
+          "blocks": [
+            {
+              "core_positions": [
+                2
+              ],
+              "atom_indices": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                24,
+                25
+              ],
+              "fragment": "Cc1ccc([*:3])cc1",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 7,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                9
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                10
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                11
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            }
+          ],
+          "matched_r_positions": [
+            2
+          ],
+          "extra_core_edges": [],
+          "target_atom_coverage": 1.0,
+          "target_bond_coverage": 1.0,
+          "mapping_status": "alternative_witness"
+        }
+      ],
+      "exact_record_identity": false,
+      "target_requirements_satisfied": false,
+      "preparation_hit": false,
+      "obtainment_hit": false,
+      "use_hit": false,
+      "contribution": "connection_method",
+      "contribution_support": "graph_only",
+      "analysis": {
+        "state": "partial",
+        "formed": [
+          {
+            "maps": [
+              6,
+              14
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              8,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "broken": [],
+        "order_changed": [
+          {
+            "maps": [
+              6,
+              7
+            ],
+            "before": "TRIPLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              7,
+              8
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              13,
+              14
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          }
+        ],
+        "representation_only": [],
+        "atom_property_changes": [
+          {
+            "map": 7,
+            "property": "hydrogen_count",
+            "before": 0,
+            "after": 1
+          },
+          {
+            "map": 13,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 0
+          },
+          {
+            "map": 14,
+            "property": "hydrogen_count",
+            "before": 1,
+            "after": 0
+          }
+        ],
+        "untracked_input_bonds": [],
+        "detached_boundaries": [],
+        "atom_sources": {
+          "8": 0,
+          "7": 0,
+          "6": 0,
+          "5": 0,
+          "4": 0,
+          "3": 0,
+          "2": 0,
+          "1": 0,
+          "26": 0,
+          "25": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "13": 2,
+          "14": 2,
+          "15": 2,
+          "16": 2,
+          "17": 2,
+          "18": 2,
+          "19": 2,
+          "20": 2,
+          "21": 2,
+          "22": 2,
+          "23": 2,
+          "24": 2
+        },
+        "topology": [
+          "ring_closure"
+        ],
+        "reaction_classes": [
+          "aryl_C_N_connection",
+          "bond_formation",
+          "bond_order_transformation"
+        ],
+        "mapping_support": "single_mapping_inference",
+        "event_scope": "unknown",
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      "claims": [],
+      "similarity": 0.7272727272727273,
+      "molecular_weight": 381.3790000000001,
+      "coverage": {
+        "joint_witness": {
+          "witness_id": "db5f9f128f8a710efc644a00",
+          "atom_coverage": 1.0,
+          "bond_coverage": 1.0,
+          "r_positions": [
+            2
+          ]
+        },
+        "sitewise_union": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "sitewise_union_atom_coverage": 1.0,
+        "enumeration_complete": true,
+        "best_found_is_proven_maximum": false,
+        "maximum_scope": "best_found_within_evaluated_families_and_mappings",
+        "coverage_semantics": "connectivity_with_elements_isotopes_and_bond_types; stereo_validated_separately_for_complete_target",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "changed_target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 48
+        },
+        "method_witness_id": "7fd05606a0a076af451f08de",
+        "method_witness_atom_coverage": 1.0
+      },
+      "ranking_features": {},
+      "lab_fit": "not_applicable",
+      "lab_reasons": [
+        "lab_context_not_configured"
+      ],
+      "reasons": [
+        "same_instance_markush_witness",
+        "event_scope:unknown",
+        "target_contribution:connection_method"
+      ],
+      "unresolved": [
+        "changes_apply_to_source_record_endpoints_not_an_assigned_step",
+        "no_qualified_literature_outcome_or_usage_witness",
+        "partial_mapping",
+        "temperature_unknown"
+      ],
+      "display_position": 3
+    },
+    {
+      "id": "c71d9457b442a75375be9bf6",
+      "record": {
+        "id": "epo:623405",
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "623405:product:0",
+            "role": "product",
+            "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1",
+            "name": "N-hydroxy-4-(5-p-methylphenyl-3-trifluoromethyl-pyrazol-1-yl)-benzenesulfonamide",
+            "actual_input": null
+          },
+          {
+            "instance_id": "623405:reactant:0",
+            "role": "reactant",
+            "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)Cl)cc2)cc1",
+            "name": "4-(5-p-methylphenyl-3-trifluoromethyl-pyrazol-1-yl)-benzenesulfonyl chloride",
+            "actual_input": null
+          },
+          {
+            "instance_id": "623405:reactant:1",
+            "role": "reactant",
+            "smiles": "Cl.NO",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "623405:reagent:0",
+            "role": "reagent",
+            "smiles": "CC(=O)[O-].[Na+]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "623405:solvent:0",
+            "role": "solvent",
+            "smiles": "C1COCCO1",
+            "name": "dioxane",
+            "actual_input": null
+          },
+          {
+            "instance_id": "623405:solvent:1",
+            "role": "solvent",
+            "smiles": "C1COCCO1",
+            "name": "dioxane",
+            "actual_input": null
+          }
+        ],
+        "observations": [
+          {
+            "product_instance_id": "623405:product:0",
+            "result": "unknown",
+            "evidence_text": null,
+            "source_location": null,
+            "isolated": null,
+            "yield_pct": null,
+            "yield_type": "unknown"
+          }
+        ],
+        "mapped_reaction_smiles": "CC(=O)[O-].Cl[S:19]([c:18]1[cH:17][cH:16][c:15](-[n:14]2[c:6](-[c:5]3[cH:4][cH:3][c:2]([CH3:1])[cH:27][cH:26]3)[cH:7][c:8]([C:9]([F:10])([F:11])[F:12])[n:13]2)[cH:25][cH:24]1)(=[O:20])=[O:21].Cl.[NH2:22][OH:23].[Na+]>>[CH3:1][c:2]1[cH:3][cH:4][c:5](-[c:6]2[cH:7][c:8]([C:9]([F:10])([F:11])[F:12])[n:13][n:14]2-[c:15]2[cH:16][cH:17][c:18]([S:19](=[O:20])(=[O:21])[NH:22][OH:23])[cH:24][cH:25]2)[cH:26][cH:27]1",
+        "reaction_smiles": "CC(=O)[O-].[Na+].Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)Cl)cc2)cc1.Cl.NO>>Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1",
+        "event_scope": "unknown",
+        "documented_step_ref": null,
+        "step_count": null,
+        "one_pot": null,
+        "conditions": {
+          "temperature_min_c": null,
+          "temperature_max_c": null,
+          "pressure_max_kpa": null,
+          "duration_seconds": null,
+          "equipment": null,
+          "stage_id": null,
+          "text": ""
+        },
+        "reaction_class": null,
+        "retro_template": "[N&H1&+0&D2:1](-[O&H1&D1:4])-[S&H0&+0&D4:8](=[O&H0&D1:2])(=[O&H0&D1:3])-[c:7](:[c:5]):[c:6]>>[N&H2&+0&D1:1]-[O&H1&D1:4].[O&H0&D1:2]=[S&H0&+0&D4:8](=[O&H0&D1:3])(-[c:7](:[c:5]):[c:6])-Cl",
+        "raw": {}
+      },
+      "material": {
+        "instance_id": "623405:product:0",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1",
+        "name": "N-hydroxy-4-(5-p-methylphenyl-3-trifluoromethyl-pyrazol-1-yl)-benzenesulfonamide",
+        "actual_input": null
+      },
+      "family_ids": [
+        "f5285f576803259451b04c7c",
+        "fa9fcdc11a9cb1f3c0bac2e5"
+      ],
+      "layers": [
+        "fragment",
+        "whole"
+      ],
+      "witnesses": [
+        {
+          "id": "c4bb00eca7d31cdad0885468",
+          "structural_witness_id": "b2b7e95d3341464b33ea61e8",
+          "family_id": "f5285f576803259451b04c7c",
+          "source_structure_id": "f31d7344ee3755e2945ffd52",
+          "matched_role": "product",
+          "target_to_source": [
+            [
+              0,
+              12
+            ],
+            [
+              1,
+              13
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              26
+            ],
+            [
+              12,
+              25
+            ],
+            [
+              13,
+              14
+            ],
+            [
+              14,
+              15
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              16,
+              17
+            ],
+            [
+              17,
+              23
+            ],
+            [
+              18,
+              24
+            ],
+            [
+              19,
+              18
+            ],
+            [
+              20,
+              20
+            ],
+            [
+              21,
+              19
+            ],
+            [
+              22,
+              21
+            ]
+          ],
+          "core_source_atoms": [
+            12,
+            13,
+            5,
+            6,
+            7,
+            8,
+            14,
+            15,
+            16,
+            17,
+            23,
+            24,
+            18,
+            20,
+            19,
+            21
+          ],
+          "blocks": [
+            {
+              "core_positions": [
+                2
+              ],
+              "atom_indices": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                25,
+                26
+              ],
+              "fragment": "Cc1ccc([*:3])cc1",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 7,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                9
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                10
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                11
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                15
+              ],
+              "atom_indices": [
+                22
+              ],
+              "fragment": "O[*:16]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            }
+          ],
+          "matched_r_positions": [
+            2
+          ],
+          "extra_core_edges": [],
+          "target_atom_coverage": 1.0,
+          "target_bond_coverage": 1.0,
+          "mapping_status": "alternative_witness"
+        }
+      ],
+      "exact_record_identity": false,
+      "target_requirements_satisfied": false,
+      "preparation_hit": false,
+      "obtainment_hit": false,
+      "use_hit": false,
+      "contribution": "connection_method",
+      "contribution_support": "graph_only",
+      "analysis": {
+        "state": "partial",
+        "formed": [
+          {
+            "maps": [
+              19,
+              22
+            ],
+            "before": null,
+            "after": "SINGLE"
+          }
+        ],
+        "broken": [],
+        "order_changed": [],
+        "representation_only": [],
+        "atom_property_changes": [
+          {
+            "map": 22,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 1
+          }
+        ],
+        "untracked_input_bonds": [],
+        "detached_boundaries": [],
+        "atom_sources": {
+          "19": 1,
+          "18": 1,
+          "17": 1,
+          "16": 1,
+          "15": 1,
+          "14": 1,
+          "6": 1,
+          "5": 1,
+          "4": 1,
+          "3": 1,
+          "2": 1,
+          "1": 1,
+          "27": 1,
+          "26": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 1,
+          "13": 1,
+          "25": 1,
+          "24": 1,
+          "20": 1,
+          "21": 1,
+          "22": 3,
+          "23": 3
+        },
+        "topology": [
+          "ring_topology_unknown"
+        ],
+        "reaction_classes": [
+          "bond_formation"
+        ],
+        "mapping_support": "single_mapping_inference",
+        "event_scope": "unknown",
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      "claims": [],
+      "similarity": 0.5192307692307693,
+      "molecular_weight": 397.37800000000004,
+      "coverage": {
+        "joint_witness": {
+          "witness_id": "c4bb00eca7d31cdad0885468",
+          "atom_coverage": 1.0,
+          "bond_coverage": 1.0,
+          "r_positions": [
+            2
+          ]
+        },
+        "sitewise_union": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "sitewise_union_atom_coverage": 1.0,
+        "enumeration_complete": true,
+        "best_found_is_proven_maximum": false,
+        "maximum_scope": "best_found_within_evaluated_families_and_mappings",
+        "coverage_semantics": "connectivity_with_elements_isotopes_and_bond_types; stereo_validated_separately_for_complete_target",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              19,
+              22
+            ]
+          ],
+          "changed_target_atoms": [
+            19,
+            22
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 48
+        },
+        "method_witness_id": "c4bb00eca7d31cdad0885468",
+        "method_witness_atom_coverage": 1.0
+      },
+      "ranking_features": {},
+      "lab_fit": "not_applicable",
+      "lab_reasons": [
+        "lab_context_not_configured"
+      ],
+      "reasons": [
+        "same_instance_markush_witness",
+        "event_scope:unknown",
+        "target_contribution:connection_method"
+      ],
+      "unresolved": [
+        "changes_apply_to_source_record_endpoints_not_an_assigned_step",
+        "no_qualified_literature_outcome_or_usage_witness",
+        "partial_mapping",
+        "temperature_unknown"
+      ],
+      "display_position": 1
+    },
+    {
+      "id": "9c5deca33a3f0a406726f2b6",
+      "record": {
+        "id": "uspto:2192223",
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2192223",
+          "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+          "document_id": "US20020183362A1",
+          "location": "['P-1771']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "2192223:product:0",
+            "role": "product",
+            "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl",
+            "name": "4-[5-(3-chloro-4-methylphenyl)-3-(difluoromethyl)-1H-pyrazol-1-yl]-2-fluorobenzenesulfonamide",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2192223:reactant:0",
+            "role": "reactant",
+            "smiles": "Cc1ccc(C(=O)CC(=O)C(F)F)cc1Cl",
+            "name": "1-(3-chloro-4-methylphenyl)-4,4-difluoro-1,3-butanedione",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2192223:reactant:1",
+            "role": "reactant",
+            "smiles": "NNc1ccc(S(N)(=O)=O)c(F)c1",
+            "name": "2-Fluoro-4-hydrazinobenzenesulfonamide",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2192223:reagent:0",
+            "role": "reagent",
+            "smiles": "Cl",
+            "name": "hydrochloric acid",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2192223:solvent:0",
+            "role": "solvent",
+            "smiles": "CCO",
+            "name": "ethanol",
+            "actual_input": null
+          }
+        ],
+        "observations": [
+          {
+            "product_instance_id": "2192223:product:0",
+            "result": "unknown",
+            "evidence_text": null,
+            "source_location": null,
+            "isolated": null,
+            "yield_pct": null,
+            "yield_type": "unknown"
+          }
+        ],
+        "mapped_reaction_smiles": "O=[C:6]([c:5]1[cH:4][cH:3][c:2]([CH3:1])[c:26]([Cl:27])[cH:25]1)[CH2:7][C:8](=O)[CH:9]([F:10])[F:11].Cl.[NH2:12][NH:13][c:14]1[cH:15][cH:16][c:17]([S:18]([NH2:19])(=[O:20])=[O:21])[c:22]([F:23])[cH:24]1>>[CH3:1][c:2]1[cH:3][cH:4][c:5](-[c:6]2[cH:7][c:8]([CH:9]([F:10])[F:11])[n:12][n:13]2-[c:14]2[cH:15][cH:16][c:17]([S:18]([NH2:19])(=[O:20])=[O:21])[c:22]([F:23])[cH:24]2)[cH:25][c:26]1[Cl:27]",
+        "reaction_smiles": "Cc1ccc(C(=O)CC(=O)C(F)F)cc1Cl.Cl.NNc1ccc(S(N)(=O)=O)c(F)c1>>Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl",
+        "event_scope": "unknown",
+        "documented_step_ref": null,
+        "step_count": null,
+        "one_pot": null,
+        "conditions": {
+          "temperature_min_c": null,
+          "temperature_max_c": null,
+          "pressure_max_kpa": null,
+          "duration_seconds": null,
+          "equipment": null,
+          "stage_id": null,
+          "text": ""
+        },
+        "reaction_class": null,
+        "retro_template": "[F&H0&D1:1]-[C:14](-[F&H0&D1:2])-[c&H0&+0&D3:16]1:[n&H0&+0&D2:3]:[n&H0&+0&D3:9](:[c&H0&+0&D3:15](:[c&H1&+0&D2:8]:1)-[c&H0&+0&D3:17](:[c:12]:[c:5]):[c:13]:[c:4])-[c&H0&+0&D3:18](:[c:10]:[c:6]):[c:11]:[c:7]>>[F&H0&D1:1]-[C:14](-[F&H0&D1:2])-[C&H0&+0&D3:16](-[C&H2&+0&D2:8]-[C&H0&+0&D3:15](-[c&H0&+0&D3:17](:[c:12]:[c:5]):[c:13]:[c:4])=O)=O.[N&H2&+0&D1:3]-[N&H1&+0&D2:9]-[c&H0&+0&D3:18](:[c:10]:[c:6]):[c:11]:[c:7]",
+        "raw": {}
+      },
+      "material": {
+        "instance_id": "2192223:product:0",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl",
+        "name": "4-[5-(3-chloro-4-methylphenyl)-3-(difluoromethyl)-1H-pyrazol-1-yl]-2-fluorobenzenesulfonamide",
+        "actual_input": null
+      },
+      "family_ids": [
+        "fa9fcdc11a9cb1f3c0bac2e5"
+      ],
+      "layers": [
+        "whole"
+      ],
+      "witnesses": [
+        {
+          "id": "fca272b854b54736842926a9",
+          "structural_witness_id": "ff3695c062d89db801f59c48",
+          "family_id": "fa9fcdc11a9cb1f3c0bac2e5",
+          "source_structure_id": "40fd0cb664a4fb866a10227d",
+          "matched_role": "product",
+          "target_to_source": [
+            [
+              0,
+              11
+            ],
+            [
+              1,
+              12
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              7,
+              24
+            ],
+            [
+              8,
+              25
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              2
+            ],
+            [
+              12,
+              3
+            ],
+            [
+              13,
+              13
+            ],
+            [
+              14,
+              23
+            ],
+            [
+              15,
+              21
+            ],
+            [
+              16,
+              16
+            ],
+            [
+              17,
+              15
+            ],
+            [
+              18,
+              14
+            ],
+            [
+              19,
+              17
+            ],
+            [
+              20,
+              20
+            ],
+            [
+              21,
+              19
+            ],
+            [
+              22,
+              18
+            ]
+          ],
+          "core_source_atoms": [
+            11,
+            12,
+            5,
+            6,
+            7,
+            4,
+            24,
+            25,
+            1,
+            2,
+            3,
+            13,
+            23,
+            21,
+            16,
+            15,
+            14,
+            17,
+            20,
+            19,
+            18
+          ],
+          "blocks": [
+            {
+              "core_positions": [
+                8
+              ],
+              "atom_indices": [
+                0
+              ],
+              "fragment": "C[*:9]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "alkyl"
+            },
+            {
+              "core_positions": [
+                4
+              ],
+              "atom_indices": [
+                8,
+                9,
+                10
+              ],
+              "fragment": "FC(F)[*:5]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 3,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                13
+              ],
+              "atom_indices": [
+                22
+              ],
+              "fragment": "F[*:14]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                7
+              ],
+              "atom_indices": [
+                26
+              ],
+              "fragment": "Cl[*:8]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            }
+          ],
+          "matched_r_positions": [
+            8
+          ],
+          "extra_core_edges": [],
+          "target_atom_coverage": 0.9565217391304348,
+          "target_bond_coverage": 0.96,
+          "mapping_status": "alternative_witness"
+        }
+      ],
+      "exact_record_identity": false,
+      "target_requirements_satisfied": false,
+      "preparation_hit": false,
+      "obtainment_hit": false,
+      "use_hit": false,
+      "contribution": "local_method",
+      "contribution_support": "graph_only",
+      "analysis": {
+        "state": "partial",
+        "formed": [
+          {
+            "maps": [
+              6,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              8,
+              12
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "broken": [],
+        "order_changed": [
+          {
+            "maps": [
+              6,
+              7
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              7,
+              8
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              12,
+              13
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          }
+        ],
+        "representation_only": [],
+        "atom_property_changes": [
+          {
+            "map": 7,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 1
+          },
+          {
+            "map": 12,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 0
+          },
+          {
+            "map": 13,
+            "property": "hydrogen_count",
+            "before": 1,
+            "after": 0
+          }
+        ],
+        "untracked_input_bonds": [],
+        "detached_boundaries": [],
+        "atom_sources": {
+          "6": 0,
+          "5": 0,
+          "4": 0,
+          "3": 0,
+          "2": 0,
+          "1": 0,
+          "26": 0,
+          "27": 0,
+          "25": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0,
+          "12": 2,
+          "13": 2,
+          "14": 2,
+          "15": 2,
+          "16": 2,
+          "17": 2,
+          "18": 2,
+          "19": 2,
+          "20": 2,
+          "21": 2,
+          "22": 2,
+          "23": 2,
+          "24": 2
+        },
+        "topology": [
+          "ring_closure"
+        ],
+        "reaction_classes": [
+          "aryl_C_N_connection",
+          "bond_formation",
+          "bond_order_transformation"
+        ],
+        "mapping_support": "single_mapping_inference",
+        "event_scope": "unknown",
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      "claims": [],
+      "similarity": 0.36507936507936506,
+      "molecular_weight": 415.82400000000007,
+      "coverage": {
+        "joint_witness": {
+          "witness_id": "fca272b854b54736842926a9",
+          "atom_coverage": 0.9565217391304348,
+          "bond_coverage": 0.96,
+          "r_positions": [
+            8
+          ]
+        },
+        "sitewise_union": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "sitewise_union_atom_coverage": 0.9565217391304348,
+        "enumeration_complete": true,
+        "best_found_is_proven_maximum": false,
+        "maximum_scope": "best_found_within_evaluated_families_and_mappings",
+        "coverage_semantics": "connectivity_with_elements_isotopes_and_bond_types; stereo_validated_separately_for_complete_target",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "changed_target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 4
+        },
+        "method_witness_id": "fca272b854b54736842926a9",
+        "method_witness_atom_coverage": 0.9565217391304348
+      },
+      "ranking_features": {},
+      "lab_fit": "not_applicable",
+      "lab_reasons": [
+        "lab_context_not_configured"
+      ],
+      "reasons": [
+        "same_instance_markush_witness",
+        "event_scope:unknown",
+        "target_contribution:local_method"
+      ],
+      "unresolved": [
+        "changes_apply_to_source_record_endpoints_not_an_assigned_step",
+        "no_qualified_literature_outcome_or_usage_witness",
+        "partial_mapping",
+        "temperature_unknown"
+      ],
+      "display_position": 4
+    },
+    {
+      "id": "5a0439b7c681df92e0dad024",
+      "record": {
+        "id": "uspto:2144174",
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "2144174:product:0",
+            "role": "product",
+            "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1",
+            "name": "1-(3-Chloro4-fluorophenyl)-5-(4-methylphenyl)-3-(trifluoromethyl)pyrazole",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2144174:reactant:0",
+            "role": "reactant",
+            "smiles": "Cc1ccc(C(=O)CC(=O)C(F)(F)F)cc1",
+            "name": "1-(4-Methylphenyl)-4,4,4-trifluorobutane-1,3-dione",
+            "actual_input": null
+          },
+          {
+            "instance_id": "2144174:reactant:1",
+            "role": "reactant",
+            "smiles": "Cl.NNc1ccc(F)c(Cl)c1",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "observations": [
+          {
+            "product_instance_id": "2144174:product:0",
+            "result": "unknown",
+            "evidence_text": null,
+            "source_location": null,
+            "isolated": null,
+            "yield_pct": null,
+            "yield_type": "unknown"
+          }
+        ],
+        "mapped_reaction_smiles": "O=[C:6]([c:5]1[cH:4][cH:3][c:2]([CH3:1])[cH:24][cH:23]1)[CH2:7][C:8](=O)[C:9]([F:10])([F:11])[F:12].Cl.[NH2:13][NH:14][c:15]1[cH:16][cH:17][c:18]([F:19])[c:20]([Cl:21])[cH:22]1>>[CH3:1][c:2]1[cH:3][cH:4][c:5](-[c:6]2[cH:7][c:8]([C:9]([F:10])([F:11])[F:12])[n:13][n:14]2-[c:15]2[cH:16][cH:17][c:18]([F:19])[c:20]([Cl:21])[cH:22]2)[cH:23][cH:24]1",
+        "reaction_smiles": "Cc1ccc(C(=O)CC(=O)C(F)(F)F)cc1.Cl.NNc1ccc(F)c(Cl)c1>>Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1",
+        "event_scope": "unknown",
+        "documented_step_ref": null,
+        "step_count": null,
+        "one_pot": null,
+        "conditions": {
+          "temperature_min_c": null,
+          "temperature_max_c": null,
+          "pressure_max_kpa": null,
+          "duration_seconds": null,
+          "equipment": null,
+          "stage_id": null,
+          "text": ""
+        },
+        "reaction_class": null,
+        "retro_template": "[F&H0&D1:1]-[C:19](-[F&H0&D1:2])(-[F&H0&D1:3])-[c&H0&+0&D3:16]1:[n&H0&+0&D2:4]:[n&H0&+0&D3:10](:[c&H0&+0&D3:15](:[c&H1&+0&D2:9]:1)-[c&H0&+0&D3:17](:[c:11]:[c:8]):[c:12]:[c:7])-[c&H0&+0&D3:18](:[c:13]:[c:5]):[c:14]:[c:6]>>[F&H0&D1:1]-[C:19](-[F&H0&D1:2])(-[F&H0&D1:3])-[C&H0&+0&D3:16](-[C&H2&+0&D2:9]-[C&H0&+0&D3:15](-[c&H0&+0&D3:17](:[c:11]:[c:8]):[c:12]:[c:7])=O)=O.[N&H2&+0&D1:4]-[N&H1&+0&D2:10]-[c&H0&+0&D3:18](:[c:13]:[c:5]):[c:14]:[c:6]",
+        "raw": {}
+      },
+      "material": {
+        "instance_id": "2144174:product:0",
+        "role": "product",
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1",
+        "name": "1-(3-Chloro4-fluorophenyl)-5-(4-methylphenyl)-3-(trifluoromethyl)pyrazole",
+        "actual_input": null
+      },
+      "family_ids": [
+        "0f0df4792cb3a9f5839cc513",
+        "89e282ad378a5d075e902f74"
+      ],
+      "layers": [
+        "core",
+        "fragment"
+      ],
+      "witnesses": [
+        {
+          "id": "d8facd841791324f6bc75265",
+          "structural_witness_id": "380bd81418c732e5efdc8a38",
+          "family_id": "89e282ad378a5d075e902f74",
+          "source_structure_id": "cd7261560bf3d397cb65e89d",
+          "matched_role": "product",
+          "target_to_source": [
+            [
+              0,
+              12
+            ],
+            [
+              1,
+              13
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              23
+            ],
+            [
+              12,
+              22
+            ]
+          ],
+          "core_source_atoms": [
+            12,
+            13,
+            5,
+            6,
+            7,
+            8,
+            4,
+            3,
+            2,
+            1,
+            0,
+            23,
+            22
+          ],
+          "blocks": [
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                9
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                10
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                5
+              ],
+              "atom_indices": [
+                11
+              ],
+              "fragment": "F[*:6]",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 1,
+              "category": "other"
+            },
+            {
+              "core_positions": [
+                1
+              ],
+              "atom_indices": [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "fragment": "Fc1ccc([*:2])cc1Cl",
+              "boundary_bonds": [
+                "SINGLE"
+              ],
+              "heavy_atoms": 8,
+              "category": "other"
+            }
+          ],
+          "matched_r_positions": [],
+          "extra_core_edges": [],
+          "target_atom_coverage": 0.5652173913043478,
+          "target_bond_coverage": 0.56,
+          "mapping_status": "alternative_witness"
+        }
+      ],
+      "exact_record_identity": false,
+      "target_requirements_satisfied": false,
+      "preparation_hit": false,
+      "obtainment_hit": false,
+      "use_hit": false,
+      "contribution": "local_method",
+      "contribution_support": "graph_only",
+      "analysis": {
+        "state": "partial",
+        "formed": [
+          {
+            "maps": [
+              6,
+              14
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              8,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "broken": [],
+        "order_changed": [
+          {
+            "maps": [
+              6,
+              7
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              7,
+              8
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              13,
+              14
+            ],
+            "before": "SINGLE",
+            "after": "AROMATIC"
+          }
+        ],
+        "representation_only": [],
+        "atom_property_changes": [
+          {
+            "map": 7,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 1
+          },
+          {
+            "map": 13,
+            "property": "hydrogen_count",
+            "before": 2,
+            "after": 0
+          },
+          {
+            "map": 14,
+            "property": "hydrogen_count",
+            "before": 1,
+            "after": 0
+          }
+        ],
+        "untracked_input_bonds": [],
+        "detached_boundaries": [],
+        "atom_sources": {
+          "6": 0,
+          "5": 0,
+          "4": 0,
+          "3": 0,
+          "2": 0,
+          "1": 0,
+          "24": 0,
+          "23": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "13": 2,
+          "14": 2,
+          "15": 2,
+          "16": 2,
+          "17": 2,
+          "18": 2,
+          "19": 2,
+          "20": 2,
+          "21": 2,
+          "22": 2
+        },
+        "topology": [
+          "ring_closure"
+        ],
+        "reaction_classes": [
+          "aryl_C_N_connection",
+          "bond_formation",
+          "bond_order_transformation"
+        ],
+        "mapping_support": "single_mapping_inference",
+        "event_scope": "unknown",
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      "claims": [],
+      "similarity": 0.4074074074074074,
+      "molecular_weight": 354.73400000000004,
+      "coverage": {
+        "joint_witness": {
+          "witness_id": "d8facd841791324f6bc75265",
+          "atom_coverage": 0.5652173913043478,
+          "bond_coverage": 0.56,
+          "r_positions": []
+        },
+        "sitewise_union": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "sitewise_union_atom_coverage": 0.5652173913043478,
+        "enumeration_complete": true,
+        "best_found_is_proven_maximum": false,
+        "maximum_scope": "best_found_within_evaluated_families_and_mappings",
+        "coverage_semantics": "connectivity_with_elements_isotopes_and_bond_types; stereo_validated_separately_for_complete_target",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "changed_target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 12
+        },
+        "method_witness_id": "d8facd841791324f6bc75265",
+        "method_witness_atom_coverage": 0.5652173913043478
+      },
+      "ranking_features": {},
+      "lab_fit": "not_applicable",
+      "lab_reasons": [
+        "lab_context_not_configured"
+      ],
+      "reasons": [
+        "same_instance_markush_witness",
+        "event_scope:unknown",
+        "target_contribution:local_method"
+      ],
+      "unresolved": [
+        "changes_apply_to_source_record_endpoints_not_an_assigned_step",
+        "no_qualified_literature_outcome_or_usage_witness",
+        "partial_mapping",
+        "temperature_unknown"
+      ],
+      "display_position": 2
+    }
+  ]
+}

@@ -44,7 +44,7 @@
 | 5 | [chemistry/markush.py](../src/reaction_reference/chemistry/markush.py) | 一条命中为何成立，为什么不能把不同映射的支链覆盖拼起来 |
 | 6 | [reaction_analysis/analyze.py](../src/reaction_reference/reaction_analysis/analyze.py) | 真实反应形成了什么，如何对应目标要形成的连接 |
 | 7 | [evidence/claims.py](../src/reaction_reference/evidence/claims.py)、[analogs/transfer.py](../src/reaction_reference/analogs/transfer.py) | 实验事实和图类比分别怎样成立 |
-| 8 | [ranking/engine.py](../src/reaction_reference/ranking/engine.py)、[ranking/features.py](../src/reaction_reference/ranking/features.py) | 排序资格、九方向解释、展示配额和未知信息 |
+| 8 | [ranking/engine.py](../src/reaction_reference/ranking/engine.py)、[ranking/features.py](../src/reaction_reference/ranking/features.py) | 排序资格、九方向解释、展示顺序与上限、未知信息 |
 | 9 | [adapters/execution.py](../src/reaction_reference/adapters/execution.py)、[adapters/run_store.py](../src/reaction_reference/adapters/run_store.py) | 并发、取消、硬超时、快照和重启处理 |
 | 10 | [interfaces/api.py](../src/reaction_reference/interfaces/api.py)、[页面源码](../src/reaction_reference/interfaces/static/index.html) | HTTP、分页、结构高亮和页面事件 |
 

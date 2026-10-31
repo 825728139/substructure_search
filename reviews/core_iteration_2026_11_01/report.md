@@ -21,7 +21,7 @@
 - U3有BF3催化醛与带酰基吡唑的BCB构建氧杂双环[2.1.1]己烷的原始论文。这比当前库内的普通醇闭环更贴近目标反应端；本轮读到出版者摘要，补充PDF访问失败，未据此认证目标取代与异构体。[原论文](https://onlinelibrary.wiley.com/doi/abs/10.1002/anie.202305043)
 - U2的肼基萘酰亚胺在原始论文中有制备报道，明确涉及肼及后续丁胺的反应；需要检查取代位置和实际母核，不应把任意二胺取代当作肼的已验证替代。[原研究论文](https://pmc.ncbi.nlm.nih.gov/articles/PMC9402912/)
 
-后续进展见[第二轮：分片近邻与新增炔酮成环先例](iteration2/report.md)、[第三轮：盐组分端点校验与桥环覆盖诊断](iteration3/report.md)、[第四轮：芳香域查询找回肼基安装](iteration4/report.md)。
+后续进展见[第二轮：分片近邻与新增炔酮成环先例](iteration2/report.md)、[第三轮：盐组分端点校验与桥环覆盖诊断](iteration3/report.md)、[第四轮：芳香域查询找回肼基安装](iteration4/report.md)、[第五轮：展示遵循实际排序](iteration5/report.md)。
 
 ## 基线问题与本轮修改
 

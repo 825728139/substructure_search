@@ -113,7 +113,7 @@ def rank_references(
 ):
     """返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。
 
-    profile 选择参考优先、实验适配或操作偏好；context 只改变适配判断，不改结构和来源事实。补充九方向字段后采用确定性排序，保留完整目标获得记录并轮流分配三层展示位置；max_display 只裁剪展示，不删除候选池。
+    profile 选择参考优先、实验适配或操作偏好；context 只改变适配判断，不改结构和来源事实。补充九方向字段后采用确定性排序，保留完整目标获得记录，其余展示遵循排序顺序；三层标签仅用于分类浏览，不按层轮转改写优先级。max_display 只裁剪展示，不删除候选池。
     """
     enriched = []
     target_heavy_atoms = parse(target_smiles).GetNumHeavyAtoms() if target_smiles else None
@@ -206,17 +206,12 @@ def rank_references(
 
     ordered = sorted(enriched, key=key)
     selected, used = [], set()
-    # 完整目标的已报告获得记录全局保留；即使只是脱保护，也不被分层配额挤掉。
+    # 完整目标的已报告获得记录全局保留；即使只是脱保护，也优先展示。
     exact = next((r for r in ordered if r.target_requirements_satisfied and r.obtainment_hit), None)
     if exact:
         selected.append(exact)
         used.add(exact.id)
-    for _ in range(4):
-        for layer in ("whole", "core", "fragment"):
-            candidate = next((r for r in ordered if layer in r.layers and r.id not in used), None)
-            if candidate and len(selected) < max_display:
-                selected.append(candidate)
-                used.add(candidate.id)
+    # 三层查询只是召回入口，不能让分层配额把更相关的参考挤到较弱候选之后。
     for ref in ordered:
         if ref.id not in used and len(selected) < max_display:
             selected.append(ref)
