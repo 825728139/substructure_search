@@ -95,18 +95,19 @@
 | [_locator_value_present](../src/reaction_reference/adapters/sources.py#L26) | 检查定位字段是否有明确非空值；整数零有效，布尔值及含缺失项的数组无效。 |
 | [_compound_source_id](../src/reaction_reference/adapters/sources.py#L38) | 为复合来源标识转义百分号和冒号，避免字段边界碰撞；普通标识保持原有可读格式。 |
 | [import_native](../src/reaction_reference/adapters/sources.py#L43) | 把本项目 ReactionRecord JSON 或现有反应表导出行转换为统一记录。 |
-| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L174) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
-| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L246) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
-| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L292) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
-| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L296) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L329) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L376) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L383) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L388) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L422) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L497) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L516) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L561) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [JsonlSource.__init__](../src/reaction_reference/adapters/sources.py#L179) | 读取有限 JSONL，建立来源快照及材料/指纹缓存，隔离脏记录。 |
+| [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L251) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
+| [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L297) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
+| [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L301) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L334) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L408) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L415) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L420) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L456) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L507) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L590) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L609) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L682) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -140,7 +141,7 @@
 | 函数 | 职责 |
 |---|---|
 | [open_source](../src/reaction_reference/bootstrap.py#L12) | 根据 Settings 创建 JSONL 或只读 PG 来源，并可包装审核证据适配器。 |
-| [create_manager](../src/reaction_reference/bootstrap.py#L35) | 使用给定或默认 Settings 创建 RunManager，供 SDK/API 共享同一装配方式。 |
+| [create_manager](../src/reaction_reference/bootstrap.py#L39) | 使用给定或默认 Settings 创建 RunManager，供 SDK/API 共享同一装配方式。 |
 
 ## src/reaction_reference/chemistry/markush.py
 
@@ -319,7 +320,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [Settings.worker_config](../src/reaction_reference/settings.py#L31) | 提取子进程建立来源所需的可序列化配置，返回普通字典。 |
+| [Settings.worker_config](../src/reaction_reference/settings.py#L32) | 提取子进程建立来源所需的可序列化配置，返回普通字典。 |
 
 ## tests/conftest.py
 
@@ -554,13 +555,18 @@
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification](../tests/test_postgres_integration.py#L539) | 同一结构集经过不同来源预筛和分页后，完整核验应保留相同的具体产物。 |
 | [test_indexed_and_jsonl_sources_agree_after_full_family_verification.verified_ids](../tests/test_postgres_integration.py#L586) | 逐页核验所有候选，用实例身份归并；空页也必须遵循来源游标继续读取。 |
 | [test_overlay_initialization_releases_real_source_connection](../tests/test_postgres_integration.py#L628) | 审核初始化失败时，即使保留异常回溯，底层只读会话也须立即释放。 |
-| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L663) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
-| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L672) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L702) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L722) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
-| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L729) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
-| [test_quality_score_gate_applies_to_every_database_recall](../tests/test_postgres_integration.py#L769) | 所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。 |
-| [test_quality_filter_runs_before_knn_pool_limit](../tests/test_postgres_integration.py#L807) | 六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。 |
+| [test_overlay_initialization_releases_real_source_connection.capture_source](../tests/test_postgres_integration.py#L664) | 保留真实来源对象以检查主动关闭，避免依赖对象被回收时的自动清理。 |
+| [test_overlay_initialization_releases_real_source_connection.connections](../tests/test_postgres_integration.py#L673) | 通过独立观察会话检查目标应用名是否仍持有真实数据库连接。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L703) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L728) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
+| [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L735) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
+| [test_quality_score_gate_applies_to_every_database_recall](../tests/test_postgres_integration.py#L775) | 所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。 |
+| [test_quality_filter_runs_before_knn_pool_limit](../tests/test_postgres_integration.py#L813) | 六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。 |
+| [v3_source_dsn](../tests/test_postgres_integration.py#L843) | 在私有测试库建去重组和真实来源；低分代表、高分并列及无合格来源均有覆盖。 |
+| [test_v3_selects_qualified_source_before_matching_and_details](../tests/test_postgres_integration.py#L929) | 所有召回通道使用合格实验身份和事实；低分代表、并列其他来源和失效组不混入。 |
+| [test_v3_pipeline_matches_selected_material_order_and_keeps_source_on_detail_failure](../tests/test_postgres_integration.py#L982) | 端到端匹配按所选来源材料顺序；详情失败时仍只保留该合格来源的图事实。 |
+| [test_v3_missing_views_never_falls_back_to_old_table](../tests/test_postgres_integration.py#L1031) | 默认v3依赖缺失应显式报错，不能悄悄读取仍存在的旧反应表。 |
+| [test_unrelated_partial_index_does_not_claim_complete_substructure_support](../tests/test_postgres_integration.py#L1039) | 任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。 |
 
 ## tests/test_query_input_planning.py
 
@@ -965,18 +971,18 @@
 |---|---|
 | [encode](../../reviews/live_benchmark_2026_10_31/benchmark.py#L98) | 以中文可读形式序列化测试记录。 |
 | [ConnectionTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L106) | 记录真实连接及本次调用的独立事件列表。 |
-| [ConnectionTrace.query](../../reviews/live_benchmark_2026_10_31/benchmark.py#L110) | 把固定来源表及其索引目录查询改到新表，不改检索条件。 |
-| [ConnectionTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L117) | 记录真实SQL执行时间与异常类型，不记录连接密码或SQL参数。 |
-| [ConnectionTrace.cursor](../../reviews/live_benchmark_2026_10_31/benchmark.py#L141) | 包装服务端游标，单独计时打开与取页。 |
-| [ConnectionTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L145) | 其他属性和关闭操作交给真实连接。 |
-| [CursorTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L153) | 保存游标和对应连接计时器。 |
-| [CursorTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L157) | 记录子结构游标声明时间。 |
-| [CursorTrace.fetchmany](../../reviews/live_benchmark_2026_10_31/benchmark.py#L175) | 记录数据库实际取页耗时及返回行数。 |
-| [CursorTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L197) | 关闭与游标状态读取保持原实现。 |
-| [run_worker](../../reviews/live_benchmark_2026_10_31/benchmark.py#L202) | 在独立进程运行真实应用检索，实时保存最后阶段包，结束时落盘完整计时。 |
-| [run_worker.connect](../../reviews/live_benchmark_2026_10_31/benchmark.py#L224) | 为本进程来源创建真实的计时连接。 |
-| [run_worker.progress](../../reviews/live_benchmark_2026_10_31/benchmark.py#L228) | 保存最新阶段包，并记录首次出现非空结果的时间。 |
-| [main](../../reviews/live_benchmark_2026_10_31/benchmark.py#L276) | 顺序运行固定目标，限制并发为一，并以外层进程时限兜底原生计算。 |
+| [ConnectionTrace.query](../../reviews/live_benchmark_2026_10_31/benchmark.py#L110) | v3不改写SQL；v2兼容测试仅重定向旧表的物理名称。 |
+| [ConnectionTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L119) | 记录真实SQL执行时间与异常类型，不记录连接密码或SQL参数。 |
+| [ConnectionTrace.cursor](../../reviews/live_benchmark_2026_10_31/benchmark.py#L147) | 包装服务端游标，单独计时打开与取页。 |
+| [ConnectionTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L151) | 其他属性和关闭操作交给真实连接。 |
+| [CursorTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L159) | 保存游标和对应连接计时器。 |
+| [CursorTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L163) | 记录子结构游标声明时间。 |
+| [CursorTrace.fetchmany](../../reviews/live_benchmark_2026_10_31/benchmark.py#L181) | 记录数据库实际取页耗时及返回行数。 |
+| [CursorTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L203) | 关闭与游标状态读取保持原实现。 |
+| [run_worker](../../reviews/live_benchmark_2026_10_31/benchmark.py#L208) | 在独立进程运行真实应用检索，实时保存最后阶段包，结束时落盘完整计时。 |
+| [run_worker.connect](../../reviews/live_benchmark_2026_10_31/benchmark.py#L232) | 为本进程来源创建真实的计时连接。 |
+| [run_worker.progress](../../reviews/live_benchmark_2026_10_31/benchmark.py#L236) | 保存最新阶段包，并记录首次出现非空结果的时间。 |
+| [main](../../reviews/live_benchmark_2026_10_31/benchmark.py#L288) | 顺序运行固定目标，限制并发为一，并以外层进程时限兜底原生计算。 |
 
 ## ../scripts/verify_environment.py
 

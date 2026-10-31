@@ -1,0 +1,86 @@
+{
+  "recovered_groups": [
+    {
+      "selection": {
+        "group_id": 1061406,
+        "group_max_score": 12,
+        "group_source_count": 11,
+        "source_reaction_id": 5058278,
+        "source_final_score": 12,
+        "policy": "highest_qualified_score_then_lowest_source_id",
+        "other_sources_evaluated": false
+      },
+      "source": {
+        "namespace": "uspto",
+        "record_id": "5058278",
+        "experiment_id": "uspto:US20120071479A1:['p-0269']:1",
+        "document_id": "US20120071479A1",
+        "location": "['p-0269']",
+        "url": null,
+        "synthetic": false
+      },
+      "reaction_smiles": "CCCN(CCC)C(=O)COC(=O)CCNC(=O)OC(C)(C)C.Cl>>CCCN(CCC)C(=O)COC(=O)CCN",
+      "mapped_reaction_smiles": "CC(C)(C)OC(=O)[NH:16][CH2:15][CH2:14][C:12]([O:11][CH2:10][C:8]([N:4]([CH2:3][CH2:2][CH3:1])[CH2:5][CH2:6][CH3:7])=[O:9])=[O:13].Cl>>[CH3:1][CH2:2][CH2:3][N:4]([CH2:5][CH2:6][CH3:7])[C:8](=[O:9])[CH2:10][O:11][C:12](=[O:13])[CH2:14][CH2:15][NH2:16]",
+      "conditions": {
+        "temperature_min_c": null,
+        "temperature_max_c": null,
+        "pressure_max_kpa": null,
+        "duration_seconds": null,
+        "equipment": null,
+        "stage_id": null,
+        "text": ""
+      },
+      "material_instances": [
+        "5058278:product:0",
+        "5058278:reactant:0",
+        "5058278:reagent:0",
+        "5058278:solvent:0"
+      ]
+    },
+    {
+      "selection": {
+        "group_id": 1061409,
+        "group_max_score": 13,
+        "group_source_count": 8,
+        "source_reaction_id": 5058281,
+        "source_final_score": 13,
+        "policy": "highest_qualified_score_then_lowest_source_id",
+        "other_sources_evaluated": false
+      },
+      "source": {
+        "namespace": "uspto",
+        "record_id": "5058281",
+        "experiment_id": "uspto:US20120071479A1:['p-0273']:1",
+        "document_id": "US20120071479A1",
+        "location": "['p-0273']",
+        "url": null,
+        "synthetic": false
+      },
+      "reaction_smiles": "CC(C)(C)OC(=O)NCCC(=O)OCC(=O)OC1CCCCC1>>NCCC(=O)OCC(=O)OC1CCCCC1",
+      "mapped_reaction_smiles": "CC(C)(C)OC(=O)[NH:1][CH2:2][CH2:3][C:4](=[O:5])[O:6][CH2:7][C:8](=[O:9])[O:10][CH:11]1[CH2:12][CH2:13][CH2:14][CH2:15][CH2:16]1>>[NH2:1][CH2:2][CH2:3][C:4](=[O:5])[O:6][CH2:7][C:8](=[O:9])[O:10][CH:11]1[CH2:12][CH2:13][CH2:14][CH2:15][CH2:16]1",
+      "conditions": {
+        "temperature_min_c": null,
+        "temperature_max_c": null,
+        "pressure_max_kpa": null,
+        "duration_seconds": null,
+        "equipment": null,
+        "stage_id": null,
+        "text": ""
+      },
+      "material_instances": [
+        "5058281:product:0",
+        "5058281:reactant:0"
+      ]
+    }
+  ],
+  "reactant_knn_items": 3,
+  "indexes": [
+    "drfp",
+    "product_fp",
+    "products_mol",
+    "reactant_fp",
+    "reactants_mol"
+  ],
+  "source_issues": [],
+  "production_source_table": "reaction_v3"
+}

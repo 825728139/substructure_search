@@ -159,7 +159,7 @@ def test_malformed_optional_detail_container_keeps_other_details(
             sql.SQL("UPDATE reaction.reaction_details SET {}=%s").format(sql.Identifier(column)),
             (Jsonb(value),),
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         package = search(
             SearchRequest(target=Target(value="CCO")),
@@ -179,7 +179,7 @@ def test_malformed_optional_detail_container_keeps_other_details(
 @pytest.mark.parametrize("role", ["product", "reactant"])
 def test_indexed_cursor_pages_and_read_only_session(indexed_source_dsn, role):
     """真实服务端游标按页返回全部材料，严格只读事务拒绝写入。"""
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         cursor, items = 0, []
         while True:
@@ -209,7 +209,7 @@ def test_failed_page_closes_existing_cursor_and_allows_restart(
     indexed_source_dsn, monkeypatch, role, failure
 ):
     """后续页失败时释放此前已存在的服务端游标；同一家族可重新从零分页，正常续页不受影响。"""
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     family = carbon_family(name="retry-existing-cursor")
     try:
         first = source.candidate_page(family, role, 0, 1, "CCO")
@@ -262,7 +262,7 @@ def test_first_page_processing_failure_does_not_poison_cursor_cleanup(
     indexed_source_dsn, monkeypatch
 ):
     """第一页处理失败会使新游标随保存点回滚消失，重复清理也不能让连接陷入事务错误。"""
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     family = carbon_family(name="retry-first-page")
     try:
         with monkeypatch.context() as fault:
@@ -293,7 +293,7 @@ def test_knn_selection_and_detail_hydration(indexed_source_dsn, details_by_id):
                 "ALTER TABLE reaction.reaction_details ADD COLUMN reaction_id bigint"
             )
             connection.execute("UPDATE reaction.reaction_details SET reaction_id=1")
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         family = carbon_family(layer="core")
         nearest = source.candidate_page(family, "product", 0, 1, "CCO")
@@ -311,7 +311,7 @@ def test_knn_selection_and_detail_hydration(indexed_source_dsn, details_by_id):
 
 def test_query_timeout_preserves_independent_query(indexed_source_dsn):
     """真正的表锁等待触发查询超时，回滚保存点后另一个家族仍可使用同一来源会话。"""
-    source = PostgresSource(indexed_source_dsn, timeout_ms=100)
+    source = PostgresSource(indexed_source_dsn, table="reactions", timeout_ms=100)
     try:
         with psycopg.connect(indexed_source_dsn) as writer:
             writer.execute("LOCK TABLE reaction.reactions IN ACCESS EXCLUSIVE MODE")
@@ -328,7 +328,7 @@ def test_query_timeout_preserves_independent_query(indexed_source_dsn):
 
 def test_repeatable_read_keeps_material_fields_frozen(indexed_source_dsn):
     """来源建立快照后其他会话更新原行，本次查询和详情仍必须对应旧材料结构。"""
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
             writer.execute("UPDATE reaction.reactions SET product_smiles=ARRAY['CCN'] WHERE id=1")
@@ -347,7 +347,7 @@ def test_sql_row_paging_survives_dirty_and_multiple_materials(indexed_source_dsn
         writer.execute(
             "UPDATE reaction.reactions SET product_smiles=ARRAY['CCN','CCO'], products_mol='CCN.CCO'::mol WHERE id=2"
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         cursor, items, empty_pages = 0, [], 0
         while True:
@@ -372,7 +372,7 @@ def test_indexed_source_runs_the_full_search_pipeline(indexed_source_dsn):
         writer.execute(
             "UPDATE reaction.reactions SET temperature_min_c=20,temperature_max_c=25,duration_max_seconds=3600 WHERE id=1"
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         package = search(
             SearchRequest(target=Target(value="CCO"), budget={"max_tasks": 100}), source
@@ -419,7 +419,7 @@ def test_incomplete_source_keys_do_not_attach_unidentified_details(
             sql.SQL("UPDATE reaction.reaction_details SET {}=%s").format(sql.Identifier(column)),
             (value,),
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
         item = next(item for item in page.items if item.record.source.record_id == "1")
@@ -440,7 +440,7 @@ def test_direct_reaction_id_link_does_not_require_paragraph_locator(indexed_sour
         writer.execute(
             "UPDATE reaction.reactions SET document_id='',paragraph_nums=ARRAY[]::text[] WHERE id=1"
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
         item = next(item for item in page.items if item.record.source.record_id == "1")
@@ -460,7 +460,7 @@ def test_bounded_export_preserves_source_replay_template(indexed_source_dsn, tmp
         writer.execute(
             "UPDATE reaction.reactions SET reaction_center_r2=%s WHERE id=1", (template,)
         )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
         online = next(item.record for item in page.items if item.record.source.record_id == "1")
@@ -504,7 +504,7 @@ def test_ambiguous_details_are_not_arbitrarily_attached(indexed_source_dsn, link
                 "VALUES (%s,'另一条温度记录')",
                 (Jsonb([{"smiles": "CCO", "name": "另一个名称"}]),),
             )
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         page = source.candidate_page(carbon_family(), "product", 0, 10, "CCO")
         record = next(item.record for item in page.items if item.record.source.record_id == "1")
@@ -515,7 +515,7 @@ def test_ambiguous_details_are_not_arbitrarily_attached(indexed_source_dsn, link
         assert any(issue["code"] == "ambiguous_reaction_details" for issue in source.issues)
     finally:
         source.close()
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         package = search(
             SearchRequest(
@@ -608,7 +608,7 @@ def test_indexed_and_jsonl_sources_agree_after_full_family_verification(
     try:
         for number, smiles in enumerate(examples, 1):
             target = parse(smiles, target=True)
-            indexed = PostgresSource(indexed_source_dsn)
+            indexed = PostgresSource(indexed_source_dsn, table="reactions")
             try:
                 for original in initial_families(target):
                     # 本例比较完整候选流，禁用首阶段 KNN，避免把有界初选当成完整召回。
@@ -653,6 +653,7 @@ def test_overlay_initialization_releases_real_source_connection(
     application_name = "rr-overlay-connection-review"
     settings = Settings(
         source_kind="postgres",
+        postgres_table="reactions",
         postgres_dsn=make_conninfo(indexed_source_dsn, application_name=application_name),
         evidence_path=path,
         store_path=tmp_path / "runs",
@@ -713,7 +714,12 @@ def test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails
     path = tmp_path / "review.jsonl"
     if overlay == "malformed":
         path.write_text("{broken\n", encoding="utf-8")
-    settings = Settings(source_kind="postgres", postgres_dsn=indexed_source_dsn, evidence_path=path)
+    settings = Settings(
+        source_kind="postgres",
+        postgres_table="reactions",
+        postgres_dsn=indexed_source_dsn,
+        evidence_path=path,
+    )
     constructor = bootstrap.PostgresSource
     opened, pids, cleanup_errors = [], [], []
     try:
@@ -785,7 +791,7 @@ def test_quality_score_gate_applies_to_every_database_recall(indexed_source_dsn,
     family = carbon_family(layer="fragment" if mode == "fragment" else "whole")
     if mode == "strict":
         family = family.model_copy(update={"relation": "strict"})
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         cursor, found = 0, []
         while True:
@@ -824,10 +830,224 @@ def test_quality_filter_runs_before_knn_pool_limit(indexed_source_dsn, role):
             VALUES (601,12,ARRAY['CCCO'],ARRAY['CCCO'],'CCCO'::mol,'CCCO'::mol,
                     morganbv_fp('CCCO'::mol,2),morganbv_fp('CCCO'::mol,2))
         """)
-    source = PostgresSource(indexed_source_dsn)
+    source = PostgresSource(indexed_source_dsn, table="reactions")
     try:
         page = source.candidate_page(carbon_family(layer="whole"), role, 0, 1000, "CCO")
         assert [item.record.id for item in page.items] == ["integration:601"]
         assert page.next_cursor is None and page.stream_exhausted
     finally:
         source.close()
+
+
+@pytest.fixture
+def v3_source_dsn(indexed_source_dsn):
+    """在私有测试库建去重组和真实来源；低分代表、高分并列及无合格来源均有覆盖。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("SET rdkit.morgan_fp_size=2048")
+        writer.execute("CREATE TABLE reaction.reaction_v2 (LIKE reaction.reactions INCLUDING ALL)")
+        writer.execute("INSERT INTO reaction.reaction_v2 SELECT * FROM reaction.reactions")
+        writer.execute("CREATE TABLE reaction.reaction_v3 (LIKE reaction.reactions INCLUDING ALL)")
+        writer.execute("ALTER TABLE reaction.reaction_v3 ADD COLUMN detail_count bigint DEFAULT 1")
+        writer.execute("INSERT INTO reaction.reaction_v3 SELECT r.*,1 FROM reaction.reactions r")
+        writer.execute(
+            "UPDATE reaction.reaction_v3 SET reaction_smiles='CC=O>>CCO',final_score=17,detail_count=4 WHERE id=1"
+        )
+        writer.execute(
+            "UPDATE reaction.reaction_v2 SET reaction_smiles='CC=O>>CCO',final_score=10,temperature_max_c=999 WHERE id=1"
+        )
+        writer.execute("UPDATE reaction.reaction_v3 SET reaction_smiles='CCBr>>CCN' WHERE id=2")
+        writer.execute("UPDATE reaction.reaction_v2 SET reaction_smiles='CCBr>>CCN' WHERE id=2")
+        writer.execute(
+            "UPDATE reaction.reaction_v3 SET reaction_smiles='CCC=O>>CCCO',final_score=15 WHERE id=3"
+        )
+        writer.execute(
+            "UPDATE reaction.reaction_v2 SET reaction_smiles='CCC=O>>CCCO',final_score=NULL WHERE id=3"
+        )
+        writer.execute("""
+            CREATE TABLE reaction.reaction_v3_sources (
+                reaction_v3_id bigint, source_reaction_id bigint PRIMARY KEY
+            )
+        """)
+        writer.execute("INSERT INTO reaction.reaction_v3_sources VALUES (1,1),(2,2),(3,3)")
+        for number, score in [(10, 17), (11, 17), (12, 12)]:
+            writer.execute(
+                """
+                INSERT INTO reaction.reaction_v2
+                (id,source_namespace,document_id,paragraph_reaction_ordinal,product_smiles,
+                 reactant_smiles,reagent_smiles,catalyst_smiles,solvent_smiles,
+                 reaction_smiles,mapped_reaction_smiles,reaction_center_r2,
+                 temperature_max_c,duration_max_seconds,pressure_max_kpa,final_score)
+                VALUES (%s,'chosen',%s,%s,ARRAY['CCO'],ARRAY['CC=O'],ARRAY['[H][H]'],
+                        ARRAY['[Pd]'],ARRAY['CO'],'CC=O>>CCO',
+                        '[CH3:1][CH:2]=[O:3]>>[CH3:1][CH2:2][OH:3]',
+                        '[C:1][C:2][O:3]>>[C:1][C:2]=[O:3]',25,3600,101,%s)
+            """,
+                (number, f"GOOD{number}", number, score),
+            )
+            writer.execute("INSERT INTO reaction.reaction_v3_sources VALUES (1,%s)", (number,))
+            writer.execute(
+                """
+                INSERT INTO reaction.reaction_details
+                (source_namespace,document_id,paragraph_reaction_ordinal,products,reactants,temperature_text)
+                VALUES ('chosen',%s,%s,%s,'[]','合格来源的温度原文')
+            """,
+                (f"GOOD{number}", number, Jsonb([{"smiles": "CCO", "name": f"来源{number}产物"}])),
+            )
+        writer.execute("""
+            CREATE VIEW reaction.reaction_v3_source_scores AS
+            SELECT l.reaction_v3_id,l.source_reaction_id,v.final_score,
+                   v.final_score=g.final_score AS is_highest_score
+            FROM reaction.reaction_v3_sources l JOIN reaction.reaction_v2 v ON v.id=l.source_reaction_id
+            JOIN reaction.reaction_v3 g ON g.id=l.reaction_v3_id
+        """)
+        writer.execute("""
+            CREATE VIEW reaction.reaction_v3_details AS
+            SELECT l.reaction_v3_id,l.source_reaction_id,d.*
+            FROM reaction.reaction_v3_sources l JOIN reaction.reaction_v2 v ON v.id=l.source_reaction_id
+            JOIN reaction.reaction_details d
+            USING(source_type,source_namespace,document_id,paragraph_nums,paragraph_reaction_ordinal)
+        """)
+        # 用真实生产形式的非空部分GiST覆盖反应物两个通道。
+        for row in writer.execute(
+            "SELECT indexname,indexdef FROM pg_indexes WHERE schemaname='reaction' AND tablename='reaction_v3'"
+        ):
+            if "USING gist (reactant" in row[1]:
+                from psycopg import sql
+
+                writer.execute(sql.SQL("DROP INDEX reaction.{}").format(sql.Identifier(row[0])))
+        writer.execute(
+            "CREATE INDEX ON reaction.reaction_v3 USING gist (reactants_mol) WHERE reactants_mol IS NOT NULL"
+        )
+        writer.execute(
+            "CREATE INDEX ON reaction.reaction_v3 USING gist (reactant_fp) WHERE reactant_fp IS NOT NULL"
+        )
+    return indexed_source_dsn
+
+
+@pytest.mark.parametrize("role", ["product", "reactant"])
+@pytest.mark.parametrize("mode", ["knn", "fragment", "strict", "core_fallback"])
+def test_v3_selects_qualified_source_before_matching_and_details(v3_source_dsn, role, mode):
+    """所有召回通道使用合格实验身份和事实；低分代表、并列其他来源和失效组不混入。"""
+    from reaction_reference.bootstrap import open_source
+    from reaction_reference.settings import Settings
+
+    settings = Settings(source_kind="postgres", postgres_dsn=v3_source_dsn)
+    assert settings.worker_config()["postgres_table"] == "reaction_v3"
+    source = open_source(settings)
+    try:
+        family = carbon_family(layer="fragment" if mode == "fragment" else "whole")
+        if mode == "strict":
+            family = family.model_copy(update={"relation": "strict"})
+        cursor, items = 0, []
+        while True:
+            page = source.candidate_page(
+                family, role, cursor, 1, "CCO", stage=1 if mode == "core_fallback" else 0
+            )
+            items.extend(page.items)
+            if page.next_cursor is None:
+                break
+            cursor = page.next_cursor
+        assert {i.record.id for i in items} == {"chosen:10", "integration:2"}
+        selected = next(i for i in items if i.record.id == "chosen:10")
+        assert selected.record.source.document_id == "GOOD10"
+        assert selected.record.conditions.temperature_max_c == 25
+        assert selected.record.conditions.duration_seconds == 3600
+        assert selected.record.conditions.pressure_max_kpa == 101
+        assert selected.record.mapped_reaction_smiles == "[CH3:1][CH:2]=[O:3]>>[CH3:1][CH2:2][OH:3]"
+        assert selected.record.retro_template == "[C:1][C:2][O:3]>>[C:1][C:2]=[O:3]"
+        assert [m.smiles for m in selected.record.materials if m.role == "catalyst"] == ["[Pd]"]
+        metadata = selected.record.raw["dedup_source_selection"]
+        assert metadata["group_id"] == 1 and metadata["group_max_score"] == 17
+        assert metadata["source_reaction_id"] == 10 and metadata["source_final_score"] == 17
+        assert metadata["group_source_count"] == 4 and metadata["other_sources_evaluated"] is False
+        hydrated = source.hydrate(selected.record)
+        assert hydrated.id == selected.record.id
+        assert [m.instance_id for m in hydrated.materials] == [
+            m.instance_id for m in selected.record.materials
+        ]
+        assert hydrated.conditions.text == "合格来源的温度原文"
+        assert next(m for m in hydrated.materials if m.role == "product").name == "来源10产物"
+        assert (
+            source.connection.execute(
+                "SELECT count(*) AS n FROM reaction.reaction_v3_source_scores WHERE reaction_v3_id=1"
+            ).fetchone()["n"]
+            == 4
+        )
+        assert any(i["code"] == "no_qualified_group_source" for i in source.issues)
+        assert not page.scope_complete
+    finally:
+        source.close()
+
+
+def test_v3_pipeline_matches_selected_material_order_and_keeps_source_on_detail_failure(
+    v3_source_dsn,
+):
+    """端到端匹配按所选来源材料顺序；详情失败时仍只保留该合格来源的图事实。"""
+    with psycopg.connect(v3_source_dsn, autocommit=True) as writer:
+        writer.execute(
+            "UPDATE reaction.reaction_v3 SET product_smiles=ARRAY['CCO','CCN'],products_mol='CCO.CCN'::mol,reaction_smiles='CC=O>>CCN.CCO' WHERE id=1"
+        )
+        writer.execute(
+            "UPDATE reaction.reaction_v2 SET product_smiles=ARRAY['CCN','OCC'],reaction_smiles='CC=O>>CCN.CCO' WHERE id IN (10,11,12)"
+        )
+        writer.execute(
+            "CREATE TABLE reaction.bad_details AS SELECT * FROM reaction.reaction_v3_details"
+        )
+        writer.execute(
+            "UPDATE reaction.bad_details SET document_id='WRONG' WHERE source_reaction_id=10"
+        )
+        writer.execute(
+            "CREATE OR REPLACE VIEW reaction.reaction_v3_details AS SELECT * FROM reaction.bad_details"
+        )
+    source = PostgresSource(v3_source_dsn)
+    try:
+        package = search(
+            SearchRequest(
+                target=Target(value="CCO"),
+                budget={"max_tasks": 100},
+                options={"include_proposals": False, "include_usage": False},
+            ),
+            source,
+        )
+        refs = [
+            r
+            for r in package.results
+            if r.record.id == "chosen:10" and r.target_requirements_satisfied
+        ]
+        assert refs
+        for ref in refs:
+            assert ref.material.smiles == "OCC" and ref.material.instance_id == "10:product:1"
+            assert ref.record.source.document_id == "GOOD10"
+            assert (
+                ref.record.conditions.temperature_max_c == 25 and ref.record.conditions.text is None
+            )
+            assert ref.record.raw["dedup_source_selection"]["source_final_score"] == 17
+        assert any(i["code"] == "source_hydration_failed" for i in package.source_issues)
+        assert source.connection.execute("SELECT 1 AS ok").fetchone()["ok"] == 1
+    finally:
+        source.close()
+
+
+def test_v3_missing_views_never_falls_back_to_old_table(v3_source_dsn):
+    """默认v3依赖缺失应显式报错，不能悄悄读取仍存在的旧反应表。"""
+    with psycopg.connect(v3_source_dsn, autocommit=True) as writer:
+        writer.execute("DROP VIEW reaction.reaction_v3_source_scores")
+    with pytest.raises(ValueError, match="v3 source scores"):
+        PostgresSource(v3_source_dsn)
+
+
+def test_unrelated_partial_index_does_not_claim_complete_substructure_support(indexed_source_dsn):
+    """任意额外分数或其他条件的部分索引不能误认为覆盖全部允许来源。"""
+    from psycopg import sql
+
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        for row in writer.execute(
+            "SELECT indexname,indexdef FROM pg_indexes WHERE schemaname='reaction' AND tablename='reactions'"
+        ):
+            if "USING gist (products_mol" in row[1]:
+                writer.execute(sql.SQL("DROP INDEX reaction.{}").format(sql.Identifier(row[0])))
+        writer.execute(
+            "CREATE INDEX ON reaction.reactions USING gist (products_mol) WHERE final_score>=18"
+        )
+    with pytest.raises(ValueError, match="GiST on products_mol"):
+        PostgresSource(indexed_source_dsn, table="reactions")

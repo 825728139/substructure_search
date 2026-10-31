@@ -160,6 +160,11 @@ def import_native(row):
                 )
             },
             "raw_details_retained_in_source": True,
+            **(
+                {"dedup_source_selection": row["dedup_source_selection"]}
+                if "dedup_source_selection" in row
+                else {}
+            ),
         },
     )
 
@@ -326,14 +331,25 @@ class PostgresSource:
         "pressure_max_kpa",
     )
 
-    def __init__(self, dsn, *, timeout_ms=1500):
+    def __init__(self, dsn, *, timeout_ms=1500, table="reaction_v3"):
         """建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。
 
-        dsn 只用于建立连接；要求 products_mol 的非部分有效 GiST。指纹 GiST 可用时启用 KNN 初选；初始化失败关闭连接并抛出，不自动创建索引或回退全表 Python 扫描。
+        默认使用v3去重组；显式reactions支持旧来源。仅认可完整GiST或同列IS NOT NULL的部分GiST。
+        指纹 GiST 可用时启用 KNN 初选；初始化失败关闭连接，不自动建索引或回退全表扫描。
         """
         import psycopg
         from psycopg.rows import dict_row
 
+        if table not in ("reaction_v3", "reactions"):
+            raise ValueError("Unsupported reaction source table")
+        self.table = table
+        self._selected_groups = {}
+        if table == "reaction_v3":
+            self.selection_policy = (
+                "v3_group_final_score_ge_12_before_selection; "
+                "one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; "
+                "other_group_sources_not_evaluated; " + self.selection_policy
+            )
         self.connection = psycopg.connect(
             dsn, connect_timeout=5, row_factory=dict_row, autocommit=True
         )
@@ -353,8 +369,9 @@ class PostgresSource:
             if snapshot is None:
                 raise RuntimeError("Source snapshot unavailable")
             self.snapshot_id = "postgres-session:" + digest([snapshot["snapshot"], id(self)])
-            rows = self.connection.execute("""
-                SELECT DISTINCT a.attname AS column_name
+            rows = self.connection.execute(
+                """
+                SELECT DISTINCT a.attname AS column_name, pg_get_expr(i.indpred,i.indrelid) AS predicate
                 FROM pg_index i JOIN pg_class t ON t.oid=i.indrelid
                 JOIN pg_namespace n ON n.oid=t.relnamespace
                 JOIN pg_class ix ON ix.oid=i.indexrelid
@@ -363,12 +380,27 @@ class PostgresSource:
                     AS indexed_key(attnum, position)
                     ON indexed_key.position <= i.indnkeyatts
                 JOIN pg_attribute a ON a.attrelid=t.oid AND a.attnum=indexed_key.attnum
-                WHERE n.nspname='reaction' AND t.relname='reactions'
-                AND am.amname='gist' AND i.indisvalid AND i.indisready AND i.indpred IS NULL
-            """).fetchall()
-            self._indexes = {r["column_name"] for r in rows}
+                WHERE n.nspname='reaction' AND t.relname=%s
+                AND am.amname='gist' AND i.indisvalid AND i.indisready
+            """,
+                (self.table,),
+            ).fetchall()
+            self._indexes = {
+                r["column_name"]
+                for r in rows
+                if r["predicate"] is None
+                or r["predicate"].strip("() ") == r["column_name"] + " IS NOT NULL"
+            }
             self._assert_index("products_mol")
             self.max_selection_stage = 1 if self._has_index("product_fp") else 0
+            if self.table == "reaction_v3":
+                required = self.connection.execute("""
+                    SELECT to_regclass('reaction.reaction_v2') IS NOT NULL
+                       AND to_regclass('reaction.reaction_v3_source_scores') IS NOT NULL
+                       AND to_regclass('reaction.reaction_v3_details') IS NOT NULL AS ready
+                """).fetchone()
+                if not required or not required["ready"]:
+                    raise ValueError("v3 source scores, source records and details are required")
         except Exception:
             self.connection.close()
             raise
@@ -390,6 +422,8 @@ class PostgresSource:
 
         逐材料解析与验证；一条 SQL 整侧匹配可展开多个实例，它们仍须通过家族核验才成为参考。脏行/材料追加到 issues。
         """
+        if self.table == "reaction_v3":
+            rows = self._source_rows(rows)
         items = []
         for data in rows:
             try:
@@ -419,6 +453,57 @@ class PostgresSource:
                 items.append(Candidate(digest([canonical(molecule), role]), material, record))
         return items
 
+    def _source_rows(self, groups):
+        """为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。
+
+        每组当前选最高分、并列最小来源ID；其他来源仍在数据库保留，但本次没有逐一评估。
+        批量选择按组缓存；不存在合格来源时记录不完整，绝不回退到低分代表实验。
+        """
+        from psycopg import sql
+
+        missing = list(
+            dict.fromkeys(g["id"] for g in groups if g["id"] not in self._selected_groups)
+        )
+        if missing:
+            projection = sql.SQL(",").join(sql.Identifier("v", c) for c in self.lightweight_columns)
+            query = sql.SQL("""
+                SELECT {projection}, v.final_score AS source_final_score,
+                       g.id AS dedup_group_id, g.final_score AS group_max_score,
+                       g.detail_count AS group_source_count
+                FROM reaction.reaction_v3 g
+                JOIN LATERAL (
+                    SELECT s.source_reaction_id
+                    FROM reaction.reaction_v3_source_scores s
+                    WHERE s.reaction_v3_id=g.id AND s.final_score>=12 AND s.is_highest_score
+                    ORDER BY s.source_reaction_id LIMIT 1
+                ) chosen ON true
+                JOIN reaction.reaction_v2 v ON v.id=chosen.source_reaction_id
+                    AND v.final_score=g.final_score AND v.final_score>=12
+                    AND v.reaction_smiles=g.reaction_smiles
+                WHERE g.id=ANY(%s) AND g.final_score>=12
+            """).format(projection=projection)
+            found = self.connection.execute(query, (missing,)).fetchall()
+            selected = {}
+            for row in found:
+                group_id = row.pop("dedup_group_id")
+                row["dedup_source_selection"] = {
+                    "group_id": group_id,
+                    "group_max_score": row.pop("group_max_score"),
+                    "group_source_count": row.pop("group_source_count"),
+                    "source_reaction_id": row["id"],
+                    "source_final_score": row.pop("source_final_score"),
+                    "policy": "highest_qualified_score_then_lowest_source_id",
+                    "other_sources_evaluated": False,
+                }
+                selected[group_id] = row
+            for group_id in missing:
+                self._selected_groups[group_id] = selected.get(group_id)
+                if group_id not in selected:
+                    self.issues.append(
+                        {"record_id": str(group_id), "code": "no_qualified_group_source"}
+                    )
+        return [row for g in groups if (row := self._selected_groups[g["id"]]) is not None]
+
     def candidate_page(self, family, role, cursor, limit, target_smiles, stage=0):
         """在同一只读会话中读取一页候选，返回实例及范围标签。
 
@@ -444,11 +529,15 @@ class PostgresSource:
                 pool_key = (role, target_smiles)
                 if pool_key not in self._knn:
                     query = sql.SQL("""
-                        SELECT {projection} FROM reaction.reactions
+                        SELECT {projection} FROM {table}
                         WHERE final_score >= 12 AND {fp} IS NOT NULL
                         ORDER BY {fp} <%%> morganbv_fp(mol_from_smiles(%s::cstring),2)
                         LIMIT 512
-                    """).format(projection=projection, fp=sql.Identifier(fp_column))
+                    """).format(
+                        projection=projection,
+                        fp=sql.Identifier(fp_column),
+                        table=sql.Identifier("reaction", self.table),
+                    )
                     self._knn[pool_key] = self.connection.execute(
                         query, (target_smiles,)
                     ).fetchall()
@@ -462,9 +551,13 @@ class PostgresSource:
                         raise ValueError("Source cursor cannot be resumed outside its read session")
                     server = self.connection.cursor(name="rr_" + digest(key))
                     query = sql.SQL(
-                        "SELECT {projection} FROM reaction.reactions "
-                        "WHERE final_score >= 12 AND {column} @> %s::qmol"
-                    ).format(projection=projection, column=sql.Identifier(column))
+                        "SELECT {projection} FROM {table} "
+                        "WHERE final_score >= 12 AND {column} IS NOT NULL AND {column} @> %s::qmol"
+                    ).format(
+                        projection=projection,
+                        column=sql.Identifier(column),
+                        table=sql.Identifier("reaction", self.table),
+                    )
                     server.execute(query, (family.core_smarts,))
                     self._cursors[key] = (server, 0)
                 server, expected = self._cursors[key]
@@ -519,6 +612,34 @@ class PostgresSource:
         先缓存表字段能力；缺字段或键值未知时返回空对象，多条详情记录问题并抛出 ValueError，不任取一条拼接别的实验。参数值绑定传入，标识符由 psycopg.sql 安全组合。
         """
         from psycopg import sql
+
+        if self.table == "reaction_v3":
+            selected = row["dedup_source_selection"]
+            found = self.connection.execute(
+                """
+                SELECT to_jsonb(d) AS data FROM reaction.reaction_v3_details d
+                WHERE reaction_v3_id=%s AND source_reaction_id=%s LIMIT 2
+            """,
+                (selected["group_id"], row["id"]),
+            ).fetchall()
+            if len(found) > 1:
+                raise ValueError("Ambiguous v3 source details association")
+            if not found:
+                self.issues.append(
+                    {"record_id": str(row["id"]), "code": "selected_source_details_missing"}
+                )
+                return {}
+            details = found[0]["data"]
+            source_keys = (
+                "source_type",
+                "source_namespace",
+                "document_id",
+                "paragraph_nums",
+                "paragraph_reaction_ordinal",
+            )
+            if any(details.get(key) != row[key] for key in source_keys):
+                raise ValueError("v3 details do not belong to the selected source")
+            return details
 
         if self._details_columns is None:
             self._details_columns = {

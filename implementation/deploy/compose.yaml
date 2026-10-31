@@ -8,6 +8,7 @@ services:
     environment:
       RR_SOURCE_KIND: ${RR_SOURCE_KIND:-jsonl}
       RR_POSTGRES_DSN: ${RR_POSTGRES_DSN:-}
+      RR_POSTGRES_TABLE: ${RR_POSTGRES_TABLE:-reaction_v3}
       RR_API_TOKEN: ${RR_API_TOKEN:-}
       RR_MAX_CONCURRENT_RUNS: ${RR_MAX_CONCURRENT_RUNS:-2}
       RR_STORE_PATH: /app/var/runs

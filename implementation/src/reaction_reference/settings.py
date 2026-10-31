@@ -20,6 +20,7 @@ class Settings(BaseSettings):
         )
     )
     postgres_dsn: str | None = Field(default=None, repr=False)
+    postgres_table: Literal["reaction_v3", "reactions"] = "reaction_v3"
     store_path: Path = Path("var/runs")
     max_concurrent_runs: int = Field(default=2, ge=1, le=8)
     max_queued_runs: int = Field(default=16, ge=1, le=128)
@@ -37,6 +38,7 @@ class Settings(BaseSettings):
             "source_kind": self.source_kind,
             "source_path": str(self.source_path),
             "postgres_dsn": self.postgres_dsn,
+            "postgres_table": self.postgres_table,
             "source_timeout_ms": self.source_timeout_ms,
             "evidence_path": str(self.evidence_path) if self.evidence_path else None,
         }

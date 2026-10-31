@@ -1,0 +1,101 @@
+[
+  {
+    "id": "T01",
+    "label": "乙酰苯胺：小分子酰胺",
+    "smiles": "CC(=O)Nc1ccccc1",
+    "selection_reason": "预先指定的小分子，检查宽查询和真实酰胺转化",
+    "molecular_weight": 135.16599999999997,
+    "heavy_atoms": 10,
+    "rings": 1
+  },
+  {
+    "id": "T02",
+    "label": "β-丙氨酸乙酯：无环目标",
+    "smiles": "CCOC(=O)CCN",
+    "selection_reason": "预先指定的无环目标，盐形差异单独判断",
+    "molecular_weight": 117.14800000000001,
+    "heavy_atoms": 8,
+    "rings": 0
+  },
+  {
+    "id": "T03",
+    "label": "甲氧基苯基–吡啶：联芳基",
+    "smiles": "COc1ccc(-c2cccnc2)cc1",
+    "selection_reason": "预先指定的芳基连接目标，检查是否找到构建连接的方法",
+    "molecular_weight": 185.226,
+    "heavy_atoms": 14,
+    "rings": 2
+  },
+  {
+    "id": "T04",
+    "label": "Boc哌啶–氟苯甲酰胺：支链接母核",
+    "smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(F)cc2)CC1",
+    "selection_reason": "预先指定的较大多官能团目标，检查酰胺连接与保护基差异",
+    "molecular_weight": 322.3800000000001,
+    "heavy_atoms": 23,
+    "rings": 2
+  },
+  {
+    "id": "T05",
+    "label": "Boc哌啶β-酮酯：库内阳性",
+    "smiles": "CCOC(=O)CC(=O)C1CCN(C(=O)OC(C)(C)C)CC1",
+    "selection_reason": "前次只读核验中reaction_v2的id=2产物；作为自命中阳性，不代表泛化",
+    "molecular_weight": 299.367,
+    "heavy_atoms": 21,
+    "rings": 1
+  },
+  {
+    "id": "T06",
+    "label": "Boc脯氨酸甲酯：手性目标",
+    "smiles": "COC(=O)[C@@H]1CCCN1C(=O)OC(C)(C)C",
+    "selection_reason": "预先指定手性结构；连接相同不能代替立体结果证据",
+    "molecular_weight": 229.27599999999998,
+    "heavy_atoms": 16,
+    "rings": 1
+  },
+  {
+    "id": "T07",
+    "label": "Boc哌啶酰化Meldrum酸：库内阳性",
+    "smiles": "CC(C)(C)OC(=O)N1CCC(C(=O)C2C(=O)OC(C)(C)OC2=O)CC1",
+    "selection_reason": "前次只读核验中reaction_v2的id=3产物；检查环状片段的真实反应作用",
+    "molecular_weight": 355.38700000000017,
+    "heavy_atoms": 25,
+    "rings": 2
+  },
+  {
+    "id": "T08",
+    "label": "2-吡咯烷酮：小环内酰胺",
+    "smiles": "O=C1CCCN1",
+    "selection_reason": "预先指定的环状目标，不预猜断环位点，观察返回先例是否提供成环或后修饰",
+    "molecular_weight": 85.10600000000001,
+    "heavy_atoms": 6,
+    "rings": 1
+  },
+  {
+    "id": "T09",
+    "label": "多取代苯甲酰胺：无精确先例目标",
+    "smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2cc(F)c(OC(F)F)cc2Cl)CC1",
+    "selection_reason": "独立构造的T04支链替换目标；限定精确GIN探针确认12分以上来源无同一产物",
+    "molecular_weight": 422.83100000000013,
+    "heavy_atoms": 28,
+    "rings": 2
+  },
+  {
+    "id": "T10",
+    "label": "氟代联芳基羟乙基酰胺：无精确先例目标",
+    "smiles": "COc1cc(F)c(-c2cc(C(=O)NCCO)cnc2)cc1",
+    "selection_reason": "独立构造的多连接目标；限定精确GIN探针确认12分以上来源无同一产物",
+    "molecular_weight": 290.294,
+    "heavy_atoms": 21,
+    "rings": 2
+  },
+  {
+    "id": "T11",
+    "label": "氟代支化氨基酯：无精确先例目标",
+    "smiles": "CCOC(=O)C(C)(F)CCN",
+    "selection_reason": "独立构造的无环目标；限定精确GIN探针确认12分以上来源无同一产物",
+    "molecular_weight": 163.19199999999998,
+    "heavy_atoms": 11,
+    "rings": 0
+  }
+]

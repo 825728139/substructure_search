@@ -1,0 +1,1136 @@
+{
+  "10002586": {
+    "id": 10002586,
+    "final_score": 18,
+    "source_namespace": "uspto",
+    "document_id": "US12006301",
+    "paragraph_nums": [
+      "p-0091"
+    ],
+    "product_smiles": [
+      "CC(=O)Nc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "CC(=O)Cl",
+      "Nc1ccccc1",
+      "Nc1ccccc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US12006301B1"
+    ]
+  },
+  "3422988": {
+    "id": 3422988,
+    "final_score": 12,
+    "source_namespace": "uspto",
+    "document_id": "US05559131",
+    "paragraph_nums": [
+      "p-0148"
+    ],
+    "product_smiles": [
+      "CC(=O)Nc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "CC(=O)OC(C)=O",
+      "O=C(OCc1ccccc1)N1CCC(Nc2ccccc2)CC1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "3014968": {
+    "id": 3014968,
+    "final_score": 19,
+    "source_namespace": "uspto",
+    "document_id": "US04242507",
+    "paragraph_nums": [
+      "p-0067"
+    ],
+    "product_smiles": [
+      "CC(=O)Nc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "CC(=O)O",
+      "CS(=O)(=O)On1nnc2ccccc21",
+      "Nc1ccccc1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "3331069": {
+    "id": 3331069,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US05260483",
+    "paragraph_nums": [
+      "p-0051"
+    ],
+    "product_smiles": [
+      "CC(=O)Nc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "CC(=O)O",
+      "O=C=Nc1ccccc1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "2909153": {
+    "id": 2909153,
+    "final_score": 18,
+    "source_namespace": "uspto",
+    "document_id": "US03974219",
+    "paragraph_nums": [
+      "p-0035"
+    ],
+    "product_smiles": [
+      "CC(=O)Nc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "CC(=O)O",
+      "CCOP(O)O",
+      "Nc1ccccc1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "576028": {
+    "id": 576028,
+    "final_score": 14,
+    "source_namespace": "epo",
+    "document_id": "EP06291157A1",
+    "paragraph_nums": [
+      "p0126"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CCN"
+    ],
+    "reactant_smiles": [
+      "CCOC(=O)CCN=[N+]=[N-]"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP06291157A1"
+    ]
+  },
+  "5058278": {
+    "id": 5058278,
+    "final_score": 12,
+    "source_namespace": "uspto",
+    "document_id": "US20120071479A1",
+    "paragraph_nums": [
+      "p-0269"
+    ],
+    "product_smiles": [
+      "CCCN(CCC)C(=O)COC(=O)CCN"
+    ],
+    "reactant_smiles": [
+      "CCCN(CCC)C(=O)COC(=O)CCNC(=O)OC(C)(C)C"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20120071479A1"
+    ]
+  },
+  "7162610": {
+    "id": 7162610,
+    "final_score": 12,
+    "source_namespace": "uspto",
+    "document_id": "US20170327625A1",
+    "paragraph_nums": [
+      "p-0264"
+    ],
+    "product_smiles": [
+      "CCCOC(=O)CC(C)=O"
+    ],
+    "reactant_smiles": [
+      "CC1=CC(=O)OC(C)(C)O1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20170327625A1"
+    ]
+  },
+  "10434673": {
+    "id": 10434673,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US12466821",
+    "paragraph_nums": [
+      "p-0533"
+    ],
+    "product_smiles": [
+      "CCOC(=O)C1(CN)CC1"
+    ],
+    "reactant_smiles": [
+      "CCOC(=O)C1(CN=[N+]=[N-])CC1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US12466821B2"
+    ]
+  },
+  "3196683": {
+    "id": 3196683,
+    "final_score": 16,
+    "source_namespace": "uspto",
+    "document_id": "US04826984",
+    "paragraph_nums": [
+      "p-0037"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CCNCc1ccccc1"
+    ],
+    "reactant_smiles": [
+      "C=CC(=O)OCC",
+      "CNc1ccccc1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "4447900": {
+    "id": 4447900,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US20100184977A1",
+    "paragraph_nums": [
+      "p-0082"
+    ],
+    "product_smiles": [
+      "COc1ccc(-c2cccnc2)cc1"
+    ],
+    "reactant_smiles": [
+      "Brc1cccnc1",
+      "COc1cc[c]([Mg][Br])cc1",
+      "Clc1cccnc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20100184977A1"
+    ]
+  },
+  "4709472": {
+    "id": 4709472,
+    "final_score": 19,
+    "source_namespace": "uspto",
+    "document_id": "US20110053930A1",
+    "paragraph_nums": [
+      "p-0326"
+    ],
+    "product_smiles": [
+      "COc1ccc(-c2cccnc2)cc1"
+    ],
+    "reactant_smiles": [
+      "Brc1cccnc1",
+      "COc1ccc(B(O)O)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20110053930A1"
+    ]
+  },
+  "6701007": {
+    "id": 6701007,
+    "final_score": 22,
+    "source_namespace": "uspto",
+    "document_id": "US20160185752A1",
+    "paragraph_nums": [
+      "p-0229"
+    ],
+    "product_smiles": [
+      "COc1ccc(-c2cccnc2)cc1"
+    ],
+    "reactant_smiles": [
+      "COc1ccc(B(O)O)cc1",
+      "Ic1cccnc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20160185752A1"
+    ]
+  },
+  "957487": {
+    "id": 957487,
+    "final_score": 17,
+    "source_namespace": "epo",
+    "document_id": "EP09720039B1",
+    "paragraph_nums": [
+      "p0183"
+    ],
+    "product_smiles": [
+      "COc1ccc(-c2cccnc2)cc1"
+    ],
+    "reactant_smiles": [
+      "Brc1cccnc1",
+      "Brc1cccnc1",
+      "COc1ccc(B(O)O)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP09720039B1"
+    ]
+  },
+  "9446920": {
+    "id": 9446920,
+    "final_score": 17,
+    "source_namespace": "uspto",
+    "document_id": "US20230227428A1",
+    "paragraph_nums": [
+      "p-0367"
+    ],
+    "product_smiles": [
+      "COc1ccc(-c2cccnc2)cc1"
+    ],
+    "reactant_smiles": [
+      "CC1(C)OB(c2cccnc2)OC1(C)C",
+      "COc1ccc(I)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20230227428A1"
+    ]
+  },
+  "3892443": {
+    "id": 3892443,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US20080280886A1",
+    "paragraph_nums": [
+      "p-0251"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(F)cc2)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(N)CC1",
+      "Fc1ccc(CCl)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20080280886A1"
+    ]
+  },
+  "2512914": {
+    "id": 2512914,
+    "final_score": 18,
+    "source_namespace": "uspto",
+    "document_id": "US20050277670A1",
+    "paragraph_nums": [
+      "p-1181"
+    ],
+    "product_smiles": [
+      "Cc1ccc(NC2CCN(C(=O)OC(C)(C)C)CC2)cc1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(=O)CC1",
+      "Cc1ccc(N)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20050277670A1"
+    ]
+  },
+  "590292": {
+    "id": 590292,
+    "final_score": 20,
+    "source_namespace": "epo",
+    "document_id": "EP07119933A1",
+    "paragraph_nums": [
+      "p0238"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(Nc2ccc(-n3cnnn3)cc2)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(=O)CC1",
+      "Nc1ccc(-n2cnnn2)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP07119933A1"
+    ]
+  },
+  "2846763": {
+    "id": 2846763,
+    "final_score": 18,
+    "source_namespace": "uspto",
+    "document_id": "US20080039499A1",
+    "paragraph_nums": [
+      "p-0160"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2csc(NC(=O)c3ccc(F)cc3)n2)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2csc(N)n2)CC1",
+      "O=C(Cl)c1ccc(F)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20080039499A1"
+    ]
+  },
+  "1741786": {
+    "id": 1741786,
+    "final_score": 16,
+    "source_namespace": "epo",
+    "document_id": "EP18812115B1",
+    "paragraph_nums": [
+      "p0277"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)c2ccc(F)cc2)CC1"
+    ],
+    "reactant_smiles": [
+      "CON(C)C(=O)C1CCN(C(=O)OC(C)(C)C)CC1",
+      "Fc1cc[c]([Mg][Br])cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP18812115B1"
+    ]
+  },
+  "7320132": {
+    "id": 7320132,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US09745288",
+    "paragraph_nums": [
+      "p-0358",
+      "p-0359"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CC(=O)C1CCN(C(=O)OC(C)(C)C)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)C2C(=O)OC(C)(C)OC2=O)CC1",
+      "CC(C)(C)OC(=O)N1CCC(C(=O)O)CC1",
+      "CC1(C)OC(=O)CC(=O)O1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US09745288B2"
+    ]
+  },
+  "589604": {
+    "id": 589604,
+    "final_score": 13,
+    "source_namespace": "epo",
+    "document_id": "EP07112458A1",
+    "paragraph_nums": [
+      "p0404"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CC(=O)C1CCN(C(=O)OC(C)(C)C)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)O)CC1",
+      "CCOC(=O)CC(=O)c1ccccn1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP07112458A1"
+    ]
+  },
+  "4773801": {
+    "id": 4773801,
+    "final_score": 16,
+    "source_namespace": "uspto",
+    "document_id": "US20110152240A1",
+    "paragraph_nums": [
+      "p-0531"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(Nc2cc(Cl)nc3c(C=O)cnn23)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(Nc2cc(Cl)nc3ccnn23)CC1",
+      "CN(C)C=O"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20110152240A1"
+    ]
+  },
+  "6211186": {
+    "id": 6211186,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US20150051247A1",
+    "paragraph_nums": [
+      "p-0374"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CC(=O)C1CCN(C(=O)OC(C)(C)C)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)C2C(=O)OC(C)(C)OC2=O)CC1",
+      "CCO"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20150051247A1"
+    ]
+  },
+  "1234825": {
+    "id": 1234825,
+    "final_score": 16,
+    "source_namespace": "epo",
+    "document_id": "EP11835025B1",
+    "paragraph_nums": [
+      "p0322"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CC(=O)C1CCN(C(=O)OC(C)(C)C)CC1"
+    ],
+    "reactant_smiles": [
+      "CCOC(=O)C1CCN(C(=O)OC(C)(C)C)CC1",
+      "CCOC(C)=O"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP11835025B1"
+    ]
+  },
+  "7456459": {
+    "id": 7456459,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US20180127430A1",
+    "paragraph_nums": [
+      "p-0626"
+    ],
+    "product_smiles": [
+      "COC(=O)C1CCCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+      "COC(=O)[C@@H]1CCCN1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20180127430A1"
+    ]
+  },
+  "1440748": {
+    "id": 1440748,
+    "final_score": 17,
+    "source_namespace": "epo",
+    "document_id": "EP14703747B1",
+    "paragraph_nums": [
+      "p0097"
+    ],
+    "product_smiles": [
+      "COC(=O)[C@@H]1CCCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+      "COC(=O)[C@@H]1CCCN1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP14703747B1"
+    ]
+  },
+  "4746479": {
+    "id": 4746479,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US20110106241A1",
+    "paragraph_nums": [
+      "p-0224"
+    ],
+    "product_smiles": [
+      "COC(=O)C1CCCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+      "CCN(CC)CC",
+      "O=C(O)C1CCCN1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20110106241A1"
+    ]
+  },
+  "1292196": {
+    "id": 1292196,
+    "final_score": 21,
+    "source_namespace": "epo",
+    "document_id": "EP15192658B1",
+    "paragraph_nums": [
+      "p0365"
+    ],
+    "product_smiles": [
+      "COC(=O)C1CCCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCCC1C(=O)O",
+      "CI"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP15192658B1"
+    ]
+  },
+  "1526887": {
+    "id": 1526887,
+    "final_score": 13,
+    "source_namespace": "epo",
+    "document_id": "EP14703247B1",
+    "paragraph_nums": [
+      "p0083"
+    ],
+    "product_smiles": [
+      "COC(=O)[C@@H]1CCCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+      "CC(O)C(NC(=O)OC(C)(C)C)C(=O)O",
+      "CCN(CC)CC"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP14703247B1"
+    ]
+  },
+  "6331131": {
+    "id": 6331131,
+    "final_score": 18,
+    "source_namespace": "uspto",
+    "document_id": "US20150259354A1",
+    "paragraph_nums": [
+      "p-0544"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)C2C(=O)OC(C)(C)OC2=O)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)O)CC1",
+      "CC1(C)OC(=O)CC(=O)O1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20150259354A1"
+    ]
+  },
+  "3": {
+    "id": 3,
+    "final_score": 19,
+    "source_namespace": "uspto",
+    "document_id": "US20170334917A1",
+    "paragraph_nums": [
+      "p-0765"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)C2C(=O)OC(C)(C)OC2=O)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(C(=O)O)CC1",
+      "CC1(C)OC(=O)CC(=O)O1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20170334917A1"
+    ]
+  },
+  "6730054": {
+    "id": 6730054,
+    "final_score": 16,
+    "source_namespace": "uspto",
+    "document_id": "US20160237075A1",
+    "paragraph_nums": [
+      "p-0422"
+    ],
+    "product_smiles": [
+      "CCOC(=O)c1sc(C2CCCN(C(=O)OC(C)(C)C)C2)nc1-c1ccc(Oc2ccccc2)cc1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCCCC1C(N)=S",
+      "CCOC(=O)C(Br)C(=O)c1ccc(Oc2ccccc2)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20160237075A1"
+    ]
+  },
+  "10288810": {
+    "id": 10288810,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US20250353858A1",
+    "paragraph_nums": [
+      "p-0514"
+    ],
+    "product_smiles": [
+      "C[C@H]1CC(C(=O)C2C(=O)OC(C)(C)OC2=O)CCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC1(C)OC(=O)CC(=O)O1",
+      "C[C@H]1CC(C(=O)O)CCN1C(=O)OC(C)(C)C"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20250353858A1"
+    ]
+  },
+  "11": {
+    "id": 11,
+    "final_score": 19,
+    "source_namespace": "uspto",
+    "document_id": "US20170334917A1",
+    "paragraph_nums": [
+      "p-0790"
+    ],
+    "product_smiles": [
+      "C[C@H]1C[C@@H](C(=O)C2C(=O)OC(C)(C)OC2=O)CCN1C(=O)OC(C)(C)C"
+    ],
+    "reactant_smiles": [
+      "CC1(C)OC(=O)CC(=O)O1",
+      "C[C@H]1C[C@@H](C(=O)O)CCN1C(=O)OC(C)(C)C"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20170334917A1"
+    ]
+  },
+  "6183104": {
+    "id": 6183104,
+    "final_score": 12,
+    "source_namespace": "uspto",
+    "document_id": "US20150005510A1",
+    "paragraph_nums": [
+      "p-0022"
+    ],
+    "product_smiles": [
+      "O=C1CCCN1"
+    ],
+    "reactant_smiles": [
+      "O=C1CCC(=O)N1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20150005510A1"
+    ]
+  },
+  "4905717": {
+    "id": 4905717,
+    "final_score": 17,
+    "source_namespace": "uspto",
+    "document_id": "US07910577",
+    "paragraph_nums": [
+      "p-0069"
+    ],
+    "product_smiles": [
+      "O=C1CCCN1"
+    ],
+    "reactant_smiles": [
+      "C#C",
+      "N",
+      "O=C1CCCO1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US07910577B2"
+    ]
+  },
+  "4303866": {
+    "id": 4303866,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US07612216",
+    "paragraph_nums": [
+      "p-0005"
+    ],
+    "product_smiles": [
+      "O=C1CCCN1"
+    ],
+    "reactant_smiles": [
+      "N",
+      "N",
+      "O=C1CCCO1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US07612216B2"
+    ]
+  },
+  "4971202": {
+    "id": 4971202,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US08017790",
+    "paragraph_nums": [
+      "ul0025-0002"
+    ],
+    "product_smiles": [
+      "O=C1CCCN1"
+    ],
+    "reactant_smiles": [
+      "N",
+      "O=C1CCC(=O)N1",
+      "O=C1CCCO1"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "649845": {
+    "id": 649845,
+    "final_score": 12,
+    "source_namespace": "epo",
+    "document_id": "EP02756233B1",
+    "paragraph_nums": [
+      "p0008"
+    ],
+    "product_smiles": [
+      "O=C1CCCN1"
+    ],
+    "reactant_smiles": [
+      "N",
+      "O=C(O)CCC(=O)O",
+      "O=C1CCC(=O)O1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP02756233B1"
+    ]
+  },
+  "9520473": {
+    "id": 9520473,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US20230365541A1",
+    "paragraph_nums": [
+      "p-0607"
+    ],
+    "product_smiles": [
+      "COC(=O)N1CCC(C2(C)Oc3c(Cl)cc(C(=O)NCc4c(SC)cc(C)[nH]c4=O)c(C)c3O2)CC1"
+    ],
+    "reactant_smiles": [
+      "COC(=O)N1CCC(C2(C)Oc3c(Cl)cc(C(=O)O)c(C)c3O2)CC1",
+      "CSc1cc(C)[nH]c(=O)c1CNC(=O)c1cc(Cl)c2c(c1C)OC(C)(C1CCN(C(=O)C3CC(F)(F)C3)CC1)O2"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20230365541A1"
+    ]
+  },
+  "4528366": {
+    "id": 4528366,
+    "final_score": 21,
+    "source_namespace": "uspto",
+    "document_id": "US20100298377A1",
+    "paragraph_nums": [
+      "p-0296"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCCC[C@H]1[C@@H](OC(=O)Nc1ccc2[nH]ncc2c1)c1cccc(C(=O)NC2CCCCC2)c1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCCC[C@H]1C(OC(=O)Nc1ccc2[nH]ncc2c1)c1cccc(C(=O)O)c1",
+      "NC1CCCCC1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20100298377A1"
+    ]
+  },
+  "9521556": {
+    "id": 9521556,
+    "final_score": 17,
+    "source_namespace": "uspto",
+    "document_id": "US20230365562A1",
+    "paragraph_nums": [
+      "p-1121"
+    ],
+    "product_smiles": [
+      "Cn1c(=O)n(C2CCC(=O)NC2=O)c2cccc(N3CC(O[C@@H]4CCN(C(=O)OC(C)(C)C)C[C@@H]4F)C3)c21"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CC[C@@H](OC2CNC2)[C@@H](F)C1",
+      "Cn1c(=O)n(C2CCC(=O)NC2=O)c2cccc(Br)c21"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20230365562A1"
+    ]
+  },
+  "543457": {
+    "id": 543457,
+    "final_score": 13,
+    "source_namespace": "epo",
+    "document_id": "EP06715252A1",
+    "paragraph_nums": [
+      "p0094"
+    ],
+    "product_smiles": [
+      "CCOC(=O)C(C)(C)Oc1ccc(C(=O)CCc2cc(-c3ccc(C(F)(F)F)cc3)nn2C(C)C)cc1C"
+    ],
+    "reactant_smiles": [
+      "CC(C)n1nc(-c2ccc(C(F)(F)F)cc2)cc1CCC(=O)C1=CCC(C)(O)C=C1",
+      "CCOC(=O)C(C)(C)Br"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP06715252A1"
+    ]
+  },
+  "540959": {
+    "id": 540959,
+    "final_score": 19,
+    "source_namespace": "epo",
+    "document_id": "EP06122948A2",
+    "paragraph_nums": [
+      "p0036"
+    ],
+    "product_smiles": [
+      "CC(C)(C)C(=O)Oc1ccc2c(Oc3ccc(OCCN4CCCCC4)cc3)c(-c3ccc(S(C)(=O)=O)cc3)ccc2c1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)C(=O)Cl",
+      "CS(=O)(=O)c1ccc(-c2ccc3cc(O)ccc3c2Oc2ccc(OCCN3CCCCC3)cc2)cc1",
+      "CS(=O)(=O)c1ccc(-c2ccc3cc(O)ccc3c2Oc2ccc(OCCN3CCCCC3)cc2)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP06122948A2"
+    ]
+  },
+  "537624": {
+    "id": 537624,
+    "final_score": 21,
+    "source_namespace": "epo",
+    "document_id": "EP05811684A1",
+    "paragraph_nums": [
+      "p0738"
+    ],
+    "product_smiles": [
+      "COCOc1cc(CCCOc2c(CC(=O)OC)cccc2OC)n(Cc2ccc(Cl)cc2Cl)n1"
+    ],
+    "reactant_smiles": [
+      "COC(=O)Cc1cccc(OC)c1O",
+      "COCOc1cc(CCCO)n(Cc2ccc(Cl)cc2Cl)n1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP05811684A1"
+    ]
+  },
+  "4413166": {
+    "id": 4413166,
+    "final_score": 21,
+    "source_namespace": "uspto",
+    "document_id": "US20100137313A1",
+    "paragraph_nums": [
+      "p-1557"
+    ],
+    "product_smiles": [
+      "COc1cc(Nc2ncc(-c3cncc(C(=O)NCCO)c3)c(-n3nc(C(F)(F)F)cc3C)n2)cc(OC)c1"
+    ],
+    "reactant_smiles": [
+      "COc1cc(Nc2ncc(-c3cncc(C(=O)O)c3)c(-n3nc(C(F)(F)F)cc3C)n2)cc(OC)c1",
+      "NCCO"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20100137313A1"
+    ]
+  },
+  "4413163": {
+    "id": 4413163,
+    "final_score": 20,
+    "source_namespace": "uspto",
+    "document_id": "US20100137313A1",
+    "paragraph_nums": [
+      "p-1554"
+    ],
+    "product_smiles": [
+      "COc1cc(Nc2ncc(-c3cncc(C(=O)NCCO)c3)c(-n3ccc(C(F)(F)F)n3)n2)cc(OC)c1"
+    ],
+    "reactant_smiles": [
+      "COc1cc(Nc2ncc(-c3cncc(C(=O)O)c3)c(-n3ccc(C(F)(F)F)n3)n2)cc(OC)c1",
+      "NCCO"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20100137313A1"
+    ]
+  },
+  "4559092": {
+    "id": 4559092,
+    "final_score": 15,
+    "source_namespace": "uspto",
+    "document_id": "US07652167",
+    "paragraph_nums": [
+      "p-0038"
+    ],
+    "product_smiles": [
+      "CCCCOC(=O)CC"
+    ],
+    "reactant_smiles": [
+      "CCC(=O)OC",
+      "CCCCO"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US07652167B2"
+    ]
+  },
+  "10115804": {
+    "id": 10115804,
+    "final_score": 12,
+    "source_namespace": "uspto",
+    "document_id": "US20250074887A1",
+    "paragraph_nums": [
+      "p-0422"
+    ],
+    "product_smiles": [
+      "CCC(=O)OCCCO"
+    ],
+    "reactant_smiles": [
+      "CCC(=O)Cl",
+      "OCCCOCc1ccccc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20250074887A1"
+    ]
+  },
+  "2922370": {
+    "id": 2922370,
+    "final_score": 13,
+    "source_namespace": "uspto",
+    "document_id": "US04003919",
+    "paragraph_nums": [
+      "p-0220"
+    ],
+    "product_smiles": [
+      "CCCCC(=O)OCC"
+    ],
+    "reactant_smiles": [
+      "C1CCOC1",
+      "CC(C)NC1CCCCC1",
+      "CCOC(C)=O",
+      "[Li][CH2]CCC"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "2904446": {
+    "id": 2904446,
+    "final_score": 14,
+    "source_namespace": "uspto",
+    "document_id": "US03962354",
+    "paragraph_nums": [
+      "p-0070"
+    ],
+    "product_smiles": [
+      "CCOC(=O)C/C=C\\CCO"
+    ],
+    "reactant_smiles": [
+      "CCOC1=CCC=CC1",
+      "O=[O+][O-]"
+    ],
+    "original_text_found": false,
+    "resolved_document_ids": []
+  },
+  "1521681": {
+    "id": 1521681,
+    "final_score": 12,
+    "source_namespace": "epo",
+    "document_id": "EP12719088B1",
+    "paragraph_nums": [
+      "p0638"
+    ],
+    "product_smiles": [
+      "CCOC(=O)CCCO"
+    ],
+    "reactant_smiles": [
+      "CCO",
+      "O=C1CCCO1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP12719088B1"
+    ]
+  },
+  "2089934": {
+    "id": 2089934,
+    "final_score": 17,
+    "source_namespace": "epo",
+    "document_id": "EP19893952B1",
+    "paragraph_nums": [
+      "p0512"
+    ],
+    "product_smiles": [
+      "C#Cc1cccc(C(=O)NC2CCN(C(=O)OC(C)(C)C)CC2)c1"
+    ],
+    "reactant_smiles": [
+      "C#Cc1cccc(C(=O)O)c1",
+      "CC(C)(C)OC(=O)N1CCC(N)CC1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "EP19893952B1"
+    ]
+  },
+  "9351003": {
+    "id": 9351003,
+    "final_score": 17,
+    "source_namespace": "uspto",
+    "document_id": "US20230101819A1",
+    "paragraph_nums": [
+      "p-0559"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc3c(c2)CC(=O)N3)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(N)CC1",
+      "O=C1Cc2cc(C(=O)O)ccc2N1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20230101819A1"
+    ]
+  },
+  "3901692": {
+    "id": 3901692,
+    "final_score": 16,
+    "source_namespace": "uspto",
+    "document_id": "US20080293771A1",
+    "paragraph_nums": [
+      "p-0275"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(-n3ncc4ccccc43)cc2)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(-n3cc4ccccc4n3)cc2)CC1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20080293771A1"
+    ]
+  },
+  "4377108": {
+    "id": 4377108,
+    "final_score": 20,
+    "source_namespace": "uspto",
+    "document_id": "US20100093698A1",
+    "paragraph_nums": [
+      "p-0796"
+    ],
+    "product_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(Nc3nc4cccc(-c5ccccc5)n4n3)cc2)CC1"
+    ],
+    "reactant_smiles": [
+      "CC(C)(C)OC(=O)N1CCC(N)CC1",
+      "O=C(O)c1ccc(Nc2nc3cccc(-c4ccccc4)n3n2)cc1"
+    ],
+    "original_text_found": true,
+    "resolved_document_ids": [
+      "US20100093698A1"
+    ]
+  }
+}

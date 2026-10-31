@@ -31,7 +31,7 @@ def main():
         ).fetchone()
         connection.execute("ROLLBACK")
     try:
-        source = PostgresSource(dsn)
+        source = PostgresSource(dsn, table=os.environ.get("RR_POSTGRES_TABLE", "reaction_v3"))
     except ValueError as exc:
         ready = {"ready": False, "reason": str(exc)}
     else:

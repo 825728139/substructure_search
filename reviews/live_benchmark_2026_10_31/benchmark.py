@@ -1,4 +1,4 @@
-"""只读真实库基准：仅重定向表名，保留原有检索和排序算法，并记录逐次耗时。"""
+"""只读真实库基准：v3使用正式来源选择，v2仅在兼容模式重定向表名，记录逐次耗时。"""
 
 import argparse
 import json
@@ -108,19 +108,25 @@ class ConnectionTrace:
         self.connection, self.events = connection, events
 
     def query(self, query):
-        """把固定来源表及其索引目录查询改到新表，不改检索条件。"""
+        """v3不改写SQL；v2兼容测试仅重定向旧表的物理名称。"""
         text = query if isinstance(query, str) else query.as_string(self.connection)
-        return text.replace("reaction.reactions", f"reaction.{SOURCE_TABLE}").replace(
-            "t.relname='reactions'", f"t.relname='{SOURCE_TABLE}'"
-        )
+        if SOURCE_TABLE == "reaction_v2":
+            return text.replace('"reaction"."reactions"', '"reaction"."reaction_v2"').replace(
+                "reaction.reactions", "reaction.reaction_v2"
+            )
+        return text
 
     def execute(self, query, *args, **kwargs):
         """记录真实SQL执行时间与异常类型，不记录连接密码或SQL参数。"""
         query = self.query(query)
+        if SOURCE_TABLE == "reaction_v2" and "pg_index" in query and "t.relname=%s" in query:
+            args = (("reaction_v2",), *args[1:])
         started = time.perf_counter()
         error = None
         kind = (
-            "knn"
+            "source_selection"
+            if "JOIN LATERAL" in query and "chosen" in query
+            else "knn"
             if "LIMIT 512" in query
             else "hydrate"
             if "to_jsonb(d)" in query
@@ -216,7 +222,9 @@ def run_worker(target, repeat, budget_ms, timeout_ms, max_tasks, max_reactions):
         "database_table": f"reaction.{SOURCE_TABLE}",
         "minimum_final_score": 12,
         "implementation_hash": code_fingerprint(),
-        "harness_override": "only_source_table_and_catalog_table_name",
+        "harness_override": "timing_only_no_sql_rewrite_production_v3_selection"
+        if SOURCE_TABLE == "reaction_v3"
+        else "legacy_mode_table_redirect_to_v2",
         "pid": os.getpid(),
     }
     original_connect = psycopg.connect
@@ -235,7 +243,11 @@ def run_worker(target, repeat, budget_ms, timeout_ms, max_tasks, max_reactions):
     try:
         psycopg.connect = connect
         try:
-            source = PostgresSource(os.environ["RR_BENCH_DSN"], timeout_ms=timeout_ms)
+            source = PostgresSource(
+                os.environ["RR_BENCH_DSN"],
+                timeout_ms=timeout_ms,
+                table="reaction_v3" if SOURCE_TABLE == "reaction_v3" else "reactions",
+            )
         finally:
             psycopg.connect = original_connect
         report["connect_ms"] = (time.perf_counter() - started) * 1000
@@ -308,8 +320,15 @@ def main():
             path = ROOT / f"{tag}.metrics.json"
             if path.exists():
                 saved = json.loads(path.read_text())
-                if saved.get("database_table") != f"reaction.{SOURCE_TABLE}":
-                    raise ValueError("输出目录已有其他表的测试结果，请使用独立目录")
+                budget = saved.get("request", {}).get("budget", {})
+                if (
+                    saved.get("database_table") != f"reaction.{SOURCE_TABLE}"
+                    or saved.get("implementation_hash") != code_fingerprint()
+                    or saved.get("statement_timeout_ms") != args.timeout_ms
+                    or budget.get("max_tasks") != args.max_tasks
+                    or budget.get("max_reactions") != args.max_reactions
+                ):
+                    raise ValueError("输出目录已有其他来源、实现或预算的结果，请使用独立目录")
                 print(tag + " 已有结果，保留", flush=True)
                 continue
             started = time.perf_counter()

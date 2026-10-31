@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "table": "reaction_v3",
+  "references": 27,
+  "source_scores_all_ge_12": true,
+  "persisted_package_equal": true,
+  "stop_reasons": [
+    "task_budget"
+  ],
+  "temporary_store_cleaned": true
+}

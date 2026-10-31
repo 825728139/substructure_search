@@ -1,0 +1,607 @@
+{
+  "target_id": "T04",
+  "label": "Boc哌啶–氟苯甲酰胺：支链接母核",
+  "target_smiles": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(F)cc2)CC1",
+  "repeat": 2,
+  "budget_ms": 10000,
+  "statement_timeout_ms": 1500,
+  "database_table": "reaction.reaction_v3",
+  "minimum_final_score": 12,
+  "implementation_hash": "e9f536a262257227ab299c0a5ed69429e27bc819553b914d7b22f4a0b830c5d9",
+  "harness_override": "timing_only_no_sql_rewrite_production_v3_selection",
+  "pid": 1887888,
+  "connect_ms": 41.926050558686256,
+  "request": {
+    "schema_version": "1",
+    "target": {
+      "format": "smiles",
+      "value": "CC(C)(C)OC(=O)N1CCC(NC(=O)c2ccc(F)cc2)CC1"
+    },
+    "retrieval_profile": "reference-v1",
+    "ranking_profile": "reference_first",
+    "lab_context": null,
+    "options": {
+      "include_exact_identity": true,
+      "include_proposals": true,
+      "include_usage": true,
+      "exhaustive_fixture": false,
+      "directed_followups": true
+    },
+    "budget": {
+      "time_ms": 10000,
+      "max_tasks": 40,
+      "max_families": 12,
+      "max_candidates": 2000,
+      "page_size": 100,
+      "max_mappings": 128,
+      "max_atom_visits": 10000,
+      "max_reactions": 60,
+      "max_proposals": 12,
+      "max_replay_sets": 16,
+      "max_display": 18,
+      "max_summary_bytes": 65536
+    }
+  },
+  "status": "returned",
+  "statistics": {
+    "families": 10,
+    "received_candidates": 139,
+    "unique_structures": 26,
+    "by_layer": {
+      "whole": {
+        "generated_families": 2,
+        "attempted_product_families": 2,
+        "families_with_structural_hits": 2,
+        "unique_product_structures": 13,
+        "unique_experiments": 14,
+        "qualified_preparation_experiments": 0,
+        "graph_connection_candidates": 7,
+        "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+      },
+      "core": {
+        "generated_families": 2,
+        "attempted_product_families": 1,
+        "families_with_structural_hits": 1,
+        "unique_product_structures": 24,
+        "unique_experiments": 25,
+        "qualified_preparation_experiments": 0,
+        "graph_connection_candidates": 6,
+        "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+      },
+      "fragment": {
+        "generated_families": 6,
+        "attempted_product_families": 0,
+        "families_with_structural_hits": 0,
+        "unique_product_structures": 0,
+        "unique_experiments": 0,
+        "qualified_preparation_experiments": 0,
+        "graph_connection_candidates": 0,
+        "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+      }
+    },
+    "unique_experiments": 27,
+    "preparation_hits": 0,
+    "usage_hits": 0,
+    "synthetic_references": 0,
+    "analyzed_reactions": 27,
+    "proposals": 0,
+    "display_items": 18,
+    "elapsed_ms": 2029.927
+  },
+  "coverage_state": "partial",
+  "stop_reasons": [
+    "task_budget"
+  ],
+  "source_issues": [],
+  "reference_count": 27,
+  "displayed_count": 18,
+  "proposal_count": 0,
+  "exact_reference_count": 1,
+  "worker_elapsed_ms": 2094.3596865981817,
+  "first_result_ms": 1418.270573951304,
+  "events": [
+    {
+      "kind": "control",
+      "ms": 0.36291684955358505,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 1.1916616931557655,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.24813972413539886,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.1393146812915802,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.5985507741570473,
+      "error": null
+    },
+    {
+      "kind": "catalog",
+      "ms": 14.674591831862926,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.44006481766700745,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.306607224047184,
+      "error": null
+    },
+    {
+      "kind": "cursor_open",
+      "ms": 31.19607362896204,
+      "error": null
+    },
+    {
+      "kind": "fetch",
+      "ms": 140.00500924885273,
+      "rows": 10,
+      "error": null
+    },
+    {
+      "kind": "source_selection",
+      "ms": 5.074367858469486,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.19356980919837952,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.14738645404577255,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 3.4109503030776978,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.15780795365571976,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.13953633606433868,
+      "error": null
+    },
+    {
+      "kind": "knn",
+      "ms": 209.50445905327797,
+      "error": null
+    },
+    {
+      "kind": "source_selection",
+      "ms": 10.517052374780178,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.3694603219628334,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.26445183902978897,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.475831218063831,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22709369659423828,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.1889364793896675,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.4282015189528465,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.20308047533035278,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2470109611749649,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.544004961848259,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.21722447127103806,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.24384818971157074,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.251838825643063,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2150433138012886,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.29182247817516327,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.161832086741924,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.29797013849020004,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2570953220129013,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.185398273169994,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.25071389973163605,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2590129151940346,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.412338301539421,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2604350447654724,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22440776228904724,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.224242806434631,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2210121601819992,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.3888634964823723,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.659041926264763,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.23795664310455322,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.24941470474004745,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 5.319809541106224,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.25161169469356537,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2704104408621788,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.6156984493136406,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22467877715826035,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.24911761283874512,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 97.36889880150557,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.32193027436733246,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.263419933617115,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 47.89968021214008,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.3398032858967781,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.27217064052820206,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.25967881083488464,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22361986339092255,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.4625843614339828,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.23109745234251022,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.21280162036418915,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.4572180807590485,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.1730155199766159,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22369902580976486,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 2.214682288467884,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2262592315673828,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.24645309895277023,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.598382368683815,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.18600467592477798,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.27028098702430725,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.5733027830719948,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.20253565162420273,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.23025181144475937,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.381964422762394,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2093752846121788,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.25190040469169617,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.514781266450882,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.21229498088359833,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.22653304040431976,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.405041664838791,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.19309576600790024,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.26925094425678253,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.50983314961195,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.18930528312921524,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.1937560737133026,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.5479065477848053,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.19026361405849457,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.23915525525808334,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.4553377404808998,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.18888898193836212,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2788109704852104,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.7600581049919128,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.21169614046812057,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.2322811633348465,
+      "error": null
+    },
+    {
+      "kind": "hydrate",
+      "ms": 1.4175660908222198,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 0.19130390137434006,
+      "error": null
+    },
+    {
+      "kind": "control",
+      "ms": 1.5637986361980438,
+      "error": null
+    }
+  ],
+  "total_wall_ms": 2795.1602302491665,
+  "exit_code": 0
+}

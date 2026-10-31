@@ -18,7 +18,11 @@ def open_source(settings, *, exhaustive=False) -> CompoundSource:
     if settings.source_kind == "postgres":
         if not settings.postgres_dsn:
             raise ValueError("RR_POSTGRES_DSN is required")
-        source = PostgresSource(settings.postgres_dsn, timeout_ms=settings.source_timeout_ms)
+        source = PostgresSource(
+            settings.postgres_dsn,
+            timeout_ms=settings.source_timeout_ms,
+            table=settings.postgres_table,
+        )
     else:
         source = JsonlSource(settings.source_path, exhaustive=exhaustive)
     if settings.evidence_path:
