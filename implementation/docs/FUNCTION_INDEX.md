@@ -287,8 +287,9 @@
 | [_atoms](../src/reaction_reference/reaction_analysis/analyze.py#L25) | 建立正原子映射号到 Atom 的查找表，忽略 map=0 的原子。 |
 | [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
 | [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
-| [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
-| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L309) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+| [_declared_components](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 按份数展开声明材料的连通组分，仅供映射端点身份对账。 |
+| [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L119) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L323) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
 
 ## src/reaction_reference/retrieval/planner.py
 
@@ -501,8 +502,12 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_mapping_support_requires_supported_endpoint_representations](../tests/test_mapping_representation.py#L33) | 两侧或声明材料包含未支持语义时应保持未知，合法氧化及产物参考仍保留。 |
-| [test_product_mapping_endpoint_has_the_same_representation_boundary](../tests/test_mapping_representation.py#L74) | 映射产物端也必须拒绝未支持语义，不能只校验反应物端。 |
+| [test_salt_endpoint_reconciliation_preserves_all_component_identities](../tests/test_mapping_representation.py#L27) | 盐按组分和份数对账；缺反离子、电荷/同位素不同或虚原子不能被去盐操作掩盖。 |
+| [test_real_hydrazine_salt_cyclization_retains_target_bond_evidence](../tests/test_mapping_representation.py#L47) | 真实芳基肼盐酸盐先例应恢复吡唑成键投影，但不升级为已验证的目标制备。 |
+| [test_declared_product_salt_requires_its_counterion](../tests/test_mapping_representation.py#L67) | 产物盐也按全部组分对账；不能只验证有机部分就认定完整产物端点一致。 |
+| [test_repeated_declared_salts_do_not_reuse_one_mapped_component](../tests/test_mapping_representation.py#L86) | 两个声明材料需要各自的组分份数，一份映射盐不能重复抵扣。 |
+| [test_mapping_support_requires_supported_endpoint_representations](../tests/test_mapping_representation.py#L122) | 两侧或声明材料包含未支持语义时应保持未知，合法氧化及产物参考仍保留。 |
+| [test_product_mapping_endpoint_has_the_same_representation_boundary](../tests/test_mapping_representation.py#L163) | 映射产物端也必须拒绝未支持语义，不能只校验反应物端。 |
 
 ## tests/test_material_names.py
 

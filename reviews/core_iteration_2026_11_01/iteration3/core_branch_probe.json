@@ -1,0 +1,640 @@
+[
+  {
+    "target": "U01",
+    "fragment": "CCOC(=O)C=[*:1]",
+    "query": "[#6&A&+0:1]-[#6&A&+0:2]-[#8&A&+0:3]-[#6&A&+0:4](=[#8&A&+0:5])-[#6&A&+0:6]=[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.19552669767290354,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  },
+  {
+    "target": "U01",
+    "fragment": "CCOC(=O)[*:3]",
+    "query": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9](-[#6&A&+0:10](-[#8&A&+0:11]-[#6&A&+0:12]-[#6&A&+0:13])=[#8&A&+0:14])-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.10783699806779623,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  },
+  {
+    "target": "U01",
+    "fragment": "Cc1cc(C)n(C(=O)[*:6])n1",
+    "query": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1(-[#6&A&+0:18]-2)-[#6&A&+0:19](-[#7&a&+0:20]1:[#7&a&+0:21]:[#6&a&+0:22](-[#6&A&+0:23]):[#6&a&+0:24]:[#6&a&+0:25]:1-[#6&A&+0:26])=[#8&A&+0:27]",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.08990042936056852,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  },
+  {
+    "target": "U01",
+    "fragment": "c1ccc([*:4])cc1",
+    "query": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2(-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2)-[#6&a&+0:28]1:[#6&a&+0:29]:[#6&a&+0:30]:[#6&a&+0:31]:[#6&a&+0:32]:[#6&a&+0:33]:1",
+    "rows": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153969",
+          "experiment_id": "uspto:US04677129:['p-0239']:1",
+          "document_id": "US04677129",
+          "location": "['p-0239']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153969:product:0",
+            "role": "product",
+            "smiles": "CCCN1C(=O)C2CC(c3ccc(NC(C)=O)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153969:reactant:0",
+            "role": "reactant",
+            "smiles": "CC(=O)OC(C)=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153969:reactant:1",
+            "role": "reactant",
+            "smiles": "CCCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153969:catalyst:0",
+            "role": "catalyst",
+            "smiles": "CN(C)c1ccncc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153969:solvent:0",
+            "role": "solvent",
+            "smiles": "C1CCOC1",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CCCN1C(=O)C2CC(c3ccc(NC(C)=O)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153976",
+          "experiment_id": "uspto:US04677129:['p-0249']:1",
+          "document_id": "US04677129",
+          "location": "['p-0249']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153976:product:0",
+            "role": "product",
+            "smiles": "CC(C)CN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153976:reactant:0",
+            "role": "reactant",
+            "smiles": "CC(C)CN1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153976:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153976:solvent:0",
+            "role": "solvent",
+            "smiles": "CCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CC(C)CN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3204988",
+          "experiment_id": "uspto:US04857660:['p-0140']:1",
+          "document_id": "US04857660",
+          "location": "['p-0140']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3204988:product:0",
+            "role": "product",
+            "smiles": "CC(C)N1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3204988:reactant:0",
+            "role": "reactant",
+            "smiles": "CC(C)N1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3204988:reactant:1",
+            "role": "reactant",
+            "smiles": "CCCCCC.CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3204988:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3204988:solvent:0",
+            "role": "solvent",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CC(C)N1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153968",
+          "experiment_id": "uspto:US04677129:['p-0231']:1",
+          "document_id": "US04677129",
+          "location": "['p-0231']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153968:product:0",
+            "role": "product",
+            "smiles": "CC12CC(c3ccc(N)cc3)(C1)C(=O)NC2=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153968:reactant:0",
+            "role": "reactant",
+            "smiles": "CC12CC(c3ccc([N+](=O)[O-])cc3)(C1)C(=O)NC2=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153968:reactant:1",
+            "role": "reactant",
+            "smiles": "CCO",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153968:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153968:solvent:0",
+            "role": "solvent",
+            "smiles": "COCCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CC12CC(c3ccc(N)cc3)(C1)C(=O)NC2=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3177705",
+          "experiment_id": "uspto:US04764640:['p-0173']:1",
+          "document_id": "US04764640",
+          "location": "['p-0173']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3177705:product:0",
+            "role": "product",
+            "smiles": "Nc1ccc(C23CC(C2)C(=O)N(CC2CCCCC2)C3=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3177705:reactant:0",
+            "role": "reactant",
+            "smiles": "O=C1C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C(=O)N1CC1CCCCC1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3177705:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3177705:solvent:0",
+            "role": "solvent",
+            "smiles": "COCCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "Nc1ccc(C23CC(C2)C(=O)N(CC2CCCCC2)C3=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153945",
+          "experiment_id": "uspto:US04677129:['p-0173']:1",
+          "document_id": "US04677129",
+          "location": "['p-0173']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153945:product:0",
+            "role": "product",
+            "smiles": "Nc1ccc(C23CC(C2)C(=O)N(C2CCCCC2)C3=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153945:reactant:0",
+            "role": "reactant",
+            "smiles": "O=C1C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C(=O)N1C1CCCCC1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153945:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153945:solvent:0",
+            "role": "solvent",
+            "smiles": "COCCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "Nc1ccc(C23CC(C2)C(=O)N(C2CCCCC2)C3=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153953",
+          "experiment_id": "uspto:US04677129:['p-0191']:1",
+          "document_id": "US04677129",
+          "location": "['p-0191']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153953:product:0",
+            "role": "product",
+            "smiles": "Nc1ccc(C23CC(C2)C(=O)N(Cc2ccccc2)C3=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153953:reactant:0",
+            "role": "reactant",
+            "smiles": "CCOC(C)=O.CCOCC",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153953:reactant:1",
+            "role": "reactant",
+            "smiles": "O=C1C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C(=O)N1Cc1ccccc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153953:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153953:solvent:0",
+            "role": "solvent",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "Nc1ccc(C23CC(C2)C(=O)N(Cc2ccccc2)C3=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153948",
+          "experiment_id": "uspto:US04677129:['p-0179']:1",
+          "document_id": "US04677129",
+          "location": "['p-0179']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153948:product:0",
+            "role": "product",
+            "smiles": "COc1ccc(CN2C(=O)C3CC(c4ccc(N)cc4)(C3)C2=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153948:reactant:0",
+            "role": "reactant",
+            "smiles": "COc1ccc(CN2C(=O)C3CC(c4ccc([N+](=O)[O-])cc4)(C3)C2=O)cc1",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153948:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153948:solvent:0",
+            "role": "solvent",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "COc1ccc(CN2C(=O)C3CC(c4ccc(N)cc4)(C3)C2=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153934",
+          "experiment_id": "uspto:US04677129:['p-0138']:1",
+          "document_id": "US04677129",
+          "location": "['p-0138']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153934:product:0",
+            "role": "product",
+            "smiles": "CN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153934:reactant:0",
+            "role": "reactant",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153934:reactant:1",
+            "role": "reactant",
+            "smiles": "CN1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153934:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153934:solvent:0",
+            "role": "solvent",
+            "smiles": "COCCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153974",
+          "experiment_id": "uspto:US04677129:['p-0246']:1",
+          "document_id": "US04677129",
+          "location": "['p-0246']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153974:product:0",
+            "role": "product",
+            "smiles": "CCCCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153974:reactant:0",
+            "role": "reactant",
+            "smiles": "CCCCN1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153974:reactant:1",
+            "role": "reactant",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153974:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153974:solvent:0",
+            "role": "solvent",
+            "smiles": "CCO",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CCCCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153984",
+          "experiment_id": "uspto:US04677129:['p-0261']:1",
+          "document_id": "US04677129",
+          "location": "['p-0261']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153984:product:0",
+            "role": "product",
+            "smiles": "C#CCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153984:reactant:0",
+            "role": "reactant",
+            "smiles": "C#CCN1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153984:reagent:0",
+            "role": "reagent",
+            "smiles": "Cl",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153984:reagent:1",
+            "role": "reagent",
+            "smiles": "[Sn]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153984:solvent:0",
+            "role": "solvent",
+            "smiles": "O",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "C#CCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153931",
+          "experiment_id": "uspto:US04677129:['p-0131']:1",
+          "document_id": "US04677129",
+          "location": "['p-0131']",
+          "url": null,
+          "synthetic": false
+        },
+        "materials": [
+          {
+            "instance_id": "3153931:product:0",
+            "role": "product",
+            "smiles": "CCCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153931:reactant:0",
+            "role": "reactant",
+            "smiles": "CCCN1C(=O)C2CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153931:reagent:0",
+            "role": "reagent",
+            "smiles": "[H][H]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153931:catalyst:0",
+            "role": "catalyst",
+            "smiles": "[Pd]",
+            "name": null,
+            "actual_input": null
+          },
+          {
+            "instance_id": "3153931:solvent:0",
+            "role": "solvent",
+            "smiles": "CCOC(C)=O",
+            "name": null,
+            "actual_input": null
+          }
+        ],
+        "matched_product": "CCCN1C(=O)C2CC(c3ccc(N)cc3)(C2)C1=O"
+      }
+    ],
+    "stream_exhausted": false,
+    "error": null,
+    "seconds": 0.1295436518266797,
+    "raw_index_any_hit": true,
+    "raw_index_error": null
+  },
+  {
+    "target": "U03",
+    "fragment": "Cc1cc(C)n(C(=O)[*:1])n1",
+    "query": "[#6&A&+0:1]-[#6&a&+0:2]1:[#7&a&+0:3]:[#7&a&+0:4](:[#6&a&+0:5](:[#6&a&+0:6]:1)-[#6&A&+0:7])-[#6&A&+0:8](=[#8&A&+0:9])-[#6&A&+0:10]12-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.08174009807407856,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  },
+  {
+    "target": "U03",
+    "fragment": "c1ccc([*:4])cc1",
+    "query": "[#6&A&+0:10]12-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)(-[#6&A&+0:15]-2)-[#6&a&+0:16]1:[#6&a&+0:17]:[#6&a&+0:18]:[#6&a&+0:19]:[#6&a&+0:20]:[#6&a&+0:21]:1",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.09511442109942436,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  },
+  {
+    "target": "U03",
+    "fragment": "c1ccc([*:2])cc1",
+    "query": "[#6&A&+0:10]12-[#6&A&+0:11](-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2)-[#6&a&+0:22]1:[#6&a&+0:23]:[#6&a&+0:24]:[#6&a&+0:25]:[#6&a&+0:26]:[#6&a&+0:27]:1",
+    "rows": [],
+    "stream_exhausted": true,
+    "error": null,
+    "seconds": 0.09264073893427849,
+    "raw_index_any_hit": false,
+    "raw_index_error": null
+  }
+]

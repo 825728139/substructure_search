@@ -1,0 +1,907 @@
+[
+  {
+    "target": "U01",
+    "implementation_hash": "1b78d073cbaed49e5307188a9006412e5dd3e20bc006393d90c9a2c046aedfc5",
+    "statistics": {
+      "families": 12,
+      "received_candidates": 17,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1977.905
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "analysis_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9033888",
+          "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+          "document_id": "US20220251061A1",
+          "location": "['p-1349']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "9033888:product:0",
+          "role": "product",
+          "smiles": "O=C1NC(=O)C2(n3cc(CCCO)nn3)CC1C2",
+          "name": "1-(4-(3-Hydroxypropyl)-1H-1,2,3-triazol-1-yl)-3-azabicyclo[3.1.1]heptane-2,4-dione",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              3,
+              4
+            ],
+            "before": null,
+            "after": "SINGLE"
+          },
+          {
+            "maps": [
+              12,
+              13
+            ],
+            "before": null,
+            "after": "SINGLE"
+          }
+        ],
+        "topology": [
+          "ring_closure"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              6,
+              7
+            ]
+          ],
+          "changed_target_atoms": [
+            6,
+            7
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 2
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "4381854:product:0",
+          "role": "product",
+          "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1",
+          "name": "6-(2-fluoroethoxy)benzo[d]thiazol-2(3H)-one",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              1,
+              2
+            ],
+            "before": null,
+            "after": "DOUBLE"
+          },
+          {
+            "maps": [
+              7,
+              12
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              12,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure",
+          "ring_opening",
+          "ring_reorganization"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              29,
+              30
+            ],
+            [
+              30,
+              31
+            ]
+          ],
+          "changed_target_atoms": [
+            29,
+            30,
+            31
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 1
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "5364845",
+          "experiment_id": "uspto:US08318667:['p-0185']:1",
+          "document_id": "US08318667",
+          "location": "['p-0185']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "5364845:product:0",
+          "role": "product",
+          "smiles": "CCCC(c1ccc(C(=O)NCCC(=O)OC(C)(C)C)cc1)C(c1ccc(Cl)cc1)c1n[nH]c2c(Cl)cc(C(F)(F)F)cc12",
+          "name": "tert-Butyl N-[4-(1-{(4-chlorophenyl)[7-chloro-5-(trifluoromethyl)-1H-indazol-3-yl]methyl}butyl)benzoyl]-β-alaninate",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              31,
+              32
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              33,
+              34
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure"
+        ],
+        "contribution": "structure_clue",
+        "projected_changes": {
+          "formed_target_bonds": [],
+          "changed_target_atoms": [],
+          "support": "ambiguous_product_mapping",
+          "mapping_alternatives_checked": 128
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      }
+    ]
+  },
+  {
+    "target": "U02",
+    "implementation_hash": "1b78d073cbaed49e5307188a9006412e5dd3e20bc006393d90c9a2c046aedfc5",
+    "statistics": {
+      "families": 10,
+      "received_candidates": 24,
+      "unique_structures": 10,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 10,
+      "elapsed_ms": 1589.209
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "analysis_changes": []
+  },
+  {
+    "target": "U03",
+    "implementation_hash": "1b78d073cbaed49e5307188a9006412e5dd3e20bc006393d90c9a2c046aedfc5",
+    "statistics": {
+      "families": 12,
+      "received_candidates": 12,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1494.619
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "analysis_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "4381854:product:0",
+          "role": "product",
+          "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1",
+          "name": "6-(2-fluoroethoxy)benzo[d]thiazol-2(3H)-one",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              1,
+              2
+            ],
+            "before": null,
+            "after": "DOUBLE"
+          },
+          {
+            "maps": [
+              7,
+              12
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              12,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure",
+          "ring_opening",
+          "ring_reorganization"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              16,
+              17
+            ],
+            [
+              17,
+              18
+            ]
+          ],
+          "changed_target_atoms": [
+            16,
+            17,
+            18
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 1
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      }
+    ]
+  },
+  {
+    "target": "U04",
+    "implementation_hash": "1b78d073cbaed49e5307188a9006412e5dd3e20bc006393d90c9a2c046aedfc5",
+    "statistics": {
+      "families": 11,
+      "received_candidates": 27,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 7,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 2284.049
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "analysis_changes": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "2223370:product:0",
+          "role": "product",
+          "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1",
+          "name": "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              6,
+              14
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              8,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure"
+        ],
+        "contribution": "connection_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "changed_target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 48
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "623405:product:0",
+          "role": "product",
+          "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1",
+          "name": "N-hydroxy-4-(5-p-methylphenyl-3-trifluoromethyl-pyrazol-1-yl)-benzenesulfonamide",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              19,
+              22
+            ],
+            "before": null,
+            "after": "SINGLE"
+          }
+        ],
+        "topology": [
+          "ring_topology_unknown"
+        ],
+        "contribution": "connection_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              19,
+              22
+            ]
+          ],
+          "changed_target_atoms": [
+            19,
+            22
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 48
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "2144174:product:0",
+          "role": "product",
+          "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1",
+          "name": "1-(3-Chloro4-fluorophenyl)-5-(4-methylphenyl)-3-(trifluoromethyl)pyrazole",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              6,
+              14
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              8,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "changed_target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 12
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "4381854:product:0",
+          "role": "product",
+          "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1",
+          "name": "6-(2-fluoroethoxy)benzo[d]thiazol-2(3H)-one",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              1,
+              2
+            ],
+            "before": null,
+            "after": "DOUBLE"
+          },
+          {
+            "maps": [
+              7,
+              12
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              12,
+              13
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure",
+          "ring_opening",
+          "ring_reorganization"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              6,
+              12
+            ],
+            [
+              11,
+              12
+            ]
+          ],
+          "changed_target_atoms": [
+            6,
+            11,
+            12
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 1
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2304597",
+          "experiment_id": "uspto:US20040087623A1:['P-0193']:1",
+          "document_id": "US20040087623A1",
+          "location": "['P-0193']",
+          "url": null,
+          "synthetic": false
+        },
+        "material": {
+          "instance_id": "2304597:product:0",
+          "role": "product",
+          "smiles": "CCc1ccc(-c2cc(CC(=O)c3ccccn3)ccn2)cc1",
+          "name": "2-[2-(4-Ethylphenyl)-pyridin-4-yl]-1-pyridin-2-yl-ethanone",
+          "actual_input": null
+        },
+        "previous_state": "unknown",
+        "state": "partial",
+        "event_scope": "unknown",
+        "formed": [
+          {
+            "maps": [
+              2,
+              3
+            ],
+            "before": null,
+            "after": "SINGLE"
+          },
+          {
+            "maps": [
+              3,
+              4
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              3,
+              23
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              4,
+              5
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              5,
+              6
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              6,
+              7
+            ],
+            "before": null,
+            "after": "SINGLE"
+          },
+          {
+            "maps": [
+              6,
+              22
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          },
+          {
+            "maps": [
+              10,
+              11
+            ],
+            "before": null,
+            "after": "SINGLE"
+          },
+          {
+            "maps": [
+              22,
+              23
+            ],
+            "before": null,
+            "after": "AROMATIC"
+          }
+        ],
+        "topology": [
+          "ring_closure"
+        ],
+        "contribution": "local_method",
+        "projected_changes": {
+          "formed_target_bonds": [
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              12
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              9,
+              11
+            ],
+            [
+              11,
+              12
+            ]
+          ],
+          "changed_target_atoms": [
+            6,
+            7,
+            8,
+            9,
+            11,
+            12
+          ],
+          "support": "single_mapping_inference",
+          "mapping_alternatives_checked": 2
+        },
+        "obtainment_hit": false,
+        "preparation_hit": false,
+        "reasons": [
+          "partial_mapping",
+          "changes_apply_to_source_record_endpoints_not_an_assigned_step"
+        ]
+      }
+    ]
+  }
+]

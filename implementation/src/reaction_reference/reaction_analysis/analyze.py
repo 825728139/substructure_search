@@ -4,7 +4,7 @@ from collections import Counter
 
 from rdkit import Chem
 
-from reaction_reference.chemistry.structures import canonical, parse, parse_material
+from reaction_reference.chemistry.structures import canonical, parse
 from reaction_reference.domain.models import BondChange, ReactionAnalysis
 
 
@@ -100,6 +100,22 @@ def _cycle_rank(mol):
     return mol.GetNumBonds() - mol.GetNumAtoms() + len(Chem.GetMolFrags(mol))
 
 
+def _declared_components(record, role):
+    """按份数展开声明材料的连通组分，仅供映射端点身份对账。
+
+    盐和多组分材料保留全部组分、电荷、同位素及立体身份，不去盐、不中和、不指定主组分，也不改变材料实例或实际投料证据。拆分前拒绝虚原子和增强立体组，防止拆分时丢失不支持的语义。
+    """
+    components: Counter[str] = Counter()
+    for material in record.materials:
+        if material.role != role:
+            continue
+        molecule = parse(material.smiles)
+        if molecule.GetStereoGroups() or any(a.GetAtomicNum() == 0 for a in molecule.GetAtoms()):
+            raise ValueError("Unsupported declared material representation")
+        components.update(canonical(m) for m in Chem.GetMolFrags(molecule, asMols=True))
+    return components
+
+
 def analyze_reaction(record):
     """分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。
 
@@ -132,9 +148,7 @@ def analyze_reaction(record):
     try:
         for side, role in ((left, "reactant"), (right, "product")):
             available = Counter(canonical(m) for m in Chem.GetMolFrags(side, asMols=True))
-            declared = Counter(
-                canonical(parse_material(m.smiles)) for m in record.materials if m.role == role
-            )
+            declared = _declared_components(record, role)
             if declared - available:
                 return ReactionAnalysis(
                     state="unknown",
