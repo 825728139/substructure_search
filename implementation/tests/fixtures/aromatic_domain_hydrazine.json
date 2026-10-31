@@ -1,0 +1,109 @@
+{
+  "target_smiles": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN",
+  "record": {
+    "id": "epo:1969751",
+    "source": {
+      "namespace": "epo",
+      "record_id": "1969751",
+      "experiment_id": "epo:EP22915126A1:['p0122']:1",
+      "document_id": "EP22915126A1",
+      "location": "['p0122']",
+      "url": null,
+      "synthetic": false
+    },
+    "materials": [
+      {
+        "instance_id": "1969751:product:0",
+        "role": "product",
+        "smiles": "COc1ccc(CN2C(=O)c3cccc4c(NN)ccc2c34)cc1",
+        "name": "6-hydrazino-1-(4-methoxybenzyl)benzo[cd]indol-2(1H)-one",
+        "actual_input": null
+      },
+      {
+        "instance_id": "1969751:reactant:0",
+        "role": "reactant",
+        "smiles": "COc1ccc(CN2C(=O)c3cccc4c(Br)ccc2c34)cc1",
+        "name": "6-bromo-1-(4-methoxybenzyl)benzo[cd]indol-2(1H)-one",
+        "actual_input": null
+      },
+      {
+        "instance_id": "1969751:reactant:1",
+        "role": "reactant",
+        "smiles": "NN.O",
+        "name": null,
+        "actual_input": null
+      },
+      {
+        "instance_id": "1969751:reagent:0",
+        "role": "reagent",
+        "smiles": "CC(C)(C)[O-].[Na+]",
+        "name": null,
+        "actual_input": null
+      },
+      {
+        "instance_id": "1969751:solvent:0",
+        "role": "solvent",
+        "smiles": "C1COCCO1",
+        "name": "dioxane",
+        "actual_input": null
+      },
+      {
+        "instance_id": "1969751:solvent:1",
+        "role": "solvent",
+        "smiles": "C1COCCO1",
+        "name": "dioxane",
+        "actual_input": null
+      }
+    ],
+    "observations": [
+      {
+        "product_instance_id": "1969751:product:0",
+        "result": "unknown",
+        "evidence_text": null,
+        "source_location": null,
+        "isolated": null,
+        "yield_pct": null,
+        "yield_type": "unknown"
+      }
+    ],
+    "mapped_reaction_smiles": "CC(C)(C)[O-].CC(C)(C)[O-].Br[c:16]1[c:15]2[cH:14][cH:13][cH:12][c:11]3[c:22]2[c:21]([cH:20][cH:19]1)[N:8]([CH2:7][c:6]1[cH:5][cH:4][c:3]([O:2][CH3:1])[cH:24][cH:23]1)[C:9]3=[O:10].[NH2:17][NH2:18].NN.O.O.[Na+].[Na+]>>[CH3:1][O:2][c:3]1[cH:4][cH:5][c:6]([CH2:7][N:8]2[C:9](=[O:10])[c:11]3[cH:12][cH:13][cH:14][c:15]4[c:16]([NH:17][NH2:18])[cH:19][cH:20][c:21]2[c:22]34)[cH:23][cH:24]1",
+    "reaction_smiles": "CC(C)(C)[O-].[Na+].COc1ccc(CN2C(=O)c3cccc4c(Br)ccc2c34)cc1.NN.O>>COc1ccc(CN2C(=O)c3cccc4c(NN)ccc2c34)cc1",
+    "event_scope": "unknown",
+    "documented_step_ref": null,
+    "step_count": null,
+    "one_pot": null,
+    "conditions": {
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "pressure_max_kpa": null,
+      "duration_seconds": null,
+      "equipment": null,
+      "stage_id": null,
+      "text": ""
+    },
+    "reaction_class": null,
+    "retro_template": "[N&H1&+0&D2:1](-[N&H2&D1:2])-[c&H0&+0&D3:7](:[c:6]:[c:5]):[c:8](:[c:3]):[c:4]>>[N&H2&+0&D1:1]-[N&H2&D1:2].[c:3]:[c:8](:[c:4]):[c&H0&+0&D3:7](:[c:6]:[c:5])-Br",
+    "raw": {
+      "source_record_hash": "c9945f91c0bfcc84878ecfc696d4c88175ce2569625926a49e12b320152c3114",
+      "source_locator": {
+        "id": 1969751,
+        "source_namespace": "epo",
+        "document_id": "EP22915126A1",
+        "paragraph_nums": [
+          "p0122"
+        ],
+        "paragraph_reaction_ordinal": 1
+      },
+      "raw_details_retained_in_source": true,
+      "dedup_source_selection": {
+        "group_id": 1969751,
+        "group_max_score": 19,
+        "group_source_count": 2,
+        "source_reaction_id": 1969751,
+        "source_final_score": 19,
+        "policy": "highest_qualified_score_then_lowest_source_id",
+        "other_sources_evaluated": false
+      }
+    }
+  }
+}

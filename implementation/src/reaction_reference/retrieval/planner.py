@@ -80,6 +80,29 @@ def _core_smarts(mol, atom_ids, groups):
     return smarts, [a.GetAtomMapNum() - 1 for a in restored.GetAtoms()]
 
 
+def _aromatic_domains(mol):
+    """返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。
+
+    用于保留稠合体系中的完整芳香部分，不要求相邻非芳香环也存在；不产生断键方案或预测环变化。
+    """
+    remaining = {a.GetIdx() for a in mol.GetAtoms() if a.GetIsAromatic()}
+    domains = []
+    while remaining:
+        root = min(remaining)
+        remaining.remove(root)
+        domain, stack = {root}, [root]
+        while stack:
+            atom = stack.pop()
+            for bond in mol.GetAtomWithIdx(atom).GetBonds():
+                other = bond.GetOtherAtomIdx(atom)
+                if bond.GetIsAromatic() and other in remaining:
+                    remaining.remove(other)
+                    domain.add(other)
+                    stack.append(other)
+        domains.append(domain)
+    return domains
+
+
 def plan_families(target, max_families=12):
     """自动生成整体、核心、分片三层的有限 QueryFamily 列表。
 
@@ -135,6 +158,8 @@ def plan_families(target, max_families=12):
         seeds["core"].append(
             (_close_units(anchors or all_atoms, groups, target), "acyclic_functional_anchor_paths")
         )
+    aromatic_seeds = []
+    aromatic_domains = _aromatic_domains(target)
     for name, match, _ in groups:
         neighborhood = set(match)
         for atom in match:
@@ -143,6 +168,17 @@ def plan_families(target, max_families=12):
                 for n in target.GetAtomWithIdx(atom).GetNeighbors()
                 if n.GetAtomicNum() > 1
             )
+        # 环外官能团连接混合稠合环系时，补查完整芳香域，避免强制保留非芳香杂环而漏掉前体。
+        # 仅在确实省去非芳香环原子时增加家族；完整环系查询仍保留，不把它当成开环预测。
+        if not any(target.GetAtomWithIdx(i).IsInRing() for i in match):
+            for domain in aromatic_domains:
+                if neighborhood & domain and any(domain < system for system in systems):
+                    aromatic_seeds.append(
+                        (
+                            _close_units(neighborhood | domain, groups, target),
+                            f"aromatic_domain_functional_neighborhood:{name}",
+                        )
+                    )
         # 官能团邻域若碰到环系，则保留完整环系；此处不猜测开环前体。
         for system in systems:
             if neighborhood & system:
@@ -150,6 +186,7 @@ def plan_families(target, max_families=12):
         seeds["fragment"].append(
             (_close_units(neighborhood, groups, target), f"functional_neighborhood:{name}")
         )
+    seeds["fragment"] = aromatic_seeds + seeds["fragment"]
     for (a, b), _ in BRICS.FindBRICSBonds(target):
         if target.GetBondBetweenAtoms(a, b).IsInRing():
             continue

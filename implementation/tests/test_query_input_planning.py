@@ -1,12 +1,15 @@
 """查询入口与规划回归：防止多行结构被截断，以及无环核心生成重复计算路径。"""
 
 import json
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 from rdkit import Chem
 
 from reaction_reference.adapters.sources import JsonlSource
+from reaction_reference.application.search import search
+from reaction_reference.chemistry.markush import match_family
 from reaction_reference.chemistry.structures import StructureError, canonical, parse
 from reaction_reference.interfaces.api import create_app
 from reaction_reference.retrieval.planner import functional_matches, plan_families
@@ -92,3 +95,62 @@ def test_large_acyclic_planning_does_not_expand_all_anchor_pairs(monkeypatch):
     core = next(family for family in families if family.layer == "core")
     assert anchors <= set(core.target_atoms)
     assert len(calls) <= len(anchors) - 1
+
+
+def test_aromatic_domain_keeps_attachment_without_requiring_fused_lactam():
+    """稠合内酰胺上的环外胺可查询同位点芳胺前体，同时保留完整环系家族。"""
+    target = parse("Nc1ccc2CC(=O)Nc2c1", target=True)
+    families = plan_families(target)
+    family = next(
+        f for f in families if f.rule_id == "aromatic_domain_functional_neighborhood:amine"
+    )
+    assert len(family.target_atoms) == 7
+    assert any(f.layer == "core" and len(f.target_atoms) > 7 for f in families)
+    for smiles, expected in [("Nc1ccccc1", "match"), ("Nc1ccncc1", "no_match")]:
+        result = match_family(family, parse(smiles), target, "test-domain")
+        assert result.state == expected
+        if expected == "match":
+            assert all(len(w.target_to_source) == 7 for w in result.witnesses)
+
+
+@pytest.mark.parametrize("smiles", ["Nc1ccccc1", "NNc1ccc2ccccc2c1", "NCCO", "N1CCCCC1"])
+def test_domain_variant_is_not_added_without_mixed_fused_ring_system(smiles):
+    """单芳环、全芳香稠环、无环及全饱和环不产生重复的芳香域放宽家族。"""
+    assert not any(
+        f.rule_id.startswith("aromatic_domain_functional_neighborhood:")
+        for f in plan_families(parse(smiles, target=True))
+    )
+
+
+def test_real_hydrazine_installation_is_found_with_aromatic_domain(tmp_path, request_factory):
+    """真实单羰基稠环肼基安装通过芳香域家族召回，并保留目标成键及非完整目标的边界。"""
+    payload = json.loads(
+        (Path(__file__).parent / "fixtures/aromatic_domain_hydrazine.json").read_text()
+    )
+    path = tmp_path / "hydrazine.jsonl"
+    path.write_text(json.dumps(payload["record"]) + "\n")
+    source = JsonlSource(path, exhaustive=True)
+    try:
+        package = search(
+            request_factory(
+                payload["target_smiles"],
+                options={"include_usage": False, "include_proposals": False},
+                budget={"max_tasks": 100},
+            ),
+            source,
+        )
+        families = {
+            f.id
+            for f in package.families
+            if f.rule_id == "aromatic_domain_functional_neighborhood:amine"
+        }
+        reference = next(r for r in package.results if r.record.source.record_id == "1969751")
+        assert any(
+            w.family_id in families and len(w.target_to_source) == 12 for w in reference.witnesses
+        )
+        assert reference.coverage["projected_changes"]["formed_target_bonds"]
+        assert not reference.target_requirements_satisfied
+        assert not reference.obtainment_hit and not reference.preparation_hit
+        assert reference.record.event_scope == "unknown"
+    finally:
+        source.close()

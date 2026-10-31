@@ -298,10 +298,11 @@
 | [functional_matches](../src/reaction_reference/retrieval/planner.py#L12) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
 | [_close_units](../src/reaction_reference/retrieval/planner.py#L28) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
 | [_core_smarts](../src/reaction_reference/retrieval/planner.py#L47) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
-| [plan_families](../src/reaction_reference/retrieval/planner.py#L83) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L197) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L226) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L249) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L83) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
+| [plan_families](../src/reaction_reference/retrieval/planner.py#L106) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L234) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L263) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L286) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -589,13 +590,16 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_multiline_smiles_cannot_silently_drop_a_structure](../tests/test_query_input_planning.py#L17) | 目标和来源结构都必须拒绝含多个非空行的输入，不能只解释第一种分子。 |
-| [test_single_structure_whitespace_and_cx_annotations_remain_supported](../tests/test_query_input_planning.py#L24) | 外围空白、单行 CX 标签与同位素仍应保留原本的具体结构语义。 |
-| [test_http_rejects_multiline_structure_before_accepting_a_job](../tests/test_query_input_planning.py#L30) | HTTP 预览、检索和排除材料校验应拒绝多行结构，且不落盘错误任务。 |
-| [test_jsonl_multiline_material_is_isolated_without_losing_other_records](../tests/test_query_input_planning.py#L45) | 来源 JSONL 中转义换行的材料必须报告结构问题，相邻有效反应仍可检索。 |
-| [test_acyclic_core_preserves_all_anchor_connecting_paths](../tests/test_query_input_planning.py#L64) | 优化后的无环核心应与所有原始官能团锚点之间的路径并集完全一致。 |
-| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs](../tests/test_query_input_planning.py#L78) | 大量官能团的合法目标只需线性次路径连接，避免查询预览被两两路径计算拖慢。 |
-| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs.counted_path](../tests/test_query_input_planning.py#L85) | 记录实际图路径调用次数，避免用不稳定的机器耗时作为回归断言。 |
+| [test_multiline_smiles_cannot_silently_drop_a_structure](../tests/test_query_input_planning.py#L20) | 目标和来源结构都必须拒绝含多个非空行的输入，不能只解释第一种分子。 |
+| [test_single_structure_whitespace_and_cx_annotations_remain_supported](../tests/test_query_input_planning.py#L27) | 外围空白、单行 CX 标签与同位素仍应保留原本的具体结构语义。 |
+| [test_http_rejects_multiline_structure_before_accepting_a_job](../tests/test_query_input_planning.py#L33) | HTTP 预览、检索和排除材料校验应拒绝多行结构，且不落盘错误任务。 |
+| [test_jsonl_multiline_material_is_isolated_without_losing_other_records](../tests/test_query_input_planning.py#L48) | 来源 JSONL 中转义换行的材料必须报告结构问题，相邻有效反应仍可检索。 |
+| [test_acyclic_core_preserves_all_anchor_connecting_paths](../tests/test_query_input_planning.py#L67) | 优化后的无环核心应与所有原始官能团锚点之间的路径并集完全一致。 |
+| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs](../tests/test_query_input_planning.py#L81) | 大量官能团的合法目标只需线性次路径连接，避免查询预览被两两路径计算拖慢。 |
+| [test_large_acyclic_planning_does_not_expand_all_anchor_pairs.counted_path](../tests/test_query_input_planning.py#L88) | 记录实际图路径调用次数，避免用不稳定的机器耗时作为回归断言。 |
+| [test_aromatic_domain_keeps_attachment_without_requiring_fused_lactam](../tests/test_query_input_planning.py#L100) | 稠合内酰胺上的环外胺可查询同位点芳胺前体，同时保留完整环系家族。 |
+| [test_domain_variant_is_not_added_without_mixed_fused_ring_system](../tests/test_query_input_planning.py#L117) | 单芳环、全芳香稠环、无环及全饱和环不产生重复的芳香域放宽家族。 |
+| [test_real_hydrazine_installation_is_found_with_aromatic_domain](../tests/test_query_input_planning.py#L125) | 真实单羰基稠环肼基安装通过芳香域家族召回，并保留目标成键及非完整目标的边界。 |
 
 ## tests/test_reactions.py
 

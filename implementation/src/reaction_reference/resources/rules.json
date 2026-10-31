@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "version": "organic-reference-1.0",
+  "version": "organic-reference-1.1",
   "status": "bounded_rule_set_with_regression_cases",
   "functional_groups": [
     {"id": "amide", "smarts": "[CX3](=[OX1])-[NX3]", "priority": 100},
@@ -14,7 +14,7 @@
     {"id": "amine", "smarts": "[NX3+0;!$(N-C=O);!$(N-S(=O)=O)]", "priority": 70},
     {"id": "ether", "smarts": "[#6]-[OX2H0+0]-[#6]", "priority": 50}
   ],
-  "query_rules": ["whole_murcko_with_adjacent_functional_units", "complete_ring_system", "acyclic_functional_anchor_paths", "functional_neighborhood", "nonring_boundary_fragments"],
+  "query_rules": ["whole_murcko_with_adjacent_functional_units", "complete_ring_system", "acyclic_functional_anchor_paths", "aromatic_domain_functional_neighborhood", "functional_neighborhood", "nonring_boundary_fragments"],
   "transfer_rules": [
     {
       "id": "acyl_chloride_primary_amine",

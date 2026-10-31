@@ -1,0 +1,345 @@
+[
+  {
+    "name": "naphthyl_hydrazine_dicarbonyl",
+    "query": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3](-[#6&A&+0:4]=[#8&A&+0:5]):[#6&a&+0:18]2:[#6&a&+0:13](-[#6&A&+0:11]=[#8&A&+0:12]):[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17]:2:[#6&a&+0:19]:1-[#7&A&+0:20]-[#7&A&+0:21]",
+    "rows": [],
+    "error": null,
+    "seconds": 0.07928997557610273
+  },
+  {
+    "name": "naphthyl_hydrazine",
+    "query": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]:[#6&a&+0:18]2:[#6&a&+0:13]:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17]:2:[#6&a&+0:19]:1-[#7&A&+0:20]-[#7&A&+0:21]",
+    "rows": [
+      {
+        "id": 10143003,
+        "final_score": 17,
+        "product_smiles": [
+          "COC(=O)c1ccc2c(NN=C(c3ccccc3)c3ccccc3)cccc2c1F"
+        ],
+        "reactant_smiles": [
+          "COC(=O)c1ccc2c(Br)cccc2c1F",
+          "NN=C(c1ccccc1)c1ccccc1"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20250122152A1",
+        "paragraph_nums": [
+          "p-0335"
+        ]
+      },
+      {
+        "id": 9523754,
+        "final_score": 12,
+        "product_smiles": [
+          "O=C1CCC(N2N=Cc3cccc4c(Br)ccc2c34)C(=O)N1"
+        ],
+        "reactant_smiles": [
+          "O=C(O)CCCn1c(=O)[nH]c2ccc(Br)cc21",
+          "O=C1CCC(Br)C(=O)N1"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20230372496A1",
+        "paragraph_nums": [
+          "p-2078"
+        ]
+      },
+      {
+        "id": 1866440,
+        "final_score": 19,
+        "product_smiles": [
+          "COc1cc(C(C)=NNc2cccc3ccccc23)c(Br)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "COc1cc(C(C)=O)c(Br)c2ccccc12",
+          "Cl.NNc1cccc2ccccc12"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP21858547A1",
+        "paragraph_nums": [
+          "p0161"
+        ]
+      },
+      {
+        "id": 4049264,
+        "final_score": 20,
+        "product_smiles": [
+          "N#Cc1ccc(N2CCCCN2C(=O)Cc2ccccc2OC(F)(F)F)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "N#Cc1ccc(N2CCCCN2)c2ccccc12",
+          "O=C(O)Cc1ccccc1OC(F)(F)F"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20090093464A1",
+        "paragraph_nums": [
+          "p-1052"
+        ]
+      },
+      {
+        "id": 4049263,
+        "final_score": 20,
+        "product_smiles": [
+          "N#Cc1ccc(N2CCCCN2C(=O)C2CCCCC2)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "N#Cc1ccc(N2CCCCN2)c2ccccc12",
+          "O=C(Cl)C1CCCCC1"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20090093464A1",
+        "paragraph_nums": [
+          "p-0832"
+        ]
+      },
+      {
+        "id": 4049265,
+        "final_score": 22,
+        "product_smiles": [
+          "N#Cc1ccc(N2CCCCN2C(=O)CCc2ccc(F)cc2)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "N#Cc1ccc(N2CCCCN2)c2ccccc12",
+          "O=C(O)CCc1ccc(F)cc1"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20090093464A1",
+        "paragraph_nums": [
+          "p-1182"
+        ]
+      },
+      {
+        "id": 1969751,
+        "final_score": 19,
+        "product_smiles": [
+          "COc1ccc(CN2C(=O)c3cccc4c(NN)ccc2c34)cc1"
+        ],
+        "reactant_smiles": [
+          "COc1ccc(CN2C(=O)c3cccc4c(Br)ccc2c34)cc1",
+          "NN.O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP22915126A1",
+        "paragraph_nums": [
+          "p0122"
+        ]
+      },
+      {
+        "id": 749703,
+        "final_score": 18,
+        "product_smiles": [
+          "CC1(C)C(=O)N(C2CCCCCCC2)N1c1cccc2ccccc12"
+        ],
+        "reactant_smiles": [
+          "Brc1cccc2ccccc12",
+          "CC1(C)NN(C2CCCCCCC2)C1=O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP09823304A1",
+        "paragraph_nums": [
+          "p1316"
+        ]
+      },
+      {
+        "id": 9350339,
+        "final_score": 15,
+        "product_smiles": [
+          "c1cc2c3c(cccc3c1)NN=N2"
+        ],
+        "reactant_smiles": [
+          "CCCCON=O",
+          "Nc1cccc2cccc(N)c12"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20230100838A1",
+        "paragraph_nums": [
+          "p-1362"
+        ]
+      },
+      {
+        "id": 8945794,
+        "final_score": 17,
+        "product_smiles": [
+          "c1cc2c3c(cccc3c1)NN=N2"
+        ],
+        "reactant_smiles": [
+          "Nc1cccc2cccc(N)c12",
+          "O=N[O-].[Na+]"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20220041634A1",
+        "paragraph_nums": [
+          "p-0088"
+        ]
+      },
+      {
+        "id": 7938781,
+        "final_score": 13,
+        "product_smiles": [
+          "c1cc2c3c(cccc3c1)NN=N2"
+        ],
+        "reactant_smiles": [
+          "CC(C)CCON=O",
+          "Nc1cccc2cccc(N)c12"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20190270743A1",
+        "paragraph_nums": [
+          "p-0428"
+        ]
+      },
+      {
+        "id": 4049262,
+        "final_score": 20,
+        "product_smiles": [
+          "N#Cc1ccc(N2CCCCN2)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "C1CCNNC1.Cl.Cl",
+          "N#Cc1ccc(F)c2ccccc12"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20090093464A1",
+        "paragraph_nums": [
+          "p-0140"
+        ]
+      },
+      {
+        "id": 1903008,
+        "final_score": 17,
+        "product_smiles": [
+          "NNc1ccc([N+](=O)[O-])c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "NN.O",
+          "O=[N+]([O-])c1ccc(F)c2ccccc12"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP17851862B1",
+        "paragraph_nums": [
+          "p0804"
+        ]
+      },
+      {
+        "id": 1902979,
+        "final_score": 18,
+        "product_smiles": [
+          "NNc1cccc2c(F)cccc12"
+        ],
+        "reactant_smiles": [
+          "Fc1cccc2c(Br)cccc12",
+          "NN.O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP17851862B1",
+        "paragraph_nums": [
+          "p0723"
+        ]
+      },
+      {
+        "id": 448681,
+        "final_score": 20,
+        "product_smiles": [
+          "N#Cc1ccc(NN)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "N#Cc1ccc(F)c2ccccc12",
+          "NN.O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP03788076A1",
+        "paragraph_nums": [
+          "p0347"
+        ]
+      },
+      {
+        "id": 749706,
+        "final_score": 20,
+        "product_smiles": [
+          "CC1(C)C(=O)N(C2CC3CCC2C3)N1c1cccc2ccccc12"
+        ],
+        "reactant_smiles": [
+          "Brc1cccc2ccccc12",
+          "CC1(C)NN(C2CC3CCC2C3)C1=O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP09823304A1",
+        "paragraph_nums": [
+          "p1331"
+        ]
+      },
+      {
+        "id": 10575076,
+        "final_score": 19,
+        "product_smiles": [
+          "NNc1cccc2c(Br)cccc12"
+        ],
+        "reactant_smiles": [
+          "Nc1cccc2c(Br)cccc12",
+          "O=N[O-].[Na+]"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20260207797A1",
+        "paragraph_nums": [
+          "p-1528"
+        ]
+      },
+      {
+        "id": 284228,
+        "final_score": 21,
+        "product_smiles": [
+          "O=C1c2[nH]c3cc(Cl)ccc3c(=O)c2C(=O)N1Nc1cccc2ccccc12"
+        ],
+        "reactant_smiles": [
+          "COC(=O)c1nc2cc(Cl)ccc2c(O)c1C(=O)OC",
+          "Cl.NNc1cccc2ccccc12"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP00101917A2",
+        "paragraph_nums": [
+          "p0124",
+          "p0125"
+        ]
+      },
+      {
+        "id": 1173657,
+        "final_score": 20,
+        "product_smiles": [
+          "CC(C)(C)NS(=O)(=O)c1ccc(NN)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "CC(C)(C)NS(=O)(=O)c1ccc(Br)c2ccccc12",
+          "NN.O"
+        ],
+        "source_namespace": "epo",
+        "document_id": "EP13725577B1",
+        "paragraph_nums": [
+          "p0337"
+        ]
+      },
+      {
+        "id": 4174148,
+        "final_score": 18,
+        "product_smiles": [
+          "NNc1ccc(S(=O)(=O)O)c2ccccc12"
+        ],
+        "reactant_smiles": [
+          "Nc1ccc(S(=O)(=O)[O-])c2ccccc12.[Na+]",
+          "O=N[O-].[Na+]"
+        ],
+        "source_namespace": "uspto",
+        "document_id": "US20090275142A1",
+        "paragraph_nums": [
+          "p-0159"
+        ]
+      }
+    ],
+    "error": null,
+    "seconds": 0.06533332634717226
+  },
+  {
+    "name": "naphthyl_hydrazine_dicarbonyl_any_charge",
+    "query": "[#6&a:1]1:[#6&a:2]:[#6&a:3](-[#6&A:4]=[#8&A:5]):[#6&a:18]2:[#6&a:13](-[#6&A:11]=[#8&A:12]):[#6&a:14]:[#6&a:15]:[#6&a:16]:[#6&a:17]:2:[#6&a:19]:1-[#7&A:20]-[#7&A:21]",
+    "rows": [],
+    "error": null,
+    "seconds": 0.012711198069155216
+  }
+]
