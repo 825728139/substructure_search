@@ -1,0 +1,984 @@
+{
+  "v2_previously_reviewed_sources": [
+    {
+      "source_reaction_id": 243673,
+      "reaction_v3_id": 243673,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 350900,
+      "reaction_v3_id": 321221,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 2,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 576028,
+      "reaction_v3_id": 576028,
+      "source_score": 14,
+      "representative_score": 14,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 901859,
+      "reaction_v3_id": 901859,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1201567,
+      "reaction_v3_id": 1157858,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 21,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1292196,
+      "reaction_v3_id": 1157858,
+      "source_score": 21,
+      "representative_score": 19,
+      "detail_count": 21,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1319410,
+      "reaction_v3_id": 1234825,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 12,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1329328,
+      "reaction_v3_id": 916280,
+      "source_score": 14,
+      "representative_score": 12,
+      "detail_count": 52,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1329345,
+      "reaction_v3_id": 916280,
+      "source_score": 14,
+      "representative_score": 12,
+      "detail_count": 52,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1348632,
+      "reaction_v3_id": 1348632,
+      "source_score": 17,
+      "representative_score": 17,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1360583,
+      "reaction_v3_id": 1360583,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1440748,
+      "reaction_v3_id": 1440748,
+      "source_score": 17,
+      "representative_score": 17,
+      "detail_count": 20,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1745008,
+      "reaction_v3_id": 1440748,
+      "source_score": 17,
+      "representative_score": 17,
+      "detail_count": 20,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 1826243,
+      "reaction_v3_id": 1826243,
+      "source_score": 15,
+      "representative_score": 15,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2388831,
+      "reaction_v3_id": 2388831,
+      "source_score": 14,
+      "representative_score": 14,
+      "detail_count": 10,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2390680,
+      "reaction_v3_id": 1708819,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 29,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2512884,
+      "reaction_v3_id": 2512884,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2554809,
+      "reaction_v3_id": 589604,
+      "source_score": 13,
+      "representative_score": 13,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2803860,
+      "reaction_v3_id": 1157858,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 21,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 2909155,
+      "reaction_v3_id": 2909153,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 8,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 3033116,
+      "reaction_v3_id": 2388831,
+      "source_score": 15,
+      "representative_score": 14,
+      "detail_count": 10,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 3138427,
+      "reaction_v3_id": 3138427,
+      "source_score": 15,
+      "representative_score": 15,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 3809288,
+      "reaction_v3_id": 2697272,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 3892443,
+      "reaction_v3_id": 3892443,
+      "source_score": 13,
+      "representative_score": 13,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4237376,
+      "reaction_v3_id": 589604,
+      "source_score": 13,
+      "representative_score": 13,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4345124,
+      "reaction_v3_id": 2855288,
+      "source_score": 20,
+      "representative_score": 19,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4350925,
+      "reaction_v3_id": 4350925,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4372752,
+      "reaction_v3_id": 632410,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4447900,
+      "reaction_v3_id": 4447900,
+      "source_score": 13,
+      "representative_score": 13,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4624174,
+      "reaction_v3_id": 623099,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4653466,
+      "reaction_v3_id": 2855288,
+      "source_score": 20,
+      "representative_score": 19,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4664687,
+      "reaction_v3_id": 2855288,
+      "source_score": 20,
+      "representative_score": 19,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4680029,
+      "reaction_v3_id": 4680029,
+      "source_score": 21,
+      "representative_score": 21,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4788454,
+      "reaction_v3_id": 687805,
+      "source_score": 13,
+      "representative_score": 13,
+      "detail_count": 8,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 4925080,
+      "reaction_v3_id": 4925080,
+      "source_score": 20,
+      "representative_score": 20,
+      "detail_count": 1,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5058281,
+      "reaction_v3_id": 1061409,
+      "source_score": 13,
+      "representative_score": 11,
+      "detail_count": 8,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5082503,
+      "reaction_v3_id": 2855288,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 6,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5247604,
+      "reaction_v3_id": 4701353,
+      "source_score": 19,
+      "representative_score": 20,
+      "detail_count": 2,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5425732,
+      "reaction_v3_id": 1044682,
+      "source_score": 18,
+      "representative_score": 19,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5497915,
+      "reaction_v3_id": 916280,
+      "source_score": 12,
+      "representative_score": 12,
+      "detail_count": 52,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5497920,
+      "reaction_v3_id": 916280,
+      "source_score": 12,
+      "representative_score": 12,
+      "detail_count": 52,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5595859,
+      "reaction_v3_id": 901855,
+      "source_score": 21,
+      "representative_score": 21,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5662996,
+      "reaction_v3_id": 1032033,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 9,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5700654,
+      "reaction_v3_id": 4709472,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5784198,
+      "reaction_v3_id": 4709472,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 5878376,
+      "reaction_v3_id": 5076515,
+      "source_score": 17,
+      "representative_score": 17,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6247897,
+      "reaction_v3_id": 3,
+      "source_score": 18,
+      "representative_score": 19,
+      "detail_count": 10,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6254148,
+      "reaction_v3_id": 1255246,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6254238,
+      "reaction_v3_id": 1255299,
+      "source_score": 18,
+      "representative_score": 20,
+      "detail_count": 3,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6480877,
+      "reaction_v3_id": 4709472,
+      "source_score": 19,
+      "representative_score": 19,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6647603,
+      "reaction_v3_id": 1187797,
+      "source_score": 18,
+      "representative_score": 17,
+      "detail_count": 13,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 6801271,
+      "reaction_v3_id": 1234825,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 12,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7026592,
+      "reaction_v3_id": 1187797,
+      "source_score": 18,
+      "representative_score": 17,
+      "detail_count": 13,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7058627,
+      "reaction_v3_id": 1061406,
+      "source_score": 12,
+      "representative_score": 10,
+      "detail_count": 11,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7208639,
+      "reaction_v3_id": 1187797,
+      "source_score": 17,
+      "representative_score": 17,
+      "detail_count": 13,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7326284,
+      "reaction_v3_id": 1234825,
+      "source_score": 16,
+      "representative_score": 16,
+      "detail_count": 12,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7771574,
+      "reaction_v3_id": 3,
+      "source_score": 18,
+      "representative_score": 19,
+      "detail_count": 10,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7903952,
+      "reaction_v3_id": 1824941,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 8,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 8682986,
+      "reaction_v3_id": 7177490,
+      "source_score": 18,
+      "representative_score": 20,
+      "detail_count": 4,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 9128655,
+      "reaction_v3_id": 8613994,
+      "source_score": 14,
+      "representative_score": 14,
+      "detail_count": 2,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 9337888,
+      "reaction_v3_id": 9337888,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 9388765,
+      "reaction_v3_id": 9388765,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 10170992,
+      "reaction_v3_id": 9337888,
+      "source_score": 18,
+      "representative_score": 18,
+      "detail_count": 5,
+      "same_reaction": true,
+      "representative_exists": true
+    }
+  ],
+  "group_condition_examples": [
+    {
+      "reaction_v3_id": 632410,
+      "source_reaction_id": 632410,
+      "final_score": 20,
+      "document_id": "EP07829299A1",
+      "paragraph_nums": [
+        "p0192"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": null,
+      "yield_max_pct": null
+    },
+    {
+      "reaction_v3_id": 632410,
+      "source_reaction_id": 4372752,
+      "final_score": 20,
+      "document_id": "US20100081825A1",
+      "paragraph_nums": [
+        "p-0246"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": null,
+      "yield_max_pct": null
+    },
+    {
+      "reaction_v3_id": 632410,
+      "source_reaction_id": 4789681,
+      "final_score": 17,
+      "document_id": "US20110178304A1",
+      "paragraph_nums": [
+        "p-0180"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": null,
+      "yield_max_pct": null
+    },
+    {
+      "reaction_v3_id": 632410,
+      "source_reaction_id": 5671281,
+      "final_score": 17,
+      "document_id": "US08461182",
+      "paragraph_nums": [
+        "p-0173"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": null,
+      "yield_max_pct": null
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 1440748,
+      "final_score": 17,
+      "document_id": "EP14703747B1",
+      "paragraph_nums": [
+        "p0097"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 1515797,
+      "final_score": 15,
+      "document_id": "EP19161143A1",
+      "paragraph_nums": [
+        "p0097"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 1745008,
+      "final_score": 17,
+      "document_id": "EP19161143B1",
+      "paragraph_nums": [
+        "p0096"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 6667419,
+      "final_score": 17,
+      "document_id": "US20160122359A1",
+      "paragraph_nums": [
+        "p-0112"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 6757594,
+      "final_score": 17,
+      "document_id": "US20160289240A1",
+      "paragraph_nums": [
+        "p-0112"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 6809210,
+      "final_score": 17,
+      "document_id": "US20160368926A1",
+      "paragraph_nums": [
+        "p-0120"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 6967945,
+      "final_score": 17,
+      "document_id": "US09504670",
+      "paragraph_nums": [
+        "p-0111"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 6973369,
+      "final_score": 17,
+      "document_id": "US09512134",
+      "paragraph_nums": [
+        "p-0118"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 7055018,
+      "final_score": 16,
+      "document_id": "US20170129916A1",
+      "paragraph_nums": [
+        "p-0328"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": null,
+      "yield_max_pct": null
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 7111592,
+      "final_score": 17,
+      "document_id": "US20170231956A1",
+      "paragraph_nums": [
+        "p-0106"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 7218382,
+      "final_score": 15,
+      "document_id": "US09579304",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 7530537,
+      "final_score": 15,
+      "document_id": "US20180250268A1",
+      "paragraph_nums": [
+        "p-0111"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 7730930,
+      "final_score": 15,
+      "document_id": "US10052308",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 8149882,
+      "final_score": 15,
+      "document_id": "US10441571",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 8149970,
+      "final_score": 15,
+      "document_id": "US10441572",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 8294153,
+      "final_score": 15,
+      "document_id": "US20200206189A1",
+      "paragraph_nums": [
+        "p-0112"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 8871736,
+      "final_score": 15,
+      "document_id": "US11077094",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 8996206,
+      "final_score": 15,
+      "document_id": "US20220151992A1",
+      "paragraph_nums": [
+        "p-0120"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 10065276,
+      "final_score": 15,
+      "document_id": "US12167998",
+      "paragraph_nums": [
+        "p-0110"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 1440748,
+      "source_reaction_id": 10192146,
+      "final_score": 15,
+      "document_id": "US20250186392A1",
+      "paragraph_nums": [
+        "p-0112"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "95.000",
+      "yield_max_pct": "95.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 7169133,
+      "final_score": 19,
+      "document_id": "US20170342059A1",
+      "paragraph_nums": [
+        "p-0174"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 7882656,
+      "final_score": 18,
+      "document_id": "US20190152959A1",
+      "paragraph_nums": [
+        "p-0195"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 7882673,
+      "final_score": 18,
+      "document_id": "US20190152958A1",
+      "paragraph_nums": [
+        "p-0196"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 8112133,
+      "final_score": 18,
+      "document_id": "US10364234",
+      "paragraph_nums": [
+        "p-0158"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 8151090,
+      "final_score": 18,
+      "document_id": "US10442794",
+      "paragraph_nums": [
+        "p-0194"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    },
+    {
+      "reaction_v3_id": 7169133,
+      "source_reaction_id": 8515329,
+      "final_score": 18,
+      "document_id": "US10759788",
+      "paragraph_nums": [
+        "p-0162"
+      ],
+      "temperature_min_c": null,
+      "temperature_max_c": null,
+      "yield_min_pct": "50.000",
+      "yield_max_pct": "50.000"
+    }
+  ],
+  "missing_old_source_ids": [],
+  "qualified_old_source_excluded_by_representative": [
+    {
+      "source_reaction_id": 5058281,
+      "reaction_v3_id": 1061409,
+      "source_score": 13,
+      "representative_score": 11,
+      "detail_count": 8,
+      "same_reaction": true,
+      "representative_exists": true
+    },
+    {
+      "source_reaction_id": 7058627,
+      "reaction_v3_id": 1061406,
+      "source_score": 12,
+      "representative_score": 10,
+      "detail_count": 11,
+      "same_reaction": true,
+      "representative_exists": true
+    }
+  ]
+}

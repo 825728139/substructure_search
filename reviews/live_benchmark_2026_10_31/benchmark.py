@@ -22,6 +22,9 @@ ROOT = Path(
         str(Path(__file__).resolve().parents[2] / ".cache/live-benchmark-2026-10-31"),
     )
 )
+SOURCE_TABLE = os.environ.get("RR_BENCH_TABLE", "reaction_v2")
+if SOURCE_TABLE not in ("reaction_v2", "reaction_v3"):
+    raise ValueError("测试来源仅允许 reaction_v2 或 reaction_v3")
 TARGETS = [
     (
         "T01",
@@ -107,8 +110,8 @@ class ConnectionTrace:
     def query(self, query):
         """把固定来源表及其索引目录查询改到新表，不改检索条件。"""
         text = query if isinstance(query, str) else query.as_string(self.connection)
-        return text.replace("reaction.reactions", "reaction.reaction_v2").replace(
-            "t.relname='reactions'", "t.relname='reaction_v2'"
+        return text.replace("reaction.reactions", f"reaction.{SOURCE_TABLE}").replace(
+            "t.relname='reactions'", f"t.relname='{SOURCE_TABLE}'"
         )
 
     def execute(self, query, *args, **kwargs):
@@ -210,7 +213,7 @@ def run_worker(target, repeat, budget_ms, timeout_ms, max_tasks, max_reactions):
         "repeat": repeat,
         "budget_ms": budget_ms,
         "statement_timeout_ms": timeout_ms,
-        "database_table": "reaction.reaction_v2",
+        "database_table": f"reaction.{SOURCE_TABLE}",
         "minimum_final_score": 12,
         "implementation_hash": code_fingerprint(),
         "harness_override": "only_source_table_and_catalog_table_name",
@@ -304,6 +307,9 @@ def main():
             tag = f"{target[0]}-{args.budget_ms}-r{repeat}"
             path = ROOT / f"{tag}.metrics.json"
             if path.exists():
+                saved = json.loads(path.read_text())
+                if saved.get("database_table") != f"reaction.{SOURCE_TABLE}":
+                    raise ValueError("输出目录已有其他表的测试结果，请使用独立目录")
                 print(tag + " 已有结果，保留", flush=True)
                 continue
             started = time.perf_counter()
@@ -334,7 +340,7 @@ def main():
                     "repeat": repeat,
                     "budget_ms": args.budget_ms,
                     "status": "outer_timeout",
-                    "database_table": "reaction.reaction_v2",
+                    "database_table": f"reaction.{SOURCE_TABLE}",
                     "minimum_final_score": 12,
                 }
             )

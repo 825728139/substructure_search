@@ -1443,5 +1443,35 @@
     "python_modules_documented": 101,
     "python_classes_documented": 70,
     "python_named_functions_documented": 582
+  },
+  "live_database_v3_benchmark_20261031": {
+    "report": "../../reviews/live_benchmark_v3_2026_10_31/report.md",
+    "verified_implementation_hash": "ba5f7d03281393aed3f2d41daedecb7a302e4a5145ba27f10585c452741b12e1",
+    "database_table": "reaction.reaction_v3",
+    "minimum_representative_final_score": 12,
+    "targets": 11,
+    "default_runs": 22,
+    "expanded_runs": 5,
+    "chemical_review_positions": 80,
+    "default_positive_method_positions": 31,
+    "default_positive_method_denominator": 55,
+    "novel_positive_method_positions": 5,
+    "novel_positive_method_denominator": 15,
+    "default_latency_seconds": {
+      "min": 1.4482,
+      "median": 2.7179,
+      "p95": 4.1386,
+      "max": 4.2003
+    },
+    "source_linked_previous_records": 63,
+    "known_qualified_sources_excluded_by_representative": [
+      7058627,
+      5058281
+    ],
+    "independent_blinded_review": false,
+    "experimental_validation": false,
+    "full_corpus_recall_measured": false,
+    "database_written": false,
+    "production_code_changed": false
   }
 }

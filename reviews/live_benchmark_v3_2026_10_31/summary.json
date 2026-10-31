@@ -1,0 +1,277 @@
+{
+  "database_table": "reaction.reaction_v3",
+  "minimum_final_score": 12,
+  "implementation_hash": "ba5f7d03281393aed3f2d41daedecb7a302e4a5145ba27f10585c452741b12e1",
+  "timing_scope": "single_concurrency_application_search_with_process_start_and_output_serialization_not_HTTP_load_test",
+  "harness_override": "only source table and index catalog table name changed from reactions to reaction_v2",
+  "default_runs": 22,
+  "targets": 11,
+  "default_latency_seconds": {
+    "min": 1.4482,
+    "median": 2.7179,
+    "p95": 4.1386,
+    "max": 4.2003
+  },
+  "default_stop_reasons": {
+    "task_budget": 22
+  },
+  "reviewed_default_positions": 55,
+  "reviewed_expanded_positions": 25,
+  "default_positive_method_positions": 31,
+  "default_positive_method_fraction": 0.5636363636363636,
+  "default_grades": {
+    "A": 13,
+    "E": 4,
+    "C": 10,
+    "B": 18,
+    "D": 10
+  },
+  "novel_targets": [
+    "T09",
+    "T10",
+    "T11"
+  ],
+  "novel_default_positive_method_positions": 5,
+  "positive_definition": "A or B from direct chemical/source review, not structure match or experimental success probability",
+  "independent_blinded_review": false,
+  "experimental_validation": false,
+  "full_corpus_recall_measured": false,
+  "production_code_changed": false,
+  "database_written": false,
+  "by_target": [
+    {
+      "target_id": "T01",
+      "positive_at_5": 3,
+      "grades": [
+        "A",
+        "E",
+        "C",
+        "B",
+        "B"
+      ],
+      "useful_method_families": [
+        "酰氯乙酰化",
+        "酸酐乙酰化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 0,
+        "fragment": 0
+      }
+    },
+    {
+      "target_id": "T02",
+      "positive_at_5": 1,
+      "grades": [
+        "A",
+        "C",
+        "D",
+        "E",
+        "C"
+      ],
+      "useful_method_families": [
+        "叠氮还原"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 1
+      },
+      "expanded_positive_at_5": 1
+    },
+    {
+      "target_id": "T03",
+      "positive_at_5": 5,
+      "grades": [
+        "A",
+        "A",
+        "A",
+        "A",
+        "A"
+      ],
+      "useful_method_families": [
+        "Suzuki偶联",
+        "有机锌交叉偶联"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 0
+      }
+    },
+    {
+      "target_id": "T04",
+      "positive_at_5": 3,
+      "grades": [
+        "E",
+        "B",
+        "D",
+        "B",
+        "B"
+      ],
+      "useful_method_families": [
+        "芳酸与4氨基哌啶酰胺化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 0
+      },
+      "expanded_positive_at_5": 2
+    },
+    {
+      "target_id": "T05",
+      "positive_at_5": 3,
+      "grades": [
+        "A",
+        "C",
+        "D",
+        "A",
+        "A"
+      ],
+      "useful_method_families": [
+        "Meldrum酸中间体醇解",
+        "交叉Claisen缩合"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 1
+      }
+    },
+    {
+      "target_id": "T06",
+      "positive_at_5": 4,
+      "grades": [
+        "B",
+        "A",
+        "B",
+        "E",
+        "B"
+      ],
+      "useful_method_families": [
+        "甲酯化后Boc保护",
+        "羧酸O甲基化",
+        "胺Boc保护"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 0,
+        "fragment": 0
+      }
+    },
+    {
+      "target_id": "T07",
+      "positive_at_5": 3,
+      "grades": [
+        "A",
+        "A",
+        "D",
+        "B",
+        "C"
+      ],
+      "useful_method_families": [
+        "Meldrum酸C酰化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 1
+      }
+    },
+    {
+      "target_id": "T08",
+      "positive_at_5": 4,
+      "grades": [
+        "B",
+        "C",
+        "B",
+        "B",
+        "B"
+      ],
+      "useful_method_families": [
+        "不饱和内酰胺氢化",
+        "内酯氨解及环化",
+        "琥珀酰亚胺还原",
+        "琥珀酸体系还原胺化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 0
+      }
+    },
+    {
+      "target_id": "T09",
+      "positive_at_5": 2,
+      "grades": [
+        "B",
+        "D",
+        "B",
+        "D",
+        "D"
+      ],
+      "useful_method_families": [
+        "芳卤羰基化酰胺化",
+        "芳酸与4氨基哌啶酰胺化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 2,
+        "fragment": 1
+      },
+      "expanded_positive_at_5": 0
+    },
+    {
+      "target_id": "T10",
+      "positive_at_5": 3,
+      "grades": [
+        "D",
+        "B",
+        "B",
+        "C",
+        "B"
+      ],
+      "useful_method_families": [
+        "Suzuki偶联",
+        "烟酸与乙醇胺酰胺化",
+        "芳酸与伯胺酰胺化"
+      ],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 0
+      },
+      "expanded_positive_at_5": 3
+    },
+    {
+      "target_id": "T11",
+      "positive_at_5": 0,
+      "grades": [
+        "C",
+        "C",
+        "D",
+        "D",
+        "C"
+      ],
+      "useful_method_families": [],
+      "top5_repeat_jaccard": 1.0,
+      "whole_core_fragment_attempts": {
+        "whole": 2,
+        "core": 1,
+        "fragment": 1
+      },
+      "expanded_positive_at_5": 0
+    }
+  ]
+}

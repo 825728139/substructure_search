@@ -1,0 +1,76 @@
+{
+  "sample": {
+    "sample_size": 100,
+    "missing_arrays": 0,
+    "shape_mismatch": 0,
+    "bad_drfp": 0
+  },
+  "plans": {
+    "substructure": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.41,
+          "Total Cost": 52.68,
+          "Plan Rows": 10,
+          "Plan Width": 8,
+          "Disabled": false,
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Forward",
+              "Index Name": "reaction_v3_products_mol_gist",
+              "Relation Name": "reaction_v3",
+              "Alias": "reaction_v3",
+              "Startup Cost": 0.41,
+              "Total Cost": 14561.38,
+              "Plan Rows": 2786,
+              "Plan Width": 8,
+              "Disabled": false,
+              "Index Cond": "(products_mol @> 'c1ccccc1'::qmol)",
+              "Filter": "(final_score >= 12)"
+            }
+          ]
+        }
+      }
+    ],
+    "knn": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.41,
+          "Total Cost": 915.84,
+          "Plan Rows": 512,
+          "Plan Width": 16,
+          "Disabled": false,
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Forward",
+              "Index Name": "reaction_v3_product_fp_gist",
+              "Relation Name": "reaction_v3",
+              "Alias": "reaction_v3",
+              "Startup Cost": 0.41,
+              "Total Cost": 4980770.58,
+              "Plan Rows": 2785757,
+              "Plan Width": 16,
+              "Disabled": false,
+              "Order By": "(product_fp <%> '\\x00000000000000000000000000000000000000000000008000000000000020000000000000000000000000000000000020000000000000000000000000000000000004000000000000000000000000000004000000000080000000000000000000000000800000000000020000000000000000000000000000000000000000020000000002002000010000000000000001000000008000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000100000000000002000000002000000000000000000000000000000000'::bfp)",
+              "Filter": "(final_score >= 12)"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

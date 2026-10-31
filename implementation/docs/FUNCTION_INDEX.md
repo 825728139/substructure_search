@@ -963,20 +963,20 @@
 
 | 函数 | 职责 |
 |---|---|
-| [encode](../../reviews/live_benchmark_2026_10_31/benchmark.py#L95) | 以中文可读形式序列化测试记录。 |
-| [ConnectionTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L103) | 记录真实连接及本次调用的独立事件列表。 |
-| [ConnectionTrace.query](../../reviews/live_benchmark_2026_10_31/benchmark.py#L107) | 把固定来源表及其索引目录查询改到新表，不改检索条件。 |
-| [ConnectionTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L114) | 记录真实SQL执行时间与异常类型，不记录连接密码或SQL参数。 |
-| [ConnectionTrace.cursor](../../reviews/live_benchmark_2026_10_31/benchmark.py#L138) | 包装服务端游标，单独计时打开与取页。 |
-| [ConnectionTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L142) | 其他属性和关闭操作交给真实连接。 |
-| [CursorTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L150) | 保存游标和对应连接计时器。 |
-| [CursorTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L154) | 记录子结构游标声明时间。 |
-| [CursorTrace.fetchmany](../../reviews/live_benchmark_2026_10_31/benchmark.py#L172) | 记录数据库实际取页耗时及返回行数。 |
-| [CursorTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L194) | 关闭与游标状态读取保持原实现。 |
-| [run_worker](../../reviews/live_benchmark_2026_10_31/benchmark.py#L199) | 在独立进程运行真实应用检索，实时保存最后阶段包，结束时落盘完整计时。 |
-| [run_worker.connect](../../reviews/live_benchmark_2026_10_31/benchmark.py#L221) | 为本进程来源创建真实的计时连接。 |
-| [run_worker.progress](../../reviews/live_benchmark_2026_10_31/benchmark.py#L225) | 保存最新阶段包，并记录首次出现非空结果的时间。 |
-| [main](../../reviews/live_benchmark_2026_10_31/benchmark.py#L273) | 顺序运行固定目标，限制并发为一，并以外层进程时限兜底原生计算。 |
+| [encode](../../reviews/live_benchmark_2026_10_31/benchmark.py#L98) | 以中文可读形式序列化测试记录。 |
+| [ConnectionTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L106) | 记录真实连接及本次调用的独立事件列表。 |
+| [ConnectionTrace.query](../../reviews/live_benchmark_2026_10_31/benchmark.py#L110) | 把固定来源表及其索引目录查询改到新表，不改检索条件。 |
+| [ConnectionTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L117) | 记录真实SQL执行时间与异常类型，不记录连接密码或SQL参数。 |
+| [ConnectionTrace.cursor](../../reviews/live_benchmark_2026_10_31/benchmark.py#L141) | 包装服务端游标，单独计时打开与取页。 |
+| [ConnectionTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L145) | 其他属性和关闭操作交给真实连接。 |
+| [CursorTrace.__init__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L153) | 保存游标和对应连接计时器。 |
+| [CursorTrace.execute](../../reviews/live_benchmark_2026_10_31/benchmark.py#L157) | 记录子结构游标声明时间。 |
+| [CursorTrace.fetchmany](../../reviews/live_benchmark_2026_10_31/benchmark.py#L175) | 记录数据库实际取页耗时及返回行数。 |
+| [CursorTrace.__getattr__](../../reviews/live_benchmark_2026_10_31/benchmark.py#L197) | 关闭与游标状态读取保持原实现。 |
+| [run_worker](../../reviews/live_benchmark_2026_10_31/benchmark.py#L202) | 在独立进程运行真实应用检索，实时保存最后阶段包，结束时落盘完整计时。 |
+| [run_worker.connect](../../reviews/live_benchmark_2026_10_31/benchmark.py#L224) | 为本进程来源创建真实的计时连接。 |
+| [run_worker.progress](../../reviews/live_benchmark_2026_10_31/benchmark.py#L228) | 保存最新阶段包，并记录首次出现非空结果的时间。 |
+| [main](../../reviews/live_benchmark_2026_10_31/benchmark.py#L276) | 顺序运行固定目标，限制并发为一，并以外层进程时限兜底原生计算。 |
 
 ## ../scripts/verify_environment.py
 

@@ -1,0 +1,1683 @@
+{
+  "build": [
+    {
+      "phase": "analyzing",
+      "config": {
+        "source": "reaction.reaction_v2",
+        "dedup_key": "reaction_smiles-exact-v1",
+        "representative": "minimum-source-id",
+        "expected_sources": 10682666
+      },
+      "completed_at": "2026-10-31 15:25:20.341388+08:00"
+    },
+    {
+      "phase": "index_detail_count",
+      "config": {
+        "source": "reaction.reaction_v2",
+        "dedup_key": "reaction_smiles-exact-v1",
+        "representative": "minimum-source-id",
+        "expected_sources": 10682666
+      },
+      "completed_at": "2026-10-31 15:25:16.676705+08:00"
+    },
+    {
+      "phase": "index_reaction_v2_drfp_gist",
+      "config": {
+        "source": "reaction.reaction_v2",
+        "dedup_key": "reaction_smiles-exact-v1",
+        "representative": "minimum-source-id",
+        "expected_sources": 10682666
+      },
+      "completed_at": "2026-10-31 15:16:50.690397+08:00"
+    }
+  ],
+  "tables": [
+    {
+      "relname": "reaction_v2",
+      "estimated_rows": 10682984
+    },
+    {
+      "relname": "reaction_v3",
+      "estimated_rows": 3448146
+    },
+    {
+      "relname": "reaction_v3_sources",
+      "estimated_rows": 10684668
+    }
+  ],
+  "indexes": [
+    {
+      "relname": "reaction_v3_atmospheres_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_atmospheres_gin ON reaction.reaction_v3 USING gin (atmospheres) WHERE (cardinality(atmospheres) > 0)"
+    },
+    {
+      "relname": "reaction_v3_catalyst_smiles_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_catalyst_smiles_gin ON reaction.reaction_v3 USING gin (catalyst_smiles)"
+    },
+    {
+      "relname": "reaction_v3_center_r1_md5_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_center_r1_md5_idx ON reaction.reaction_v3 USING btree (md5(reaction_center_r1)) WHERE (reaction_center_r1 IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_center_r2_md5_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_center_r2_md5_idx ON reaction.reaction_v3 USING btree (md5(reaction_center_r2)) WHERE (reaction_center_r2 IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_center_r3_md5_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_center_r3_md5_idx ON reaction.reaction_v3 USING btree (md5(reaction_center_r3)) WHERE (reaction_center_r3 IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_center_r4_md5_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_center_r4_md5_idx ON reaction.reaction_v3 USING btree (md5(reaction_center_r4)) WHERE (reaction_center_r4 IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_class_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_class_idx ON reaction.reaction_v3 USING btree (reaction_class) WHERE (reaction_class IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_detail_count_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_detail_count_idx ON reaction.reaction_v3 USING btree (detail_count)"
+    },
+    {
+      "relname": "reaction_v3_drfp_gist",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_drfp_gist ON reaction.reaction_v3 USING gist (drfp) WHERE (drfp IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_duration_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_duration_idx ON reaction.reaction_v3 USING btree (duration_max_seconds) WHERE (duration_max_seconds IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_final_score_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_final_score_idx ON reaction.reaction_v3 USING btree (final_score) WHERE (final_score IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_pkey",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE UNIQUE INDEX reaction_v3_pkey ON reaction.reaction_v3 USING btree (id)"
+    },
+    {
+      "relname": "reaction_v3_pressure_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_pressure_idx ON reaction.reaction_v3 USING btree (pressure_max_kpa) WHERE (pressure_max_kpa IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_product_fp_gist",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_product_fp_gist ON reaction.reaction_v3 USING gist (product_fp)"
+    },
+    {
+      "relname": "reaction_v3_product_smiles_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_product_smiles_gin ON reaction.reaction_v3 USING gin (product_smiles)"
+    },
+    {
+      "relname": "reaction_v3_products_mol_gist",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_products_mol_gist ON reaction.reaction_v3 USING gist (products_mol)"
+    },
+    {
+      "relname": "reaction_v3_reactant_fp_gist",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_reactant_fp_gist ON reaction.reaction_v3 USING gist (reactant_fp) WHERE (reactant_fp IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_reactant_smiles_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_reactant_smiles_gin ON reaction.reaction_v3 USING gin (reactant_smiles)"
+    },
+    {
+      "relname": "reaction_v3_reactants_mol_gist",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_reactants_mol_gist ON reaction.reaction_v3 USING gist (reactants_mol) WHERE (reactants_mol IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_reaction_smiles_md5_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_reaction_smiles_md5_idx ON reaction.reaction_v3 USING btree (md5(reaction_smiles))"
+    },
+    {
+      "relname": "reaction_v3_reagent_smiles_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_reagent_smiles_gin ON reaction.reaction_v3 USING gin (reagent_smiles)"
+    },
+    {
+      "relname": "reaction_v3_solvent_smiles_gin",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_solvent_smiles_gin ON reaction.reaction_v3 USING gin (solvent_smiles)"
+    },
+    {
+      "relname": "reaction_v3_temperature_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_temperature_idx ON reaction.reaction_v3 USING btree (temperature_max_c) WHERE (temperature_max_c IS NOT NULL)"
+    },
+    {
+      "relname": "reaction_v3_yield_idx",
+      "indisvalid": true,
+      "indisready": true,
+      "definition": "CREATE INDEX reaction_v3_yield_idx ON reaction.reaction_v3 USING btree (yield_max_pct) WHERE (yield_max_pct IS NOT NULL)"
+    }
+  ],
+  "sampled_group_rows": 300,
+  "sampled_multiple_source_groups": [
+    {
+      "id": 1,
+      "final_score": 17,
+      "detail_count": 5,
+      "n": 5,
+      "min_id": 1,
+      "min_score": 16,
+      "max_score": 17,
+      "qualified": 5,
+      "same_reaction": true
+    },
+    {
+      "id": 2,
+      "final_score": 17,
+      "detail_count": 10,
+      "n": 10,
+      "min_id": 2,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 10,
+      "same_reaction": true
+    },
+    {
+      "id": 3,
+      "final_score": 19,
+      "detail_count": 10,
+      "n": 10,
+      "min_id": 3,
+      "min_score": 18,
+      "max_score": 19,
+      "qualified": 10,
+      "same_reaction": true
+    },
+    {
+      "id": 4,
+      "final_score": 17,
+      "detail_count": 10,
+      "n": 10,
+      "min_id": 4,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 10,
+      "same_reaction": true
+    },
+    {
+      "id": 5,
+      "final_score": 19,
+      "detail_count": 12,
+      "n": 12,
+      "min_id": 5,
+      "min_score": 17,
+      "max_score": 21,
+      "qualified": 12,
+      "same_reaction": true
+    },
+    {
+      "id": 6,
+      "final_score": 20,
+      "detail_count": 10,
+      "n": 10,
+      "min_id": 6,
+      "min_score": 16,
+      "max_score": 20,
+      "qualified": 10,
+      "same_reaction": true
+    },
+    {
+      "id": 7,
+      "final_score": 22,
+      "detail_count": 10,
+      "n": 10,
+      "min_id": 7,
+      "min_score": 19,
+      "max_score": 22,
+      "qualified": 10,
+      "same_reaction": true
+    },
+    {
+      "id": 8,
+      "final_score": 10,
+      "detail_count": 15,
+      "n": 15,
+      "min_id": 8,
+      "min_score": 8,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 9,
+      "final_score": 18,
+      "detail_count": 17,
+      "n": 17,
+      "min_id": 9,
+      "min_score": 16,
+      "max_score": 18,
+      "qualified": 17,
+      "same_reaction": true
+    },
+    {
+      "id": 10,
+      "final_score": 17,
+      "detail_count": 17,
+      "n": 17,
+      "min_id": 10,
+      "min_score": 16,
+      "max_score": 17,
+      "qualified": 17,
+      "same_reaction": true
+    },
+    {
+      "id": 11,
+      "final_score": 19,
+      "detail_count": 17,
+      "n": 17,
+      "min_id": 11,
+      "min_score": 18,
+      "max_score": 19,
+      "qualified": 17,
+      "same_reaction": true
+    },
+    {
+      "id": 12,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 12,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 13,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 13,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 14,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 14,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 15,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 15,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 16,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 16,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 17,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 17,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 18,
+      "final_score": 18,
+      "detail_count": 6,
+      "n": 6,
+      "min_id": 18,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 6,
+      "same_reaction": true
+    },
+    {
+      "id": 19,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 19,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 20,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 20,
+      "min_score": 16,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 21,
+      "final_score": 11,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 21,
+      "min_score": 10,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 22,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 22,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 23,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 23,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 25,
+      "final_score": 14,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 25,
+      "min_score": 13,
+      "max_score": 14,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 26,
+      "final_score": 16,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 26,
+      "min_score": 15,
+      "max_score": 16,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 27,
+      "final_score": 15,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 27,
+      "min_score": 14,
+      "max_score": 15,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 28,
+      "final_score": 15,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 28,
+      "min_score": 14,
+      "max_score": 15,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 29,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 29,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 30,
+      "final_score": 21,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 30,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 31,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 31,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068325,
+      "final_score": 9,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068325,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 1068326,
+      "final_score": 15,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068326,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068327,
+      "final_score": 13,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068327,
+      "min_score": 13,
+      "max_score": 14,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068328,
+      "final_score": 14,
+      "detail_count": 5,
+      "n": 5,
+      "min_id": 1068328,
+      "min_score": 13,
+      "max_score": 15,
+      "qualified": 5,
+      "same_reaction": true
+    },
+    {
+      "id": 1068329,
+      "final_score": 14,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068329,
+      "min_score": 14,
+      "max_score": 15,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068330,
+      "final_score": 8,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068330,
+      "min_score": 8,
+      "max_score": 8,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 1068331,
+      "final_score": 5,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068331,
+      "min_score": 5,
+      "max_score": 5,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 1068332,
+      "final_score": 12,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068332,
+      "min_score": 12,
+      "max_score": 12,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068333,
+      "final_score": 11,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068333,
+      "min_score": 11,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 1068336,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068336,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068337,
+      "final_score": 21,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068337,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068338,
+      "final_score": 14,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068338,
+      "min_score": 14,
+      "max_score": 15,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068340,
+      "final_score": 13,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068340,
+      "min_score": 13,
+      "max_score": 13,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068341,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068341,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068342,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068342,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068343,
+      "final_score": 21,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068343,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068344,
+      "final_score": 21,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068344,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068345,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068345,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068346,
+      "final_score": 13,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068346,
+      "min_score": 13,
+      "max_score": 14,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068348,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068348,
+      "min_score": 17,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068351,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068351,
+      "min_score": 19,
+      "max_score": 21,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068352,
+      "final_score": 13,
+      "detail_count": 5,
+      "n": 5,
+      "min_id": 1068352,
+      "min_score": 13,
+      "max_score": 13,
+      "qualified": 5,
+      "same_reaction": true
+    },
+    {
+      "id": 1068354,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068354,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 1068355,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 1068355,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 2136664,
+      "final_score": 6,
+      "detail_count": 4,
+      "n": 4,
+      "min_id": 2136664,
+      "min_score": 6,
+      "max_score": 6,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136665,
+      "final_score": 14,
+      "detail_count": 17,
+      "n": 17,
+      "min_id": 2136665,
+      "min_score": 14,
+      "max_score": 15,
+      "qualified": 17,
+      "same_reaction": true
+    },
+    {
+      "id": 2136666,
+      "final_score": 9,
+      "detail_count": 4,
+      "n": 4,
+      "min_id": 2136666,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136671,
+      "final_score": 18,
+      "detail_count": 66,
+      "n": 66,
+      "min_id": 2136671,
+      "min_score": 18,
+      "max_score": 19,
+      "qualified": 66,
+      "same_reaction": true
+    },
+    {
+      "id": 2136672,
+      "final_score": 10,
+      "detail_count": 5,
+      "n": 5,
+      "min_id": 2136672,
+      "min_score": 10,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136673,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 2136673,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 2136674,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 2136674,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 2136677,
+      "final_score": 15,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136677,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136678,
+      "final_score": 9,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136678,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136679,
+      "final_score": 16,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136679,
+      "min_score": 16,
+      "max_score": 16,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136680,
+      "final_score": 14,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136680,
+      "min_score": 14,
+      "max_score": 14,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136683,
+      "final_score": 8,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136683,
+      "min_score": 8,
+      "max_score": 8,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136684,
+      "final_score": 14,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136684,
+      "min_score": 14,
+      "max_score": 14,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136685,
+      "final_score": 12,
+      "detail_count": 8,
+      "n": 8,
+      "min_id": 2136685,
+      "min_score": 12,
+      "max_score": 13,
+      "qualified": 8,
+      "same_reaction": true
+    },
+    {
+      "id": 2136687,
+      "final_score": 15,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136687,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136688,
+      "final_score": 13,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136688,
+      "min_score": 13,
+      "max_score": 13,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136689,
+      "final_score": 17,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136689,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136690,
+      "final_score": 19,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136690,
+      "min_score": 19,
+      "max_score": 19,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 2136691,
+      "final_score": 5,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 2136691,
+      "min_score": 5,
+      "max_score": 5,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136695,
+      "final_score": 8,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 2136695,
+      "min_score": 8,
+      "max_score": 8,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 2136698,
+      "final_score": 15,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 2136698,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 2136699,
+      "final_score": 17,
+      "detail_count": 4,
+      "n": 4,
+      "min_id": 2136699,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 4,
+      "same_reaction": true
+    },
+    {
+      "id": 3205046,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 3205046,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 3205057,
+      "final_score": 14,
+      "detail_count": 7,
+      "n": 7,
+      "min_id": 3205057,
+      "min_score": 14,
+      "max_score": 14,
+      "qualified": 7,
+      "same_reaction": true
+    },
+    {
+      "id": 3205108,
+      "final_score": 9,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 3205108,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 4273412,
+      "final_score": 9,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 4273412,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 4273912,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 4273912,
+      "min_score": 17,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 4273931,
+      "final_score": 10,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 4273931,
+      "min_score": 10,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 4274106,
+      "final_score": 10,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 4274106,
+      "min_score": 10,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 4274118,
+      "final_score": 19,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 4274118,
+      "min_score": 19,
+      "max_score": 19,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 5341697,
+      "final_score": 12,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5341697,
+      "min_score": 10,
+      "max_score": 12,
+      "qualified": 1,
+      "same_reaction": true
+    },
+    {
+      "id": 5341703,
+      "final_score": 11,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 5341703,
+      "min_score": 11,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 5341827,
+      "final_score": 7,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5341827,
+      "min_score": 7,
+      "max_score": 7,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 5341828,
+      "final_score": 12,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 5341828,
+      "min_score": 12,
+      "max_score": 12,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 5342211,
+      "final_score": 13,
+      "detail_count": 6,
+      "n": 6,
+      "min_id": 5342211,
+      "min_score": 13,
+      "max_score": 14,
+      "qualified": 6,
+      "same_reaction": true
+    },
+    {
+      "id": 5342251,
+      "final_score": 12,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342251,
+      "min_score": 12,
+      "max_score": 12,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342257,
+      "final_score": 16,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342257,
+      "min_score": 16,
+      "max_score": 16,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342263,
+      "final_score": 16,
+      "detail_count": 6,
+      "n": 6,
+      "min_id": 5342263,
+      "min_score": 16,
+      "max_score": 16,
+      "qualified": 6,
+      "same_reaction": true
+    },
+    {
+      "id": 5342267,
+      "final_score": 13,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342267,
+      "min_score": 13,
+      "max_score": 13,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342268,
+      "final_score": 13,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342268,
+      "min_score": 13,
+      "max_score": 13,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342269,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342269,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342270,
+      "final_score": 12,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 5342270,
+      "min_score": 12,
+      "max_score": 12,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 5342290,
+      "final_score": 18,
+      "detail_count": 12,
+      "n": 12,
+      "min_id": 5342290,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 12,
+      "same_reaction": true
+    },
+    {
+      "id": 5342294,
+      "final_score": 18,
+      "detail_count": 46,
+      "n": 46,
+      "min_id": 5342294,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 46,
+      "same_reaction": true
+    },
+    {
+      "id": 7478274,
+      "final_score": 12,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478274,
+      "min_score": 12,
+      "max_score": 12,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478277,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478277,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478279,
+      "final_score": 10,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478279,
+      "min_score": 10,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478282,
+      "final_score": 9,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478282,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478284,
+      "final_score": 20,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478284,
+      "min_score": 20,
+      "max_score": 20,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478286,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478286,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478288,
+      "final_score": 16,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478288,
+      "min_score": 16,
+      "max_score": 16,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478291,
+      "final_score": 8,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478291,
+      "min_score": 8,
+      "max_score": 8,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478296,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478296,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478298,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478298,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478302,
+      "final_score": 15,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478302,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478304,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478304,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478308,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478308,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478312,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478312,
+      "min_score": 19,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478316,
+      "final_score": 11,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478316,
+      "min_score": 11,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478318,
+      "final_score": 20,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478318,
+      "min_score": 20,
+      "max_score": 20,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478320,
+      "final_score": 20,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478320,
+      "min_score": 20,
+      "max_score": 20,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478322,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478322,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478325,
+      "final_score": 16,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478325,
+      "min_score": 16,
+      "max_score": 16,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478328,
+      "final_score": 9,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478328,
+      "min_score": 9,
+      "max_score": 9,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478332,
+      "final_score": 7,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478332,
+      "min_score": 7,
+      "max_score": 7,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478334,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478334,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478336,
+      "final_score": 5,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478336,
+      "min_score": 5,
+      "max_score": 5,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478338,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478338,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478339,
+      "final_score": 19,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478339,
+      "min_score": 19,
+      "max_score": 19,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478341,
+      "final_score": 10,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478341,
+      "min_score": 10,
+      "max_score": 10,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 7478343,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478343,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478345,
+      "final_score": 17,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478345,
+      "min_score": 17,
+      "max_score": 17,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478347,
+      "final_score": 14,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478347,
+      "min_score": 14,
+      "max_score": 14,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 7478350,
+      "final_score": 11,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 7478350,
+      "min_score": 11,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 8547358,
+      "final_score": 18,
+      "detail_count": 7,
+      "n": 7,
+      "min_id": 8547358,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 7,
+      "same_reaction": true
+    },
+    {
+      "id": 8547361,
+      "final_score": 8,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 8547361,
+      "min_score": 8,
+      "max_score": 8,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 8548293,
+      "final_score": 15,
+      "detail_count": 2,
+      "n": 2,
+      "min_id": 8548293,
+      "min_score": 15,
+      "max_score": 15,
+      "qualified": 2,
+      "same_reaction": true
+    },
+    {
+      "id": 9614971,
+      "final_score": 18,
+      "detail_count": 4,
+      "n": 4,
+      "min_id": 9614971,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 4,
+      "same_reaction": true
+    },
+    {
+      "id": 9615017,
+      "final_score": 18,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 9615017,
+      "min_score": 18,
+      "max_score": 18,
+      "qualified": 3,
+      "same_reaction": true
+    },
+    {
+      "id": 9615055,
+      "final_score": 11,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 9615055,
+      "min_score": 11,
+      "max_score": 11,
+      "qualified": 0,
+      "same_reaction": true
+    },
+    {
+      "id": 9615380,
+      "final_score": 20,
+      "detail_count": 3,
+      "n": 3,
+      "min_id": 9615380,
+      "min_score": 20,
+      "max_score": 20,
+      "qualified": 3,
+      "same_reaction": true
+    }
+  ],
+  "low_representative_with_qualified_source": []
+}
