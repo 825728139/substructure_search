@@ -303,7 +303,7 @@ class PostgresSource:
 
     hydration_requires_io = True
     selection_failure_fallback = True
-    selection_policy = "optional_indexed_side_fp_knn_top512_then_independent_indexed_core_cursor; no_server_mass_window"
+    selection_policy = "final_score_ge_12_before_selection; optional_indexed_side_fp_knn_top512_then_independent_indexed_core_cursor; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",
@@ -422,6 +422,7 @@ class PostgresSource:
     def candidate_page(self, family, role, cursor, limit, target_smiles, stage=0):
         """在同一只读会话中读取一页候选，返回实例及范围标签。
 
+        所有通道先在 SQL 中限制 final_score >= 12，缺失分数不参与召回。
         具备指纹索引时，整体/核心首阶段复用前 512 条整侧 KNN 池；其他阶段用核心 mol 子结构服务端游标。cursor 校验顺序，limit 限制抓取行数。每次查询置于 savepoint，失败回滚局部事务并使相关游标失效。整侧相似/命中均不能替代逐产品 R 核验。
         """
         from psycopg import Error, sql
@@ -444,7 +445,7 @@ class PostgresSource:
                 if pool_key not in self._knn:
                     query = sql.SQL("""
                         SELECT {projection} FROM reaction.reactions
-                        WHERE {fp} IS NOT NULL
+                        WHERE final_score >= 12 AND {fp} IS NOT NULL
                         ORDER BY {fp} <%%> morganbv_fp(mol_from_smiles(%s::cstring),2)
                         LIMIT 512
                     """).format(projection=projection, fp=sql.Identifier(fp_column))
@@ -461,7 +462,8 @@ class PostgresSource:
                         raise ValueError("Source cursor cannot be resumed outside its read session")
                     server = self.connection.cursor(name="rr_" + digest(key))
                     query = sql.SQL(
-                        "SELECT {projection} FROM reaction.reactions WHERE {column} @> %s::qmol"
+                        "SELECT {projection} FROM reaction.reactions "
+                        "WHERE final_score >= 12 AND {column} @> %s::qmol"
                     ).format(projection=projection, column=sql.Identifier(column))
                     server.execute(query, (family.core_smarts,))
                     self._cursors[key] = (server, 0)

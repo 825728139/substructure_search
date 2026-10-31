@@ -55,7 +55,10 @@ JSONL 可以采用本项目 [ReactionRecord 契约](contracts/ReactionRecord.sch
 
 PostgreSQL 通过环境变量 `RR_POSTGRES_DSN` 接入，命令使用 `--source postgres`。凭据不写入代码、结果包或 Git。读取使用 Repeatable Read 和只读事务；要求有效的 mol GiST 索引。可用的指纹 GiST 索引提供整侧 KNN 初选，随后独立的 mol 子结构游标和逐材料 Markush 核验补充参考。KNN 池不是全量子结构筛选保证；现有整侧指纹也不冒充具体产物的指纹。每条 SQL 有超时，不执行全量 COUNT 或对全量命中做排序。接口依据为 [RDKit Cartridge 官方说明](https://www.rdkit.org/docs/Cartridge.html#operators)。当前来源未提供具体材料质量索引，因此不在源 SQL 内临时全表计算分子量。
 
-2026-10-29 的只读检查确认源库尚无这些化学索引，在线适配器会报告未就绪。可以显式导出一个有数量上限的样本先使用，不会自动回退全表扫描，也不会自动修改源库：
+数据库召回统一要求 `final_score >= 12`，12 分保留，低分及 NULL 排除。门槛在 SQL 中先于 KNN 排序、512 条截断和子结构分页执行，适用于产物、反应物及严格目标补查。命中统计范围是满足该门槛的来源记录；该分数门槛不替代后续方法分析，也不增加温度、压力或产率等默认过滤。JSONL 示例/离线评测仍按其显式样本运行，本项门槛针对在线 PostgreSQL 来源。
+
+
+2026-10-31 的只读检查确认旧表 `reaction.reactions` 与新表 `reaction.reaction_v2` 已有化学索引。当前适配器仍查询旧表，新增属性尚未接入；反应物部分 GiST 与适配器的非部分索引要求仍待兼容。可显式导出有数量上限的本地评测样本；导出工具按主键取样，不等同于上述在线检索质量过滤：
 
 ```bash
 ./implementation/scripts/rr export-sample --limit 300 --output var/reactions.jsonl
@@ -122,7 +125,7 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 458 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 468 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 ### 真实来源和浏览器集成检查
 
@@ -134,7 +137,7 @@ uv run --frozen --with playwright==1.64.1 python -m playwright install chromium
 uv run --frozen --with playwright==1.64.1 python scripts/check.py
 ```
 
-已有 Chromium 可通过 `RR_TEST_CHROMIUM_PATH` 指定可执行文件。需要单独排查时运行 `tests/test_postgres_integration.py` 或 `tests/test_browser_integration.py`。本机已通过 37 项真实 SQL 和 7 项真实浏览器检查；小样本集成通过不代表现库执行计划、全库性能或跨浏览器兼容性已验收。
+已有 Chromium 可通过 `RR_TEST_CHROMIUM_PATH` 指定可执行文件。需要单独排查时运行 `tests/test_postgres_integration.py` 或 `tests/test_browser_integration.py`。本机已通过 47 项真实 SQL 和 7 项真实浏览器检查；小样本集成通过不代表现库执行计划、全库性能或跨浏览器兼容性已验收。
 
 后续三轮新增的 11 类修复与逐轮验证见[三轮复审记录](docs/MULTI_ROUND_REVIEW.md)。审核文件按补丁处理：省略字段会保留来源原值，显式空列表表示清空；使用 Python 模型生成补丁时应调用 `model_dump_json(exclude_unset=True)` 保留字段是否提供的区别。
 

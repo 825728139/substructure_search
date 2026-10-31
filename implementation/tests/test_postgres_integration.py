@@ -93,7 +93,7 @@ def indexed_source_dsn(postgres_cluster):
                 reaction_center_r2 text, temperature_min_c real,
                 temperature_max_c real, duration_max_seconds bigint,
                 pressure_max_kpa real, products_mol mol, reactants_mol mol,
-                product_fp bfp, reactant_fp bfp
+                product_fp bfp, reactant_fp bfp, final_score integer DEFAULT 12
             )
         """)
         connection.execute("""
@@ -762,3 +762,72 @@ def test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails
     finally:
         for source in opened:
             source.connection.close()
+
+
+@pytest.mark.parametrize("role", ["product", "reactant"])
+@pytest.mark.parametrize("mode", ["knn", "core_fallback", "fragment", "strict"])
+def test_quality_score_gate_applies_to_every_database_recall(indexed_source_dsn, role, mode):
+    """所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("SET rdkit.morgan_fp_size=2048")
+        writer.execute("DELETE FROM reaction.reactions")
+        for number, score in enumerate([None, 0, 11, 12, 13], 1):
+            writer.execute(
+                """
+                INSERT INTO reaction.reactions
+                (id,final_score,product_smiles,reactant_smiles,products_mol,reactants_mol,
+                 product_fp,reactant_fp)
+                VALUES (%s,%s,ARRAY['CCO'],ARRAY['CCO'],'CCO'::mol,'CCO'::mol,
+                        morganbv_fp('CCO'::mol,2),morganbv_fp('CCO'::mol,2))
+                """,
+                (number, score),
+            )
+    family = carbon_family(layer="fragment" if mode == "fragment" else "whole")
+    if mode == "strict":
+        family = family.model_copy(update={"relation": "strict"})
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        cursor, found = 0, []
+        while True:
+            page = source.candidate_page(
+                family, role, cursor, 1, "CCO", stage=1 if mode == "core_fallback" else 0
+            )
+            found.extend(item.record.id for item in page.items)
+            if page.next_cursor is None:
+                assert page.stream_exhausted and page.scope_complete
+                break
+            cursor = page.next_cursor
+        assert sorted(found) == ["integration:4", "integration:5"]
+        assert "final_score_ge_12" in source.selection_policy
+    finally:
+        source.close()
+
+
+@pytest.mark.parametrize("role", ["product", "reactant"])
+def test_quality_filter_runs_before_knn_pool_limit(indexed_source_dsn, role):
+    """六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。"""
+    with psycopg.connect(indexed_source_dsn, autocommit=True) as writer:
+        writer.execute("SET rdkit.morgan_fp_size=2048")
+        writer.execute("DELETE FROM reaction.reactions")
+        writer.execute("""
+            INSERT INTO reaction.reactions
+            (id,final_score,product_smiles,reactant_smiles,products_mol,reactants_mol,
+             product_fp,reactant_fp)
+            SELECT n,11,ARRAY['CCO'],ARRAY['CCO'],'CCO'::mol,'CCO'::mol,
+                   morganbv_fp('CCO'::mol,2),morganbv_fp('CCO'::mol,2)
+            FROM generate_series(1,600) n
+        """)
+        writer.execute("""
+            INSERT INTO reaction.reactions
+            (id,final_score,product_smiles,reactant_smiles,products_mol,reactants_mol,
+             product_fp,reactant_fp)
+            VALUES (601,12,ARRAY['CCCO'],ARRAY['CCCO'],'CCCO'::mol,'CCCO'::mol,
+                    morganbv_fp('CCCO'::mol,2),morganbv_fp('CCCO'::mol,2))
+        """)
+    source = PostgresSource(indexed_source_dsn)
+    try:
+        page = source.candidate_page(carbon_family(layer="whole"), role, 0, 1000, "CCO")
+        assert [item.record.id for item in page.items] == ["integration:601"]
+        assert page.next_cursor is None and page.stream_exhausted
+    finally:
+        source.close()

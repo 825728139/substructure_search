@@ -104,9 +104,9 @@
 | [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L383) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
 | [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L388) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
 | [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L422) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L495) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L514) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L559) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L497) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L516) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L561) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -559,6 +559,8 @@
 | [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails](../tests/test_postgres_integration.py#L702) | 审核初始化失败且真实连接关闭也报错时，仍返回审核原错并释放客户端与服务器会话。 |
 | [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source](../tests/test_postgres_integration.py#L722) | 建立真实来源，按场景终止本测试后端，并记录真实关闭过程中的驱动异常。 |
 | [test_overlay_failure_keeps_original_error_when_real_connection_cleanup_fails.capture_source.record_close](../tests/test_postgres_integration.py#L729) | 调用真实关闭逻辑，保留驱动异常以证明关闭故障确实发生。 |
+| [test_quality_score_gate_applies_to_every_database_recall](../tests/test_postgres_integration.py#L769) | 所有数据库召回通道排除低分与未知分数，边界十二分可命中且分页不跳漏。 |
+| [test_quality_filter_runs_before_knn_pool_limit](../tests/test_postgres_integration.py#L807) | 六百个低分完全相同结构不能占满近邻池，合格但相似度较低的先例仍须被召回。 |
 
 ## tests/test_query_input_planning.py
 
