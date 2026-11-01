@@ -301,10 +301,10 @@
 | [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L85) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
 | [_attachment_environment](../src/reaction_reference/retrieval/planner.py#L108) | 保留支链连接原子及其一层重原子邻域，并补齐相交官能团和完整环。 |
 | [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L138) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
-| [plan_families](../src/reaction_reference/retrieval/planner.py#L195) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L367) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L396) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L419) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [plan_families](../src/reaction_reference/retrieval/planner.py#L202) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L381) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L410) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L433) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -377,11 +377,13 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_two_substituent_query_preserves_relative_positions](../tests/test_attachment_planning.py#L16) | 同时保留芳基酯与腈时不能把邻位异构体当作对位先例。 |
-| [test_attachment_combinations_have_bounded_unique_connected_queries](../tests/test_attachment_planning.py#L38) | 支链组合有数量上限且全部属于目标连通子图，不能生成不存在的拼接结构。 |
-| [test_public_planner_includes_attachment_query_and_keeps_bare_core](../tests/test_attachment_planning.py#L54) | 正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。 |
-| [test_attachment_environment_relaxes_tail_but_preserves_nitrogen_role](../tests/test_attachment_planning.py#L71) | 远端烷链可变且核心仍可加取代，但连接端仲胺不能静默变成叔胺或醚。 |
-| [test_attachment_environment_closes_functional_units_and_rings](../tests/test_attachment_planning.py#L80) | 酰胺邻域保持C=O与N，苄基连接邻域保留完整苯环而放开对位远端烷链。 |
+| [test_two_substituent_query_preserves_relative_positions](../tests/test_attachment_planning.py#L17) | 同时保留芳基酯与腈时不能把邻位异构体当作对位先例。 |
+| [test_attachment_combinations_have_bounded_unique_connected_queries](../tests/test_attachment_planning.py#L39) | 支链组合有数量上限且全部属于目标连通子图，不能生成不存在的拼接结构。 |
+| [test_public_planner_includes_attachment_query_and_keeps_bare_core](../tests/test_attachment_planning.py#L55) | 正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。 |
+| [test_attachment_environment_relaxes_tail_but_preserves_nitrogen_role](../tests/test_attachment_planning.py#L72) | 远端烷链可变且核心仍可加取代，但连接端仲胺不能静默变成叔胺或醚。 |
+| [test_attachment_environment_closes_functional_units_and_rings](../tests/test_attachment_planning.py#L81) | 酰胺邻域保持C=O与N，苄基连接邻域保留完整苯环而放开对位远端烷链。 |
+| [test_single_and_pair_questions_precede_repeated_tail_precision](../tests/test_attachment_planning.py#L102) | 两条长支链都有局部/完整版本时，第二个名额应查询双位点而不是重复单支链。 |
+| [test_default_plan_includes_pair_and_preserves_full_alternatives](../tests/test_attachment_planning.py#L122) | 默认计划提供双位点查询，较大预算仍保留完整远端版本和裸核心。 |
 
 ## tests/test_browser_integration.py
 

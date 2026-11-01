@@ -9,6 +9,7 @@ from reaction_reference.retrieval.planner import (
     _attachment_seeds,
     _core_smarts,
     functional_matches,
+    initial_families,
     plan_families,
 )
 
@@ -96,3 +97,35 @@ def test_attachment_environment_closes_functional_units_and_rings():
         )
         assert match_family(family, target, target, "self").state == "match"
         assert len(atoms) < target.GetNumHeavyAtoms()
+
+
+def test_single_and_pair_questions_precede_repeated_tail_precision():
+    """两条长支链都有局部/完整版本时，第二个名额应查询双位点而不是重复单支链。"""
+    target = parse("CCCCCNc1ccc(NCCCCC)cc1")
+    core = {a.GetIdx() for a in target.GetAtoms() if a.GetIsAromatic()}
+    seeds = _attachment_seeds(target, core, functional_matches(target), limit=2)
+    assert [rule for _, rule in seeds] == [
+        "core_attachment_environment:1",
+        "core_attachment_environment:2",
+    ]
+    assert seeds[0][0] < seeds[1][0]
+
+
+@pytest.mark.parametrize(
+    "smiles",
+    [
+        "CCCCCNc1ccc(OCCCCC)cc1",
+        "COC(=O)C1CC(NCCCCC)C1",
+        "CCN1CCC(C(=O)NCCCCC)CC1",
+    ],
+)
+def test_default_plan_includes_pair_and_preserves_full_alternatives(smiles):
+    """默认计划提供双位点查询，较大预算仍保留完整远端版本和裸核心。"""
+    target = parse(smiles)
+    families = initial_families(target)
+    core = [f for f in families if f.layer == "core"]
+    assert core[0].rule_id == "complete_ring_system"
+    assert any(f.rule_id.endswith(":2") for f in core)
+    expanded = plan_families(target, 48)
+    assert any(f.rule_id == "core_attachment_combination:2" for f in expanded)
+    assert len({f.id for f in expanded}) == len(expanded)

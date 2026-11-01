@@ -1,0 +1,593 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>双位点查询执行</title><style>body{font-family:sans-serif;margin:28px}.grid{display:flex;flex-wrap:wrap;gap:12px}article{width:370px;border:1px solid #ccc;padding:12px}img{width:100%}code,pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>实际计划与双位点查询执行</h1><p>高亮为固定原子，展开可查看不同候选阶段的实际执行范围。初选流结束不等于全库查完。</p><h2>U01</h2><div class="grid"><article><b>1. 基础骨架或分片</b><img src="U01-1.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6:1]-[#6:2]-[#8:3]-[#6:4](=[#8:5])/[#6:6]=[#6:7]1\[#7:8]-[#6:9](-[#6:10](-[#8:11]-[#6:12]-[#6:13])=[#8:14])-[#6@:15]2(-[#6:16]-[#6@@:17]-1(-[#6:18]-2)-[#6:19](-[#7:20]1:[#7:21]:[#6:22](-[#6:23]):[#6:24]:[#6:25]:1-[#6:26])=[#8:27])-[#6:28]1:[#6:29]:[#6:30]:[#6:31]:[#6:32]:[#6:33]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;29e3ed1dd482d557f8937f76&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;06f6c8f24cc8b1ca40c2cf67&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>2. 基础骨架或分片</b><img src="U01-2.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:2]-[#8&amp;A&amp;+0:3]-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#6&amp;A&amp;+0:6]=[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9](-[#6&amp;A&amp;+0:10](-[#8&amp;A&amp;+0:11]-[#6&amp;A&amp;+0:12])=[#8&amp;A&amp;+0:14])-[#6&amp;A&amp;+0:15]2(-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1(-[#6&amp;A&amp;+0:18]-2)-[#6&amp;A&amp;+0:19](-[#7&amp;a&amp;+0:20]1:[#7&amp;a&amp;+0:21]:[#6&amp;a&amp;+0:22]:[#6&amp;a&amp;+0:24]:[#6&amp;a&amp;+0:25]:1)=[#8&amp;A&amp;+0:27])-[#6&amp;a&amp;+0:28]1:[#6&amp;a&amp;+0:29]:[#6&amp;a&amp;+0:30]:[#6&amp;a&amp;+0:31]:[#6&amp;a&amp;+0:32]:[#6&amp;a&amp;+0:33]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;5323deeb2a5f63bd17414539&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;677d9bd2cb03e175516871b0&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;5323deeb2a5f63bd17414539&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;0560ec9b1d52d796ee457e21&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>3. 基础骨架或分片</b><img src="U01-3.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9]-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;e30c64e8c8c80fcb12da1662&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;00141572c69e4a28ed40cae4&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true,
+    &quot;priority_continuations&quot;: 2
+  }
+]</pre></details></article><article><b>4. 基础骨架或分片</b><img src="U01-4.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:1]-[#6&amp;A&amp;+0:2]-[#8&amp;A&amp;+0:3]-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#6&amp;A&amp;+0:6]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;e6b7b470116366faf8d3753e&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;c212934f2f0fd6e4feb064ca&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>5. 单支链组合</b><img src="U01-5.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9](-[#6&amp;A&amp;+0&amp;H0&amp;X3:10](-[#8&amp;A&amp;+0&amp;H0&amp;X2:11]-[#6&amp;A&amp;+0:12])=[#8&amp;A&amp;+0&amp;H0&amp;X1:14])-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;8b6e908898d4377292493ed7&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;4f4b629283b83b7c5297a888&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;8b6e908898d4377292493ed7&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;7fb85ab67b5cb2b16b270044&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>6. 基础骨架或分片</b><img src="U01-6.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9](-[#6&amp;A&amp;+0:10](-[#8&amp;A&amp;+0:11]-[#6&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13])=[#8&amp;A&amp;+0:14])-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;2a9ef88ceeb6bce55756fac5&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;17399e5d273d6c99d5fb4bfa&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;2a9ef88ceeb6bce55756fac5&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;5b1a47a79ccea873afcec4fa&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>7. 双支链组合</b><img src="U01-7.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:2]-[#8&amp;A&amp;+0&amp;H0&amp;X2:3]-[#6&amp;A&amp;+0&amp;H0&amp;X3:4](=[#8&amp;A&amp;+0&amp;H0&amp;X1:5])-[#6&amp;A&amp;+0&amp;H1&amp;X3:6]=[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9](-[#6&amp;A&amp;+0&amp;H0&amp;X3:10](-[#8&amp;A&amp;+0&amp;H0&amp;X2:11]-[#6&amp;A&amp;+0:12])=[#8&amp;A&amp;+0&amp;H0&amp;X1:14])-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;aa0eb9ee6f159483a0d0030b&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;ca5acd883950bcae4ba14c7a&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;aa0eb9ee6f159483a0d0030b&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;3f29cc7c85d3871ed8e1190f&quot;,
+    &quot;complete&quot;: false
+  }
+]</pre></details></article><article><b>8. 基础骨架或分片</b><img src="U01-8.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:2]-[#8&amp;A&amp;+0:3]-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#6&amp;A&amp;+0:6]</code><pre>[]</pre></details></article><article><b>9. 基础骨架或分片</b><img src="U01-9.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:20]1:[#7&amp;a&amp;+0:21]:[#6&amp;a&amp;+0:22]:[#6&amp;a&amp;+0:24]:[#6&amp;a&amp;+0:25]:1</code><pre>[]</pre></details></article><article><b>10. 基础骨架或分片</b><img src="U01-10.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9](-[#6&amp;A&amp;+0:10](-[#8&amp;A&amp;+0:11]-[#6&amp;A&amp;+0:12])=[#8&amp;A&amp;+0:14])-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[]</pre></details></article><article><b>11. 基础骨架或分片</b><img src="U01-11.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:7]1-[#7&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9]-[#6&amp;A&amp;+0:15]2-[#6&amp;A&amp;+0:16]-[#6&amp;A&amp;+0:17]-1-[#6&amp;A&amp;+0:18]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;cb7f9ba9e4acbbbe1cd5e493&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;c81837047b755157e303cd7d&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>12. 基础骨架或分片</b><img src="U01-12.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:1]-[#6&amp;A&amp;+0:2]-[#8&amp;A&amp;+0:3]-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#6&amp;A&amp;+0:6]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;77d07c624d8908e581b16bea&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;dacd04557955113648fd4e38&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article></div><h2>U02</h2><div class="grid"><article><b>1. 基础骨架或分片</b><img src="U02-1.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6:1]1:[#6:2]:[#6:3]2-[#6:4](=[#8:5])-[#7:6](-[#6:7]-[#6:8]-[#6:9]-[#6:10])-[#6:11](=[#8:12])-[#6:13]3:[#6:14]:[#6:15]:[#6:16]:[#6:17](:[#6:18]:2:3):[#6:19]:1-[#7:20]-[#7:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;8fc483a223ede1badd5e8714&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;848852a2979f1b28d6ce1ab5&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>2. 基础骨架或分片</b><img src="U02-2.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6]-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0:20]-[#7&amp;A&amp;+0:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;c05d84c7c8973ad043ca1016&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;7e464405304ffa7f02f7c486&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;c05d84c7c8973ad043ca1016&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;48c8cd42c63e0b92477ad6f8&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>3. 基础骨架或分片</b><img src="U02-3.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6]-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;6b50f6758e2e442e6eb6b9c3&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;82be6285de91bc460eced4a0&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>4. 基础骨架或分片</b><img src="U02-4.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:18]2:[#6&amp;a&amp;+0:13]:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17]:2:[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0:20]-[#7&amp;A&amp;+0:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;9c878b2d205311c845e7d773&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;9628ee40a845b2ccd1401204&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;9c878b2d205311c845e7d773&quot;,
+    &quot;role&quot;: &quot;reactant&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;a7f29d25feef72d36bd270a5&quot;,
+    &quot;complete&quot;: false
+  }
+]</pre></details></article><article><b>5. 单支链组合</b><img src="U02-5.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6]-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0:20]-[#7&amp;A&amp;+0:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;b0613fe7cff8c236afe62371&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;8acf57cdf66bd55ad87fa0cc&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;b0613fe7cff8c236afe62371&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;a4287a19147ed5514854762b&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>6. 基础骨架或分片</b><img src="U02-6.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6](-[#6&amp;A&amp;+0:7])-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;0c2e100c9c29e387a5ad54ef&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;b148e6c3dd5e282b3b17dd30&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>7. 双支链组合</b><img src="U02-7.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6](-[#6&amp;A&amp;+0&amp;H2&amp;X4:7]-[#6&amp;A&amp;+0:8])-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0&amp;H1&amp;X3:20]-[#7&amp;A&amp;+0&amp;H2&amp;X3:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;8d8141bb24b29e176aa1558f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;1c9d470cf47c946c9d2d594e&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;8d8141bb24b29e176aa1558f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;c385064c078c38a4e5c4509f&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>8. 双支链组合</b><img src="U02-8.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6](-[#6&amp;A&amp;+0:7]-[#6&amp;A&amp;+0:8]-[#6&amp;A&amp;+0:9]-[#6&amp;A&amp;+0:10])-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0:20]-[#7&amp;A&amp;+0:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;f69969e1d1f5e983eb91002f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;68b01f6fe668b68602d33077&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;f69969e1d1f5e983eb91002f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;30f9cd9de94d7164fe3cca71&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>9. 基础骨架或分片</b><img src="U02-9.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6]-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;79c8bb731d04df10a2d28feb&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;b378ca294a85f07586a8d56b&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>10. 单支链组合</b><img src="U02-10.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6](-[#6&amp;A&amp;+0&amp;H2&amp;X4:7]-[#6&amp;A&amp;+0:8])-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;3ec9b8b22a4931bee0aa5ad1&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;9dcd039e9bc31e79c9ce9fa5&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>11. 基础骨架或分片</b><img src="U02-11.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]2-[#6&amp;A&amp;+0:4](=[#8&amp;A&amp;+0:5])-[#7&amp;A&amp;+0:6]-[#6&amp;A&amp;+0:11](=[#8&amp;A&amp;+0:12])-[#6&amp;a&amp;+0:13]3:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:2:3):[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;5f3a0e952b3c19ebce0d8b4f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;04e208afc4f868dec9375e4a&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>12. 基础骨架或分片</b><img src="U02-12.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:1]1:[#6&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:18]2:[#6&amp;a&amp;+0:13]:[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17]:2:[#6&amp;a&amp;+0:19]:1-[#7&amp;A&amp;+0:20]-[#7&amp;A&amp;+0:21]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;9a4c56d139e0cc8a648f6e0f&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;d4a94625cc81cabf21f7adbb&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article></div><h2>U03</h2><div class="grid"><article><b>1. 基础骨架或分片</b><img src="U03-1.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6:1]-[#6:2]1:[#7:3]:[#7:4](:[#6:5](:[#6:6]:1)-[#6:7])-[#6:8](=[#8:9])-[#6:10]12-[#6:11](-[#8:12]-[#6:13](-[#6:14]-1)(-[#6:15]-2)-[#6:16]1:[#6:17]:[#6:18]:[#6:19]:[#6:20]:[#6:21]:1)-[#6:22]1:[#6:23]:[#6:24]:[#6:25]:[#6:26]:[#6:27]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;b301d39b32b3236af54d9749&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;7c1efd2b11c450797ffaa08d&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>2. 基础骨架或分片</b><img src="U03-2.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4](:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0:6]:1)-[#6&amp;A&amp;+0:8](=[#8&amp;A&amp;+0:9])-[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11](-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)(-[#6&amp;A&amp;+0:15]-2)-[#6&amp;a&amp;+0:16]1:[#6&amp;a&amp;+0:17]:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:[#6&amp;a&amp;+0:20]:[#6&amp;a&amp;+0:21]:1)-[#6&amp;a&amp;+0:22]1:[#6&amp;a&amp;+0:23]:[#6&amp;a&amp;+0:24]:[#6&amp;a&amp;+0:25]:[#6&amp;a&amp;+0:26]:[#6&amp;a&amp;+0:27]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;fbaa3064895a27272352000d&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;cc4ee2f88ecaa2f611286065&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;fbaa3064895a27272352000d&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;2ea2e258e89c74cb943db493&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>3. 基础骨架或分片</b><img src="U03-3.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)-[#6&amp;A&amp;+0:15]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;236b64275ef4bf5de87f1ab0&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;6a8536623ecd2f32f036a383&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true,
+    &quot;priority_continuations&quot;: 2
+  }
+]</pre></details></article><article><b>4. 基础骨架或分片</b><img src="U03-4.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4](:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0:6]:1)-[#6&amp;A&amp;+0:8](=[#8&amp;A&amp;+0:9])-[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)-[#6&amp;A&amp;+0:15]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;36d086af2ee9063a7afcbaca&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;cc803e5db2d84ff8dc139fe1&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;36d086af2ee9063a7afcbaca&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;dc6c7f969a595551bafce398&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>5. 单支链组合</b><img src="U03-5.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4](:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0:6]:1)-[#6&amp;A&amp;+0&amp;H0&amp;X3:8](=[#8&amp;A&amp;+0&amp;H0&amp;X1:9])-[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)-[#6&amp;A&amp;+0:15]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;0168c7fd5ac0657363af7b56&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;74e2bcbbaa91ea6b35eeeb9d&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;0168c7fd5ac0657363af7b56&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;e14e81eb2e70c7975495f50c&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>6. 基础骨架或分片</b><img src="U03-6.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11](-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)(-[#6&amp;A&amp;+0:15]-2)-[#6&amp;a&amp;+0:16]1:[#6&amp;a&amp;+0:17]:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:[#6&amp;a&amp;+0:20]:[#6&amp;a&amp;+0:21]:1)-[#6&amp;a&amp;+0:22]1:[#6&amp;a&amp;+0:23]:[#6&amp;a&amp;+0:24]:[#6&amp;a&amp;+0:25]:[#6&amp;a&amp;+0:26]:[#6&amp;a&amp;+0:27]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;7a62fdf784f0fa562d6f6881&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;558224e8cb1b53e41ef33cbb&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;7a62fdf784f0fa562d6f6881&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;74da3a2ef30ed9be87b7b00d&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>7. 双支链组合</b><img src="U03-7.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0&amp;H0&amp;X2:3]:[#7&amp;a&amp;+0&amp;H0&amp;X3:4](:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0&amp;H1&amp;X3:6]:1)-[#6&amp;A&amp;+0&amp;H0&amp;X3:8](=[#8&amp;A&amp;+0&amp;H0&amp;X1:9])-[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)(-[#6&amp;A&amp;+0:15]-2)-[#6&amp;a&amp;+0&amp;H0&amp;X3:16]1:[#6&amp;a&amp;+0&amp;H1&amp;X3:17]:[#6&amp;a&amp;+0&amp;H1&amp;X3:18]:[#6&amp;a&amp;+0&amp;H1&amp;X3:19]:[#6&amp;a&amp;+0&amp;H1&amp;X3:20]:[#6&amp;a&amp;+0&amp;H1&amp;X3:21]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;208d5350237d6e3aa633664e&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;fb76c40308140d0001393d41&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  },
+  {
+    &quot;family_id&quot;: &quot;208d5350237d6e3aa633664e&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 1,
+    &quot;selection_scope_id&quot;: &quot;c2d358050523ad432d92bbe9&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>8. 基础骨架或分片</b><img src="U03-8.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:1]-[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4](:[#6&amp;a&amp;+0:5](:[#6&amp;a&amp;+0:6]:1)-[#6&amp;A&amp;+0:7])-[#6&amp;A&amp;+0:8]=[#8&amp;A&amp;+0:9]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;fb89bbc0fa71693b8dbcdcb2&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;499e8955fa41a62247deacd6&quot;,
+    &quot;complete&quot;: false
+  }
+]</pre></details></article><article><b>9. 基础骨架或分片</b><img src="U03-9.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0:6]:1</code><pre>[]</pre></details></article><article><b>10. 基础骨架或分片</b><img src="U03-10.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:1]-[#6&amp;a&amp;+0:2]1:[#7&amp;a&amp;+0:3]:[#7&amp;a&amp;+0:4](:[#6&amp;a&amp;+0:5](:[#6&amp;a&amp;+0:6]:1)-[#6&amp;A&amp;+0:7])-[#6&amp;A&amp;+0:8](=[#8&amp;A&amp;+0:9])-[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)(-[#6&amp;A&amp;+0:15]-2)-[#6&amp;a&amp;+0:16]1:[#6&amp;a&amp;+0:17]:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:[#6&amp;a&amp;+0:20]:[#6&amp;a&amp;+0:21]:1</code><pre>[]</pre></details></article><article><b>11. 基础骨架或分片</b><img src="U03-11.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;A&amp;+0:10]12-[#6&amp;A&amp;+0:11]-[#8&amp;A&amp;+0:12]-[#6&amp;A&amp;+0:13](-[#6&amp;A&amp;+0:14]-1)-[#6&amp;A&amp;+0:15]-2</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;74182d680304f07a72c3e83e&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;f9fada19d7e9b0df80934788&quot;,
+    &quot;complete&quot;: true,
+    &quot;stream_exhausted&quot;: true,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article></div><h2>U04</h2><div class="grid"><article><b>1. 基础骨架或分片</b><img src="U04-1.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7:1]1:[#7:2](:[#6:3](:[#6:4]:[#6:5]:1-[#6:6])-[#6:7]1:[#6:8]:[#6:9]:[#6:10](-[#6:11]):[#6:12]:[#6:13]:1)-[#6:14]1:[#6:15]:[#6:16]:[#6:17](:[#6:18]:[#6:19]:1)-[#16:20](=[#8:21])(=[#8:22])-[#7:23]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;aadfcfe8d78fb3ab14ec0d4a&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;9589e132dd4c41c282e2a7c8&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;indexed_side_substructure_session_cursor_without_global_sort_or_size_window&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>2. 基础骨架或分片</b><img src="U04-2.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2](:[#6&amp;a&amp;+0:3](:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1)-[#6&amp;a&amp;+0:7]1:[#6&amp;a&amp;+0:8]:[#6&amp;a&amp;+0:9]:[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1)-[#6&amp;a&amp;+0:14]1:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:1)-[#16&amp;A&amp;+0:20](=[#8&amp;A&amp;+0:21])(=[#8&amp;A&amp;+0:22])-[#7&amp;A&amp;+0:23]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;fa9fcdc11a9cb1f3c0bac2e5&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;1f0a6bfc18f529e790f10dfd&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>3. 基础骨架或分片</b><img src="U04-3.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;0f0df4792cb3a9f5839cc513&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;23dc9aa7a0faaa9984f7e299&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>4. 基础骨架或分片</b><img src="U04-4.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:14]1:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:1)-[#16&amp;A&amp;+0:20](=[#8&amp;A&amp;+0:21])(=[#8&amp;A&amp;+0:22])-[#7&amp;A&amp;+0:23]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;acacf5bd994b30a4a0be7ec2&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;5533eadcd6fae4d91011bc49&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>5. 单支链组合</b><img src="U04-5.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2](:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1)-[#6&amp;a&amp;+0:14]1:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17]:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;a7f555b20814e5945e6d8f69&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;1acd6bc5b6b92ca84b3fe218&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>6. 基础骨架或分片</b><img src="U04-6.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3](:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1-[#6&amp;A&amp;+0:6])-[#6&amp;a&amp;+0:7]1:[#6&amp;a&amp;+0:8]:[#6&amp;a&amp;+0:9]:[#6&amp;a&amp;+0:10](-[#6&amp;A&amp;+0:11]):[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;89e282ad378a5d075e902f74&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;0a87a0bc477ddcddac08b47e&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>7. 双支链组合</b><img src="U04-7.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2](:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1-[#6&amp;A&amp;+0&amp;H3&amp;X4:6])-[#6&amp;a&amp;+0&amp;H0&amp;X3:14]1:[#6&amp;a&amp;+0&amp;H1&amp;X3:15]:[#6&amp;a&amp;+0&amp;H1&amp;X3:16]:[#6&amp;a&amp;+0:17]:[#6&amp;a&amp;+0&amp;H1&amp;X3:18]:[#6&amp;a&amp;+0&amp;H1&amp;X3:19]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;208e3470b25e90ac75d07fd0&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;efb4bfdef4f56ba688d042db&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>8. 基础骨架或分片</b><img src="U04-8.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#6&amp;a&amp;+0:7]1:[#6&amp;a&amp;+0:8]:[#6&amp;a&amp;+0:9]:[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;e094017550c3c49b4f40d91b&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;2d2f7285e56dd3b8acc1b573&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>9. 基础骨架或分片</b><img src="U04-9.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2](:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1-[#6&amp;A&amp;+0:6])-[#6&amp;a&amp;+0:14]1:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:1)-[#16&amp;A&amp;+0:20](=[#8&amp;A&amp;+0:21])(=[#8&amp;A&amp;+0:22])-[#7&amp;A&amp;+0:23]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;f5285f576803259451b04c7c&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;6b1e9a4e229d4a3cd6a41734&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>10. 单支链组合</b><img src="U04-10.svg"><p>尚未完成取页</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3](:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1)-[#6&amp;a&amp;+0:7]1:[#6&amp;a&amp;+0:8]:[#6&amp;a&amp;+0:9]:[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;4209c868888172c8699c9f6d&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;8304aa23c445793501c961b5&quot;,
+    &quot;complete&quot;: false
+  }
+]</pre></details></article><article><b>11. 基础骨架或分片</b><img src="U04-11.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2](:[#6&amp;a&amp;+0:3](:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1)-[#6&amp;a&amp;+0:7]1:[#6&amp;a&amp;+0:8]:[#6&amp;a&amp;+0:9]:[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1)-[#6&amp;a&amp;+0:14]1:[#6&amp;a&amp;+0:15]:[#6&amp;a&amp;+0:16]:[#6&amp;a&amp;+0:17](:[#6&amp;a&amp;+0:18]:[#6&amp;a&amp;+0:19]:1)-[#16&amp;A&amp;+0:20](=[#8&amp;A&amp;+0:21])(=[#8&amp;A&amp;+0:22])-[#7&amp;A&amp;+0:23]</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;6477547f6c5382c733d4e7ef&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;62a4c3b1f53dd13a2e65fcc1&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article><article><b>12. 基础骨架或分片</b><img src="U04-12.svg"><p>已取得查询流状态</p><details><summary>表达式与实际执行状态</summary><code>[#7&amp;a&amp;+0:1]1:[#7&amp;a&amp;+0:2]:[#6&amp;a&amp;+0:3]:[#6&amp;a&amp;+0:4]:[#6&amp;a&amp;+0:5]:1</code><pre>[
+  {
+    &quot;family_id&quot;: &quot;244ff735310aa0744ddd7bda&quot;,
+    &quot;role&quot;: &quot;product&quot;,
+    &quot;stage&quot;: 0,
+    &quot;selection_scope_id&quot;: &quot;20c4f67f668d158fb692debd&quot;,
+    &quot;complete&quot;: false,
+    &quot;stream_exhausted&quot;: false,
+    &quot;enumeration_kind&quot;: &quot;core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required&quot;,
+    &quot;matching_enumeration_complete&quot;: true
+  }
+]</pre></details></article></div></html>

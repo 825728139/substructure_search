@@ -165,6 +165,7 @@ def _attachment_seeds(target, core, groups, limit=12):
     seen: set[tuple[int, ...]] = set()
     while len(result) < limit:
         added = False
+        round_variants = []
         for stream, count in ((singles, 1), (pairs, 2)):
             choice = next(stream, None)
             if choice is None:
@@ -177,7 +178,13 @@ def _attachment_seeds(target, core, groups, limit=12):
             variants = (
                 [(local, f"core_attachment_environment:{count}")] if local != full else []
             ) + [(full, f"core_attachment_combination:{count}")]
-            for atoms, rule in variants:
+            round_variants.append(variants)
+        # 先给单支链与双支链各一次机会，再补同一组合的完整远端版本。
+        for variant_index in (0, 1):
+            for variants in round_variants:
+                if variant_index >= len(variants):
+                    continue
+                atoms, rule = variants[variant_index]
                 atoms = _close_units(atoms, groups, target)
                 key = tuple(sorted(atoms))
                 if key not in seen and atoms != set(core):
@@ -291,7 +298,7 @@ def plan_families(target, max_families=12):
         seeds["fragment"].append((all_atoms, "full_chain_local_fallback"))
     if not seeds["core"]:
         seeds["core"].append((whole, "framework_core_fallback"))
-    # 裸核心与保留实际支链连接的查询交替；至少先保留各个不同核心的机会。
+    # 每个核心优先覆盖裸骨架、单/双位点，再安排同一组合的不同远端精度。
     bare_cores = list(seeds["core"])
     attachment_streams = []
     environment_atoms: dict[tuple, set[int]] = {}
@@ -304,20 +311,27 @@ def plan_families(target, max_families=12):
                 # 相同查询由不同核心派生时，只约束共同的支链部分，不能误锁核心R位点。
                 local = set(atoms) - set(core)
                 environment_atoms[identity] = environment_atoms.get(identity, local) & local
-    attachments = []
-    for _ in range(max_families):
-        for stream in attachment_streams:
-            candidate = next(stream, None)
-            if candidate is not None:
-                attachments.append(candidate)
-        if len(attachments) >= max_families:
-            break
     seeds["core"] = []
-    for index in range(max(len(bare_cores), len(attachments))):
-        if index < len(bare_cores):
-            seeds["core"].append(bare_cores[index])
-        if index < len(attachments):
-            seeds["core"].append(attachments[index])
+    attachments = []
+    for bare, stream in zip(bare_cores, attachment_streams, strict=True):
+        # 对每个核心先覆盖裸骨架、单连接、双连接三个问题，再切换核心。
+        # 同一支链的局部/完整版本不能抢占双位点关系的首轮机会。
+        seeds["core"].append(bare)
+        deferred = []
+        selected_counts = set()
+        for candidate in stream:
+            count = candidate[1].rsplit(":", 1)[-1]
+            if count not in selected_counts:
+                seeds["core"].append(candidate)
+                selected_counts.add(count)
+            else:
+                deferred.append(candidate)
+            if len(selected_counts) == 2:
+                break
+        deferred.extend(stream)
+        # 后续完整版本仍可在预算充足时被选择，不能永久删除。
+        attachments.extend(deferred)
+    seeds["core"].extend(attachments)
     families: list[QueryFamily] = []
     seen: set[tuple] = set()
     # 按层轮流取种子，使整体、核心、分片都有进入有限家族预算的机会。
