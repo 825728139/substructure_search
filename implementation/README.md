@@ -2,6 +2,8 @@
 
 输入一个具体有机目标分子的 SMILES，在模型预测之前生成整体、核心、分片三层 Markush 查询，找出参考反应，分析实际连接与修饰贡献，给出有来源约束的反应物替换建议和可追溯资料包。提供 CLI、Python SDK、HTTP API 和内部查看页面，不包含收费功能。
 
+本阶段收尾入口：[查询规划保留改动、实际效果与边界](docs/QUERY_STAGE_HANDOVER.md)。
+
 交接阅读从 [中文代码交接指南](docs/HANDOVER.md) 开始；其中包括项目目录、实际调用链、关键对象和编号含义、修改入口及验证步骤。全部具名 Python 函数有中文说明，可通过 [函数索引](docs/FUNCTION_INDEX.md) 直接定位。
 
 ![项目运行架构](docs/system-architecture.svg)
