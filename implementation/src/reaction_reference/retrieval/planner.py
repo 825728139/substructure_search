@@ -415,7 +415,11 @@ def progressive_followups(parent, target, witnesses, limit=2):
 
     各位点分别出现不能视为同一分子共同满足。桥连块的全部端口作为一个问题；精确约束继承父查询。没有见证不把查询失败推断成化学缺口，最多返回limit项，不预测前体或条件。
     """
-    if not witnesses or limit <= 0:
+    if (
+        not witnesses
+        or limit <= 0
+        or parent.trigger == "completed_exact_attachment_scope_without_match"
+    ):
         return []
     blocks = outside_blocks(target, parent.target_atoms)
     desired = {p for block in blocks for p in block["core_positions"]}
@@ -447,6 +451,97 @@ def progressive_followups(parent, target, witnesses, limit=2):
     return result
 
 
+def relax_exact_attachments(parent, target):
+    """将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。
+
+    仅处理能在目标实际R块中完整对账的必需精确约束；其他类别、碳数、相等或CX语义不猜测。局部环境与完整支链相同时不生成伪放宽；该函数不判断无命中，调用方须先核实查询范围完成。
+    """
+    if (
+        parent.trigger not in ("missing_attachment_block", "missing_joint_assignment")
+        or parent.relation != "structural_family"
+        or not parent.r_constraints
+        or parent.equal_r_positions
+        or not parent.allow_extra_substitution
+        or "|" in parent.core_smarts
+        or any(
+            c.requirement != "required"
+            or c.exact_fragment is None
+            or c.category != "any"
+            or c.max_carbons is not None
+            for c in parent.r_constraints
+        )
+    ):
+        return None
+    blocks = outside_blocks(target, parent.target_atoms)
+    selected = [
+        block
+        for block in blocks
+        if any(
+            c.position in block["core_positions"] and c.exact_fragment == block["fragment"]
+            for c in parent.r_constraints
+        )
+    ]
+    if any(
+        sum(
+            c.position in block["core_positions"] and c.exact_fragment == block["fragment"]
+            for block in selected
+        )
+        < parent.r_constraints.count(c)
+        for c in parent.r_constraints
+    ):
+        return None
+    core = set(parent.target_atoms)
+    groups = functional_matches(target)
+    local = core.union(
+        *(_attachment_environment(target, core, block, groups) for block in selected)
+    )
+    full = core.union(*(set(block["atom_indices"]) for block in selected))
+    if local == full:
+        return None
+    smarts, ids = _core_smarts(target, local, groups)
+    query = Chem.RWMol(Chem.MolFromSmarts(smarts))
+    original = Chem.MolFromSmarts(parent.core_smarts)
+    if original is None or original.GetNumAtoms() != len(parent.target_atoms):
+        return None
+    positions = {atom: i for i, atom in enumerate(ids)}
+    for old, atom in enumerate(parent.target_atoms):
+        query.ReplaceAtom(positions[atom], original.GetAtomWithIdx(old))
+    for bond in original.GetBonds():
+        left, right = (
+            positions[parent.target_atoms[i]]
+            for i in (bond.GetBeginAtomIdx(), bond.GetEndAtomIdx())
+        )
+        new_bond = query.GetBondBetweenAtoms(left, right)
+        if new_bond is None:
+            return None
+        query.ReplaceBond(new_bond.GetIdx(), bond)
+    # 只锁定新增局部内部原子，原核心谓词逐个复制，边界仍可接其他远端结构。
+    for atom in local - core:
+        original_atom = target.GetAtomWithIdx(atom)
+        if all(n.GetAtomicNum() == 1 or n.GetIdx() in local for n in original_atom.GetNeighbors()):
+            query.GetAtomWithIdx(positions[atom]).ExpandQuery(
+                Chem.AtomFromSmarts(
+                    f"[H{original_atom.GetTotalNumHs(includeNeighbors=True)};X{original_atom.GetTotalDegree()}]"
+                )
+            )
+    expression = Chem.MolToSmarts(query)
+    restored_ids = [atom.GetAtomMapNum() - 1 for atom in Chem.MolFromSmarts(expression).GetAtoms()]
+    if set(restored_ids) != set(ids) or len(restored_ids) != len(ids):
+        return None
+    return parent.model_copy(
+        update={
+            "id": digest([parent.id, "relax_exact_attachments", expression]),
+            "parent_id": parent.id,
+            "core_smarts": expression,
+            "target_atoms": restored_ids,
+            "r_constraints": [],
+            "rule_id": "relaxed_attachment_environment",
+            "trigger": "completed_exact_attachment_scope_without_match",
+            "description": "精确支链查询范围完成且无匹配后，保留连接端环境、放宽远端；不是精确支链命中",
+        }
+    )
+
+
 def exact_family(target):
     """构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。
 
@@ -473,9 +568,9 @@ def exact_family(target):
 def initial_families(target, max_families=12, include_exact=True):
     """组合初始三层家族与可选的严格目标补查，返回有顺序的列表。
 
-    max_families 是本次家族上限；预算仅为 3 且启用补查时，严格整体、核心、分片各留一个位置。较大预算下给后续定向家族预留空间；预览和真实检索共用此入口。
+    max_families 是本次家族上限；预算仅为 3 且启用补查时，严格整体、核心、分片各留一个位置。较大预算下给两个定向家族和一次无匹配后的放宽预留空间；预览和真实检索共用此入口。
     """
-    planned = plan_families(target, max(3, max_families - (3 if include_exact else 2)))
+    planned = plan_families(target, max(3, max_families - (4 if include_exact else 3)))
     if not include_exact:
         return planned
     if max_families == 3:

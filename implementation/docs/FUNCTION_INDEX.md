@@ -131,10 +131,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [search](../src/reaction_reference/application/search.py#L39) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
-| [search.package](../src/reaction_reference/application/search.py#L81) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L262) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L272) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search](../src/reaction_reference/application/search.py#L43) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
+| [search.package](../src/reaction_reference/application/search.py#L86) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
+| [search.publish](../src/reaction_reference/application/search.py#L267) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L277) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -305,8 +305,9 @@
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L202) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
 | [directed_family](../src/reaction_reference/retrieval/planner.py#L381) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
 | [progressive_followups](../src/reaction_reference/retrieval/planner.py#L413) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L450) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L473) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L454) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L545) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L568) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -642,6 +643,16 @@
 | [test_aromatic_domain_keeps_attachment_without_requiring_fused_lactam](../tests/test_query_input_planning.py#L100) | 稠合内酰胺上的环外胺可查询同位点芳胺前体，同时保留完整环系家族。 |
 | [test_domain_variant_is_not_added_without_mixed_fused_ring_system](../tests/test_query_input_planning.py#L117) | 单芳环、全芳香稠环、无环及全饱和环不产生重复的芳香域放宽家族。 |
 | [test_real_hydrazine_installation_is_found_with_aromatic_domain](../tests/test_query_input_planning.py#L125) | 真实单羰基稠环肼基安装通过芳香域家族召回，并保留目标成键及非完整目标的边界。 |
+
+## tests/test_query_relaxation.py
+
+| 函数 | 职责 |
+|---|---|
+| [exact_tail_query](../tests/test_query_relaxation.py#L20) | 用真实苯胺支链匹配构造自动精确补查，避免伪造位点覆盖。 |
+| [test_relaxation_preserves_attachment_nitrogen_and_target_correspondence](../tests/test_query_relaxation.py#L28) | 放开远端链后可匹配羟乙基，但连接仲胺与目标原子对应仍正确。 |
+| [test_pipeline_relaxes_only_completed_scope_without_match](../tests/test_query_relaxation.py#L56) | 完整且无匹配才生成放宽家族；超时、候选范围不完整或任务中断不能充当无命中。 |
+| [test_pipeline_relaxes_only_completed_scope_without_match.page](../tests/test_query_relaxation.py#L69) | 仅模拟查询范围状态，正常情况仍执行真实候选匹配。 |
+| [test_relaxation_retains_original_core_atom_predicates](../tests/test_query_relaxation.py#L99) | 放宽远端链不能抹掉原核心的芳环氢数限制。 |
 
 ## tests/test_reactions.py
 

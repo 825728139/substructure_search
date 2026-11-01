@@ -104,9 +104,10 @@ def test_pipeline_executes_two_distinct_missing_block_followups(
             ),
             source,
         )
-        children = [query for query in calls if query.parent_id]
+        children = [query for query in calls if query.parent_id == family.id]
         assert [{c.position for c in query.r_constraints} for query in children] == [{0}, {3}]
-        assert len(package.families) == 3
+        assert len(package.families) == 4
+        assert sum(f.rule_id == "relaxed_attachment_environment" for f in package.families) == 1
         assert len(package.results) == 1
         assert not package.results[0].target_requirements_satisfied
     finally:

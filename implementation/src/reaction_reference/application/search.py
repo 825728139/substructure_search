@@ -32,7 +32,11 @@ from reaction_reference.evidence.claims import evidence_for, summary_items
 from reaction_reference.evidence.relations import material_relations
 from reaction_reference.ranking.engine import rank_references
 from reaction_reference.reaction_analysis.analyze import analyze_reaction, project_changes
-from reaction_reference.retrieval.planner import initial_families, progressive_followups
+from reaction_reference.retrieval.planner import (
+    initial_families,
+    progressive_followups,
+    relax_exact_attachments,
+)
 from reaction_reference.rules import code_fingerprint, load_rules
 
 
@@ -71,6 +75,7 @@ def search(request, source, *, run_id=None, on_progress=None):
         )
     use_attempts = 0
     followups = 0
+    relaxations = 0
     analyzed: set[str] = set()
     source_issues: list[dict] = []
     last_progress = 0.0
@@ -613,6 +618,25 @@ def search(request, source, *, run_id=None, on_progress=None):
                         queue.appendleft((family, role, 0, stage + 1))
                     else:
                         queue.append((family, role, 0, stage + 1))
+            if (
+                request.options.directed_followups
+                and role == "product"
+                and relaxations < 1
+                and len(family_lookup) < request.budget.max_families
+                and page.next_cursor is None
+                and states[state_key]["complete"]
+                and (
+                    request.options.exhaustive_fixture
+                    or stage >= getattr(source, "max_selection_stage", 2)
+                )
+                and not any(family.id in r.family_ids for r in references.values())
+            ):
+                relaxed = relax_exact_attachments(family, target)
+                if relaxed and relaxed.id not in family_lookup:
+                    family_lookup[relaxed.id] = relaxed
+                    relaxations += 1
+                    states[state_key]["relaxation_family_id"] = relaxed.id
+                    queue.appendleft((relaxed, "product", 0, 0))
             if (
                 request.options.directed_followups
                 and role == "product"
