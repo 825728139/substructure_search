@@ -6,6 +6,7 @@ from pathlib import Path
 
 from rdkit import Chem, DataStructs
 
+from reaction_reference.chemistry.markush import candidate_smarts
 from reaction_reference.chemistry.structures import (
     canonical,
     digest,
@@ -310,7 +311,7 @@ class PostgresSource:
     preferred_page_size = 2
     selection_failure_fallback = True
     fragment_selection_stages = True
-    selection_policy = "final_score_ge_12_before_selection; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
+    selection_policy = "final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",
@@ -520,6 +521,7 @@ class PostgresSource:
         self._assert_index(column)
         projection = sql.SQL(",").join(sql.Identifier(c) for c in self.lightweight_columns)
         key = (family.id, role, stage)
+        query_smarts = candidate_smarts(family)
         priority_continuation = False
         self.connection.execute("SAVEPOINT rr_query")
         try:
@@ -549,6 +551,7 @@ class PostgresSource:
                 family_pool_key = (
                     pool_key,
                     family.core_smarts,
+                    query_smarts,
                     family.layer == "fragment",
                     expandable_core,
                 )
@@ -571,7 +574,7 @@ class PostgresSource:
                                 (
                                     family.core_smarts,
                                     [row["id"] for row in nearest_rows],
-                                    family.core_smarts,
+                                    query_smarts,
                                 ),
                             ).fetchall()
                         }
@@ -602,7 +605,7 @@ class PostgresSource:
                                     projection=projection,
                                     table=sql.Identifier("reaction", self.table),
                                 ),
-                                (family.core_smarts, family.core_smarts, seed_limit),
+                                (query_smarts, family.core_smarts, seed_limit),
                             ).fetchall()
                         except Error as exc:
                             self.connection.execute("ROLLBACK TO SAVEPOINT rr_core_seed")
@@ -658,7 +661,7 @@ class PostgresSource:
                         column=sql.Identifier(column),
                         table=sql.Identifier("reaction", self.table),
                     )
-                    server.execute(query, (family.core_smarts,))
+                    server.execute(query, (query_smarts,))
                     self._cursors[key] = (server, 0)
                 server, expected = self._cursors[key]
                 if expected != cursor:
@@ -669,6 +672,8 @@ class PostgresSource:
                 enumeration = (
                     "indexed_side_substructure_session_cursor_without_global_sort_or_size_window"
                 )
+            if query_smarts != family.core_smarts:
+                enumeration += "_required_single_port_r_prefilter"
             items = self._items(rows, role)
             self.connection.execute("RELEASE SAVEPOINT rr_query")
         except Exception:

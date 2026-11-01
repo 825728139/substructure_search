@@ -8,6 +8,52 @@ from reaction_reference.chemistry.structures import digest, outside_blocks
 from reaction_reference.domain.models import MatchResult, RBlock, Witness
 
 
+def candidate_smarts(family):
+    """将单端口必需精确支链拼入候选预筛SMARTS，返回完整匹配的必要条件。
+
+    只增加可明确定位的元素/键连接，不用它认定精确R、手性或材料身份。复杂多端口块、CX语义、未解析片段或过大的拼接退回原核心，避免未经证明的筛选造成漏检。重复约束保留份数，不能一条支链抵扣两个位置。
+    """
+    if not family.r_constraints or "|" in family.core_smarts:
+        return family.core_smarts
+    query = Chem.MolFromSmarts(family.core_smarts)
+    if query is None or query.GetNumAtoms() != len(family.target_atoms):
+        return family.core_smarts
+    combined = Chem.RWMol(query)
+    for constraint in family.r_constraints:
+        if constraint.requirement != "required" or constraint.exact_fragment is None:
+            continue
+        text = constraint.exact_fragment
+        if "|" in text:
+            return family.core_smarts
+        fragment = Chem.MolFromSmiles(text)
+        if fragment is None or len(Chem.GetMolFrags(fragment)) != 1:
+            return family.core_smarts
+        ports = [a for a in fragment.GetAtoms() if a.GetAtomicNum() == 0]
+        if (
+            len(ports) != 1
+            or ports[0].GetDegree() != 1
+            or ports[0].GetAtomMapNum() != constraint.position + 1
+            or not 0 <= constraint.position < query.GetNumAtoms()
+            or fragment.GetStereoGroups()
+            or combined.GetNumAtoms() + fragment.GetNumAtoms() > 512
+        ):
+            return family.core_smarts
+        port = ports[0].GetIdx()
+        part = Chem.MolFromSmarts(Chem.MolToSmarts(fragment))
+        indexes = {port: constraint.position}
+        for atom in part.GetAtoms():
+            if atom.GetIdx() != port:
+                atom.SetAtomMapNum(0)
+                # 重新接回端口会改变局部邻居顺序；预筛去掉支链手性，最终精确R核验仍保留。
+                atom.SetChiralTag(Chem.ChiralType.CHI_UNSPECIFIED)
+                indexes[atom.GetIdx()] = combined.AddAtom(atom)
+        for bond in part.GetBonds():
+            combined.AddBond(
+                indexes[bond.GetBeginAtomIdx()], indexes[bond.GetEndAtomIdx()], bond.GetBondType()
+            )
+    return Chem.MolToSmarts(combined.GetMol())
+
+
 def compile_family(family):
     """从 QueryFamily 的 SMARTS/CXSMARTS 恢复查询 Mol 和原生 generic 属性。
 

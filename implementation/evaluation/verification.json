@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-11-01",
-  "implementation_hash": "fac0adee3347c3c32b06e799cfeca16feb05906319ef83e985c0264d6b0a574f",
+  "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
   "rule_hash": "1e53e5eb9fe4ba715916a2bb80c9a773fa722011e179eeeb3f8ecc86dc064ea8",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 529,
+    "tests_passed": 543,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "fac0adee3347c3c32b06e799cfeca16feb05906319ef83e985c0264d6b0a574f"
+    "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1676,5 +1676,18 @@
     "python_modules_documented": 105,
     "python_classes_documented": 70,
     "python_named_functions_documented": 626
+  },
+  "expert_query_iteration_5": {
+    "report": "../../reviews/expert_query_2026_11_01/iteration5/report.md",
+    "verified_implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
+    "full_tests_passed": 543,
+    "postgres_tests_passed": 66,
+    "live_runs": 4,
+    "expert_level_claimed": false,
+    "new_useful_precedents_claimed": false,
+    "production_database_written": false,
+    "python_modules_documented": 106,
+    "python_classes_documented": 70,
+    "python_named_functions_documented": 632
   }
 }

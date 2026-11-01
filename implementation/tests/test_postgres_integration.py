@@ -147,6 +147,37 @@ def carbon_family(*, layer="fragment", name="carbon"):
     )
 
 
+@pytest.mark.parametrize("stage", [0, 1])
+def test_required_branch_is_filtered_before_page_and_cache_is_separate(indexed_source_dsn, stage):
+    """定向醇查询先在SQL限制C—O，父核心缓存不能让胺占用仅一条的子查询页面。"""
+    from reaction_reference.domain.models import RConstraint
+
+    source = PostgresSource(indexed_source_dsn, table="reactions")
+    parent = carbon_family(layer="core", name="parent")
+    child = parent.model_copy(
+        update={
+            "id": "child",
+            "parent_id": parent.id,
+            "r_constraints": [
+                RConstraint(position=0, exact_fragment="O[*:1]", requirement="required")
+            ],
+        }
+    )
+    try:
+        source.candidate_page(parent, "product", 0, 1, "CCN", stage=stage)
+        page = source.candidate_page(child, "product", 0, 1, "CCN", stage=stage)
+        assert len(page.items) == 1
+        assert page.items[0].record.id in {"integration:1", "integration:3"}
+        assert "O" in page.items[0].material.smiles
+        ids = [item.record.id for item in page.items]
+        while page.next_cursor is not None:
+            page = source.candidate_page(child, "product", page.next_cursor, 1, "CCN", stage=stage)
+            ids.extend(item.record.id for item in page.items)
+        assert set(ids) == {"integration:1", "integration:3"}
+    finally:
+        source.close()
+
+
 @pytest.mark.parametrize("column,value,name", [("products", True, None), ("reactants", 7, "乙醇")])
 def test_malformed_optional_detail_container_keeps_other_details(
     indexed_source_dsn, column, value, name

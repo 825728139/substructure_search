@@ -1,0 +1,1306 @@
+[
+  {
+    "target": "U01",
+    "manifest": {
+      "created_at": "2026-11-01T00:12:35.842314+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
+      "rule_version": "organic-reference-1.5",
+      "rule_hash": "1e53e5eb9fe4ba715916a2bb80c9a773fa722011e179eeeb3f8ecc86dc064ea8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:7837882": "ef7e1722a613195d58b014ed",
+        "uspto:3153963": "83a093bee33710d4fd2412a8",
+        "uspto:9392974": "d150e315adf34cfc84ae8175",
+        "uspto:9033888": "c9310d7f8132b6031c3305ba",
+        "epo:1901418": "3651e25e832e2ffe2304a3b3",
+        "uspto:6766761": "05552f4474929c24adb97511",
+        "epo:62248": "1a512a8bbe2e71358c0c3cd8",
+        "epo:62851": "c71e04bde48d8433138ed5ae"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "queries": [
+      {
+        "family": {
+          "id": "7a5f0e7049d2de711eb6d79e",
+          "parent_id": "e30c64e8c8c80fcb12da1662",
+          "layer": "core",
+          "core_smarts": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2",
+          "target_atoms": [
+            6,
+            7,
+            8,
+            14,
+            15,
+            16,
+            17
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 0,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "CCOC(=O)C=[*:1]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [0]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#6&A&+0:7]1(-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2)=[#6]-[#6](-[#8]-[#6]-[#6])=[#8]",
+        "states": [
+          {
+            "family_id": "7a5f0e7049d2de711eb6d79e",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "de5baf07341160ba1f7ce8f7",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "7a5f0e7049d2de711eb6d79e",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "f7b20ed393cee07d6fcd7894",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      },
+      {
+        "family": {
+          "id": "a1732c7e7516cad6d68c5324",
+          "parent_id": "e30c64e8c8c80fcb12da1662",
+          "layer": "core",
+          "core_smarts": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9]-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2",
+          "target_atoms": [
+            6,
+            7,
+            8,
+            14,
+            15,
+            16,
+            17
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 2,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "CCOC(=O)[*:3]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [2]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#6&A&+0:7]1-[#7&A&+0:8]-[#6&A&+0:9](-[#6&A&+0:15]2-[#6&A&+0:16]-[#6&A&+0:17]-1-[#6&A&+0:18]-2)-[#6](-[#8]-[#6]-[#6])=[#8]",
+        "states": [
+          {
+            "family_id": "a1732c7e7516cad6d68c5324",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "c8cbef8299a94694aa01a91e",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "a1732c7e7516cad6d68c5324",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "f1c40614f6ed7a09c2ff37d1",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      }
+    ],
+    "statistics": {
+      "families": 12,
+      "received_candidates": 9,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1457.25
+    },
+    "added_source_ids": [],
+    "removed_source_ids": [],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "7837882",
+          "experiment_id": "uspto:US20190076542A1:['p-1059']:1",
+          "document_id": "US20190076542A1",
+          "location": "['p-1059']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153963",
+          "experiment_id": "uspto:US04677129:['p-0222']:1",
+          "document_id": "US04677129",
+          "location": "['p-0222']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9392974",
+          "experiment_id": "uspto:US20230145336A1:['p-1828']:1",
+          "document_id": "US20230145336A1",
+          "location": "['p-1828']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9033888",
+          "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+          "document_id": "US20220251061A1",
+          "location": "['p-1349']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1901418",
+          "experiment_id": "epo:EP17796814B1:['p0728']:1",
+          "document_id": "EP17796814B1",
+          "location": "['p0728']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6766761",
+          "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+          "document_id": "US20160304517A1",
+          "location": "['p-0591']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62248",
+          "experiment_id": "epo:EP86303171A2:['p0100']:1",
+          "document_id": "EP86303171A2",
+          "location": "['p0100']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62851",
+          "experiment_id": "epo:EP86730018A2:['p0023']:1",
+          "document_id": "EP86730018A2",
+          "location": "['p0023']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8
+      }
+    ]
+  },
+  {
+    "target": "U02",
+    "manifest": {
+      "created_at": "2026-11-01T00:12:37.608029+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
+      "rule_version": "organic-reference-1.5",
+      "rule_hash": "1e53e5eb9fe4ba715916a2bb80c9a773fa722011e179eeeb3f8ecc86dc064ea8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2148857": "03caaba167a7f43069b5db11",
+        "uspto:4438348": "1ec90e82ce7c2fc0e226b8bb",
+        "uspto:8279156": "067b1e6f648a22f893bd9463",
+        "epo:1969751": "38777d1500f633f71760b090"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "queries": [
+      {
+        "family": {
+          "id": "fec9260252c7de43edb0c932",
+          "parent_id": "6b50f6758e2e442e6eb6b9c3",
+          "layer": "core",
+          "core_smarts": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]2-[#6&A&+0:4](=[#8&A&+0:5])-[#7&A&+0:6]-[#6&A&+0:11](=[#8&A&+0:12])-[#6&a&+0:13]3:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:2:3):[#6&a&+0:19]:1",
+          "target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 14,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "NN[*:15]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [14]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]2-[#6&A&+0:4](=[#8&A&+0:5])-[#7&A&+0:6]-[#6&A&+0:11](=[#8&A&+0:12])-[#6&a&+0:13]3:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:2:3):[#6&a&+0:19]:1-[#7]-[#7]",
+        "states": [
+          {
+            "family_id": "fec9260252c7de43edb0c932",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "1f3f294944229d16e1a0cb26",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "fec9260252c7de43edb0c932",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "3c0de8a12d39e77587cbbb6a",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      },
+      {
+        "family": {
+          "id": "5f3a0e952b3c19ebce0d8b4f",
+          "parent_id": "6b50f6758e2e442e6eb6b9c3",
+          "layer": "core",
+          "core_smarts": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]2-[#6&A&+0:4](=[#8&A&+0:5])-[#7&A&+0:6]-[#6&A&+0:11](=[#8&A&+0:12])-[#6&a&+0:13]3:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:2:3):[#6&a&+0:19]:1",
+          "target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 5,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "CCCC[*:6]",
+              "max_carbons": null
+            },
+            {
+              "position": 14,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "NN[*:15]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [5, 14]；保留其他位点变化空间",
+          "trigger": "missing_joint_assignment"
+        },
+        "source_prefilter_smarts": "[#6&a&+0:1]1:[#6&a&+0:2]:[#6&a&+0:3]2-[#6&A&+0:4](=[#8&A&+0:5])-[#7&A&+0:6](-[#6&A&+0:11](=[#8&A&+0:12])-[#6&a&+0:13]3:[#6&a&+0:14]:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:2:3):[#6&a&+0:19]:1-[#7]-[#7])-[#6]-[#6]-[#6]-[#6]",
+        "states": [
+          {
+            "family_id": "5f3a0e952b3c19ebce0d8b4f",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "d7fbff2d05bcf3ce5e64baaf",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "5f3a0e952b3c19ebce0d8b4f",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "fd191cf67f19a1470c5e4a95",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      }
+    ],
+    "statistics": {
+      "families": 12,
+      "received_candidates": 5,
+      "unique_structures": 4,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 4,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 4,
+      "proposals": 0,
+      "display_items": 4,
+      "elapsed_ms": 972.412
+    },
+    "added_source_ids": [],
+    "removed_source_ids": [
+      "4044389"
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2148857",
+          "experiment_id": "uspto:US20020010279A1:['P-0200']:1",
+          "document_id": "US20020010279A1",
+          "location": "['P-0200']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4438348",
+          "experiment_id": "uspto:US20100168428A1:['p-0198']:1",
+          "document_id": "US20100168428A1",
+          "location": "['p-0198']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "8279156",
+          "experiment_id": "uspto:US20200172489A1:['p-0175']:1",
+          "document_id": "US20200172489A1",
+          "location": "['p-0175']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1969751",
+          "experiment_id": "epo:EP22915126A1:['p0122']:1",
+          "document_id": "EP22915126A1",
+          "location": "['p0122']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4
+      }
+    ]
+  },
+  {
+    "target": "U03",
+    "manifest": {
+      "created_at": "2026-11-01T00:12:39.535643+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
+      "rule_version": "organic-reference-1.5",
+      "rule_hash": "1e53e5eb9fe4ba715916a2bb80c9a773fa722011e179eeeb3f8ecc86dc064ea8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "epo:2106886": "5ed9b101c9670095b7132b3c",
+        "uspto:10255161": "f1adfb726e68fbbfeb0f0083",
+        "uspto:10143190": "f4a2a02c800e3daeab95209e",
+        "uspto:10210576": "1e4f37ea94cf23cc8f577642",
+        "epo:2030567": "bd96e9aa12b4d452dadacbb1",
+        "uspto:9641319": "d9932c2b72b169f4772fb990"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "queries": [
+      {
+        "family": {
+          "id": "cd9910df5228e527beef2f12",
+          "parent_id": "236b64275ef4bf5de87f1ab0",
+          "layer": "core",
+          "core_smarts": "[#6&A&+0:10]12-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2",
+          "target_atoms": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 0,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "Cc1cc(C)n(C(=O)[*:1])n1",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [0]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#6&A&+0:10]12(-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2)-[#6](-[#7]1:[#6](:[#6]:[#6](-[#6]):[#7]:1)-[#6])=[#8]",
+        "states": [
+          {
+            "family_id": "cd9910df5228e527beef2f12",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "1225670ba8e8ded8d6115a6a",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "cd9910df5228e527beef2f12",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "81fec12b0294dc96db2446b4",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      },
+      {
+        "family": {
+          "id": "e3b3883bc0da914573efcda3",
+          "parent_id": "236b64275ef4bf5de87f1ab0",
+          "layer": "core",
+          "core_smarts": "[#6&A&+0:10]12-[#6&A&+0:11]-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2",
+          "target_atoms": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "rule_id": "complete_ring_system",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 1,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "c1ccc([*:2])cc1",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [1]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#6&A&+0:10]12-[#6&A&+0:11](-[#8&A&+0:12]-[#6&A&+0:13](-[#6&A&+0:14]-1)-[#6&A&+0:15]-2)-[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1",
+        "states": [
+          {
+            "family_id": "e3b3883bc0da914573efcda3",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "2f25deca1d832dac31085e0f",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          },
+          {
+            "family_id": "e3b3883bc0da914573efcda3",
+            "role": "product",
+            "stage": 1,
+            "selection_scope_id": "805c9a9bacbb00765a9fd9e9",
+            "complete": true,
+            "stream_exhausted": true,
+            "enumeration_kind": "indexed_side_substructure_session_cursor_without_global_sort_or_size_window_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      }
+    ],
+    "statistics": {
+      "families": 12,
+      "received_candidates": 6,
+      "unique_structures": 5,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 5,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 6,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 6,
+      "proposals": 0,
+      "display_items": 6,
+      "elapsed_ms": 1206.289
+    },
+    "added_source_ids": [],
+    "removed_source_ids": [],
+    "sources": [
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2106886",
+          "experiment_id": "epo:EP22705676B1:['p1470']:1",
+          "document_id": "EP22705676B1",
+          "location": "['p1470']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10255161",
+          "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+          "document_id": "US20250304535A1",
+          "location": "['p-0643']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10143190",
+          "experiment_id": "uspto:US20250122152A1:['p-0837']:1",
+          "document_id": "US20250122152A1",
+          "location": "['p-0837']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10210576",
+          "experiment_id": "uspto:US20250221996A1:['p-0442']:1",
+          "document_id": "US20250221996A1",
+          "location": "['p-0442']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2030567",
+          "experiment_id": "epo:EP22723850B1:['p0601']:1",
+          "document_id": "EP22723850B1",
+          "location": "['p0601']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9641319",
+          "experiment_id": "uspto:US11780851:['p-0304', 'p-0305']:1",
+          "document_id": "US11780851",
+          "location": "['p-0304', 'p-0305']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6
+      }
+    ]
+  },
+  {
+    "target": "U04",
+    "manifest": {
+      "created_at": "2026-11-01T00:12:42.398047+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "a03f5bbfcdd2cecd0a82219dbd35e1e6b9691b4bd37e2b40af9edb3923461482",
+      "rule_version": "organic-reference-1.5",
+      "rule_hash": "1e53e5eb9fe4ba715916a2bb80c9a773fa722011e179eeeb3f8ecc86dc064ea8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2223370": "4998595f308e2cd0b8b5832d",
+        "epo:623405": "aba22fc2e12b3a1a48e9e745",
+        "uspto:2192223": "143e58537ce9db786de7cd2b",
+        "uspto:2144174": "885fc8e78d49dbf056ec241d",
+        "uspto:6726425": "d3af962d30c85c0df2c9e2be",
+        "uspto:3638087": "04514d98690ad6e21700dea4",
+        "uspto:3638216": "939ae5967416b2ae795cf538",
+        "uspto:4723747": "b7d087b6f488813437bbcaf4",
+        "uspto:4327902": "c44c7cd0eded00da626c4356",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "uspto:2304597": "9c2d2f4d4b431bf125c23363",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "queries": [
+      {
+        "family": {
+          "id": "c04db9ad683db481b83322ed",
+          "parent_id": "fa9fcdc11a9cb1f3c0bac2e5",
+          "layer": "whole",
+          "core_smarts": "[#7&a&+0:1]1:[#7&a&+0:2](:[#6&a&+0:3](:[#6&a&+0:4]:[#6&a&+0:5]:1)-[#6&a&+0:7]1:[#6&a&+0:8]:[#6&a&+0:9]:[#6&a&+0:10]:[#6&a&+0:12]:[#6&a&+0:13]:1)-[#6&a&+0:14]1:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:[#6&a&+0:19]:1)-[#16&A&+0:20](=[#8&A&+0:21])(=[#8&A&+0:22])-[#7&A&+0:23]",
+          "target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ],
+          "rule_id": "whole_murcko_with_adjacent_functional_units",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 4,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "C[*:5]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [4]；保留其他位点变化空间",
+          "trigger": "missing_attachment_block"
+        },
+        "source_prefilter_smarts": "[#7&a&+0:1]1:[#7&a&+0:2](:[#6&a&+0:3](:[#6&a&+0:4]:[#6&a&+0:5]:1-[#6])-[#6&a&+0:7]1:[#6&a&+0:8]:[#6&a&+0:9]:[#6&a&+0:10]:[#6&a&+0:12]:[#6&a&+0:13]:1)-[#6&a&+0:14]1:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:[#6&a&+0:19]:1)-[#16&A&+0:20](=[#8&A&+0:21])(=[#8&A&+0:22])-[#7&A&+0:23]",
+        "states": [
+          {
+            "family_id": "c04db9ad683db481b83322ed",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "21924e5d93107010d8375743",
+            "complete": false,
+            "stream_exhausted": false,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      },
+      {
+        "family": {
+          "id": "6477547f6c5382c733d4e7ef",
+          "parent_id": "fa9fcdc11a9cb1f3c0bac2e5",
+          "layer": "whole",
+          "core_smarts": "[#7&a&+0:1]1:[#7&a&+0:2](:[#6&a&+0:3](:[#6&a&+0:4]:[#6&a&+0:5]:1)-[#6&a&+0:7]1:[#6&a&+0:8]:[#6&a&+0:9]:[#6&a&+0:10]:[#6&a&+0:12]:[#6&a&+0:13]:1)-[#6&a&+0:14]1:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:[#6&a&+0:19]:1)-[#16&A&+0:20](=[#8&A&+0:21])(=[#8&A&+0:22])-[#7&A&+0:23]",
+          "target_atoms": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ],
+          "rule_id": "whole_murcko_with_adjacent_functional_units",
+          "rule_version": "organic-reference-1.5",
+          "r_constraints": [
+            {
+              "position": 4,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "C[*:5]",
+              "max_carbons": null
+            },
+            {
+              "position": 8,
+              "requirement": "required",
+              "category": "any",
+              "exact_fragment": "C[*:9]",
+              "max_carbons": null
+            }
+          ],
+          "equal_r_positions": [],
+          "core_topology_policy": "forbid_extra_internal_edges",
+          "allow_extra_substitution": true,
+          "use_generic_matchers": true,
+          "relation": "structural_family",
+          "description": "根据已核验命中补查核心位点 [4, 8]；保留其他位点变化空间",
+          "trigger": "missing_joint_assignment"
+        },
+        "source_prefilter_smarts": "[#7&a&+0:1]1:[#7&a&+0:2](:[#6&a&+0:3](:[#6&a&+0:4]:[#6&a&+0:5]:1-[#6])-[#6&a&+0:7]1:[#6&a&+0:8]:[#6&a&+0:9]:[#6&a&+0:10](:[#6&a&+0:12]:[#6&a&+0:13]:1)-[#6])-[#6&a&+0:14]1:[#6&a&+0:15]:[#6&a&+0:16]:[#6&a&+0:17](:[#6&a&+0:18]:[#6&a&+0:19]:1)-[#16&A&+0:20](=[#8&A&+0:21])(=[#8&A&+0:22])-[#7&A&+0:23]",
+        "states": [
+          {
+            "family_id": "6477547f6c5382c733d4e7ef",
+            "role": "product",
+            "stage": 0,
+            "selection_scope_id": "e676a1eb37c36c138ebb0447",
+            "complete": false,
+            "stream_exhausted": false,
+            "enumeration_kind": "core_filtered_knn512_with_bounded_input_core_absence_seeds_individual_verification_required_required_single_port_r_prefilter",
+            "matching_enumeration_complete": true
+          }
+        ]
+      }
+    ],
+    "statistics": {
+      "families": 12,
+      "received_candidates": 23,
+      "unique_structures": 12,
+      "by_layer": {
+        "whole": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 5,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 5,
+          "unique_experiments": 5,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 12,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 12,
+      "proposals": 0,
+      "display_items": 12,
+      "elapsed_ms": 1977.45
+    },
+    "added_source_ids": [],
+    "removed_source_ids": [],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2192223",
+          "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+          "document_id": "US20020183362A1",
+          "location": "['P-1771']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6726425",
+          "experiment_id": "uspto:US20160229850A1:['p-0111']:1",
+          "document_id": "US20160229850A1",
+          "location": "['p-0111']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638087",
+          "experiment_id": "uspto:US07001917:['p-0319']:1",
+          "document_id": "US07001917",
+          "location": "['p-0319']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638216",
+          "experiment_id": "uspto:US07001895:['p-1568']:1",
+          "document_id": "US07001895",
+          "location": "['p-1568']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4723747",
+          "experiment_id": "uspto:US20110077262A1:['p-0468']:1",
+          "document_id": "US20110077262A1",
+          "location": "['p-0468']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4327902",
+          "experiment_id": "uspto:US20100016323A1:['p-0445']:1",
+          "document_id": "US20100016323A1",
+          "location": "['p-0445']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 9
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 10
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2304597",
+          "experiment_id": "uspto:US20040087623A1:['P-0193']:1",
+          "document_id": "US20040087623A1",
+          "location": "['P-0193']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 11
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 12
+      }
+    ]
+  }
+]
