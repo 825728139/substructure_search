@@ -296,18 +296,19 @@
 
 | 函数 | 职责 |
 |---|---|
-| [functional_matches](../src/reaction_reference/retrieval/planner.py#L14) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
-| [_close_units](../src/reaction_reference/retrieval/planner.py#L30) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
-| [_core_smarts](../src/reaction_reference/retrieval/planner.py#L49) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
-| [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L85) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
-| [_attachment_environment](../src/reaction_reference/retrieval/planner.py#L108) | 保留支链连接原子及其一层重原子邻域，并补齐相交官能团和完整环。 |
-| [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L138) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
-| [plan_families](../src/reaction_reference/retrieval/planner.py#L202) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L381) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L413) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
-| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L454) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L545) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L568) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [functional_matches](../src/reaction_reference/retrieval/planner.py#L15) | 按规则优先级识别官能团，返回（规则名、目标原子元组、优先级）列表。 |
+| [_close_units](../src/reaction_reference/retrieval/planner.py#L31) | 把与 seed 相交的功能单元补入核心原子集合并返回新集合。 |
+| [_core_smarts](../src/reaction_reference/retrieval/planner.py#L53) | 为选定目标原子构造带目标映射号的固定核心 SMARTS。 |
+| [_aromatic_domains](../src/reaction_reference/retrieval/planner.py#L89) | 返回由芳香键连接的芳香原子域，联苯的单键不合并两个域。 |
+| [_attachment_environment](../src/reaction_reference/retrieval/planner.py#L112) | 保留支链连接原子及其一层重原子邻域，并补齐相交官能团和完整环。 |
+| [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L142) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
+| [plan_families](../src/reaction_reference/retrieval/planner.py#L206) | 按规范原子遍历规划家族，再将查询映射回用户原始目标索引。 |
+| [_plan_ordered_families](../src/reaction_reference/retrieval/planner.py#L238) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L434) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L466) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
+| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L507) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L598) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L621) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -574,6 +575,14 @@
 | [test_shared_structure_witness_is_bound_to_each_actual_experiment](../tests/test_pipeline.py#L368) | 确认结构核验可复用，但返回见证 ID 必须分别绑定不同实验来源。 |
 | [test_missing_operation_fields_do_not_rank_as_easy_conditions](../tests/test_pipeline.py#L404) | 确认缺失温度/时长不能在操作偏好下获得比已知条件更容易的优势。 |
 | [test_operation_preference_does_not_assume_zero_celsius_is_room_temperature](../tests/test_pipeline.py#L429) | 确认操作偏好以公开的 25°C 为参照，不把需要制冷的 0°C 当作室温。 |
+
+## tests/test_planning_representation.py
+
+| 函数 | 职责 |
+|---|---|
+| [query_signature](../tests/test_planning_representation.py#L13) | 去掉仅用于目标定位的映射号，比较同一查询的结构语义与选择顺序。 |
+| [test_equivalent_atom_orders_keep_query_selection_and_correct_correspondence](../tests/test_planning_representation.py#L32) | 反转和固定随机重排不改变非精确家族选择；每个查询仍精确回指当前输入编号。 |
+| [test_functional_closure_does_not_depend_on_group_enumeration_order](../tests/test_planning_representation.py#L52) | 芳位连接的N—N单元需要稳定补齐，不能因两个胺匹配顺序而漏掉末端N。 |
 
 ## tests/test_postgres_integration.py
 
@@ -1044,6 +1053,12 @@
 | 函数 | 职责 |
 |---|---|
 | [main](../../reviews/core_iteration_2026_11_01/run_targets.py#L11) | 加载归档的原始四目标，沿用基准脚本的连接、预算和计时，不修改业务查询。 |
+
+## ../reviews/expert_query_2026_11_01/iteration7/run_representation_check.py
+
+| 函数 | 职责 |
+|---|---|
+| [main](../../reviews/expert_query_2026_11_01/iteration7/run_representation_check.py#L10) | 建立原始/反转目标对，验证结构身份后交给统一计时器，不修改原始输入文件。 |
 
 ## ../reviews/live_benchmark_2026_10_31/benchmark.py
 

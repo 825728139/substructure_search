@@ -1,5 +1,6 @@
 """目标驱动的有限查询规划：按三层规则生成可解释家族，保留原子对应；不预先猜测开闭环反应位置。"""
 
+import json
 from itertools import combinations
 
 from rdkit import Chem
@@ -30,20 +31,23 @@ def functional_matches(mol):
 def _close_units(seed, groups, mol, *, adjacent=False):
     """把与 seed 相交的功能单元补入核心原子集合并返回新集合。
 
-    adjacent=True 时也检查与当前核心相邻的单元；按已排序规则单次遍历，后续规则可看到已扩展的集合，不是任意深度的闭包求解。
+    adjacent=True 时也检查与当前核心相邻的单元；反复补齐直到集合稳定，避免官能团命中顺序决定是否保留整个连接单元。仅加入已有目标原子，迭代有限。
     """
     result = set(seed)
-    for _, match, _ in groups:
-        if result.intersection(match) or (
-            adjacent
-            and any(
-                n.GetIdx() in result
-                for index in match
-                for n in mol.GetAtomWithIdx(index).GetNeighbors()
-            )
-        ):
-            result.update(match)
-    return result
+    while True:
+        previous = set(result)
+        for _, match, _ in groups:
+            if result.intersection(match) or (
+                adjacent
+                and any(
+                    n.GetIdx() in result
+                    for index in match
+                    for n in mol.GetAtomWithIdx(index).GetNeighbors()
+                )
+            ):
+                result.update(match)
+        if result == previous:
+            return result
 
 
 def _core_smarts(mol, atom_ids, groups):
@@ -200,6 +204,38 @@ def _attachment_seeds(target, core, groups, limit=12):
 
 
 def plan_families(target, max_families=12):
+    """按规范原子遍历规划家族，再将查询映射回用户原始目标索引。
+
+    仅消除SMILES书写起点和原子排序对有限查询选择的影响；不改目标电荷、同位素、立体或互变形式。对称等价位点允许等价对应，身份仍通过具体见证核验。
+    """
+    ordering_view = Chem.Mol(target)
+    for atom in ordering_view.GetAtoms():
+        atom.SetAtomMapNum(0)
+    Chem.MolToSmiles(ordering_view, canonical=True, isomericSmiles=True)
+    order = json.loads(ordering_view.GetProp("_smilesAtomOutputOrder"))
+    ordered = Chem.RenumberAtoms(target, order)
+    planned = _plan_ordered_families(ordered, max_families)
+    families = []
+    for family in planned:
+        query = Chem.MolFromSmarts(family.core_smarts)
+        for atom in query.GetAtoms():
+            atom.SetAtomMapNum(order[family.target_atoms[atom.GetIdx()]] + 1)
+        expression = Chem.MolToSmarts(query)
+        ids = [atom.GetAtomMapNum() - 1 for atom in Chem.MolFromSmarts(expression).GetAtoms()]
+        families.append(
+            family.model_copy(
+                update={
+                    "id": digest((family.layer, tuple(ids), expression)),
+                    "core_smarts": expression,
+                    "target_atoms": ids,
+                    "description": f"{family.layer}: {family.rule_id}; 固定原目标原子 {ids}，其他取代可变",
+                }
+            )
+        )
+    return families
+
+
+def _plan_ordered_families(target, max_families=12):
     """自动生成整体、核心、分片三层的有限 QueryFamily 列表。
 
     环状目标使用 Murcko 骨架、完整环系和官能团邻域；无环目标使用全框架或功能锚点路径。核心补充完整支链的单项与双项组合，分片补充 BRICS 非环边界。轮流取各层种子以保留各层机会，按层和目标原子集合去重，最多返回 max_families 个家族；这不是所有可能骨架或专家查询策略的穷举。
@@ -239,6 +275,23 @@ def plan_families(target, max_families=12):
                     rings.remove(ring)
                     changed = True
         systems.append(group)
+    # 先安排连接更复杂的完整环系，再比较杂原子数与大小；规范索引仅用于稳定并列。
+    # 这是检索问题的排序，不是合成难度或反应可行性评分。
+    systems.sort(
+        key=lambda system: (
+            -(
+                sum(
+                    b.GetBeginAtomIdx() in system and b.GetEndAtomIdx() in system
+                    for b in target.GetBonds()
+                )
+                - len(system)
+                + 1
+            ),
+            -sum(target.GetAtomWithIdx(i).GetAtomicNum() not in (1, 6) for i in system),
+            -len(system),
+            tuple(sorted(system)),
+        )
+    )
     for system in systems:
         seeds["core"].append((_close_units(system, groups, target), "complete_ring_system"))
     anchors = set()
