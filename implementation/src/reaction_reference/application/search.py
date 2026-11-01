@@ -614,9 +614,12 @@ def search(request, source, *, run_id=None, on_progress=None):
                 ]
                 if len(useful) < 4:
                     # 近邻池完全没有该核心时立即尝试独立子结构通道，避免罕见骨架被通用片段挤掉。
-                    if not page.items:
+                    if not page.items and not family.rule_id.startswith(
+                        "functional_connection_environment:"
+                    ):
                         queue.appendleft((family, role, 0, stage + 1))
                     else:
+                        # 很小的局部环境可能在全库匹配昂贵；空近邻补查也先轮转，不阻塞其他骨架。
                         queue.append((family, role, 0, stage + 1))
             if (
                 request.options.directed_followups

@@ -1,5 +1,6 @@
 """独立结构查询任务审查：不将软件正反例当作真实化学先例或专家盲测。"""
 
+import argparse
 import json
 from pathlib import Path
 
@@ -40,7 +41,10 @@ def evaluate(task):
 
 def main():
     """从相邻固定任务清单读取结构问题，在标准输出返回可复核结果。"""
-    tasks = json.loads(Path(__file__).with_name("query_tasks.json").read_text())
+    parser = argparse.ArgumentParser(description="核查固定结构任务，不声明专家验证")
+    parser.add_argument("--tasks", type=Path, default=Path(__file__).with_name("query_tasks.json"))
+    args = parser.parse_args()
+    tasks = json.loads(args.tasks.read_text())
     results = [evaluate(task) for task in tasks]
     print(
         json.dumps(

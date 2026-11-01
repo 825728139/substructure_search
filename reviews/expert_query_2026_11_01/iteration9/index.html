@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>局部官能团查询任务</title><style>body{font-family:sans-serif;margin:28px;max-width:1100px}article{border:1px solid #ccc;padding:14px;margin:16px 0}img{width:100%}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>无环与环内局部官能团环境</h1><p>自编结构语义任务，参与本次修复；不代表专家盲测或反应检索准确率。</p><article><h2>保留无环酰胺NH及两端连接，允许远端链缩短。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="acyclic_amide.svg"><p>修复前：False；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:amide&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;!R:6]-&amp;!@[#7&amp;A&amp;+0&amp;!R&amp;H1&amp;X3:7]-&amp;!@[#6&amp;A&amp;+0&amp;!R&amp;H0&amp;X3:8](=&amp;!@[#8&amp;A&amp;+0&amp;!R&amp;H0&amp;X1:9])-&amp;!@[#6&amp;A&amp;+0&amp;!R:10]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留无环伯胺，与叔胺区分，同时不固定整条烷链。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="acyclic_amine.svg"><p>修复前：False；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:amine&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;!R:7]-&amp;!@[#7&amp;A&amp;+0&amp;!R&amp;H2&amp;X3:8]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留醇所在碳的仲碳环境，不能只看OH而把叔醇混入。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="secondary_alcohol.svg"><p>修复前：True；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:hydroxyl&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;!R:7]-&amp;!@[#6&amp;A&amp;+0&amp;!R&amp;H1&amp;X4:5](-&amp;!@[#8&amp;A&amp;+0&amp;H1&amp;X2&amp;!R&amp;H1&amp;X2:6])-&amp;!@[#6&amp;A&amp;+0&amp;!R:4]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>提供环内酰胺局部环境查询，可参考不同环大小，但与开链酰胺区分。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="cyclic_lactam.svg"><p>修复前：False；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:amide&quot;,
+  &quot;smarts&quot;: &quot;[#8&amp;A&amp;+0&amp;!R&amp;H0&amp;X1:1]=&amp;!@[#6&amp;A&amp;+0&amp;R&amp;H0&amp;X3:2](-&amp;@[#6&amp;A&amp;+0&amp;R:9])-&amp;@[#7&amp;A&amp;+0&amp;R&amp;H1&amp;X3:3]-&amp;@[#6&amp;A&amp;+0&amp;R:4]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留醚两侧饱和连接端，与酯区分，远端链允许变化。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="acyclic_ether.svg"><p>修复前：False；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:ether&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;!R:3]-&amp;!@[#6&amp;A&amp;+0&amp;!R&amp;H2&amp;X4:4]-&amp;!@[#8&amp;A&amp;+0&amp;!R&amp;H0&amp;X2:5]-&amp;!@[#6&amp;A&amp;+0&amp;!R&amp;H2&amp;X4:6]-&amp;!@[#6&amp;A&amp;+0&amp;!R:7]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留酮羰基局部连接，与醇区分，远端烷链允许变化。</h2><p>左为目标，中为应允许的变化，右为应区分的反例。</p><img src="acyclic_carbonyl.svg"><p>修复前：True；修复后：True</p><details><summary>查询表达式</summary><pre>{
+  &quot;rule&quot;: &quot;functional_connection_environment:carbonyl&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;!R:6]-&amp;!@[#6&amp;A&amp;+0&amp;!R&amp;H0&amp;X3:4](=&amp;!@[#8&amp;A&amp;+0&amp;!R&amp;H0&amp;X1:5])-&amp;!@[#6&amp;A&amp;+0&amp;!R:3]&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article></html>

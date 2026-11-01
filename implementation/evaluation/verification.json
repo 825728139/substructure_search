@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
   "date": "2026-11-01",
-  "implementation_hash": "c6d2656d982e09b9968df38215b793833e22fda35d479bf21185851364f9f4d1",
-  "rule_hash": "44e205992684eacc5a81340aa7e259d543c75295e5a4ffbc0ec14c2ffde5c237",
+  "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+  "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
     "python": "3.12.12",
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 562,
+    "tests_passed": 568,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -67,7 +67,7 @@
     "report": "evaluation/sample_report.json",
     "method_labels": "unreviewed_not_scored",
     "full_corpus_performance_verified": false,
-    "implementation_hash": "c6d2656d982e09b9968df38215b793833e22fda35d479bf21185851364f9f4d1"
+    "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6"
   },
   "deployment": {
     "compose_config_valid": true,
@@ -1733,5 +1733,23 @@
     "python_modules_documented": 110,
     "python_classes_documented": 70,
     "python_named_functions_documented": 646
+  },
+  "expert_query_iteration_9": {
+    "report": "../../reviews/expert_query_2026_11_01/iteration9/report.md",
+    "verified_implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+    "full_tests_passed": 568,
+    "postgres_tests_passed": 66,
+    "live_runs": 8,
+    "structural_tasks_before": 2,
+    "structural_tasks_after": 6,
+    "structural_tasks_total": 6,
+    "previous_tasks_recheck_passed": 8,
+    "tasks_used_to_develop_fix": true,
+    "expert_level_claimed": false,
+    "new_useful_precedents_claimed": false,
+    "production_database_written": false,
+    "python_modules_documented": 111,
+    "python_classes_documented": 70,
+    "python_named_functions_documented": 650
   }
 }

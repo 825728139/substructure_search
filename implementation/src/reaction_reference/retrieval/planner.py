@@ -308,6 +308,7 @@ def _plan_ordered_families(target, max_families=12):
             (_close_units(anchors or all_atoms, groups, target), "acyclic_functional_anchor_paths")
         )
     aromatic_seeds = []
+    local_seeds = []
     aromatic_domains = _aromatic_domains(target)
     for name, match, _ in groups:
         neighborhood = set(match)
@@ -317,6 +318,13 @@ def _plan_ordered_families(target, max_families=12):
                 for n in target.GetAtomWithIdx(atom).GetNeighbors()
                 if n.GetAtomicNum() > 1
             )
+        # 直接连接环境不强制带上整个环系；通过后续环内外谓词保留局部拓扑角色。
+        local_seeds.append(
+            (
+                _close_units(neighborhood, groups, target),
+                f"functional_connection_environment:{name}",
+            )
+        )
         # 环外官能团连接混合稠合环系时，补查完整芳香域，避免强制保留非芳香杂环而漏掉前体。
         # 仅在确实省去非芳香环原子时增加家族；完整环系查询仍保留，不把它当成开环预测。
         if not any(target.GetAtomWithIdx(i).IsInRing() for i in match):
@@ -335,7 +343,7 @@ def _plan_ordered_families(target, max_families=12):
         seeds["fragment"].append(
             (_close_units(neighborhood, groups, target), f"functional_neighborhood:{name}")
         )
-    seeds["fragment"] = aromatic_seeds + seeds["fragment"]
+    seeds["fragment"] = aromatic_seeds + local_seeds + seeds["fragment"]
     for (a, b), _ in BRICS.FindBRICSBonds(target):
         if target.GetBondBetweenAtoms(a, b).IsInRing():
             continue
@@ -396,6 +404,29 @@ def _plan_ordered_families(target, max_families=12):
             if not atoms:
                 continue
             smarts, ids = _core_smarts(target, atoms, groups)
+            if rule.startswith("functional_connection_environment:"):
+                query = Chem.MolFromSmarts(smarts)
+                fixed = set(ids)
+                for position, original in enumerate(ids):
+                    atom = target.GetAtomWithIdx(original)
+                    query_atom = query.GetAtomWithIdx(position)
+                    query_atom.ExpandQuery(
+                        Chem.AtomFromSmarts("[R]" if atom.IsInRing() else "[!R]")
+                    )
+                    if all(
+                        n.GetAtomicNum() == 1 or n.GetIdx() in fixed for n in atom.GetNeighbors()
+                    ):
+                        query_atom.ExpandQuery(
+                            Chem.AtomFromSmarts(
+                                f"[H{atom.GetTotalNumHs(includeNeighbors=True)};X{atom.GetTotalDegree()}]"
+                            )
+                        )
+                for bond in query.GetBonds():
+                    source_bond = target.GetBondBetweenAtoms(
+                        ids[bond.GetBeginAtomIdx()], ids[bond.GetEndAtomIdx()]
+                    )
+                    bond.ExpandQuery(Chem.BondFromSmarts("@" if source_bond.IsInRing() else "!@"))
+                smarts = Chem.MolToSmarts(query)
             if rule.startswith(("core_attachment_environment:", "core_attachment_combination:")):
                 # 完整支链与局部环境都锁定内部原子的H/X；局部边界仍允许远端变化。
                 # 这是目标连接端的结构约束，避免CH3与CF3、一级与三级中心静默等同。

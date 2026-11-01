@@ -1,0 +1,1860 @@
+[
+  {
+    "run": "U01-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:28.887511+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:7837882": "ef7e1722a613195d58b014ed",
+        "uspto:3153963": "83a093bee33710d4fd2412a8",
+        "uspto:9392974": "d150e315adf34cfc84ae8175",
+        "uspto:9033888": "c9310d7f8132b6031c3305ba",
+        "epo:1901418": "3651e25e832e2ffe2304a3b3",
+        "uspto:6766761": "05552f4474929c24adb97511",
+        "epo:62248": "1a512a8bbe2e71358c0c3cd8",
+        "uspto:3965552": "e957aebbdd75b645fa29015b"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 9,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 1,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1390.731
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "9550f0e660c0e7c3bd26d268",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "bcbeab2adc282804467ff51a",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "7837882",
+          "experiment_id": "uspto:US20190076542A1:['p-1059']:1",
+          "document_id": "US20190076542A1",
+          "location": "['p-1059']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(c4ccccc4)(C3)C2=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153963",
+          "experiment_id": "uspto:US04677129:['p-0222']:1",
+          "document_id": "US04677129",
+          "location": "['p-0222']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9392974",
+          "experiment_id": "uspto:US20230145336A1:['p-1828']:1",
+          "document_id": "US20230145336A1",
+          "location": "['p-1828']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "O=C1NC(=O)C2(Nc3ccc(I)cc3)CC1C2"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9033888",
+          "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+          "document_id": "US20220251061A1",
+          "location": "['p-1349']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "O=C1NC(=O)C2(n3cc(CCCO)nn3)CC1C2"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1901418",
+          "experiment_id": "epo:EP17796814B1:['p0728']:1",
+          "document_id": "EP17796814B1",
+          "location": "['p0728']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(F)(C3)C2=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6766761",
+          "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+          "document_id": "US20160304517A1",
+          "location": "['p-0591']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(C3)C2c2ccccc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62248",
+          "experiment_id": "epo:EP86303171A2:['p0100']:1",
+          "document_id": "EP86303171A2",
+          "location": "['p0100']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7,
+        "smiles": "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)OCC)cc3)[nH]c2n(CCC)c1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3965552",
+          "experiment_id": "uspto:US07417055:['p-1027']:1",
+          "document_id": "US07417055",
+          "location": "['p-1027']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8,
+        "smiles": "CCOC(=O)C(C)OP(=O)(CCN1CCN(Cc2ccc(C(=O)Nc3ccc(C)c(Nc4nccc(-c5cccnc5)n4)c3)cc2)CC1)Oc1ccccc1"
+      }
+    ]
+  },
+  {
+    "run": "U01-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:37.627925+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)/C=C1\\NC(C(OCC)=O)[C@]2(C[C@@]\\1(C2)C(N1N=C(C)C=C1C)=O)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:7837882": "ef7e1722a613195d58b014ed",
+        "uspto:3153963": "83a093bee33710d4fd2412a8",
+        "uspto:9392974": "d150e315adf34cfc84ae8175",
+        "uspto:9033888": "c9310d7f8132b6031c3305ba",
+        "epo:1901418": "3651e25e832e2ffe2304a3b3",
+        "uspto:6766761": "05552f4474929c24adb97511",
+        "epo:62248": "1a512a8bbe2e71358c0c3cd8",
+        "uspto:3965552": "e957aebbdd75b645fa29015b"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 9,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 1,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 1422.005
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "9550f0e660c0e7c3bd26d268",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "e67d16d5dfa4b03dd9610fd9",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "7837882",
+          "experiment_id": "uspto:US20190076542A1:['p-1059']:1",
+          "document_id": "US20190076542A1",
+          "location": "['p-1059']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(c4ccccc4)(C3)C2=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3153963",
+          "experiment_id": "uspto:US04677129:['p-0222']:1",
+          "document_id": "US04677129",
+          "location": "['p-0222']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "CCCN1C(=O)C2(c3ccccc3)CC(c3ccc([N+](=O)[O-])cc3)(C2)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9392974",
+          "experiment_id": "uspto:US20230145336A1:['p-1828']:1",
+          "document_id": "US20230145336A1",
+          "location": "['p-1828']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "O=C1NC(=O)C2(Nc3ccc(I)cc3)CC1C2"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9033888",
+          "experiment_id": "uspto:US20220251061A1:['p-1349']:1",
+          "document_id": "US20220251061A1",
+          "location": "['p-1349']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "O=C1NC(=O)C2(n3cc(CCCO)nn3)CC1C2"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1901418",
+          "experiment_id": "epo:EP17796814B1:['p0728']:1",
+          "document_id": "EP17796814B1",
+          "location": "['p0728']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(F)(C3)C2=O)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6766761",
+          "experiment_id": "uspto:US20160304517A1:['p-0591']:1",
+          "document_id": "US20160304517A1",
+          "location": "['p-0591']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "COc1ccc(CN2C(=O)C3CC(C3)C2c2ccccc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "62248",
+          "experiment_id": "epo:EP86303171A2:['p0100']:1",
+          "document_id": "EP86303171A2",
+          "location": "['p0100']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7,
+        "smiles": "CCCn1c(=O)c2nc(-c3ccc(/C=C/C(=O)OCC)cc3)[nH]c2n(CCC)c1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3965552",
+          "experiment_id": "uspto:US07417055:['p-1027']:1",
+          "document_id": "US07417055",
+          "location": "['p-1027']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8,
+        "smiles": "CCOC(=O)C(C)OP(=O)(CCN1CCN(Cc2ccc(C(=O)Nc3ccc(C)c(Nc4nccc(-c5cccnc5)n4)c3)cc2)CC1)Oc1ccccc1"
+      }
+    ]
+  },
+  {
+    "run": "U02-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:30.736779+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2148857": "03caaba167a7f43069b5db11",
+        "uspto:4438348": "1ec90e82ce7c2fc0e226b8bb",
+        "epo:1969751": "38777d1500f633f71760b090",
+        "uspto:2352758": "e6cf95217be061580a9f431b",
+        "uspto:8991304": "b68b38e51190586a244acd91"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 5,
+      "unique_structures": 5,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 5,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 5,
+      "proposals": 0,
+      "display_items": 5,
+      "elapsed_ms": 1121.697
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "5111bf80bbd323674c3975c0",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "2d75d9c7594ab9153eefd303",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "7e4f5cc9fe58e1619e9e122f",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "b1eaf9329bfedacb5ad2763a",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2148857",
+          "experiment_id": "uspto:US20020010279A1:['P-0200']:1",
+          "document_id": "US20020010279A1",
+          "location": "['P-0200']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "CCCCN1C(=O)c2cccc3c(NCCNC)ccc(c23)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4438348",
+          "experiment_id": "uspto:US20100168428A1:['p-0198']:1",
+          "document_id": "US20100168428A1",
+          "location": "['p-0198']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "O=C1NC(=O)c2cccc3cccc1c23"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1969751",
+          "experiment_id": "epo:EP22915126A1:['p0122']:1",
+          "document_id": "EP22915126A1",
+          "location": "['p0122']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "COc1ccc(CN2C(=O)c3cccc4c(NN)ccc2c34)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2352758",
+          "experiment_id": "uspto:US20040214251A1:['P-0059']:1",
+          "document_id": "US20040214251A1",
+          "location": "['P-0059']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "O=C1c2ccccc2C(=O)N1CCCN1C(=O)OC(C#CC2CC2)(C(F)(F)F)c2cc(Cl)ccc21"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "8991304",
+          "experiment_id": "uspto:US20220143012A1:['p-1193']:1",
+          "document_id": "US20220143012A1",
+          "location": "['p-1193']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "CCCCc1nc2c(N)nc3ccc(N4CCN(CCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCC(=O)OC(C)(C)C)CC4)cc3c2n1CCCCN1C(=O)c2ccccc2C1=O"
+      }
+    ]
+  },
+  {
+    "run": "U02-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:39.751780+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "C1C=C2C(=O)N(CCCC)C(=O)C3C=CC=C(C2=3)C=1NN"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2148857": "03caaba167a7f43069b5db11",
+        "uspto:4438348": "1ec90e82ce7c2fc0e226b8bb",
+        "epo:1969751": "38777d1500f633f71760b090",
+        "uspto:2352758": "e6cf95217be061580a9f431b",
+        "uspto:8991304": "b68b38e51190586a244acd91"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 5,
+      "unique_structures": 5,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 5,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 5,
+      "proposals": 0,
+      "display_items": 5,
+      "elapsed_ms": 1265.798
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "5111bf80bbd323674c3975c0",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "c6122f6615293de3256dbd21",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "7e4f5cc9fe58e1619e9e122f",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "55e0cb1662d7eca73029ef8f",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2148857",
+          "experiment_id": "uspto:US20020010279A1:['P-0200']:1",
+          "document_id": "US20020010279A1",
+          "location": "['P-0200']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "CCCCN1C(=O)c2cccc3c(NCCNC)ccc(c23)C1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4438348",
+          "experiment_id": "uspto:US20100168428A1:['p-0198']:1",
+          "document_id": "US20100168428A1",
+          "location": "['p-0198']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "O=C1NC(=O)c2cccc3cccc1c23"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "1969751",
+          "experiment_id": "epo:EP22915126A1:['p0122']:1",
+          "document_id": "EP22915126A1",
+          "location": "['p0122']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "COc1ccc(CN2C(=O)c3cccc4c(NN)ccc2c34)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2352758",
+          "experiment_id": "uspto:US20040214251A1:['P-0059']:1",
+          "document_id": "US20040214251A1",
+          "location": "['P-0059']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "O=C1c2ccccc2C(=O)N1CCCN1C(=O)OC(C#CC2CC2)(C(F)(F)F)c2cc(Cl)ccc21"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "8991304",
+          "experiment_id": "uspto:US20220143012A1:['p-1193']:1",
+          "document_id": "US20220143012A1",
+          "location": "['p-1193']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "CCCCc1nc2c(N)nc3ccc(N4CCN(CCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCC(=O)OC(C)(C)C)CC4)cc3c2n1CCCCN1C(=O)c2ccccc2C1=O"
+      }
+    ]
+  },
+  {
+    "run": "U03-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:32.638603+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "epo:2106886": "5ed9b101c9670095b7132b3c",
+        "uspto:10255161": "f1adfb726e68fbbfeb0f0083",
+        "uspto:10143190": "f4a2a02c800e3daeab95209e",
+        "uspto:10210576": "1e4f37ea94cf23cc8f577642",
+        "epo:2030567": "bd96e9aa12b4d452dadacbb1",
+        "uspto:9641319": "d9932c2b72b169f4772fb990"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 6,
+      "unique_structures": 5,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 5,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 6,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 6,
+      "proposals": 0,
+      "display_items": 6,
+      "elapsed_ms": 1053.623
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "8e6d4c4aace77fd42eda9829",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "a20a23708095eadf6bb8312d",
+        "complete": true,
+        "stream_exhausted": true,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "09432cebba4c1fcda5a8db21",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "9ae9e13970ef1fe5dfa4c992",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2106886",
+          "experiment_id": "epo:EP22705676B1:['p1470']:1",
+          "document_id": "EP22705676B1",
+          "location": "['p1470']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "ICC12CC(CO1)C2"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10255161",
+          "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+          "document_id": "US20250304535A1",
+          "location": "['p-0643']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "COc1ccc(C23COC(C2)C3)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10143190",
+          "experiment_id": "uspto:US20250122152A1:['p-0837']:1",
+          "document_id": "US20250122152A1",
+          "location": "['p-0837']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "COc1ccc(C23COC(C2)C3)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10210576",
+          "experiment_id": "uspto:US20250221996A1:['p-0442']:1",
+          "document_id": "US20250221996A1",
+          "location": "['p-0442']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "COC(=O)C12CC(CI)(C1)OC2(C)C"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2030567",
+          "experiment_id": "epo:EP22723850B1:['p0601']:1",
+          "document_id": "EP22723850B1",
+          "location": "['p0601']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "COC(=O)c1ccc(N)c(NC23COC(C2)C3)c1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9641319",
+          "experiment_id": "uspto:US11780851:['p-0304', 'p-0305']:1",
+          "document_id": "US11780851",
+          "location": "['p-0304', 'p-0305']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "Cc1c([N+](=O)[O-])c(OCCCn2nc(Cl)c3cnc(Cl)nc32)nn1CC12COC(C1)C2"
+      }
+    ]
+  },
+  {
+    "run": "U03-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:41.884537+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC1=NN(C(=C1)C)C(=O)C12C(OC(C1)(C2)C1C=CC=CC=1)C1C=CC=CC=1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "epo:2106886": "5ed9b101c9670095b7132b3c",
+        "uspto:10255161": "f1adfb726e68fbbfeb0f0083",
+        "uspto:10143190": "f4a2a02c800e3daeab95209e",
+        "uspto:10210576": "1e4f37ea94cf23cc8f577642",
+        "epo:2030567": "bd96e9aa12b4d452dadacbb1",
+        "uspto:9641319": "d9932c2b72b169f4772fb990"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 12,
+      "received_candidates": 6,
+      "unique_structures": 5,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 7,
+          "attempted_product_families": 5,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 5,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 6,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 6,
+      "proposals": 0,
+      "display_items": 6,
+      "elapsed_ms": 1182.896
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "8e6d4c4aace77fd42eda9829",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "fb069fc6e9430f60af29cb2d",
+        "complete": true,
+        "stream_exhausted": true,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "09432cebba4c1fcda5a8db21",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "e979fc445888ab1c4133cf76",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2106886",
+          "experiment_id": "epo:EP22705676B1:['p1470']:1",
+          "document_id": "EP22705676B1",
+          "location": "['p1470']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "ICC12CC(CO1)C2"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10255161",
+          "experiment_id": "uspto:US20250304535A1:['p-0643']:1",
+          "document_id": "US20250304535A1",
+          "location": "['p-0643']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "COc1ccc(C23COC(C2)C3)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10143190",
+          "experiment_id": "uspto:US20250122152A1:['p-0837']:1",
+          "document_id": "US20250122152A1",
+          "location": "['p-0837']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "COc1ccc(C23COC(C2)C3)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "10210576",
+          "experiment_id": "uspto:US20250221996A1:['p-0442']:1",
+          "document_id": "US20250221996A1",
+          "location": "['p-0442']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "COC(=O)C12CC(CI)(C1)OC2(C)C"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "2030567",
+          "experiment_id": "epo:EP22723850B1:['p0601']:1",
+          "document_id": "EP22723850B1",
+          "location": "['p0601']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "COC(=O)c1ccc(N)c(NC23COC(C2)C3)c1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "9641319",
+          "experiment_id": "uspto:US11780851:['p-0304', 'p-0305']:1",
+          "document_id": "US11780851",
+          "location": "['p-0304', 'p-0305']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "Cc1c([N+](=O)[O-])c(OCCCn2nc(Cl)c3cnc(Cl)nc32)nn1CC12COC(C1)C2"
+      }
+    ]
+  },
+  {
+    "run": "U04-10000-r1.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:35.357299+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2223370": "4998595f308e2cd0b8b5832d",
+        "epo:623405": "aba22fc2e12b3a1a48e9e745",
+        "uspto:2192223": "143e58537ce9db786de7cd2b",
+        "uspto:2144174": "885fc8e78d49dbf056ec241d",
+        "uspto:6726425": "d3af962d30c85c0df2c9e2be",
+        "uspto:3638087": "04514d98690ad6e21700dea4",
+        "uspto:3638216": "939ae5967416b2ae795cf538",
+        "uspto:4723747": "b7d087b6f488813437bbcaf4",
+        "uspto:4327902": "c44c7cd0eded00da626c4356",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "uspto:2304597": "9c2d2f4d4b431bf125c23363",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df",
+        "uspto:2698953": "457a55d754127cf63733a1ba"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 23,
+      "unique_structures": 13,
+      "by_layer": {
+        "whole": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 5,
+          "unique_experiments": 5,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 13,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 13,
+      "proposals": 0,
+      "display_items": 13,
+      "elapsed_ms": 1960.814
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "2a59a3c86b8cb350fa068bcd",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "01fdf8706fceda20f34816e2",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "2a59a3c86b8cb350fa068bcd",
+        "role": "reactant",
+        "stage": 0,
+        "selection_scope_id": "86712e1f32935ae41f989341",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2192223",
+          "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+          "document_id": "US20020183362A1",
+          "location": "['P-1771']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6726425",
+          "experiment_id": "uspto:US20160229850A1:['p-0111']:1",
+          "document_id": "US20160229850A1",
+          "location": "['p-0111']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "Cc1cc(N)n(-c2ccccc2)n1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638087",
+          "experiment_id": "uspto:US07001917:['p-0319']:1",
+          "document_id": "US07001917",
+          "location": "['p-0319']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "CCc1ccc(S(=O)(=O)NC(=O)NCCc2ccc(-n3nc(C)c(-c4ccccc4)c3C)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638216",
+          "experiment_id": "uspto:US07001895:['p-1568']:1",
+          "document_id": "US07001895",
+          "location": "['p-1568']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7,
+        "smiles": "CC(C)CCOc1c(-c2ccc(S(N)(=O)=O)cc2)cnn(-c2cccc(Cl)c2)c1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4723747",
+          "experiment_id": "uspto:US20110077262A1:['p-0468']:1",
+          "document_id": "US20110077262A1",
+          "location": "['p-0468']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8,
+        "smiles": "COC(=O)c1ccc(-n2nc(C)c3cc(C(=O)N4CCC5(CC4)CC(=O)c4cc(-c6cnn(C)c6)ccc4O5)ccc32)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4327902",
+          "experiment_id": "uspto:US20100016323A1:['p-0445']:1",
+          "document_id": "US20100016323A1",
+          "location": "['p-0445']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 9,
+        "smiles": "C=CCN(CCO)S(=O)(=O)c1ccc(OCCC)c(-c2nn3c(CCC)nc(C)c3c(=O)[nH]2)c1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 10,
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2304597",
+          "experiment_id": "uspto:US20040087623A1:['P-0193']:1",
+          "document_id": "US20040087623A1",
+          "location": "['P-0193']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 11,
+        "smiles": "CCc1ccc(-c2cc(CC(=O)c3ccccn3)ccn2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 12,
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2698953",
+          "experiment_id": "uspto:US20070060629A1:['p-0252']:1",
+          "document_id": "US20070060629A1",
+          "location": "['p-0252']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 13,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)c(CO)c2)cc1"
+      }
+    ]
+  },
+  {
+    "run": "U04-10000-r2.package",
+    "manifest": {
+      "created_at": "2026-11-01T00:38:44.476787+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "N1N(C(=CC=1C)C1C=CC(C)=CC=1)C1C=CC(=CC=1)S(=O)(=O)N"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2223370": "4998595f308e2cd0b8b5832d",
+        "epo:623405": "aba22fc2e12b3a1a48e9e745",
+        "uspto:2192223": "143e58537ce9db786de7cd2b",
+        "uspto:2144174": "885fc8e78d49dbf056ec241d",
+        "uspto:6726425": "d3af962d30c85c0df2c9e2be",
+        "uspto:3638087": "04514d98690ad6e21700dea4",
+        "uspto:3638216": "939ae5967416b2ae795cf538",
+        "uspto:4723747": "b7d087b6f488813437bbcaf4",
+        "uspto:4327902": "c44c7cd0eded00da626c4356",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "uspto:2304597": "9c2d2f4d4b431bf125c23363",
+        "uspto:6327800": "0c9a67a249d84e6140d1c5df",
+        "uspto:2698953": "457a55d754127cf63733a1ba"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 23,
+      "unique_structures": 13,
+      "by_layer": {
+        "whole": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 7,
+          "unique_experiments": 7,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 5,
+          "unique_experiments": 5,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 13,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 13,
+      "proposals": 0,
+      "display_items": 13,
+      "elapsed_ms": 1804.788
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [],
+    "local_family_states": [
+      {
+        "family_id": "2a59a3c86b8cb350fa068bcd",
+        "role": "product",
+        "stage": 0,
+        "selection_scope_id": "839b4f3ee5ca061ee99e6e5a",
+        "complete": false,
+        "stream_exhausted": false,
+        "enumeration_kind": "core_filtered_knn512_individual_verification_required",
+        "matching_enumeration_complete": true
+      },
+      {
+        "family_id": "2a59a3c86b8cb350fa068bcd",
+        "role": "reactant",
+        "stage": 0,
+        "selection_scope_id": "b46ac5c109cc2503e6d786c3",
+        "complete": false
+      }
+    ],
+    "sources": [
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2223370",
+          "experiment_id": "uspto:US20030096853A1:['P-0049']:1",
+          "document_id": "US20030096853A1",
+          "location": "['P-0049']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 1,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "epo",
+          "record_id": "623405",
+          "experiment_id": "epo:EP06765404B1:['p0056']:1",
+          "document_id": "EP06765404B1",
+          "location": "['p0056']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 2,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(=O)(=O)NO)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2192223",
+          "experiment_id": "uspto:US20020183362A1:['P-1771']:1",
+          "document_id": "US20020183362A1",
+          "location": "['P-1771']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 3,
+        "smiles": "Cc1ccc(-c2cc(C(F)F)nn2-c2ccc(S(N)(=O)=O)c(F)c2)cc1Cl"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2144174",
+          "experiment_id": "uspto:US20010047023A1:['P-0035']:1",
+          "document_id": "US20010047023A1",
+          "location": "['P-0035']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 4,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(F)c(Cl)c2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6726425",
+          "experiment_id": "uspto:US20160229850A1:['p-0111']:1",
+          "document_id": "US20160229850A1",
+          "location": "['p-0111']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 5,
+        "smiles": "Cc1cc(N)n(-c2ccccc2)n1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638087",
+          "experiment_id": "uspto:US07001917:['p-0319']:1",
+          "document_id": "US07001917",
+          "location": "['p-0319']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 6,
+        "smiles": "CCc1ccc(S(=O)(=O)NC(=O)NCCc2ccc(-n3nc(C)c(-c4ccccc4)c3C)cc2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "3638216",
+          "experiment_id": "uspto:US07001895:['p-1568']:1",
+          "document_id": "US07001895",
+          "location": "['p-1568']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 7,
+        "smiles": "CC(C)CCOc1c(-c2ccc(S(N)(=O)=O)cc2)cnn(-c2cccc(Cl)c2)c1=O"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4723747",
+          "experiment_id": "uspto:US20110077262A1:['p-0468']:1",
+          "document_id": "US20110077262A1",
+          "location": "['p-0468']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 8,
+        "smiles": "COC(=O)c1ccc(-n2nc(C)c3cc(C(=O)N4CCC5(CC4)CC(=O)c4cc(-c6cnn(C)c6)ccc4O5)ccc32)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4327902",
+          "experiment_id": "uspto:US20100016323A1:['p-0445']:1",
+          "document_id": "US20100016323A1",
+          "location": "['p-0445']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 9,
+        "smiles": "C=CCN(CCO)S(=O)(=O)c1ccc(OCCC)c(-c2nn3c(CCC)nc(C)c3c(=O)[nH]2)c1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "4381854",
+          "experiment_id": "uspto:US20100098634A1:['p-0661']:1",
+          "document_id": "US20100098634A1",
+          "location": "['p-0661']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 10,
+        "smiles": "O=c1[nH]c2ccc(OCCF)cc2s1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2304597",
+          "experiment_id": "uspto:US20040087623A1:['P-0193']:1",
+          "document_id": "US20040087623A1",
+          "location": "['P-0193']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 11,
+        "smiles": "CCc1ccc(-c2cc(CC(=O)c3ccccn3)ccn2)cc1"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "6327800",
+          "experiment_id": "uspto:US20150252016A1:['p-0047']:1",
+          "document_id": "US20150252016A1",
+          "location": "['p-0047']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 12,
+        "smiles": "CCN(C(=O)CCSCCC(F)(F)F)c1cn(-c2cccnc2)nc1Cl"
+      },
+      {
+        "source": {
+          "namespace": "uspto",
+          "record_id": "2698953",
+          "experiment_id": "uspto:US20070060629A1:['p-0252']:1",
+          "document_id": "US20070060629A1",
+          "location": "['p-0252']",
+          "url": null,
+          "synthetic": false
+        },
+        "position": 13,
+        "smiles": "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)c(CO)c2)cc1"
+      }
+    ]
+  }
+]

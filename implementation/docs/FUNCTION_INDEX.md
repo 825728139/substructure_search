@@ -304,11 +304,11 @@
 | [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L142) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L206) | 按规范原子遍历规划家族，再将查询映射回用户原始目标索引。 |
 | [_plan_ordered_families](../src/reaction_reference/retrieval/planner.py#L238) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L434) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L466) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
-| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L507) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L598) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L621) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L465) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L497) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
+| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L538) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L629) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L652) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -504,6 +504,15 @@
 | 函数 | 职责 |
 |---|---|
 | [test_frontend_task_isolation_and_current_results](../tests/test_frontend.py#L11) | 运行乱序响应、分页、下载、重排隔离、无快照终态及串行轮询十二个场景。 |
+
+## tests/test_functional_environments.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_default_local_environment_preserves_chemical_role](../tests/test_functional_environments.py#L19) | 默认计划存在接受局部等价正例、拒绝官能团角色不同反例的家族。 |
+| [test_local_ring_environment_does_not_claim_full_ring_identity](../tests/test_functional_environments.py#L36) | 不同环大小可作局部参考，但局部查询不覆盖完整目标，也不抹去完整环系查询。 |
+| [test_empty_local_near_pool_does_not_jump_ahead_of_other_family](../tests/test_functional_environments.py#L49) | 空局部近邻的独立补查保持队尾，其他核心先执行；补查本身仍保留。 |
+| [test_empty_local_near_pool_does_not_jump_ahead_of_other_family.page](../tests/test_functional_environments.py#L72) | 只模拟局部初选为空，其余候选仍来自真实样本结构。 |
 
 ## tests/test_global_review.py
 
@@ -1065,8 +1074,8 @@
 
 | 函数 | 职责 |
 |---|---|
-| [evaluate](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L13) | 寻找默认计划中覆盖指定连接背景、接受正例且拒绝反例的非精确家族。 |
-| [main](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L41) | 从相邻固定任务清单读取结构问题，在标准输出返回可复核结果。 |
+| [evaluate](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L14) | 寻找默认计划中覆盖指定连接背景、接受正例且拒绝反例的非精确家族。 |
+| [main](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L42) | 从相邻固定任务清单读取结构问题，在标准输出返回可复核结果。 |
 
 ## ../reviews/live_benchmark_2026_10_31/benchmark.py
 

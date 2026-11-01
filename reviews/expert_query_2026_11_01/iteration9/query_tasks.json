@@ -1,0 +1,8 @@
+[
+  {"id":"acyclic_amide","target":"CCCCCCNC(=O)CCCCC","anchor":"CNC(=O)C","positive":"CCNC(=O)CC","negative":"CCN(C)C(=O)CC","question":"保留无环酰胺NH及两端连接，允许远端链缩短。"},
+  {"id":"acyclic_amine","target":"CCCCCCCN","anchor":"CN","positive":"CCCN","negative":"CCN(C)C","question":"保留无环伯胺，与叔胺区分，同时不固定整条烷链。"},
+  {"id":"secondary_alcohol","target":"CCCCC(O)CCCCC","anchor":"CC(O)C","positive":"CCC(O)CC","negative":"CC(C)(O)CC","question":"保留醇所在碳的仲碳环境，不能只看OH而把叔醇混入。"},
+  {"id":"cyclic_lactam","target":"O=C1NCCCCCC1","anchor":"C(=O)N","positive":"O=C1NCCCCC1","negative":"CCC(=O)NCCC","question":"提供环内酰胺局部环境查询，可参考不同环大小，但与开链酰胺区分。"},
+  {"id":"acyclic_ether","target":"CCCCOCCCC","anchor":"COC","positive":"CCOCC","negative":"CCOC(=O)CC","question":"保留醚两侧饱和连接端，与酯区分，远端链允许变化。"},
+  {"id":"acyclic_carbonyl","target":"CCCC(=O)CCCC","anchor":"CC(=O)C","positive":"CCC(=O)CC","negative":"CCC(O)CC","question":"保留酮羰基局部连接，与醇区分，远端烷链允许变化。"}
+]

@@ -1,0 +1,204 @@
+{
+  "implementation_hash": "c6d2656d982e09b9968df38215b793833e22fda35d479bf21185851364f9f4d1",
+  "expert_validated": false,
+  "results": [
+    {
+      "id": "acyclic_amide",
+      "question": "保留无环酰胺NH及两端连接，允许远端链缩短。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "acyclic_full_framework",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&A&+0:5]-[#6&A&+0:6]-[#7&A&+0:7]-[#6&A&+0:8](=[#8&A&+0:9])-[#6&A&+0:10]-[#6&A&+0:11]-[#6&A&+0:12]-[#6&A&+0:13]-[#6&A&+0:14]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:amide",
+          "smarts": "[#6&A&+0:6]-[#7&A&+0:7]-[#6&A&+0:8](=[#8&A&+0:9])-[#6&A&+0:10]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:5]-[#6&A&+0&H2&X4:6]-[#7&A&+0:7]-[#6&A&+0:8](=[#8&A&+0:9])-[#6&A&+0&H2&X4:10]-[#6&A&+0:11]",
+          "positive": "match",
+          "negative": "match"
+        }
+      ]
+    },
+    {
+      "id": "acyclic_amine",
+      "question": "保留无环伯胺，与叔胺区分，同时不固定整条烷链。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "acyclic_full_framework",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&A&+0:5]-[#6&A&+0:6]-[#6&A&+0:7]-[#7&A&+0:8]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:amine",
+          "smarts": "[#6&A&+0:7]-[#7&A&+0:8]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:1",
+          "smarts": "[#6&A&+0:6]-[#6&A&+0&H2&X4:7]-[#7&A&+0:8]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&A&+0&H3&X4:1]-[#6&A&+0&H2&X4:2]-[#6&A&+0&H2&X4:3]-[#6&A&+0&H2&X4:4]-[#6&A&+0&H2&X4:5]-[#6&A&+0&H2&X4:6]-[#6&A&+0&H2&X4:7]-[#7&A&+0:8]",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "secondary_alcohol",
+      "question": "保留醇所在碳的仲碳环境，不能只看OH而把叔醇混入。",
+      "passed": true,
+      "candidates": [
+        {
+          "rule": "acyclic_full_framework",
+          "smarts": "[#6&A&+0:11]-[#6&A&+0:10]-[#6&A&+0:9]-[#6&A&+0:8]-[#6&A&+0:7]-[#6&A&+0:5](-[#8&A&+0&H1&X2:6])-[#6&A&+0:4]-[#6&A&+0:3]-[#6&A&+0:2]-[#6&A&+0:1]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:hydroxyl",
+          "smarts": "[#6&A&+0:7]-[#6&A&+0:5](-[#8&A&+0&H1&X2:6])-[#6&A&+0:4]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:8]-[#6&A&+0&H2&X4:7]-[#6&A&+0:5](-[#8&A&+0&H1&X2:6])-[#6&A&+0&H2&X4:4]-[#6&A&+0:3]",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0&H3&X4:11]-[#6&A&+0&H2&X4:10]-[#6&A&+0&H2&X4:9]-[#6&A&+0&H2&X4:8]-[#6&A&+0&H2&X4:7]-[#6&A&+0:5](-[#8&A&+0&H1&X2:6])-[#6&A&+0&H2&X4:4]-[#6&A&+0&H2&X4:3]-[#6&A&+0&H2&X4:2]-[#6&A&+0&H3&X4:1]",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "cyclic_lactam",
+      "question": "提供环内酰胺局部环境查询，可参考不同环大小，但与开链酰胺区分。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#8&A&+0:1]=[#6&A&+0:2]1-[#6&A&+0:9]-[#6&A&+0:8]-[#6&A&+0:7]-[#6&A&+0:6]-[#6&A&+0:5]-[#6&A&+0:4]-[#7&A&+0:3]-1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "complete_ring_system",
+          "smarts": "[#8&A&+0:1]=[#6&A&+0:2]1-[#6&A&+0:9]-[#6&A&+0:8]-[#6&A&+0:7]-[#6&A&+0:6]-[#6&A&+0:5]-[#6&A&+0:4]-[#7&A&+0:3]-1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:amide",
+          "smarts": "[#8&A&+0:1]=[#6&A&+0:2]1-[#6&A&+0:9]-[#6&A&+0:8]-[#6&A&+0:7]-[#6&A&+0:6]-[#6&A&+0:5]-[#6&A&+0:4]-[#7&A&+0:3]-1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "acyclic_ether",
+      "question": "保留醚两侧饱和连接端，与酯区分，远端链允许变化。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "acyclic_full_framework",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]-[#6&A&+0:7]-[#6&A&+0:8]-[#6&A&+0:9]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "acyclic_functional_anchor_paths",
+          "smarts": "[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "functional_neighborhood:ether",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]-[#6&A&+0:7]",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:1",
+          "smarts": "[#6&A&+0:2]-[#6&A&+0&H2&X4:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]",
+          "positive": "no_match",
+          "negative": "match"
+        },
+        {
+          "rule": "nonring_boundary_fragment",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:2]-[#6&A&+0&H2&X4:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]-[#6&A&+0&H2&X4:7]-[#6&A&+0:8]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "nonring_boundary_fragment",
+          "smarts": "[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]-[#6&A&+0:7]-[#6&A&+0:8]-[#6&A&+0:9]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&A&+0&H3&X4:1]-[#6&A&+0&H2&X4:2]-[#6&A&+0&H2&X4:3]-[#6&A&+0:4]-[#8&A&+0:5]-[#6&A&+0:6]",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "acyclic_carbonyl",
+      "question": "保留酮羰基局部连接，与醇区分，远端烷链允许变化。",
+      "passed": true,
+      "candidates": [
+        {
+          "rule": "acyclic_full_framework",
+          "smarts": "[#6&A&+0:9]-[#6&A&+0:8]-[#6&A&+0:7]-[#6&A&+0:6]-[#6&A&+0:4](=[#8&A&+0:5])-[#6&A&+0:3]-[#6&A&+0:2]-[#6&A&+0:1]",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:carbonyl",
+          "smarts": "[#6&A&+0:6]-[#6&A&+0:4](=[#8&A&+0:5])-[#6&A&+0:3]",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:7]-[#6&A&+0&H2&X4:6]-[#6&A&+0:4](=[#8&A&+0:5])-[#6&A&+0&H2&X4:3]-[#6&A&+0:2]",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0&H3&X4:9]-[#6&A&+0&H2&X4:8]-[#6&A&+0&H2&X4:7]-[#6&A&+0&H2&X4:6]-[#6&A&+0:4](=[#8&A&+0:5])-[#6&A&+0&H2&X4:3]-[#6&A&+0&H2&X4:2]-[#6&A&+0&H3&X4:1]",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    }
+  ]
+}
