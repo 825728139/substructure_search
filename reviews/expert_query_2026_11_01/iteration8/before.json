@@ -1,0 +1,286 @@
+{
+  "implementation_hash": "f5792e2a21a118b6966369493d39863b77d636bea3d3cf6b3ec13bc3a0674792",
+  "expert_validated": false,
+  "passed": 3,
+  "total": 8,
+  "results": [
+    {
+      "id": "primary_amine",
+      "question": "保留芳伯胺，允许远端芳环取代变化，不能把叔胺当作同一连接端。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#7&A&+0:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "functional_neighborhood:amine",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#7&A&+0:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#7&A&+0:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#7&A&+0&H2&X3:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#7&A&+0:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "secondary_amide",
+      "question": "保留酰胺NH角色，远端变化不应掩盖N烷基化差异。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](=[#8&A&+0:10])-[#7&A&+0:11]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "functional_neighborhood:amide",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](=[#8&A&+0:10])-[#7&A&+0:11]-[#6&A&+0:12]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0&H0&X3:9](=[#8&A&+0&H0&X1:10])-[#7&A&+0:11]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "functional_neighborhood:carbonyl",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](=[#8&A&+0:10])-[#7&A&+0:11]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0&H0&X3:9](=[#8&A&+0&H0&X1:10])-[#7&A&+0:11]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "nonring_boundary_fragment",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](=[#8&A&+0:10])-[#7&A&+0:11]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](=[#8&A&+0:10])-[#7&A&+0:11]-[#6&A&+0:12]-[#6&A&+0:13]):[#6&a&+0:14]:[#6&a&+0:15]:1",
+          "positive": "match",
+          "negative": "match"
+        }
+      ]
+    },
+    {
+      "id": "aldehyde",
+      "question": "寻找醛环境参考时，应有能与酮区分的查询。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]=[#8&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "functional_neighborhood:carbonyl",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]=[#8&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]=[#8&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0&H1&X3:9]=[#8&A&+0&H0&X1:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]=[#8&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "terminal_alkyne",
+      "question": "保留末端炔氢，不能把内炔视作完全相同的反应把手。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "nonring_boundary_fragment",
+          "smarts": "[#6&A&+0:10]#[#6&A&+0:9]-[#6&a&+0:8]1:[#6&a&+0:7]:[#6&a&+0:6]:[#6&a&+0:5]:[#6&a&+0:12]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&A&+0:10]#[#6&A&+0:9]-[#6&a&+0:8]1:[#6&a&+0:7]:[#6&a&+0:6]:[#6&a&+0:5]:[#6&a&+0:12]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0&H1&X2:10]#[#6&A&+0&H0&X2:9]-[#6&a&+0:8]1:[#6&a&+0:7]:[#6&a&+0:6]:[#6&a&+0:5](-[#6&A&+0&H2&X4:4]-[#6&A&+0:3]):[#6&a&+0:12]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:10]#[#6&A&+0:9]-[#6&a&+0:8]1:[#6&a&+0:7]:[#6&a&+0:6]:[#6&a&+0:5](-[#6&A&+0:4]-[#6&A&+0:3]-[#6&A&+0:2]-[#6&A&+0:1]):[#6&a&+0:12]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "methyl_ketone",
+      "question": "应有保留甲基酮而非三氟甲基酮的查询，同时允许芳环远端变化。",
+      "passed": false,
+      "candidates": [
+        {
+          "rule": "functional_neighborhood:carbonyl",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](-[#6&A&+0:11])=[#8&A&+0:10]):[#6&a&+0:12]:[#6&a&+0:13]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](-[#6&A&+0:11])=[#8&A&+0:10]):[#6&a&+0:12]:[#6&a&+0:13]:1",
+          "positive": "match",
+          "negative": "match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0&H0&X3:9](-[#6&A&+0&H3&X4:11])=[#8&A&+0&H0&X1:10]):[#6&a&+0:12]:[#6&a&+0:13]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9](-[#6&A&+0:11])=[#8&A&+0:10]):[#6&a&+0:12]:[#6&a&+0:13]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "phenol",
+      "question": "保留游离酚羟基，与甲醚区分。",
+      "passed": true,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#8&A&+0&H1&X2:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "complete_ring_system",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#8&A&+0&H1&X2:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:hydroxyl",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#8&A&+0&H1&X2:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_environment:1",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#8&A&+0&H1&X2:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#8&A&+0&H1&X2:9]):[#6&a&+0:10]:[#6&a&+0:11]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "nitrile",
+      "question": "保留腈的元素和三键，不能与酰胺混为同一基团。",
+      "passed": true,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "functional_neighborhood:nitrile",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:1",
+          "smarts": "[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_environment:2",
+          "smarts": "[#6&A&+0:3]-[#6&A&+0&H2&X4:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0&H0&X2:9]#[#7&A&+0&H0&X1:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:1]-[#6&A&+0:2]-[#6&A&+0:3]-[#6&A&+0:4]-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "no_match",
+          "negative": "no_match"
+        }
+      ]
+    },
+    {
+      "id": "para_pair",
+      "question": "完整保留两位点相对关系，不能把邻位和对位当作同一组合。",
+      "passed": true,
+      "candidates": [
+        {
+          "rule": "whole_murcko_with_adjacent_functional_units",
+          "smarts": "[#6&A&+0:1]-[#8&A&+0:2]-[#6&A&+0:3](=[#8&A&+0:4])-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "no_match"
+        },
+        {
+          "rule": "core_attachment_combination:2",
+          "smarts": "[#6&A&+0:1]-[#8&A&+0:2]-[#6&A&+0:3](=[#8&A&+0:4])-[#6&a&+0:5]1:[#6&a&+0:6]:[#6&a&+0:7]:[#6&a&+0:8](-[#6&A&+0:9]#[#7&A&+0:10]):[#6&a&+0:11]:[#6&a&+0:12]:1",
+          "positive": "match",
+          "negative": "no_match"
+        }
+      ]
+    }
+  ]
+}

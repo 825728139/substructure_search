@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>结构任务正反例</title><style>body{font-family:sans-serif;margin:28px;max-width:1100px}article{border:1px solid #ccc;padding:14px;margin:16px 0}img{width:100%}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>8个结构查询任务：正例与反例</h1><p>由本次开发编写的结构能力检查，不是外部专家盲测或真实反应准确率。修复针对这些已知失败进行了调整，不能视为独立验证集。</p><article><h2>保留芳伯胺，允许远端芳环取代变化，不能把叔胺当作同一连接端。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="primary_amine.svg"><p>修复前：不通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;core_attachment_combination:1&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#7&amp;A&amp;+0&amp;H2&amp;X3:9]):[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:11]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留酰胺NH角色，远端变化不应掩盖N烷基化差异。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="secondary_amide.svg"><p>修复前：不通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;core_attachment_combination:1&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#6&amp;A&amp;+0&amp;H0&amp;X3:9](=[#8&amp;A&amp;+0&amp;H0&amp;X1:10])-[#7&amp;A&amp;+0&amp;H1&amp;X3:11]-[#6&amp;A&amp;+0&amp;H2&amp;X4:12]-[#6&amp;A&amp;+0&amp;H3&amp;X4:13]):[#6&amp;a&amp;+0:14]:[#6&amp;a&amp;+0:15]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>寻找醛环境参考时，应有能与酮区分的查询。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="aldehyde.svg"><p>修复前：不通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;core_attachment_combination:1&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#6&amp;A&amp;+0&amp;H1&amp;X3:9]=[#8&amp;A&amp;+0&amp;H0&amp;X1:10]):[#6&amp;a&amp;+0:11]:[#6&amp;a&amp;+0:12]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留末端炔氢，不能把内炔视作完全相同的反应把手。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="terminal_alkyne.svg"><p>修复前：不通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;core_attachment_combination:1&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0&amp;H1&amp;X2:10]#[#6&amp;A&amp;+0&amp;H0&amp;X2:9]-[#6&amp;a&amp;+0:8]1:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:5]:[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:11]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>应有保留甲基酮而非三氟甲基酮的查询，同时允许芳环远端变化。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="methyl_ketone.svg"><p>修复前：不通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;core_attachment_combination:1&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#6&amp;A&amp;+0&amp;H0&amp;X3:9](-[#6&amp;A&amp;+0&amp;H3&amp;X4:11])=[#8&amp;A&amp;+0&amp;H0&amp;X1:10]):[#6&amp;a&amp;+0:12]:[#6&amp;a&amp;+0:13]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留游离酚羟基，与甲醚区分。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="phenol.svg"><p>修复前：通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;whole_murcko_with_adjacent_functional_units&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#8&amp;A&amp;+0&amp;H1&amp;X2:9]):[#6&amp;a&amp;+0:10]:[#6&amp;a&amp;+0:11]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>保留腈的元素和三键，不能与酰胺混为同一基团。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="nitrile.svg"><p>修复前：通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;whole_murcko_with_adjacent_functional_units&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#6&amp;A&amp;+0:9]#[#7&amp;A&amp;+0:10]):[#6&amp;a&amp;+0:11]:[#6&amp;a&amp;+0:12]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article><article><h2>完整保留两位点相对关系，不能把邻位和对位当作同一组合。</h2><p>左：目标；中：应允许的远端变化；右：应由角色保留查询区分的反例。</p><img src="para_pair.svg"><p>修复前：通过；修复后：通过</p><details><summary>符合要求的查询</summary><pre>{
+  &quot;rule&quot;: &quot;whole_murcko_with_adjacent_functional_units&quot;,
+  &quot;smarts&quot;: &quot;[#6&amp;A&amp;+0:1]-[#8&amp;A&amp;+0:2]-[#6&amp;A&amp;+0:3](=[#8&amp;A&amp;+0:4])-[#6&amp;a&amp;+0:5]1:[#6&amp;a&amp;+0:6]:[#6&amp;a&amp;+0:7]:[#6&amp;a&amp;+0:8](-[#6&amp;A&amp;+0:9]#[#7&amp;A&amp;+0:10]):[#6&amp;a&amp;+0:11]:[#6&amp;a&amp;+0:12]:1&quot;,
+  &quot;positive&quot;: &quot;match&quot;,
+  &quot;negative&quot;: &quot;no_match&quot;
+}</pre></details></article></html>

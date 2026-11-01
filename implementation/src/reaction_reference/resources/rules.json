@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "version": "organic-reference-1.7",
+  "version": "organic-reference-1.8",
   "status": "bounded_rule_set_with_regression_cases",
   "functional_groups": [
     {"id": "amide", "smarts": "[CX3](=[OX1])-[NX3]", "priority": 100},

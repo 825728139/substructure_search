@@ -359,7 +359,7 @@ def _plan_ordered_families(target, max_families=12):
         candidates = _attachment_seeds(target, core, groups, limit=max_families)
         attachment_streams.append(iter(candidates))
         for atoms, rule in candidates:
-            if rule.startswith("core_attachment_environment:"):
+            if rule.startswith(("core_attachment_environment:", "core_attachment_combination:")):
                 identity = (tuple(sorted(atoms)), rule)
                 # 相同查询由不同核心派生时，只约束共同的支链部分，不能误锁核心R位点。
                 local = set(atoms) - set(core)
@@ -396,8 +396,8 @@ def _plan_ordered_families(target, max_families=12):
             if not atoms:
                 continue
             smarts, ids = _core_smarts(target, atoms, groups)
-            if rule.startswith("core_attachment_environment:"):
-                # 完全包含其重原子邻居的局部原子锁定H/X；边界原子仍允许远端变化。
+            if rule.startswith(("core_attachment_environment:", "core_attachment_combination:")):
+                # 完整支链与局部环境都锁定内部原子的H/X；局部边界仍允许远端变化。
                 # 这是目标连接端的结构约束，避免CH3与CF3、一级与三级中心静默等同。
                 query = Chem.MolFromSmarts(smarts)
                 fixed = set(ids)

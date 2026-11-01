@@ -129,3 +129,37 @@ def test_default_plan_includes_pair_and_preserves_full_alternatives(smiles):
     expanded = plan_families(target, 48)
     assert any(f.rule_id == "core_attachment_combination:2" for f in expanded)
     assert len({f.id for f in expanded}) == len(expanded)
+
+
+@pytest.mark.parametrize(
+    "handle,changed",
+    [
+        ("N", "N(C)C"),
+        ("C(=O)NCC", "C(=O)N(C)CC"),
+        ("C=O", "C(=O)C"),
+        ("C#C", "C#CC"),
+        ("C(=O)C", "C(=O)C(F)(F)F"),
+    ],
+)
+def test_short_full_attachment_has_role_preserving_query_without_losing_broad_core(handle, changed):
+    """短完整支链也应有氢数/取代程度保留的查询，而较宽的裸核心仍可召回不同环境。"""
+    from rdkit import Chem
+
+    target = parse(f"CCCCc1ccc({handle})cc1")
+    positive = parse(f"Fc1ccc({handle})cc1")
+    negative = parse(f"Fc1ccc({changed})cc1")
+    anchor = Chem.MolFromSmarts(f"c1ccc({handle})cc1")
+    positions = target.GetSubstructMatches(anchor)
+    families = initial_families(target)
+    qualified = [
+        f
+        for f in families
+        if f.relation != "strict" and any(set(p) <= set(f.target_atoms) for p in positions)
+    ]
+    assert any(
+        match_family(f, positive, target, "positive").state == "match"
+        and match_family(f, negative, target, "negative").state == "no_match"
+        for f in qualified
+    )
+    core = next(f for f in families if f.rule_id == "complete_ring_system")
+    assert match_family(core, negative, target, "broad").state == "match"

@@ -388,6 +388,7 @@
 | [test_attachment_environment_closes_functional_units_and_rings](../tests/test_attachment_planning.py#L81) | 酰胺邻域保持C=O与N，苄基连接邻域保留完整苯环而放开对位远端烷链。 |
 | [test_single_and_pair_questions_precede_repeated_tail_precision](../tests/test_attachment_planning.py#L102) | 两条长支链都有局部/完整版本时，第二个名额应查询双位点而不是重复单支链。 |
 | [test_default_plan_includes_pair_and_preserves_full_alternatives](../tests/test_attachment_planning.py#L122) | 默认计划提供双位点查询，较大预算仍保留完整远端版本和裸核心。 |
+| [test_short_full_attachment_has_role_preserving_query_without_losing_broad_core](../tests/test_attachment_planning.py#L144) | 短完整支链也应有氢数/取代程度保留的查询，而较宽的裸核心仍可召回不同环境。 |
 
 ## tests/test_browser_integration.py
 
@@ -1059,6 +1060,13 @@
 | 函数 | 职责 |
 |---|---|
 | [main](../../reviews/expert_query_2026_11_01/iteration7/run_representation_check.py#L10) | 建立原始/反转目标对，验证结构身份后交给统一计时器，不修改原始输入文件。 |
+
+## ../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py
+
+| 函数 | 职责 |
+|---|---|
+| [evaluate](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L13) | 寻找默认计划中覆盖指定连接背景、接受正例且拒绝反例的非精确家族。 |
+| [main](../../reviews/expert_query_2026_11_01/iteration8/evaluate_queries.py#L41) | 从相邻固定任务清单读取结构问题，在标准输出返回可复核结果。 |
 
 ## ../reviews/live_benchmark_2026_10_31/benchmark.py
 

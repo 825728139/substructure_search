@@ -1,0 +1,10 @@
+[
+  {"id":"primary_amine","target":"CCCCc1ccc(N)cc1","anchor":"c1ccc(N)cc1","positive":"Fc1ccc(N)cc1","negative":"Fc1ccc(N(C)C)cc1","question":"保留芳伯胺，允许远端芳环取代变化，不能把叔胺当作同一连接端。"},
+  {"id":"secondary_amide","target":"CCCCc1ccc(C(=O)NCC)cc1","anchor":"c1ccc(C(=O)N)cc1","positive":"Fc1ccc(C(=O)NCC)cc1","negative":"Fc1ccc(C(=O)N(C)CC)cc1","question":"保留酰胺NH角色，远端变化不应掩盖N烷基化差异。"},
+  {"id":"aldehyde","target":"CCCCc1ccc(C=O)cc1","anchor":"c1ccc(C=O)cc1","positive":"Fc1ccc(C=O)cc1","negative":"Fc1ccc(C(=O)C)cc1","question":"寻找醛环境参考时，应有能与酮区分的查询。"},
+  {"id":"terminal_alkyne","target":"CCCCc1ccc(C#C)cc1","anchor":"c1ccc(C#C)cc1","positive":"Fc1ccc(C#C)cc1","negative":"Fc1ccc(C#CC)cc1","question":"保留末端炔氢，不能把内炔视作完全相同的反应把手。"},
+  {"id":"methyl_ketone","target":"CCCCc1ccc(C(=O)C)cc1","anchor":"c1ccc(C(=O)C)cc1","positive":"Fc1ccc(C(=O)C)cc1","negative":"Fc1ccc(C(=O)C(F)(F)F)cc1","question":"应有保留甲基酮而非三氟甲基酮的查询，同时允许芳环远端变化。"},
+  {"id":"phenol","target":"CCCCc1ccc(O)cc1","anchor":"c1ccc(O)cc1","positive":"Fc1ccc(O)cc1","negative":"Fc1ccc(OC)cc1","question":"保留游离酚羟基，与甲醚区分。"},
+  {"id":"nitrile","target":"CCCCc1ccc(C#N)cc1","anchor":"c1ccc(C#N)cc1","positive":"Fc1ccc(C#N)cc1","negative":"Fc1ccc(C(N)=O)cc1","question":"保留腈的元素和三键，不能与酰胺混为同一基团。"},
+  {"id":"para_pair","target":"COC(=O)c1ccc(C#N)cc1","anchor":"COC(=O)c1ccc(C#N)cc1","positive":"COC(=O)c1ccc(C#N)cc1","negative":"COC(=O)c1ccccc1C#N","question":"完整保留两位点相对关系，不能把邻位和对位当作同一组合。"}
+]
