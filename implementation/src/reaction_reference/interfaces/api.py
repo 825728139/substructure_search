@@ -53,6 +53,11 @@ def create_app(settings=None):
         """返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。"""
         return files("reaction_reference").joinpath("interfaces/static/index.html").read_text()
 
+    @app.get("/demo", response_class=HTMLResponse, include_in_schema=False)
+    def demo():
+        """返回面向人工化学验证的目标、查询结构与反应图演示页面。"""
+        return files("reaction_reference").joinpath("interfaces/static/demo.html").read_text()
+
     def owner(authorization: str | None = Header(default=None)):
         """验证可选内部 Bearer 令牌，返回固定 internal 访问范围。
 
@@ -147,6 +152,49 @@ def create_app(settings=None):
     def preview(request: SearchRequest, _=Depends(owner)):
         """调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。"""
         return {"families": [f.model_dump() for f in client.preview(request)]}
+
+    @app.post("/v1/demo/preview")
+    def demo_preview(request: SearchRequest, _=Depends(owner)):
+        """以正式规划器预览初始家族，并用RDKit绘制目标及查询。"""
+        from reaction_reference.interfaces.depiction import query_images
+
+        return query_images(request.target.value, client.preview(request))
+
+    @app.get("/v1/search-runs/{run_id}/demo")
+    def demo_result(run_id: str, scope=Depends(owner)):
+        """读取已保存快照，返回实际家族执行范围及推荐反应图，不重新检索。"""
+        from reaction_reference.interfaces.depiction import query_images, reaction_svg
+
+        client.manager.store.load(run_id, scope)
+        package = client.manager.store.package(run_id)
+        if package is None:
+            raise HTTPException(409, "尚无结果快照")
+        payload = query_images(package.target_input_smiles, package.families)
+        references = {r.id: r for r in package.results}
+        recommendations = []
+        for identifier in package.displayed_reference_ids:
+            reference = references[identifier]
+            try:
+                svg = reaction_svg(reference)
+                error = None
+            except (ValueError, RuntimeError) as exc:
+                svg, error = None, f"来源结构无法绘图：{type(exc).__name__}"
+            recommendations.append(
+                {
+                    "reference": reference.model_dump(mode="json"),
+                    "reaction_svg": svg,
+                    "drawing_error": error,
+                }
+            )
+        return {
+            **payload,
+            "snapshot_id": package.snapshot_id,
+            "family_states": package.family_states,
+            "statistics": package.statistics,
+            "stop_reasons": package.stop_reasons,
+            "source_issues": package.source_issues,
+            "recommendations": recommendations,
+        }
 
     @app.post("/v1/search-runs", status_code=202)
     def submit(

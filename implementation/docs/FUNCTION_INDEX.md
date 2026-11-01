@@ -210,25 +210,28 @@
 | [create_app](../src/reaction_reference/interfaces/api.py#L25) | 装配 FastAPI 应用、共享 Client、内部认证和快照分页接口，返回 app。 |
 | [create_app.lifespan](../src/reaction_reference/interfaces/api.py#L36) | 应用启动后接管共享客户端的生命周期，关闭时在线程池中等待清理。 |
 | [create_app.index](../src/reaction_reference/interfaces/api.py#L52) | 返回随包分发的内部查看页面 HTML；页面本身不包含业务证据或访问令牌。 |
-| [create_app.owner](../src/reaction_reference/interfaces/api.py#L56) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
-| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L69) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
-| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L78) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
-| [create_app.missing](../src/reaction_reference/interfaces/api.py#L95) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
-| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L100) | 把 revision、幂等或快照冲突转为 409 JSON。 |
-| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L105) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
-| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L110) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
-| [create_app.live](../src/reaction_reference/interfaces/api.py#L117) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
-| [create_app.ready](../src/reaction_reference/interfaces/api.py#L122) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
-| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L142) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
-| [create_app.preview](../src/reaction_reference/interfaces/api.py#L147) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
-| [create_app.submit](../src/reaction_reference/interfaces/api.py#L152) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
-| [create_app.status](../src/reaction_reference/interfaces/api.py#L166) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
-| [create_app.results](../src/reaction_reference/interfaces/api.py#L193) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
-| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L247) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
-| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L269) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
-| [create_app.structure](../src/reaction_reference/interfaces/api.py#L281) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
-| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L305) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
-| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L310) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
+| [create_app.demo](../src/reaction_reference/interfaces/api.py#L57) | 返回面向人工化学验证的目标、查询结构与反应图演示页面。 |
+| [create_app.owner](../src/reaction_reference/interfaces/api.py#L61) | 验证可选内部 Bearer 令牌，返回固定 internal 访问范围。 |
+| [create_app.encode_cursor](../src/reaction_reference/interfaces/api.py#L74) | 将运行、owner、snapshot 和 offset 编码并附加 HMAC 签名，返回分页令牌。 |
+| [create_app.decode_cursor](../src/reaction_reference/interfaces/api.py#L83) | 校验分页令牌长度和 HMAC 后恢复游标字段，非法内容返回 422。 |
+| [create_app.missing](../src/reaction_reference/interfaces/api.py#L100) | 把不存在或不可见的运行/快照 KeyError 转为 404 JSON。 |
+| [create_app.conflict](../src/reaction_reference/interfaces/api.py#L105) | 把 revision、幂等或快照冲突转为 409 JSON。 |
+| [create_app.capacity](../src/reaction_reference/interfaces/api.py#L110) | 把协调器容量不足转换为 429 JSON，不在 HTTP 层继续排无限任务。 |
+| [create_app.invalid](../src/reaction_reference/interfaces/api.py#L115) | 把业务输入 ValueError 转为 422，截断消息长度，不返回原生堆栈。 |
+| [create_app.live](../src/reaction_reference/interfaces/api.py#L122) | 返回进程存活标志，不检查来源连接，因此不代表检索已就绪。 |
+| [create_app.ready](../src/reaction_reference/interfaces/api.py#L127) | 校验规则并尝试打开/关闭来源，返回 ready 或 503。 |
+| [create_app.get_capabilities](../src/reaction_reference/interfaces/api.py#L147) | 返回当前规则版本、支持查询/分析能力及未支持范围，受内部认证保护。 |
+| [create_app.preview](../src/reaction_reference/interfaces/api.py#L152) | 调用 SDK 生成初始查询家族并序列化返回，不读取来源反应。 |
+| [create_app.demo_preview](../src/reaction_reference/interfaces/api.py#L157) | 以正式规划器预览初始家族，并用RDKit绘制目标及查询。 |
+| [create_app.demo_result](../src/reaction_reference/interfaces/api.py#L164) | 读取已保存快照，返回实际家族执行范围及推荐反应图，不重新检索。 |
+| [create_app.submit](../src/reaction_reference/interfaces/api.py#L200) | 校验幂等键长度后提交检索，返回 202 和初始 RunState。 |
+| [create_app.status](../src/reaction_reference/interfaces/api.py#L214) | 读取访问范围内的运行状态，并附上最新已保存快照的统计与完整性。 |
+| [create_app.results](../src/reaction_reference/interfaces/api.py#L241) | 按已发布的展示 ID 顺序返回参考卡片和建议卡片及下页游标。 |
+| [create_app.evidence](../src/reaction_reference/interfaces/api.py#L295) | 在指定 run 的最新资料包中查找 Claim 或实验绑定 Witness。 |
+| [create_app.export_package](../src/reaction_reference/interfaces/api.py#L317) | 返回访问范围内的完整 JSON 资料包，可指定固定 snapshot。 |
+| [create_app.structure](../src/reaction_reference/interfaces/api.py#L329) | 为运行内的指定参考生成带原子高亮的 SVG，可指定固定 snapshot。 |
+| [create_app.cancel](../src/reaction_reference/interfaces/api.py#L353) | 请求协调器停止运行并返回其真实终态或当前状态，不在接口层伪造取消成功。 |
+| [create_app.rerank](../src/reaction_reference/interfaces/api.py#L358) | 在当前访问范围内创建冻结证据重排 run，返回 202 和派生状态。 |
 
 ## src/reaction_reference/interfaces/cli.py
 
@@ -241,7 +244,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [reference_svg](../src/reaction_reference/interfaces/depiction.py#L8) | 绘制 Reference 的具体材料，按最佳已发现单见证高亮覆盖原子。 |
+| [query_images](../src/reaction_reference/interfaces/depiction.py#L10) | 绘制目标、每个真实家族的SMARTS及固定原子高亮；R约束额外绘制源端必要条件。 |
+| [query_images.draw](../src/reaction_reference/interfaces/depiction.py#L14) | 生成单分子SVG；高亮仅表示查询固定位置，不表示实验已验证。 |
+| [reaction_svg](../src/reaction_reference/interfaces/depiction.py#L41) | 按实际来源材料角色绘制反应物到产物，不用目标推断或补造缺失反应物。 |
+| [reference_svg](../src/reaction_reference/interfaces/depiction.py#L60) | 绘制 Reference 的具体材料，按最佳已发现单见证高亮覆盖原子。 |
 
 ## src/reaction_reference/interfaces/sdk.py
 
@@ -493,6 +499,14 @@
 | [test_concurrent_export_keeps_the_first_published_file.publish_race](../tests/test_data_boundaries.py#L243) | 模拟检查路径为空后，另一进程恰好先发布结果。 |
 | [test_export_publication_failure_does_not_leave_output](../tests/test_data_boundaries.py#L255) | 最终发布失败时也应删除临时文件，避免无效导出占用目标路径。 |
 | [test_export_publication_failure_does_not_leave_output.failed_publish](../tests/test_data_boundaries.py#L260) | 模拟目标文件发布时的权限错误。 |
+
+## tests/test_demo.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_demo_preview_uses_formal_planner_and_rdkit](../tests/test_demo.py#L11) | 预览绘制全部正式家族及源端预筛，不访问反应数据库。 |
+| [test_demo_endpoints_require_configured_token](../tests/test_demo.py#L25) | Demo图像数据与检索数据遵循同一内部认证。 |
+| [test_reaction_depiction_uses_actual_materials](../tests/test_demo.py#L33) | 反应图从真实材料角色生成，不需映射或拟合成目标。 |
 
 ## tests/test_evaluation.py
 

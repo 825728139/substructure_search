@@ -4,6 +4,8 @@
 
 本阶段收尾入口：[查询规划保留改动、实际效果与边界](docs/QUERY_STAGE_HANDOVER.md)。
 
+人工验证页面：访问 `/demo`，输入SMILES即可查看RDKit目标、实际查询片段与推荐反应图，见[Demo使用说明](docs/DEMO.md)。
+
 交接阅读从 [中文代码交接指南](docs/HANDOVER.md) 开始；其中包括项目目录、实际调用链、关键对象和编号含义、修改入口及验证步骤。全部具名 Python 函数有中文说明，可通过 [函数索引](docs/FUNCTION_INDEX.md) 直接定位。
 
 ![项目运行架构](docs/system-architecture.svg)
@@ -128,7 +130,7 @@ uv run --frozen python scripts/check.py
 
 检查包括全仓库 Python 中文说明与独立/行尾注释、Ruff、mypy、模块导入边界、化学及服务测试、契约漂移、wheel 打包。用 `python scripts/check_comments.py --write-index` 可刷新函数阅读索引。运行记录见 [实现与验证范围](docs/STATUS.md)。默认不访问源库；可选只读来源探针为 `uv run python scripts/probe_source.py`。
 
-当前共 570 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
+当前共 573 项测试；其中前端异步状态回归使用 Node.js，缺失时会明确显示跳过。本轮确认问题、修复及测试对应关系见[整体代码审查记录](docs/CODE_REVIEW.md)。
 
 ### 真实来源和浏览器集成检查
 
