@@ -384,17 +384,20 @@ def directed_family(parent, target, positions):
     parent 保留原核心与目标对应，positions 是查询核心的位置而非目标全分子索引。没有可约束 R 块时返回 None；不猜测新反应或虚构前体。
     """
     blocks = outside_blocks(target, parent.target_atoms)
-    constraints = []
+    constraints = list(parent.r_constraints)
+    requested = []
     for block in blocks:
         if set(block["core_positions"]) & set(positions):
             # 桥连块可能两次连接同一核心原子，但它仍是一个实际支链块。
             for position in sorted(set(block["core_positions"])):
-                constraints.append(
-                    RConstraint(
-                        position=position, requirement="required", exact_fragment=block["fragment"]
-                    )
+                constraint = RConstraint(
+                    position=position, requirement="required", exact_fragment=block["fragment"]
                 )
-    if not constraints:
+                requested.append(constraint)
+                # 同位点多个相同支链需要保留份数；已有父约束只抵扣对应份数。
+                if requested.count(constraint) > constraints.count(constraint):
+                    constraints.append(constraint)
+    if constraints == parent.r_constraints:
         return None
     return parent.model_copy(
         update={
@@ -405,6 +408,43 @@ def directed_family(parent, target, positions):
             "description": f"Directed follow-up at target core positions {sorted(set(positions))}",
         }
     )
+
+
+def progressive_followups(parent, target, witnesses, limit=2):
+    """根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。
+
+    各位点分别出现不能视为同一分子共同满足。桥连块的全部端口作为一个问题；精确约束继承父查询。没有见证不把查询失败推断成化学缺口，最多返回limit项，不预测前体或条件。
+    """
+    if not witnesses or limit <= 0:
+        return []
+    blocks = outside_blocks(target, parent.target_atoms)
+    desired = {p for block in blocks for p in block["core_positions"]}
+    covered = [set(w.matched_r_positions) for w in witnesses]
+    if not desired or any(desired <= positions for positions in covered):
+        return []
+    missing = [
+        set(block["core_positions"])
+        for block in blocks
+        if not any(set(block["core_positions"]) <= positions for positions in covered)
+    ]
+    # 位点问题按目标位置稳定排列；先单块再联合，不能一次锁死全部尚无依据的支链。
+    questions = sorted(missing, key=lambda positions: tuple(sorted(positions))) + [desired]
+    result: list[QueryFamily] = []
+    for positions in questions:
+        child = directed_family(parent, target, positions)
+        if child and all(child.id != existing.id for existing in result):
+            child = child.model_copy(
+                update={
+                    "trigger": "missing_attachment_block"
+                    if positions != desired
+                    else "missing_joint_assignment",
+                    "description": f"根据已核验命中补查核心位点 {sorted(positions)}；保留其他位点变化空间",
+                }
+            )
+            result.append(child)
+            if len(result) >= limit:
+                break
+    return result
 
 
 def exact_family(target):

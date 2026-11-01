@@ -18,7 +18,6 @@ from reaction_reference.chemistry.structures import (
     descriptors,
     digest,
     meets_target,
-    outside_blocks,
     parse,
     similarity,
 )
@@ -33,7 +32,7 @@ from reaction_reference.evidence.claims import evidence_for, summary_items
 from reaction_reference.evidence.relations import material_relations
 from reaction_reference.ranking.engine import rank_references
 from reaction_reference.reaction_analysis.analyze import analyze_reaction, project_changes
-from reaction_reference.retrieval.planner import directed_family, initial_families
+from reaction_reference.retrieval.planner import initial_families, progressive_followups
 from reaction_reference.rules import code_fingerprint, load_rules
 
 
@@ -621,24 +620,22 @@ def search(request, source, *, run_id=None, on_progress=None):
                 and len(family_lookup) < request.budget.max_families
             ):
                 # 用现有见证暴露的 R 组合缺口补查，不在检索前猜测战略切断键。
-                desired = {
-                    p
-                    for block in outside_blocks(target, family.target_atoms)
-                    for p in block["core_positions"]
-                }
                 found = [
                     w for r in references.values() for w in r.witnesses if w.family_id == family.id
                 ]
-                if (
-                    desired
-                    and found
-                    and not any(desired <= set(w.matched_r_positions) for w in found)
-                ):
-                    child = directed_family(family, target, desired)
-                    if child and child.id not in family_lookup:
+                children = progressive_followups(
+                    family,
+                    target,
+                    found,
+                    limit=min(2 - followups, request.budget.max_families - len(family_lookup)),
+                )
+                pending = []
+                for child in children:
+                    if child.id not in family_lookup:
                         family_lookup[child.id] = child
                         followups += 1
-                        queue.appendleft((child, "product", 0, 0))
+                        pending.append((child, "product", 0, 0))
+                queue.extendleft(reversed(pending))
             publish()
     except BudgetExceeded as exc:
         stopped.append(str(exc))

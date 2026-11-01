@@ -131,10 +131,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [search](../src/reaction_reference/application/search.py#L40) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
-| [search.package](../src/reaction_reference/application/search.py#L82) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L263) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L273) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search](../src/reaction_reference/application/search.py#L39) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
+| [search.package](../src/reaction_reference/application/search.py#L81) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
+| [search.publish](../src/reaction_reference/application/search.py#L262) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L272) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -303,8 +303,9 @@
 | [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L138) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L202) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
 | [directed_family](../src/reaction_reference/retrieval/planner.py#L381) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L410) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L433) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L413) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L450) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L473) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -603,6 +604,18 @@
 | [test_knn_core_filter_precedes_candidate_pagination](../tests/test_postgres_integration.py#L1059) | 有限近邻池先限制当前核心，不能让不含氧的高相似候选占用醇查询的分页名额。 |
 | [test_core_change_seed_can_recover_outside_knn_without_dropping_nearby](../tests/test_postgres_integration.py#L1078) | 近邻前512均保留核心时，补入池外真实核心变化线索，并保留近邻及不重复分页。 |
 | [test_seed_only_initial_core_can_request_bounded_priority_pages](../tests/test_postgres_integration.py#L1127) | 近邻池不含查询核心时仅初始核心请求短暂连续分页；整体与定向家族不借此独占预算。 |
+
+## tests/test_progressive_queries.py
+
+| 函数 | 职责 |
+|---|---|
+| [query_and_witnesses](../tests/test_progressive_queries.py#L14) | 构造不对称取代吡啶的真实核心匹配，返回目标、家族与全部已核验对应。 |
+| [test_missing_blocks_are_queried_separately](../tests/test_progressive_queries.py#L31) | 两条目标支链都未出现时，两个补查各锁一个位点，避免一次全部锁死。 |
+| [test_sitewise_union_does_not_suppress_joint_query](../tests/test_progressive_queries.py#L42) | 乙基和丙基分别见于不同材料时仍补查共同出现，不能用位点并集宣称满足。 |
+| [test_joint_hit_and_absent_evidence_do_not_create_followups](../tests/test_progressive_queries.py#L52) | 已有联合见证或尚无见证时均不凭空制造缺口。 |
+| [test_nested_directed_query_keeps_parent_constraints](../tests/test_progressive_queries.py#L60) | 对子家族增加另一位点不能丢掉已锁定的父位点，重复补查不生成新家族。 |
+| [test_pipeline_executes_two_distinct_missing_block_followups](../tests/test_progressive_queries.py#L72) | 真实来源分页先返回缺口材料，编排器随后实际执行两个不同单块补查。 |
+| [test_pipeline_executes_two_distinct_missing_block_followups.page](../tests/test_progressive_queries.py#L92) | 记录实际被执行的查询，底层仍使用真实结构匹配而非伪造命中。 |
 
 ## tests/test_query_input_planning.py
 
