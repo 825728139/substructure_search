@@ -404,6 +404,20 @@ def _plan_ordered_families(target, max_families=12):
             if not atoms:
                 continue
             smarts, ids = _core_smarts(target, atoms, groups)
+            if rule == "acyclic_full_framework":
+                # 完整无环框架不能仅凭环中的一段路径命中；局部类比仍由其他家族提供。
+                query = Chem.MolFromSmarts(smarts)
+                for atom in query.GetAtoms():
+                    atom.ExpandQuery(Chem.AtomFromSmarts("[!R]"))
+                    original = target.GetAtomWithIdx(ids[atom.GetIdx()])
+                    # 无环内部连接及杂原子保留H/X；末端碳仍允许链延长类比。
+                    if original.GetAtomicNum() != 6 or original.GetDegree() > 1:
+                        atom.ExpandQuery(
+                            Chem.AtomFromSmarts(
+                                f"[H{original.GetTotalNumHs(includeNeighbors=True)};X{original.GetTotalDegree()}]"
+                            )
+                        )
+                smarts = Chem.MolToSmarts(query)
             if rule.startswith("functional_connection_environment:"):
                 query = Chem.MolFromSmarts(smarts)
                 fixed = set(ids)

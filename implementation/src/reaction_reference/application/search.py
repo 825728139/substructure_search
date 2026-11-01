@@ -314,7 +314,11 @@ def search(request, source, *, run_id=None, on_progress=None):
                 # 在线来源一页少取，先给不同家族实际处理机会；后续仍沿游标继续，不丢弃候选。
                 page_size = request.budget.page_size
                 if not request.options.exhaustive_fixture:
-                    page_size = min(page_size, getattr(source, "preferred_page_size", page_size))
+                    preferred = getattr(source, "preferred_page_size", page_size)
+                    if role == "product" and family.rule_id == "acyclic_full_framework":
+                        # 完整无环框架已有非环及内部连接约束；短暂多看几条，避免后续相似家族反复处理同一前缀。
+                        preferred = getattr(source, "whole_framework_page_size", preferred)
+                    page_size = min(page_size, preferred)
                 page = source.candidate_page(family, role, cursor, page_size, target_smiles, stage)
             except Exception as exc:
                 source_issues.append(

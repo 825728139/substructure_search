@@ -41,7 +41,8 @@ def test_experiment_counts_include_source_namespace(
     try:
         package = search(
             request_factory(
-                "CCN",
+                # 计数回归使用共同乙基片段，不依赖把伯胺与酰胺当成同一完整框架。
+                "CC",
                 options={
                     "exhaustive_fixture": True,
                     "include_proposals": False,

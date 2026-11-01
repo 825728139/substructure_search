@@ -1,0 +1,98 @@
+[
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4185445",
+      "experiment_id": "uspto:US20090286812A1:['p-0521']:1",
+      "document_id": "US20090286812A1",
+      "location": "['p-0521']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCOc1ccc(Oc2ncnc3c2cnn3C2CCN(C(=O)C3CCCC3)CC2)c(F)c1"
+  },
+  {
+    "source": {
+      "namespace": "epo",
+      "record_id": "715170",
+      "experiment_id": "epo:EP05704415B1:['p0075', 'p0076']:1",
+      "document_id": "EP05704415B1",
+      "location": "['p0075', 'p0076']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCCCCCCCCCCC(=O)NCCCC"
+  },
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "7334691",
+      "experiment_id": "uspto:US09771372:['p-0461']:1",
+      "document_id": "US09771372",
+      "location": "['p-0461']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "Cc1cc2nc3n(c2cc1C)C(NC(=O)C1CCN(C(=O)C2CCCC2)C1)(C(F)(F)F)C(=O)N3"
+  },
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2977946",
+      "experiment_id": "uspto:US04144320:['p-0046']:1",
+      "document_id": "US04144320",
+      "location": "['p-0046']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCCCCCCCCCCCCCCC(=O)NCCCC"
+  },
+  {
+    "source": {
+      "namespace": "epo",
+      "record_id": "196534",
+      "experiment_id": "epo:EP93870157A1:['p0034']:1",
+      "document_id": "EP93870157A1",
+      "location": "['p0034']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCCCCCCCCNC(=O)CCCCC(=O)NCCCCCCCCC"
+  },
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "9289982",
+      "experiment_id": "uspto:US20230039502A1:['p-0156']:1",
+      "document_id": "US20230039502A1",
+      "location": "['p-0156']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "C=CCCCCCCCC(=O)NCCCC"
+  },
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3172265",
+      "experiment_id": "uspto:US04745212:['p-0070']:1",
+      "document_id": "US04745212",
+      "location": "['p-0070']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCCCNC(=O)CCCCCN=C=O"
+  },
+  {
+    "source": {
+      "namespace": "uspto",
+      "record_id": "8748982",
+      "experiment_id": "uspto:US20210355081A1:['p-0066']:1",
+      "document_id": "US20210355081A1",
+      "location": "['p-0066']",
+      "url": null,
+      "synthetic": false
+    },
+    "smiles": "CCCCCCCCCCCC(=O)NCCCC[C@H](NC(=O)CCCCCCCCCCC)C(=O)O"
+  }
+]

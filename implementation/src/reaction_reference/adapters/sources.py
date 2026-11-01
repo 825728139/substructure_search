@@ -309,9 +309,10 @@ class PostgresSource:
 
     hydration_requires_io = True
     preferred_page_size = 2
+    whole_framework_page_size = 6
     selection_failure_fallback = True
     fragment_selection_stages = True
-    selection_policy = "final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window"
+    selection_policy = "final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; acyclic_whole_page_up_to6; no_server_mass_window"
     lightweight_columns = (
         "id",
         "source_type",

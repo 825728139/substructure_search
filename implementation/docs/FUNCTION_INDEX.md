@@ -99,15 +99,15 @@
 | [JsonlSource.candidate_page](../src/reaction_reference/adapters/sources.py#L252) | 返回家族、角色、选择阶段和目标共同限定范围的一页 CandidatePage。 |
 | [JsonlSource.close](../src/reaction_reference/adapters/sources.py#L298) | 清空按家族/角色/目标/选择阶段缓存的候选顺序；无外部连接需要关闭。 |
 | [JsonlSource.hydrate](../src/reaction_reference/adapters/sources.py#L302) | 返回已在内存完整加载的 ReactionRecord，不发起额外 I/O。 |
-| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L337) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
-| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L412) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
-| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L419) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
-| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L424) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
-| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L460) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
-| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L511) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
-| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L700) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
-| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L719) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
-| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L792) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
+| [PostgresSource.__init__](../src/reaction_reference/adapters/sources.py#L338) | 建立只读 Repeatable Read 会话、SQL 超时及指纹/手性参数，核对有效索引。 |
+| [PostgresSource._has_index](../src/reaction_reference/adapters/sources.py#L413) | 检查指定列是否为有效 GiST 的真实键列，返回 bool。 |
+| [PostgresSource._assert_index](../src/reaction_reference/adapters/sources.py#L420) | 要求指定化学列具备 GiST；缺失时抛出 ValueError，明确来源能力未就绪。 |
+| [PostgresSource._items](../src/reaction_reference/adapters/sources.py#L425) | 把轻量 SQL 行展开为指定角色的具体材料候选并保留原行用于详情加载。 |
+| [PostgresSource._source_rows](../src/reaction_reference/adapters/sources.py#L461) | 为一页去重组选实际合格来源，匹配前绑定其结构、映射及条件，防止水合后更换材料。 |
+| [PostgresSource.candidate_page](../src/reaction_reference/adapters/sources.py#L512) | 在同一只读会话中读取一页候选，返回实例及范围标签。 |
+| [PostgresSource.hydrate](../src/reaction_reference/adapters/sources.py#L701) | 对已命中的轻量记录按需读取详情、重建统一记录并缓存。 |
+| [PostgresSource._fetch_details](../src/reaction_reference/adapters/sources.py#L720) | 按完整来源组合键或 reaction_id 查询详情，最多读取两条以检测关联歧义。 |
+| [PostgresSource.close](../src/reaction_reference/adapters/sources.py#L793) | 回滚并关闭只读会话，同时释放其服务端游标；旧游标不能跨新会话续用。 |
 
 ## src/reaction_reference/analogs/transfer.py
 
@@ -304,11 +304,11 @@
 | [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L142) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L206) | 按规范原子遍历规划家族，再将查询映射回用户原始目标索引。 |
 | [_plan_ordered_families](../src/reaction_reference/retrieval/planner.py#L238) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L465) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L497) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
-| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L538) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L629) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L652) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L479) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L511) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
+| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L552) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L643) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L666) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -340,6 +340,13 @@
 | [request_factory](../tests/conftest.py#L31) | 提供统一请求构造器，允许测试仅覆盖与当前场景相关的字段。 |
 | [request_factory.create](../tests/conftest.py#L34) | 将目标 SMILES 和覆盖参数构造成严格 SearchRequest，返回测试请求。 |
 | [settings](../tests/conftest.py#L42) | 为每个测试分配独立临时运行目录，避免协调锁与作业状态互相污染。 |
+
+## tests/test_acyclic_framework.py
+
+| 函数 | 职责 |
+|---|---|
+| [test_whole_acyclic_framework_rejects_path_inside_lactam](../tests/test_acyclic_framework.py#L10) | 足够大的内酰胺可包含无环酰胺路径，但不应作为完整无环框架匹配。 |
+| [test_whole_framework_page_uses_budget_before_repeated_family_prefixes](../tests/test_acyclic_framework.py#L26) | 同一有界预算下，完整无环框架六条页能处理更多不同记录，不被同前缀家族耗尽。 |
 
 ## tests/test_annotations.py
 
