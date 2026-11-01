@@ -1,0 +1,50 @@
+[
+  {
+    "target": "V05",
+    "source_id": "353330",
+    "judgment": "contradictory",
+    "reason": "二碳酸二叔丁酯与哌啶羧酸反应，原文9H单峰支持Boc；抽取写成正丁氧羰基，不能作为目标正丁酯精确先例。"
+  },
+  {
+    "target": "V05",
+    "source_id": "2556568",
+    "judgment": "not_target_step",
+    "reason": "原文是已有氨基甲酸酯的哌啶酮还原胺化，不是所需保护基形成。"
+  },
+  {
+    "target": "V05",
+    "source_id": "770525",
+    "judgment": "unverified",
+    "reason": "原文引用其他例，端点可能为脱苄保护；不能据当前错误连接图认定发生目标氨基甲酸酯构建。"
+  },
+  {
+    "target": "V05",
+    "source_id": "3522600",
+    "judgment": "unverified",
+    "reason": "原文未定位，输入叔丁氧羰基到产物正丁氧羰基的表示变化存疑。"
+  },
+  {
+    "target": "V06",
+    "source_id": "3172265",
+    "judgment": "unverified",
+    "reason": "原文未定位；底物链和硅基氮与产物链存在疑点，不能凭较高结构覆盖判为最佳方法。"
+  },
+  {
+    "target": "V06",
+    "source_id": "9289982",
+    "judgment": "method",
+    "reason": "原文明示9-癸烯酸与丁胺在PyBOP/Hunig碱条件下形成N-丁基酰胺，保持目标两端连接和NH；目标更短、无末端双键，源产率不外推。"
+  },
+  {
+    "target": "V06",
+    "source_id": "7522407",
+    "judgment": "limited",
+    "reason": "原文改用辛酸和赖氨酸盐的浓度制备Nε酰化产物，说明局部酰化，但目标无氨基酸端和选择性问题，条件引用未完全核查。"
+  },
+  {
+    "target": "V06",
+    "source_id": "4539864",
+    "judgment": "not_experiment",
+    "reason": "原文为代谢路线可能性描述，不是目标开链酰胺的实际制备。"
+  }
+]

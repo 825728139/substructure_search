@@ -1751,5 +1751,23 @@
     "python_modules_documented": 111,
     "python_classes_documented": 70,
     "python_named_functions_documented": 650
+  },
+  "expert_query_iteration_10": {
+    "report": "../../reviews/expert_query_2026_11_01/iteration10/report.md",
+    "verified_implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+    "runtime_changed": false,
+    "new_default_target_runs": 6,
+    "expanded_diagnostic_runs": 2,
+    "manually_reviewed_default_positions": 30,
+    "default_targets_with_clear_method_in_top5": 4,
+    "default_targets_with_conditional_method": 1,
+    "default_targets_without_verified_formation_method": 1,
+    "expert_comparison_performed": false,
+    "production_database_written": false,
+    "full_tests_rerun": false,
+    "previous_full_tests_passed": 568,
+    "python_modules_documented": 112,
+    "python_classes_documented": 70,
+    "python_named_functions_documented": 651
   }
 }

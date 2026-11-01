@@ -1,0 +1,735 @@
+[
+  {
+    "target": {
+      "id": "V01",
+      "label": "芳基叔酰胺",
+      "smiles": "CCN(C)C(=O)c1ccccc1",
+      "expectation": "优先核查苯甲酰来源与乙基甲基胺形成酰胺C—N键的实例；已有叔酰胺的无关后修饰不能替代。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:07.003933+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCN(C)C(=O)c1ccccc1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:2174992": "e87c6fc8337d81babf713e20",
+        "uspto:2928670": "7ac019ea06336b814b1267f0",
+        "epo:1119512": "5a863d4054c421794633027e",
+        "epo:669207": "0dacf13180bd6db1495633c5",
+        "epo:669208": "cc3bd276bdcc78b38a169db5",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "uspto:4793635": "f6c098c9c83de4027ef68456"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 31,
+      "unique_structures": 6,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 7,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 7,
+      "proposals": 0,
+      "display_items": 7,
+      "elapsed_ms": 6100.793
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [
+      {
+        "family_id": "e87781985efd254ef04bffc3",
+        "code": "core_seed_query_failed",
+        "type": "QueryCanceled"
+      }
+    ]
+  },
+  {
+    "target": {
+      "id": "V02",
+      "label": "对氨基苯甲酸乙酯",
+      "smiles": "CCOC(=O)c1ccc(N)cc1",
+      "expectation": "优先核查保留乙酯的芳硝基还原，或保留芳胺的羧酸乙酯化；必须核对芳环取代位置。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:18.109561+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCOC(=O)c1ccc(N)cc1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:4146839": "e7e1ffa166a4cc89d15de1ac",
+        "uspto:8656749": "d762a140be357aa29d66b959",
+        "uspto:4993307": "ab38f6576ccb9d0f67a6d21c",
+        "epo:551114": "7770358f0b642a4a1f33f05e",
+        "uspto:4425205": "f92272fef92dfe0012b10a69",
+        "epo:1073980": "08c37d083d9d663980683ff9"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 9,
+      "received_candidates": 14,
+      "unique_structures": 3,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 0,
+          "unique_product_structures": 0,
+          "unique_experiments": 0,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 0,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 3,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 1,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 6,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 6,
+      "proposals": 0,
+      "display_items": 6,
+      "elapsed_ms": 10334.705
+    },
+    "stop_reasons": [
+      "global_deadline",
+      "source_query_failed_or_timed_out"
+    ],
+    "source_issues": [
+      {
+        "scope": "016c91aa919e8810a7424442",
+        "code": "source_query_failed",
+        "type": "QueryCanceled"
+      },
+      {
+        "scope": "0ca7245c2e945d79772b0de7",
+        "code": "source_query_failed",
+        "type": "QueryCanceled"
+      },
+      {
+        "scope": "9341bd01ff30cca96e0144ae",
+        "code": "source_query_failed",
+        "type": "QueryCanceled"
+      },
+      {
+        "scope": "16369b4371d0532e423a1bb6",
+        "code": "source_query_failed",
+        "type": "QueryCanceled"
+      },
+      {
+        "scope": "0308bf6749ff304fbc9ade5f",
+        "code": "source_query_failed",
+        "type": "QueryCanceled"
+      }
+    ]
+  },
+  {
+    "target": {
+      "id": "V03",
+      "label": "芳氧基仲醇与异丙氨基链",
+      "smiles": "CC(C)NCC(O)COc1ccccc1",
+      "expectation": "优先核查缩水甘油芳醚被异丙胺开环形成对应β氨基醇，或形成正确芳氧基连接的局部实例；核对N/O位点及开环区域。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:22.594689+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CC(C)NCC(O)COc1ccccc1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "epo:61072": "8a7018724b57fe4644f10921",
+        "uspto:2929521": "de94229466440b6aea399dde",
+        "uspto:2892047": "9f8da26eea0e37a68194c805",
+        "epo:82502": "7f47d574007599475cc9dfa0",
+        "uspto:2929520": "0ef3cf27146cd75973f87831",
+        "uspto:3094906": "1d670bfe816feb3185aeadbf",
+        "uspto:2313847": "f2b1695d1b14a8d1f9743697",
+        "epo:1332373": "6fdfa4c09db101ccc7ad54df"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 9,
+      "received_candidates": 32,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 8,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 8,
+      "proposals": 0,
+      "display_items": 8,
+      "elapsed_ms": 3735.551
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": []
+  },
+  {
+    "target": {
+      "id": "V04",
+      "label": "保留叔胺的芳基仲酰胺",
+      "smiles": "CCN(CC)CCNC(=O)c1ccc(Cl)cc1",
+      "expectation": "优先核查端位伯胺与对氯苯甲酰来源酰胺化并保留叔胺；不能把叔胺烷基化等同目标酰胺形成。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:31.339698+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCN(CC)CCNC(=O)c1ccc(Cl)cc1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:8852111": "73b7f9a11d537a4283641cc3",
+        "uspto:3187218": "6c40edba0cabae11fcf3f51b",
+        "uspto:2638186": "f66f8d205f89c5489d58654f",
+        "epo:672275": "9c2f727f485dab5fff20d114",
+        "uspto:3862344": "8e22ed27119a23e72fcc6180",
+        "uspto:4381854": "e3121a105afc86f20801104e",
+        "uspto:4793635": "f6c098c9c83de4027ef68456",
+        "uspto:3089926": "f4405ae21f8c2ab30b36875a",
+        "uspto:3019079": "e6617b702023d3b38bd54b72",
+        "uspto:3198176": "723c3adbe2265e8102112669"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 29,
+      "unique_structures": 8,
+      "by_layer": {
+        "whole": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 6,
+          "unique_experiments": 6,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 5,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 10,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 10,
+      "proposals": 0,
+      "display_items": 10,
+      "elapsed_ms": 8011.247
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [
+      {
+        "family_id": "860f4daa2b1a996de5a770b5",
+        "code": "core_seed_query_failed",
+        "type": "QueryCanceled"
+      },
+      {
+        "family_id": "90247222e58c5c2f4d9272ea",
+        "code": "core_seed_query_failed",
+        "type": "QueryCanceled"
+      }
+    ]
+  },
+  {
+    "target": {
+      "id": "V05",
+      "label": "环胺氨基甲酸酯",
+      "smiles": "CCCCOC(=O)N1CCCCC1",
+      "expectation": "优先核查环胺氨基甲酸酯形成，保留C(=O)—O与C(=O)—N连接；其他羧酸酯或普通酰胺仅作较远参考。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:37.763325+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCCCOC(=O)N1CCCCC1"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "uspto:3496063": "a89785905b76691c8b484ad9",
+        "uspto:3496061": "ee581362c26ee06e1ffd18b8",
+        "epo:815451": "9fc49f6d828e75b759cc5a07",
+        "uspto:3495292": "a3a052e03e75980f06d553c2",
+        "uspto:4408598": "7fd7da6535d77eac0d682a3d",
+        "uspto:3522600": "7d01a7226d60b362ad695a51",
+        "uspto:3803916": "e3d46d74a81a7423ddf1c759",
+        "epo:751558": "970b95801e5a0c2634bd4595",
+        "epo:527278": "66955d42209da9761909a23e"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 30,
+      "unique_structures": 9,
+      "by_layer": {
+        "whole": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 2,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 5,
+          "unique_experiments": 5,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 4,
+          "attempted_product_families": 4,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 3,
+          "unique_experiments": 3,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 3,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 9,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 9,
+      "proposals": 0,
+      "display_items": 9,
+      "elapsed_ms": 5692.097
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": [
+      {
+        "family_id": "1f8cb8ea036d2fbc6113f59d",
+        "code": "core_seed_query_failed",
+        "type": "QueryCanceled"
+      }
+    ]
+  },
+  {
+    "target": {
+      "id": "V06",
+      "label": "无环仲酰胺",
+      "smiles": "CCCCNC(=O)CCCCC",
+      "expectation": "优先核查脂肪羧酸衍生物与丁胺形成酰胺；放宽远端链长度可提供方法类比，但必须保留仲酰胺及两端连接。"
+    },
+    "manifest": {
+      "created_at": "2026-11-01T00:42:45.237638+00:00",
+      "rdkit_version": "2026.03.2",
+      "code_version": "0.1.0",
+      "implementation_hash": "9ebdbf507f3eb04066434a3acc72c7de69fdbc947b5665b773454cceda1998f6",
+      "rule_version": "organic-reference-1.9",
+      "rule_hash": "15d4a0292ac209402b70c18264d20dea8ebb96a7b5a7236cb00b7088fa2875e8",
+      "request": {
+        "schema_version": "1",
+        "target": {
+          "format": "smiles",
+          "value": "CCCCNC(=O)CCCCC"
+        },
+        "retrieval_profile": "reference-v1",
+        "ranking_profile": "reference_first",
+        "lab_context": null,
+        "options": {
+          "include_exact_identity": true,
+          "include_proposals": true,
+          "include_usage": true,
+          "exhaustive_fixture": false,
+          "directed_followups": true
+        },
+        "budget": {
+          "time_ms": 10000,
+          "max_tasks": 40,
+          "max_families": 12,
+          "max_candidates": 2000,
+          "page_size": 100,
+          "max_mappings": 128,
+          "max_atom_visits": 10000,
+          "max_reactions": 60,
+          "max_proposals": 12,
+          "max_replay_sets": 16,
+          "max_display": 18,
+          "max_summary_bytes": 65536
+        }
+      },
+      "source_record_hashes": {
+        "epo:715170": "908c57b72f1a5d2e9d160c88",
+        "uspto:4193966": "c9580811e1166e6b14b9eb00",
+        "uspto:2977946": "f2fa54c396141f8ce497415c",
+        "uspto:3542897": "8d33ea96332e29e30af7b29e",
+        "epo:1552073": "d7fd6aea632e6e691738325f",
+        "uspto:3456971": "7bb538b0a3b3646246034708",
+        "uspto:3456972": "f109ecd9a7c982ec9ed074c6"
+      },
+      "target_atom_order": "request_smiles_parse_order",
+      "unsupported": [
+        "arbitrary_variable_paths",
+        "protection_and_tautomer_expansion",
+        "automatic_stereochemical_origin_inference"
+      ],
+      "selection_policy": "v3_group_final_score_ge_12_before_selection; one_actual_source_score_ge_12_per_group_highest_score_then_lowest_id; other_group_sources_not_evaluated; final_score_ge_12_before_selection; required_single_port_r_prefilter_before_pagination; all_layers_core_filtered_knn_top512; whole_core_interleaved_with_up_to2_input_core_absence_seeds; seed_only_initial_core_up_to8_seeds_and2_priority_continuations; independent_indexed_core_cursor; small_pages_for_family_turns; no_server_mass_window",
+      "selection_policy_status": "uncalibrated_initial_configuration"
+    },
+    "statistics": {
+      "families": 11,
+      "received_candidates": 28,
+      "unique_structures": 6,
+      "by_layer": {
+        "whole": {
+          "generated_families": 2,
+          "attempted_product_families": 2,
+          "families_with_structural_hits": 1,
+          "unique_product_structures": 1,
+          "unique_experiments": 1,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 1,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "core": {
+          "generated_families": 6,
+          "attempted_product_families": 6,
+          "families_with_structural_hits": 4,
+          "unique_product_structures": 4,
+          "unique_experiments": 4,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 4,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        },
+        "fragment": {
+          "generated_families": 3,
+          "attempted_product_families": 3,
+          "families_with_structural_hits": 3,
+          "unique_product_structures": 2,
+          "unique_experiments": 2,
+          "qualified_preparation_experiments": 0,
+          "graph_connection_candidates": 2,
+          "count_scope": "evaluated_candidates_only_not_full_corpus_total"
+        }
+      },
+      "unique_experiments": 7,
+      "preparation_hits": 0,
+      "usage_hits": 0,
+      "synthetic_references": 0,
+      "analyzed_reactions": 7,
+      "proposals": 0,
+      "display_items": 7,
+      "elapsed_ms": 6751.034
+    },
+    "stop_reasons": [
+      "task_budget"
+    ],
+    "source_issues": []
+  }
+]

@@ -1064,6 +1064,12 @@
 |---|---|
 | [main](../../reviews/core_iteration_2026_11_01/run_targets.py#L11) | 加载归档的原始四目标，沿用基准脚本的连接、预算和计时，不修改业务查询。 |
 
+## ../reviews/expert_query_2026_11_01/iteration10/run_targets.py
+
+| 函数 | 职责 |
+|---|---|
+| [main](../../reviews/expert_query_2026_11_01/iteration10/run_targets.py#L8) | 加载预先固定的六个目标与化学问题，沿用正式来源和统一默认预算。 |
+
 ## ../reviews/expert_query_2026_11_01/iteration7/run_representation_check.py
 
 | 函数 | 职责 |

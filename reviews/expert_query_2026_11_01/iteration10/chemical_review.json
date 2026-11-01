@@ -1,0 +1,794 @@
+[
+  {
+    "target": "V01",
+    "rank": 1,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2174992",
+      "experiment_id": "uspto:US20020111359A1:['P-0390']:1",
+      "document_id": "US20020111359A1",
+      "location": "['P-0390']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 18,
+    "material_role": "product",
+    "reactants": [
+      "CCNC",
+      "O=Cc1ccc(C(=O)O)cc1"
+    ],
+    "products": [
+      "CCN(C)C(=O)c1ccc(C=O)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文以含对位醛的苯甲酸先活化，再与乙基甲基胺形成叔酰胺；支持所需酰胺连接，额外醛基与目标不同。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V01",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2928670",
+      "experiment_id": "uspto:US04017522:['p-0065']:1",
+      "document_id": "US04017522",
+      "location": "['p-0065']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 19,
+    "material_role": "reactant",
+    "reactants": [
+      "CCCCCCCC/C=C\\CCCCCCCC(=O)Cl",
+      "CN(CCO)C(=O)c1ccccc1"
+    ],
+    "products": [
+      "CCCCCCCC/C=C\\CCCCCCCC(=O)OCCN(C)C(=O)c1ccccc1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "未定位原文；材料从反应物通道出现，图示为已有苯甲酰胺的羟乙基酯化，不是目标叔酰胺形成证据。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V01",
+    "rank": 3,
+    "source": {
+      "namespace": "epo",
+      "record_id": "1119512",
+      "experiment_id": "epo:EP09709250B1:['p1278']:1",
+      "document_id": "EP09709250B1",
+      "location": "['p1278']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 15,
+    "material_role": "product",
+    "reactants": [
+      "CCN(Cc1cc(C(F)(F)F)ccc1-c1cc(CC(=O)OC)ccc1OC)C(=O)NCc1ccccc1",
+      "CCNCc1cc(C(F)(F)F)ccc1Br",
+      "O=C(Cl)c1ccccc1"
+    ],
+    "products": [
+      "CCN(Cc1cc(C(F)(F)F)ccc1Br)C(=O)c1ccccc1"
+    ],
+    "original_text_located": true,
+    "judgment": "limited",
+    "reason": "原文明确苯甲酰氯与乙基苄基胺参照其他步骤反应，提供叔酰胺形成线索；N取代及混入的额外结构与目标不同，所引用步骤未核查。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V01",
+    "rank": 4,
+    "source": {
+      "namespace": "epo",
+      "record_id": "669207",
+      "experiment_id": "epo:EP06848056B1:['p0500']:1",
+      "document_id": "EP06848056B1",
+      "location": "['p0500']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 19,
+    "material_role": "product",
+    "reactants": [
+      "CCNC",
+      "O=C(Cl)c1ccc(Oc2ccc(Cl)cc2[N+](=O)[O-])cc1"
+    ],
+    "products": [
+      "CCN(C)C(=O)c1ccc(Oc2ccc(Cl)cc2[N+](=O)[O-])cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文N-甲基乙胺与前例酰氯相关底物反应生成对应叔酰胺，保留目标胺取代；芳环外围差异较大。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V01",
+    "rank": 5,
+    "source": {
+      "namespace": "epo",
+      "record_id": "669208",
+      "experiment_id": "epo:EP06848056B1:['p0501']:1",
+      "document_id": "EP06848056B1",
+      "location": "['p0501']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 18,
+    "material_role": "reactant",
+    "reactants": [
+      "CCN(C)C(=O)c1ccc(Oc2ccc(Cl)cc2[N+](=O)[O-])cc1"
+    ],
+    "products": [
+      "CCN(C)C(=O)c1ccc(Oc2ccc(Cl)cc2N)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文为硝基还原，目标酰胺已存在于输入，仅为相关结构使用。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V02",
+    "rank": 1,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4146839",
+      "experiment_id": "uspto:US20090234126A1:['p-0160']:1",
+      "document_id": "US20090234126A1",
+      "location": "['p-0160']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 20,
+    "material_role": "product",
+    "reactants": [
+      "CCOC(=O)c1ccc(Br)cc1",
+      "N",
+      "[I-]"
+    ],
+    "products": [
+      "CCOC(=O)c1ccc(N)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文明确对溴苯甲酸乙酯与氨进行钯催化氨化得到目标；表格细节未全核查，不外推最优条件。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V02",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "8656749",
+      "experiment_id": "uspto:US20210161873A1:['p-1179']:1",
+      "document_id": "US20210161873A1",
+      "location": "['p-1179']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 12,
+    "material_role": "product",
+    "reactants": [
+      "Nc1ccncc1",
+      "O=C(Cl)CCl"
+    ],
+    "products": [
+      "CCOC(=O)c1ccc(N)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "contradictory",
+    "reason": "底物为4-氨基吡啶与氯乙酰氯，原文却命名对氨基苯甲酸乙酯；谱图没有乙酯对应信号且有酰胺NH/亚甲基线索，来源内部矛盾，不计目标制备。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V02",
+    "rank": 3,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4993307",
+      "experiment_id": "uspto:US08058477:['p-0153']:1",
+      "document_id": "US08058477",
+      "location": "['p-0153']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 20,
+    "material_role": "product",
+    "reactants": [
+      "CCOC(=O)c1ccc(Br)cc1",
+      "N"
+    ],
+    "products": [
+      "CCOC(=O)c1ccc(N)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method_duplicate",
+    "reason": "按同段落号及文献种类码定位原文，支持对溴苯甲酸乙酯氨化；与4146839同类报道内容，不计独立新策略。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V02",
+    "rank": 4,
+    "source": {
+      "namespace": "epo",
+      "record_id": "551114",
+      "experiment_id": "epo:EP00978244B1:['p0134']:1",
+      "document_id": "EP00978244B1",
+      "location": "['p0134']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 17,
+    "material_role": "product",
+    "reactants": [
+      "CCO",
+      "CCO",
+      "CCO",
+      "Nc1ccc(C(=O)O)cc1"
+    ],
+    "products": [
+      "CCOC(=O)c1ccc(N)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文对氨基苯甲酸在乙醇/HCl中酯化，产物质谱和报告相符，直接支持目标酯化。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V02",
+    "rank": 5,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4425205",
+      "experiment_id": "uspto:US20100152190A1:['p-1791']:1",
+      "document_id": "US20100152190A1",
+      "location": "['p-1791']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 18,
+    "material_role": "product",
+    "reactants": [
+      "CCOc1cc([N+](=O)[O-])ccc1C(=O)OC"
+    ],
+    "products": [
+      "CCOc1cc(N)ccc1C(=O)OC"
+    ],
+    "original_text_located": true,
+    "judgment": "limited",
+    "reason": "原文氢化硝基并保留甲酯，支持芳硝基还原方向；额外乙氧基及甲酯/乙酯差异存在。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V03",
+    "rank": 1,
+    "source": {
+      "namespace": "epo",
+      "record_id": "61072",
+      "experiment_id": "epo:EP86200198A1:['p0053']:1",
+      "document_id": "EP86200198A1",
+      "location": "['p0053']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 20,
+    "material_role": "product",
+    "reactants": [
+      "CC(C)N",
+      "c1ccc(OCC2CO2)cc1"
+    ],
+    "products": [
+      "CC(C)NCC(O)COc1ccccc1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文明确苯基缩水甘油醚与异丙胺转化为对应β氨基醇；支持目标连接，操作引用例II未进一步核查，不将省略立体信息视作手性验证。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V03",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2929521",
+      "experiment_id": "uspto:US04018824:['p-0067']:1",
+      "document_id": "US04018824",
+      "location": "['p-0067']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 16,
+    "material_role": "product",
+    "reactants": [
+      "CC(C)N1CC(O)C1",
+      "Cc1cccc(O)c1"
+    ],
+    "products": [
+      "Cc1cccc(OCC(O)CNC(C)C)c1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "原文未定位，图示环状氨基醇与甲酚对应的连接不能自行当作已验证开环方法。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V03",
+    "rank": 3,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2892047",
+      "experiment_id": "uspto:US03934032:['p-0047', 'p-0048']:1",
+      "document_id": "US03934032",
+      "location": "['p-0047', 'p-0048']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 16,
+    "material_role": "product",
+    "reactants": [
+      "CC(C)N",
+      "O=Cc1ccc(OCC(O)CCl)cc1",
+      "O=Cc1ccc(OCC2CO2)cc1"
+    ],
+    "products": [
+      "CC(C)NCC(O)COc1ccc(C=O)cc1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "原文未定位，列出氯醇及环氧两种结构，可能混入替代前体；不自行补出具体步骤。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V03",
+    "rank": 4,
+    "source": {
+      "namespace": "epo",
+      "record_id": "82502",
+      "experiment_id": "epo:EP87201434A1:['p0038']:1",
+      "document_id": "EP87201434A1",
+      "location": "['p0038']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 17,
+    "material_role": "reactant",
+    "reactants": [
+      "CC(C)NCC(O)COc1ccc(C(C)C(=O)[O-])cc1",
+      "O=C(Cl)Cl"
+    ],
+    "products": [
+      "COC(=O)Cc1ccc(OCC(O)CNC(C)C)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文是微量样品的衍生化/HPLC分析操作，反应表端点还与文字有差异；不是目标β氨基醇制备。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V03",
+    "rank": 5,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2929520",
+      "experiment_id": "uspto:US04018824:['p-0066']:1",
+      "document_id": "US04018824",
+      "location": "['p-0066']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 12,
+    "material_role": "product",
+    "reactants": [
+      "CC(C)N1CC(O)C1",
+      "OC1(Oc2ccccc2)C=CC=CC1"
+    ],
+    "products": [
+      "CC(C)NCC(O)COc1ccc(Oc2ccccc2)cc1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "原文未定位，输入结构与产物关系未充分核实，不计有效目标方法。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V04",
+    "rank": 1,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "8852111",
+      "experiment_id": "uspto:US11044909:['p-0127']:1",
+      "document_id": "US11044909",
+      "location": "['p-0127']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 17,
+    "material_role": "product",
+    "reactants": [
+      "CCN(CC)CCN",
+      "O=C(Cl)c1ccc(Cl)c(Cl)c1"
+    ],
+    "products": [
+      "CCN(CC)CCNC(=O)c1ccc(Cl)c(Cl)c1"
+    ],
+    "original_text_located": true,
+    "judgment": "method",
+    "reason": "原文3,4-二氯苯甲酰氯与N,N-二乙基乙二胺反应，末端伯胺酰化且叔胺保留；目标少一个芳氯，需要验证迁移。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V04",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3187218",
+      "experiment_id": "uspto:US04795828:['p-0017']:1",
+      "document_id": "US04795828",
+      "location": "['p-0017']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 16,
+    "material_role": "product",
+    "reactants": [
+      "CCN(CC)CCN",
+      "O=C(Cl)c1ccc([N+](=O)[O-])cc1"
+    ],
+    "products": [
+      "CCN(CC)CCNC(=O)c1ccc(N)cc1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "未定位原文；图式从硝基酰氯到氨基产物包含额外还原，不能当作单独已核实酰胺化。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V04",
+    "rank": 3,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2638186",
+      "experiment_id": "uspto:US20060235035A1:['p-0218']:1",
+      "document_id": "US20060235035A1",
+      "location": "['p-0218']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 18,
+    "material_role": "reactant",
+    "reactants": [
+      "CCN(CC)CCNC(=O)c1ccc(N)cc1",
+      "O=C=Nc1ccc(OC(F)(F)F)cc1"
+    ],
+    "products": [
+      "CCN(CC)CCNC(=O)c1ccc(NC(=O)Nc2ccc(OC(F)(F)F)cc2)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文使用已有普鲁卡因胺的芳胺与异氰酸酯形成脲，目标所需酰胺不是本步形成。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V04",
+    "rank": 4,
+    "source": {
+      "namespace": "epo",
+      "record_id": "672275",
+      "experiment_id": "epo:EP07786791B1:['p0352']:1",
+      "document_id": "EP07786791B1",
+      "location": "['p0352']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 19,
+    "material_role": "reactant",
+    "reactants": [
+      "CCN(CC)CCNC(=O)c1ccc(N)cc1",
+      "Oc1ccc(-c2cncc(Cl)n2)cc1"
+    ],
+    "products": [
+      "CCN(CC)CCNC(=O)c1ccc(Nc2cncc(-c3ccc(O)cc3)n2)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文已有芳氨基酰胺参与杂芳基连接，不提供目标酰胺制备；也不直接得到对氯目标。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V04",
+    "rank": 5,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3862344",
+      "experiment_id": "uspto:US20080221112A1:['p-0152']:1",
+      "document_id": "US20080221112A1",
+      "location": "['p-0152']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 21,
+    "material_role": "product",
+    "reactants": [
+      "Cc1ccc(N)cc1",
+      "O=C(Cl)c1ccc(Cl)cc1"
+    ],
+    "products": [
+      "Cc1ccc(NC(=O)c2ccc(Cl)cc2)cc1"
+    ],
+    "original_text_located": true,
+    "judgment": "limited",
+    "reason": "原文对氯苯甲酰氯与对甲苯胺酰化，支持目标酰基的反应；胺种类与叔胺共存要求未覆盖。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V05",
+    "rank": 1,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3496063",
+      "experiment_id": "uspto:US05939436:['p-0124']:1",
+      "document_id": "US05939436",
+      "location": "['p-0124']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 16,
+    "material_role": "product",
+    "reactants": [
+      "CCCCOC(=O)N1CCC(Br)CC1",
+      "O",
+      "[N-]=[N+]=[N-].[Na+]"
+    ],
+    "products": [
+      "CCCCOC(=O)N1CCCCC1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "精确产物命中但原文未定位；溴代前体与叠氮化物到无取代产物的图式存疑，不计有效目标制备。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V05",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3496061",
+      "experiment_id": "uspto:US05939436:['p-0106']:1",
+      "document_id": "US05939436",
+      "location": "['p-0106']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 17,
+    "material_role": "product",
+    "reactants": [
+      "CCCCOC(=O)N1CCC(O)CC1",
+      "CN(C)c1ccccn1",
+      "CS(=O)(=O)Cl",
+      "O=C(O)CC(O)(CC(=O)O)C(=O)O",
+      "O=C([O-])O.[Na+]",
+      "c1ccncc1"
+    ],
+    "products": [
+      "CCCCOC(=O)N1CCC(OS(C)(=O)=O)CC1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "原文未定位，图示为已有氨基甲酸酯上的羟基磺酰化，不证明目标氨基甲酸酯形成。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V05",
+    "rank": 3,
+    "source": {
+      "namespace": "epo",
+      "record_id": "815451",
+      "experiment_id": "epo:EP08864841B1:['p0558']:1",
+      "document_id": "EP08864841B1",
+      "location": "['p0558']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 19,
+    "material_role": "reactant",
+    "reactants": [
+      "CCCCOC(=O)N1CCNCC1",
+      "O=C(O)CNC(=O)OCc1ccccc1",
+      "O=C(O)CNC(=O)OCc1ccccc1"
+    ],
+    "products": [
+      "CCCCOC(=O)N1CCN(C(=O)CNC(=O)OCc2ccccc2)CC1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文在已有单保护哌嗪另一氮上偶联甘氨酸，属于使用已存在的氨基甲酸酯。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V05",
+    "rank": 4,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3495292",
+      "experiment_id": "uspto:US05935976:['p-0531', 'p-0532']:1",
+      "document_id": "US05935976",
+      "location": "['p-0531', 'p-0532']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 16,
+    "material_role": "product",
+    "reactants": [
+      "CCOC(=O)Cl",
+      "O=C(O)C1CCNCC1"
+    ],
+    "products": [
+      "CCOC(=O)N1CCC(C(=O)O)CC1"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "图式提示氯甲酸乙酯与哌啶羧酸形成氨基甲酸酯，但原文未定位，暂不计核实方法。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V05",
+    "rank": 5,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4408598",
+      "experiment_id": "uspto:US20100135999A1:['p-0559']:1",
+      "document_id": "US20100135999A1",
+      "location": "['p-0559']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 12,
+    "material_role": "reactant",
+    "reactants": [
+      "CCCCOC(=O)N1CCN(C(=O)OC(C)(C)C)CC1"
+    ],
+    "products": [
+      "CCCCOC(=O)N1CCNCC1"
+    ],
+    "original_text_located": true,
+    "judgment": "limited",
+    "reason": "原文选择性脱除哌嗪另一氮的Boc并保留丁氧羰基；支持保护基相容性，不是目标哌啶氨基甲酸酯形成。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V06",
+    "rank": 1,
+    "source": {
+      "namespace": "epo",
+      "record_id": "715170",
+      "experiment_id": "epo:EP05704415B1:['p0075', 'p0076']:1",
+      "document_id": "EP05704415B1",
+      "location": "['p0075', 'p0076']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 21,
+    "material_role": "product",
+    "reactants": [
+      "CCCCCCCCCCCC(=O)[O-].[Na+]",
+      "CCCCN.Cl"
+    ],
+    "products": [
+      "CCCCCCCCCCCC(=O)NCCCC"
+    ],
+    "original_text_located": true,
+    "judgment": "limited_method",
+    "reason": "原文以月桂酸盐和丁胺盐在胶束/缩合剂体系生成N-丁基酰胺并用GC定量；目标短链羧酸的聚集行为不同，不能直接迁移源产率或操作。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V06",
+    "rank": 2,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "4193966",
+      "experiment_id": "uspto:US20090305364A1:['p-0061']:1",
+      "document_id": "US20090305364A1",
+      "location": "['p-0061']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 12,
+    "material_role": "product",
+    "reactants": [
+      "NCCCCCC(=O)O",
+      "O=C([O-])CCCCC(=O)[O-]"
+    ],
+    "products": [
+      "O=C1CCCCCN1"
+    ],
+    "original_text_located": true,
+    "judgment": "not_experiment",
+    "reason": "原段落为微生物途径组合的概念描述，不是所需开链酰胺的具体制备实验。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V06",
+    "rank": 3,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "2977946",
+      "experiment_id": "uspto:US04144320:['p-0046']:1",
+      "document_id": "US04144320",
+      "location": "['p-0046']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 17,
+    "material_role": "product",
+    "reactants": [
+      "CCCCCCCCCCCCCCCC(=O)Cl",
+      "CCCCN"
+    ],
+    "products": [
+      "CCCCCCCCCCCCCCCC(=O)NCCCC"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "图式为长链酰氯与丁胺形成酰胺，原文未定位，不能提升为已核实目标方法。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V06",
+    "rank": 4,
+    "source": {
+      "namespace": "uspto",
+      "record_id": "3542897",
+      "experiment_id": "uspto:US06100272:['p-0156']:1",
+      "document_id": "US06100272",
+      "location": "['p-0156']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 20,
+    "material_role": "product",
+    "reactants": [
+      "Cc1cc(N)ccc1Br",
+      "O=C(Cl)CCCCl"
+    ],
+    "products": [
+      "Cc1cc(N2CCCC2=O)ccc1Br"
+    ],
+    "original_text_located": false,
+    "judgment": "unverified",
+    "reason": "图式为芳胺与氯代酰氯生成内酰胺，原文未定位且与目标开链仲酰胺差异大。",
+    "target_synthesis_validated": false
+  },
+  {
+    "target": "V06",
+    "rank": 5,
+    "source": {
+      "namespace": "epo",
+      "record_id": "1552073",
+      "experiment_id": "epo:EP16731340B1:['p0196']:1",
+      "document_id": "EP16731340B1",
+      "location": "['p0196']",
+      "url": null,
+      "synthetic": false
+    },
+    "actual_source_score": 15,
+    "material_role": "product",
+    "reactants": [
+      "CCCCNC",
+      "CCOC(=O)CC(c1ccc2c(c1)C1NCCC1C2)c1ccc2c(nnn2C)c1C",
+      "Cl",
+      "Cl",
+      "O=C(n1ccnc1)n1ccnc1",
+      "[Na+].[OH-]"
+    ],
+    "products": [
+      "CCCCN(C)C(=O)N1CCC2Cc3ccc(C(CC(=O)O)c4ccc5c(nnn5C)c4C)cc3C21"
+    ],
+    "original_text_located": true,
+    "judgment": "not_target_step",
+    "reason": "原文以CDI及N-甲基丁胺在复杂环胺上形成脲相关连接并后续水解；不是目标脂肪羧酸与丁胺的仲酰胺化。",
+    "target_synthesis_validated": false
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {"id":"V01","label":"芳基叔酰胺","smiles":"CCN(C)C(=O)c1ccccc1","expectation":"优先核查苯甲酰来源与乙基甲基胺形成酰胺C—N键的实例；已有叔酰胺的无关后修饰不能替代。"},
+  {"id":"V02","label":"对氨基苯甲酸乙酯","smiles":"CCOC(=O)c1ccc(N)cc1","expectation":"优先核查保留乙酯的芳硝基还原，或保留芳胺的羧酸乙酯化；必须核对芳环取代位置。"},
+  {"id":"V03","label":"芳氧基仲醇与异丙氨基链","smiles":"CC(C)NCC(O)COc1ccccc1","expectation":"优先核查缩水甘油芳醚被异丙胺开环形成对应β氨基醇，或形成正确芳氧基连接的局部实例；核对N/O位点及开环区域。"},
+  {"id":"V04","label":"保留叔胺的芳基仲酰胺","smiles":"CCN(CC)CCNC(=O)c1ccc(Cl)cc1","expectation":"优先核查端位伯胺与对氯苯甲酰来源酰胺化并保留叔胺；不能把叔胺烷基化等同目标酰胺形成。"},
+  {"id":"V05","label":"环胺氨基甲酸酯","smiles":"CCCCOC(=O)N1CCCCC1","expectation":"优先核查环胺氨基甲酸酯形成，保留C(=O)—O与C(=O)—N连接；其他羧酸酯或普通酰胺仅作较远参考。"},
+  {"id":"V06","label":"无环仲酰胺","smiles":"CCCCNC(=O)CCCCC","expectation":"优先核查脂肪羧酸衍生物与丁胺形成酰胺；放宽远端链长度可提供方法类比，但必须保留仲酰胺及两端连接。"}
+]
