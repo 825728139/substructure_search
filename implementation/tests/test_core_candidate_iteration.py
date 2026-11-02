@@ -12,16 +12,22 @@ from reaction_reference.ports.sources import CandidatePage
 from reaction_reference.ranking.engine import rank_references
 
 
-def test_unverified_method_label_does_not_hide_more_relevant_core():
-    """真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。"""
+def test_method_projection_and_structure_clue_have_separate_recommendation_eligibility():
+    """图方法可列入推荐但不获得实验标志；没有目标中心投影的桥环线索保留在候选池。"""
     payload = json.loads((Path(__file__).parent / "fixtures/graph_clue_ranking.json").read_text())
     references = [Reference.model_validate_json(json.dumps(r)) for r in payload["references"]]
     for ordering in [references, list(reversed(references))]:
         ranked, displayed = rank_references(ordering, target_smiles=payload["target_smiles"])
-        assert ranked[0].record.source.record_id == "3153963"
-        assert ranked[0].contribution == "structure_clue"
-        assert not ranked[0].preparation_hit and not ranked[0].obtainment_hit
-        assert displayed[0] == ranked[0].id
+        clue = next(r for r in ranked if r.record.source.record_id == "3153963")
+        assert clue.contribution == "structure_clue"
+        assert not clue.preparation_hit and not clue.obtainment_hit
+        assert clue.id not in displayed
+        assert all(not r.preparation_hit and not r.obtainment_hit for r in ranked)
+        assert all(
+            r.coverage["projected_changes"]["formed_target_bonds"]
+            for r in ranked
+            if r.id in displayed
+        )
 
 
 @pytest.mark.parametrize("limit", [1, 3, 18])

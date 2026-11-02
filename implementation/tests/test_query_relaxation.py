@@ -18,10 +18,10 @@ from reaction_reference.retrieval.planner import (
 
 
 def exact_tail_query():
-    """用真实苯胺支链匹配构造自动精确补查，避免伪造位点覆盖。"""
-    target = parse("c1ccccc1NCCCCC")
+    """用真实氨基吡啶支链匹配构造自动精确补查，避免伪造位点覆盖。"""
+    target = parse("c1ccncc1NCCCCC")
     parent = next(f for f in initial_families(target) if f.rule_id == "complete_ring_system")
-    witnesses = match_family(parent, parse("c1ccccc1NCCO"), target, "source").witnesses
+    witnesses = match_family(parent, parse("c1ccncc1NCCO"), target, "source").witnesses
     return target, progressive_followups(parent, target, witnesses)[0]
 
 
@@ -30,13 +30,13 @@ def test_relaxation_preserves_attachment_nitrogen_and_target_correspondence():
     target, exact = exact_tail_query()
     relaxed = relax_exact_attachments(exact, target)
     assert relaxed.parent_id == exact.id
-    assert match_family(exact, parse("c1ccccc1NCCO"), target, "tail").state == "no_match"
-    result = match_family(relaxed, parse("c1ccccc1NCCO"), target, "tail")
+    assert match_family(exact, parse("c1ccncc1NCCO"), target, "tail").state == "no_match"
+    result = match_family(relaxed, parse("c1ccncc1NCCO"), target, "tail")
     assert result.state == "match"
-    assert match_family(relaxed, parse("c1ccccc1N(C)CCO"), target, "tertiary").state == "no_match"
+    assert match_family(relaxed, parse("c1ccncc1N(C)CCO"), target, "tertiary").state == "no_match"
     assert progressive_followups(relaxed, target, result.witnesses) == []
     for witness in result.witnesses:
-        source = parse("c1ccccc1NCCO")
+        source = parse("c1ccncc1NCCO")
         assert all(
             target.GetAtomWithIdx(a).GetAtomicNum() == source.GetAtomWithIdx(b).GetAtomicNum()
             for a, b in witness.target_to_source
@@ -61,7 +61,7 @@ def test_pipeline_relaxes_only_completed_scope_without_match(
     module = import_module("reaction_reference.application.search")
     monkeypatch.setattr(module, "initial_families", lambda *_: [exact])
     path = tmp_path / "source.jsonl"
-    path.write_text(json.dumps({"id": "tail", "product_smiles": ["c1ccccc1NCCO"]}) + "\n")
+    path.write_text(json.dumps({"id": "tail", "product_smiles": ["c1ccncc1NCCO"]}) + "\n")
     source = JsonlSource(path, exhaustive=True)
     source.max_selection_stage = 1 if mode == "near_only" else 0
     original = source.candidate_page
@@ -77,7 +77,7 @@ def test_pipeline_relaxes_only_completed_scope_without_match(
     try:
         package = search(
             request_factory(
-                "c1ccccc1NCCCCC",
+                "c1ccncc1NCCCCC",
                 options={"include_usage": False, "include_proposals": False},
                 budget={"max_tasks": 4 if mode == "budget" else 100},
             ),
@@ -107,5 +107,5 @@ def test_relaxation_retains_original_core_atom_predicates():
         atom.ExpandQuery(Chem.AtomFromSmarts(f"[H{target_atom.GetTotalNumHs()}]"))
     constrained = exact.model_copy(update={"core_smarts": Chem.MolToSmarts(query)})
     relaxed = relax_exact_attachments(constrained, target)
-    assert match_family(relaxed, parse("c1ccccc1NCCO"), target, "plain").state == "match"
-    assert match_family(relaxed, parse("Cc1ccc(NCCO)cc1"), target, "extra-core").state == "no_match"
+    assert match_family(relaxed, parse("c1ccncc1NCCO"), target, "plain").state == "match"
+    assert match_family(relaxed, parse("Cc1ccncc1NCCO"), target, "extra-core").state == "no_match"

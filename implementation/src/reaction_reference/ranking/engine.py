@@ -90,12 +90,16 @@ def lab_fit(reference, context):
 def _priority(reference):
     """返回参考的方法/证据优先级，数值越小越优先。
 
-    满足完整目标且有获得证据的记录优先；仅图推定或未确认输入不得获得已报告方法相同的资格。
+    满足完整目标且有获得证据的记录优先；来源标注缺失不能抹掉已投影的目标方法贡献。
     """
     if reference.target_requirements_satisfied and reference.obtainment_hit:
         return 0
+    projected = reference.coverage.get("projected_changes", {})
+    if projected.get("formed_target_bonds"):
+        return 1 if reference.contribution == "connection_method" else 2
+    if projected.get("changed_target_atoms"):
+        return 3
     if not reference.obtainment_hit and not reference.use_hit:
-        # 图推定的方法标签不构成实验支持，不能先于结构覆盖把相关骨架压在无关小片段后面。
         return 6
     return {
         "connection_method": 1,
@@ -108,15 +112,55 @@ def _priority(reference):
     }[reference.contribution]
 
 
+def _connection_environment_distance(reference, target):
+    """比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。
+
+    芳环远端取代不计此项；该距离只用于结构迁移排序，不推断电子、位阻或实验可行性。
+    """
+    if target is None or not reference.witnesses:
+        return 0
+    witness = max(reference.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
+    source = parse(reference.material.smiles)
+    return sum(
+        abs(target.GetAtomWithIdx(t).GetTotalNumHs() - source.GetAtomWithIdx(s).GetTotalNumHs())
+        + abs(target.GetAtomWithIdx(t).GetTotalDegree() - source.GetAtomWithIdx(s).GetTotalDegree())
+        for t, s in witness.target_to_source
+        if not target.GetAtomWithIdx(t).GetIsAromatic()
+    )
+
+
+def _recommendation_exclusion(reference):
+    """返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。
+
+    输入使用不提供产物侧目标构建证据；无稳定目标中心投影的结构线索不占方法推荐位。
+    完整目标产物仍保留，包括来源观察尚未补齐的记录，且不提升其获得证据标志。
+    """
+    if reference.material.role == "reactant":
+        return "input_usage_without_target_product_transformation"
+    if reference.target_requirements_satisfied:
+        return None
+    projected = reference.coverage.get("projected_changes", {})
+    if projected.get("formed_target_bonds") or projected.get("changed_target_atoms"):
+        return None
+    return (
+        "reaction_center_outside_target"
+        if projected.get("support") == "single_mapping_inference"
+        else "target_reaction_center_unresolved"
+    )
+
+
 def rank_references(
     references, profile="reference_first", context=None, max_display=18, target_smiles=None
 ):
     """返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。
 
-    profile 选择参考优先、实验适配或操作偏好；context 只改变适配判断，不改结构和来源事实。补充九方向字段后采用确定性排序，保留完整目标获得记录，其余展示遵循排序顺序；三层标签仅用于分类浏览，不按层轮转改写优先级。max_display 只裁剪展示，不删除候选池。
+    profile选择参考优先、实验适配或操作偏好；context不改结构和来源事实。
+    主推荐先检查目标中心与产物资格，再依排序截取max_display项；所有候选保留，
+    排除原因写入reasons。缺失来源标记不抹平方法贡献，也不自动产生实验获得证据。
     """
     enriched = []
-    target_heavy_atoms = parse(target_smiles).GetNumHeavyAtoms() if target_smiles else None
+    target = parse(target_smiles) if target_smiles else None
+    target_heavy_atoms = target.GetNumHeavyAtoms() if target is not None else None
     for reference in references:
         fit, reasons = lab_fit(reference, context)
         ranking_features = reference.ranking_features or features(reference, target_smiles)
@@ -139,6 +183,14 @@ def rank_references(
                     "lab_fit": fit,
                     "lab_reasons": reasons,
                     "ranking_features": ranking_features,
+                    "reasons": [
+                        r for r in reference.reasons if not r.startswith("recommendation_excluded:")
+                    ]
+                    + (
+                        ["recommendation_excluded:" + exclusion]
+                        if (exclusion := _recommendation_exclusion(reference))
+                        else []
+                    ),
                 }
             )
         )
@@ -193,6 +245,7 @@ def rank_references(
             )
         base = (
             _priority(ref),
+            _connection_environment_distance(ref, target),
             evidence,
             -balanced_coverage,
             -joint.get("atom_coverage", 0),
@@ -213,7 +266,11 @@ def rank_references(
         used.add(exact.id)
     # 三层查询只是召回入口，不能让分层配额把更相关的参考挤到较弱候选之后。
     for ref in ordered:
-        if ref.id not in used and len(selected) < max_display:
+        if (
+            ref.id not in used
+            and _recommendation_exclusion(ref) is None
+            and len(selected) < max_display
+        ):
             selected.append(ref)
             used.add(ref.id)
     positions = {r.id: i + 1 for i, r in enumerate(selected)}

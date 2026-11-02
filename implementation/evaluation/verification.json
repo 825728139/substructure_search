@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-11-02",
-  "implementation_hash": "734747f6d0ed1617bde2b4a08149ede497402e27a5b36c5cc17fe8082c789f6c",
+  "implementation_hash": "64f47eaed4c5eb60227430da6913e6d6b3bd41ab305d11838cbaac657b62ace6",
   "rule_hash": "bc63918000f93f457c96a284027dac856865574b7beb15a2e9159cd5d18f5ea9",
   "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
   "environment": {
@@ -17,7 +17,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 574,
+    "tests_passed": 583,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -1669,5 +1669,33 @@
       "images_loaded": true
     },
     "checks_log": "/tmp/rr-reaction-layout-check.log"
+  },
+  "target_center_recommendation": {
+    "date": "2026-11-02",
+    "implementation_hash": "64f47eaed4c5eb60227430da6913e6d6b3bd41ab305d11838cbaac657b62ace6",
+    "full_check_passed": true,
+    "tests_passed": 583,
+    "frozen_seven_reactions_reanalyzed": true,
+    "default_live_target": "CCN(C)C(=O)c1ccccc1",
+    "default_live_display_order": [
+      "uspto:2174992",
+      "epo:669207",
+      "epo:1119512",
+      "uspto:4793635"
+    ],
+    "default_live_excluded_from_recommendation": [
+      "uspto:2928670",
+      "epo:669208"
+    ],
+    "standalone_benzene_result_not_recalled": "uspto:4381854",
+    "browser_javascript_errors": 0,
+    "default_query_families": 11,
+    "source_stop_reasons": [
+      "task_budget",
+      "usage_task_budget"
+    ],
+    "source_scope": "bounded_candidates_not_full_corpus_recall",
+    "unknown_centers_preserved_in_full_results": true,
+    "quality_scope": "single_reviewed_target_not_general_expert_validation"
   }
 }

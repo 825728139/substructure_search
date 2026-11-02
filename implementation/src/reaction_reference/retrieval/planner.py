@@ -403,6 +403,20 @@ def _plan_ordered_families(target, max_families=12):
             atoms, rule = seeds[layer].pop(0)
             if not atoms:
                 continue
+            # 单独苯环缺少连接端信息，容易召回与目标合成无关的芳环转化。
+            # 仍用它派生带支链查询；杂芳环、稠环及完整苯目标不受此限制。
+            if (
+                len(atoms) == 6
+                and atoms != all_atoms
+                and any(atoms == set(ring) for ring in target.GetRingInfo().AtomRings())
+                and all(
+                    target.GetAtomWithIdx(i).GetAtomicNum() == 6
+                    and target.GetAtomWithIdx(i).GetIsAromatic()
+                    and not target.GetAtomWithIdx(i).GetIsotope()
+                    for i in atoms
+                )
+            ):
+                continue
             smarts, ids = _core_smarts(target, atoms, groups)
             if rule == "acyclic_full_framework":
                 # 完整无环框架不能仅凭环中的一段路径命中；局部类比仍由其他家族提供。

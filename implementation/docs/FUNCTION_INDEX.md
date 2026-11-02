@@ -275,8 +275,10 @@
 |---|---|
 | [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
 | [_priority](../src/reaction_reference/ranking/engine.py#L90) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L111) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L146) | 为单个参考生成可传递且稳定的排序元组。 |
+| [_connection_environment_distance](../src/reaction_reference/ranking/engine.py#L115) | 比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。 |
+| [_recommendation_exclusion](../src/reaction_reference/ranking/engine.py#L132) | 返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L152) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L198) | 为单个参考生成可传递且稳定的排序元组。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -310,11 +312,11 @@
 | [_attachment_seeds](../src/reaction_reference/retrieval/planner.py#L142) | 生成核心与一条、两条实际支链的连通组合，保持原始连接位置。 |
 | [plan_families](../src/reaction_reference/retrieval/planner.py#L206) | 按规范原子遍历规划家族，再将查询映射回用户原始目标索引。 |
 | [_plan_ordered_families](../src/reaction_reference/retrieval/planner.py#L238) | 自动生成整体、核心、分片三层的有限 QueryFamily 列表。 |
-| [directed_family](../src/reaction_reference/retrieval/planner.py#L479) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
-| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L511) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
-| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L552) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
-| [exact_family](../src/reaction_reference/retrieval/planner.py#L643) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
-| [initial_families](../src/reaction_reference/retrieval/planner.py#L666) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
+| [directed_family](../src/reaction_reference/retrieval/planner.py#L493) | 针对缺失核心位点，将目标实际 R 块加为精确约束后返回子家族。 |
+| [progressive_followups](../src/reaction_reference/retrieval/planner.py#L525) | 根据已核验见证逐个补查缺失支链，再尝试尚未共存的位点组合。 |
+| [relax_exact_attachments](../src/reaction_reference/retrieval/planner.py#L566) | 将自动定向家族的精确支链放宽为连接端环境，保留原核心谓词与来源链。 |
+| [exact_family](../src/reaction_reference/retrieval/planner.py#L657) | 构造完整目标补查家族，保留 SMARTS 序列化后的目标原子对应。 |
+| [initial_families](../src/reaction_reference/retrieval/planner.py#L680) | 组合初始三层家族与可选的严格目标补查，返回有顺序的列表。 |
 
 ## src/reaction_reference/rules.py
 
@@ -396,12 +398,12 @@
 |---|---|
 | [test_two_substituent_query_preserves_relative_positions](../tests/test_attachment_planning.py#L17) | 同时保留芳基酯与腈时不能把邻位异构体当作对位先例。 |
 | [test_attachment_combinations_have_bounded_unique_connected_queries](../tests/test_attachment_planning.py#L39) | 支链组合有数量上限且全部属于目标连通子图，不能生成不存在的拼接结构。 |
-| [test_public_planner_includes_attachment_query_and_keeps_bare_core](../tests/test_attachment_planning.py#L55) | 正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。 |
+| [test_public_planner_includes_attachment_query_without_bare_benzene](../tests/test_attachment_planning.py#L55) | 正式规划入口保留带关键支链组合，跳过裸苯环，仍遵循家族总数上限。 |
 | [test_attachment_environment_relaxes_tail_but_preserves_nitrogen_role](../tests/test_attachment_planning.py#L72) | 远端烷链可变且核心仍可加取代，但连接端仲胺不能静默变成叔胺或醚。 |
 | [test_attachment_environment_closes_functional_units_and_rings](../tests/test_attachment_planning.py#L81) | 酰胺邻域保持C=O与N，苄基连接邻域保留完整苯环而放开对位远端烷链。 |
 | [test_single_and_pair_questions_precede_repeated_tail_precision](../tests/test_attachment_planning.py#L102) | 两条长支链都有局部/完整版本时，第二个名额应查询双位点而不是重复单支链。 |
 | [test_default_plan_includes_pair_and_preserves_full_alternatives](../tests/test_attachment_planning.py#L122) | 默认计划提供双位点查询，较大预算仍保留完整远端版本和裸核心。 |
-| [test_short_full_attachment_has_role_preserving_query_without_losing_broad_core](../tests/test_attachment_planning.py#L144) | 短完整支链也应有氢数/取代程度保留的查询，而较宽的裸核心仍可召回不同环境。 |
+| [test_short_full_attachment_has_role_preserving_query_without_bare_benzene](../tests/test_attachment_planning.py#L144) | 短完整支链保留氢数/取代程度查询，不再用没有连接信息的裸苯环补充召回。 |
 
 ## tests/test_browser_integration.py
 
@@ -463,14 +465,14 @@
 
 | 函数 | 职责 |
 |---|---|
-| [test_unverified_method_label_does_not_hide_more_relevant_core](../tests/test_core_candidate_iteration.py#L15) | 真实匹配反例中，普通酯的图方法标签不能把覆盖更多目标的桥环线索压到后面。 |
-| [test_display_follows_rank_instead_of_query_layer_quota](../tests/test_core_candidate_iteration.py#L28) | 真实成环先例不能因分片入口被整体层侧链改造挤掉，展示应保持实际排序。 |
-| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L49) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
-| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L64) | 记录真实来源取页参数，不模拟核验和返回数据。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L94) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L116) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
-| [test_priority_pages_are_bounded_and_other_families_still_run](../tests/test_core_candidate_iteration.py#L143) | 来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。 |
-| [test_priority_pages_are_bounded_and_other_families_still_run.page](../tests/test_core_candidate_iteration.py#L168) | 给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。 |
+| [test_method_projection_and_structure_clue_have_separate_recommendation_eligibility](../tests/test_core_candidate_iteration.py#L15) | 图方法可列入推荐但不获得实验标志；没有目标中心投影的桥环线索保留在候选池。 |
+| [test_display_follows_rank_instead_of_query_layer_quota](../tests/test_core_candidate_iteration.py#L34) | 真实成环先例不能因分片入口被整体层侧链改造挤掉，展示应保持实际排序。 |
+| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L55) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
+| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L70) | 记录真实来源取页参数，不模拟核验和返回数据。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L100) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L122) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run](../tests/test_core_candidate_iteration.py#L149) | 来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run.page](../tests/test_core_candidate_iteration.py#L174) | 给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。 |
 
 ## tests/test_data_boundaries.py
 
@@ -689,7 +691,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [exact_tail_query](../tests/test_query_relaxation.py#L20) | 用真实苯胺支链匹配构造自动精确补查，避免伪造位点覆盖。 |
+| [exact_tail_query](../tests/test_query_relaxation.py#L20) | 用真实氨基吡啶支链匹配构造自动精确补查，避免伪造位点覆盖。 |
 | [test_relaxation_preserves_attachment_nitrogen_and_target_correspondence](../tests/test_query_relaxation.py#L28) | 放开远端链后可匹配羟乙基，但连接仲胺与目标原子对应仍正确。 |
 | [test_pipeline_relaxes_only_completed_scope_without_match](../tests/test_query_relaxation.py#L56) | 完整且无匹配才生成放宽家族；超时、候选范围不完整或任务中断不能充当无命中。 |
 | [test_pipeline_relaxes_only_completed_scope_without_match.page](../tests/test_query_relaxation.py#L69) | 仅模拟查询范围状态，正常情况仍执行真实候选匹配。 |
@@ -997,6 +999,17 @@
 | [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable](../tests/test_status_snapshot_race.py#L14) | 在状态读取后、快照读取前注入真实失败收尾，避免旧 running 状态导致错误的 409。 |
 | [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable.fail_snapshot_write](../tests/test_status_snapshot_race.py#L39) | 只阻断新的中断快照，状态文件仍可写入真实失败终态。 |
 | [test_status_reloads_terminal_state_when_snapshot_becomes_unavailable.read_after_transition](../tests/test_status_snapshot_race.py#L45) | 首次读取快照前执行失败收尾，精确控制并发写入相对于状态读取的位置。 |
+
+## tests/test_target_center_recommendation.py
+
+| 函数 | 职责 |
+|---|---|
+| [saved_references](../tests/test_target_center_recommendation.py#L18) | 加载用户实际看到的七条候选，不依赖实时数据库变化和查询超时。 |
+| [test_actual_candidates_follow_target_method_order_and_filter_usage](../tests/test_target_center_recommendation.py#L28) | 先重新执行家族匹配排除无关杂环，再验证用户期望的1、4、3、7方法顺序。 |
+| [test_outside_and_unknown_centers_keep_distinct_exclusion_reasons](../tests/test_target_center_recommendation.py#L62) | 产物侧目标外变化与映射未知分别留痕，不谎称未知记录已被证明无关。 |
+| [test_no_standalone_benzene_in_large_target](../tests/test_target_center_recommendation.py#L94) | 多种目标和大查询预算都不应绕过规则，重新生成裸苯环查询。 |
+| [test_complete_target_and_distinctive_ring_cores_remain](../tests/test_target_center_recommendation.py#L106) | 完整苯目标、杂芳环和稠合芳环保持可检索，不泛化成禁止所有环查询。 |
+| [test_saved_reactions_are_reanalyzed_and_filtered_end_to_end](../tests/test_target_center_recommendation.py#L112) | 重新分析七条实际反应，不依赖冻结贡献标签，覆盖两侧材料的无关反应中心。 |
 
 ## tests/test_traceability.py
 

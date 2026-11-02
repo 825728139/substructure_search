@@ -52,11 +52,11 @@ def test_attachment_combinations_have_bounded_unique_connected_queries():
         assert target.HasSubstructMatch(query)
 
 
-def test_public_planner_includes_attachment_query_and_keeps_bare_core():
-    """正式规划入口同时保留裸骨架和带关键支链组合，仍遵循家族总数上限。"""
+def test_public_planner_includes_attachment_query_without_bare_benzene():
+    """正式规划入口保留带关键支链组合，跳过裸苯环，仍遵循家族总数上限。"""
     families = plan_families(parse("COC(=O)c1ccc(C#N)cc1"), max_families=12)
     assert len(families) <= 12
-    assert any(f.rule_id == "complete_ring_system" for f in families)
+    assert not any(f.rule_id == "complete_ring_system" for f in families)
     assert any(f.rule_id == "core_attachment_combination:2" for f in families)
 
 
@@ -141,8 +141,8 @@ def test_default_plan_includes_pair_and_preserves_full_alternatives(smiles):
         ("C(=O)C", "C(=O)C(F)(F)F"),
     ],
 )
-def test_short_full_attachment_has_role_preserving_query_without_losing_broad_core(handle, changed):
-    """短完整支链也应有氢数/取代程度保留的查询，而较宽的裸核心仍可召回不同环境。"""
+def test_short_full_attachment_has_role_preserving_query_without_bare_benzene(handle, changed):
+    """短完整支链保留氢数/取代程度查询，不再用没有连接信息的裸苯环补充召回。"""
     from rdkit import Chem
 
     target = parse(f"CCCCc1ccc({handle})cc1")
@@ -161,5 +161,4 @@ def test_short_full_attachment_has_role_preserving_query_without_losing_broad_co
         and match_family(f, negative, target, "negative").state == "no_match"
         for f in qualified
     )
-    core = next(f for f in families if f.rule_id == "complete_ring_system")
-    assert match_family(core, negative, target, "broad").state == "match"
+    assert not any(f.rule_id == "complete_ring_system" for f in families)
