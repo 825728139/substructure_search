@@ -244,10 +244,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [query_images](../src/reaction_reference/interfaces/depiction.py#L10) | 绘制目标、每个真实家族的SMARTS及固定原子高亮；R约束额外绘制源端必要条件。 |
-| [query_images.draw](../src/reaction_reference/interfaces/depiction.py#L14) | 生成单分子SVG；高亮仅表示查询固定位置，不表示实验已验证。 |
-| [reaction_svg](../src/reaction_reference/interfaces/depiction.py#L41) | 按实际来源材料角色绘制反应物到产物，不用目标推断或补造缺失反应物。 |
-| [reference_svg](../src/reaction_reference/interfaces/depiction.py#L60) | 绘制 Reference 的具体材料，按最佳已发现单见证高亮覆盖原子。 |
+| [query_images](../src/reaction_reference/interfaces/depiction.py#L15) | 绘制目标、每个真实家族的SMARTS及固定原子高亮；R约束额外绘制源端必要条件。 |
+| [query_images.draw](../src/reaction_reference/interfaces/depiction.py#L19) | 生成单分子SVG；高亮仅表示查询固定位置，不表示实验已验证。 |
+| [reaction_svg](../src/reaction_reference/interfaces/depiction.py#L46) | 按来源角色逐个排版分子，独立绘图区避免多材料挤在固定反应画布中。 |
+| [reference_svg](../src/reaction_reference/interfaces/depiction.py#L114) | 绘制 Reference 的具体材料，按最佳已发现单见证高亮覆盖原子。 |
 
 ## src/reaction_reference/interfaces/sdk.py
 
@@ -507,6 +507,7 @@
 | [test_demo_preview_uses_formal_planner_and_rdkit](../tests/test_demo.py#L11) | 预览绘制全部正式家族及源端预筛，不访问反应数据库。 |
 | [test_demo_endpoints_require_configured_token](../tests/test_demo.py#L25) | Demo图像数据与检索数据遵循同一内部认证。 |
 | [test_reaction_depiction_uses_actual_materials](../tests/test_demo.py#L33) | 反应图从真实材料角色生成，不需映射或拟合成目标。 |
+| [test_reaction_depiction_separates_many_materials](../tests/test_demo.py#L43) | 复杂分子、盐及多产物拥有互不重叠的绘图区，宽度随材料数量增加。 |
 
 ## tests/test_evaluation.py
 

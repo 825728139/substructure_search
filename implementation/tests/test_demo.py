@@ -38,3 +38,35 @@ def test_reaction_depiction_uses_actual_materials(amide):
     assert "<svg" in svg and "</svg>" in svg
     images = query_images("CCO", initial_families(parse("CCO")))
     assert images["queries"]
+
+
+def test_reaction_depiction_separates_many_materials():
+    """复杂分子、盐及多产物拥有互不重叠的绘图区，宽度随材料数量增加。"""
+    from types import SimpleNamespace
+    from xml.etree import ElementTree as ET
+
+    materials = [
+        SimpleNamespace(role="reactant", smiles=smiles)
+        for smiles in (
+            "CCN(C)C(=O)c1ccccc1",
+            "[Na+].[O-]C(=O)c1ccccc1",
+            "CC(C)(C)OC(=O)N1CCC(COc2ccc(C(F)(F)F)cc2)CC1",
+            "CCCCCCCCCCCCCCCCCCCCCCCC",
+        )
+    ] + [
+        SimpleNamespace(role="product", smiles="CCN(C)C(=O)c1ccccc1"),
+        SimpleNamespace(role="product", smiles="Cl"),
+        SimpleNamespace(role="solvent", smiles="O"),
+    ]
+    reference = SimpleNamespace(record=SimpleNamespace(materials=materials))
+    svg = reaction_svg(reference)
+    root = ET.fromstring(svg)
+    panels = root.findall("{http://www.w3.org/2000/svg}svg")
+    assert len(panels) == 6
+    assert [p.attrib["data-role"] for p in panels] == ["reactant"] * 4 + ["product"] * 2
+    assert float(root.attrib["width"]) > 1100
+    for left, right in zip(panels, panels[1:], strict=False):
+        assert float(left.attrib["x"]) + float(left.attrib["width"].removesuffix("px")) < float(
+            right.attrib["x"]
+        )
+    assert all(p.attrib["overflow"] == "hidden" for p in panels)
