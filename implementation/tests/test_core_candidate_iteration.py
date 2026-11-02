@@ -41,7 +41,11 @@ def test_display_follows_rank_instead_of_query_layer_quota(limit):
         ranked, displayed = rank_references(
             ordering, target_smiles=payload["target_smiles"], max_display=limit
         )
-        assert ranked[0].record.source.record_id == "2223370"
+        assert ranked[0].record.source.record_id in {"2223370", "2192223", "2144174"}
+        assert (
+            ranked[0].ranking_features["target_scaffold_relevance"]["center_location"]
+            == "core_internal"
+        )
         assert displayed == [r.id for r in ranked[:limit]]
         assert [r.display_position for r in ranked[:limit]] == list(
             range(1, min(limit, len(ranked)) + 1)

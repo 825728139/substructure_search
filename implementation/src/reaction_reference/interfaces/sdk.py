@@ -72,8 +72,8 @@ class Client:
                 request.ranking_profile,
                 request.lab_context,
                 max(3, state.request.budget.max_display - min(3, len(package.proposals))),
-                # 可选特征缓存为空时，仍用快照的已知目标计算分子量和官能团差异。
-                target_smiles=package.target_smiles,
+                # 见证绑定原始输入原子序；规范SMILES只用于结构身份，不能用于索引定位。
+                target_smiles=package.target_input_smiles,
             )
             # 沿用排序器给出的展示位置，重排不重算来源事实或结构见证。
             chosen = sorted(

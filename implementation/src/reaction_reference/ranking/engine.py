@@ -1,7 +1,10 @@
 """参考排序和实验能力适配：先区分方法资格与证据，再按明确偏好组织展示，保留所有已评估候选。"""
 
 from reaction_reference.chemistry.structures import canonical, parse
+from reaction_reference.domain.models import Reference
 from reaction_reference.ranking.features import condition_issues, features
+from reaction_reference.ranking.scaffold import scaffold_relevance, target_regions
+from reaction_reference.ranking.scoring import reference_score
 
 
 def lab_fit(reference, context):
@@ -87,39 +90,16 @@ def lab_fit(reference, context):
     )
 
 
-def _priority(reference):
-    """返回参考的方法/证据优先级，数值越小越优先。
-
-    满足完整目标且有获得证据的记录优先；来源标注缺失不能抹掉已投影的目标方法贡献。
-    """
-    if reference.target_requirements_satisfied and reference.obtainment_hit:
-        return 0
-    projected = reference.coverage.get("projected_changes", {})
-    if projected.get("formed_target_bonds"):
-        return 1 if reference.contribution == "connection_method" else 2
-    if projected.get("changed_target_atoms"):
-        return 3
-    if not reference.obtainment_hit and not reference.use_hit:
-        return 6
-    return {
-        "connection_method": 1,
-        "local_method": 2,
-        "modification": 3,
-        "target_outcome": 3,
-        "usage": 4,
-        "structure_clue": 5,
-        "unknown": 6,
-    }[reference.contribution]
-
-
-def _connection_environment_distance(reference, target):
+def _connection_environment_distance(reference, target, witness_id=None):
     """比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。
 
     芳环远端取代不计此项；该距离只用于结构迁移排序，不推断电子、位阻或实验可行性。
     """
     if target is None or not reference.witnesses:
         return 0
-    witness = max(reference.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
+    witness = next((w for w in reference.witnesses if w.id == witness_id), None)
+    if witness is None:
+        witness = max(reference.witnesses, key=lambda w: (w.target_atom_coverage, w.id))
     source = parse(reference.material.smiles)
     return sum(
         abs(target.GetAtomWithIdx(t).GetTotalNumHs() - source.GetAtomWithIdx(s).GetTotalNumHs())
@@ -157,13 +137,29 @@ def rank_references(
     profile选择参考优先、实验适配或操作偏好；context不改结构和来源事实。
     主推荐先检查目标中心与产物资格，再依排序截取max_display项；所有候选保留，
     排除原因写入reasons。缺失来源标记不抹平方法贡献，也不自动产生实验获得证据。
+    target_smiles必须保留见证绑定的原始目标原子序，不能预先规范化后重新编号。
     """
     enriched = []
     target = parse(target_smiles) if target_smiles else None
-    target_heavy_atoms = target.GetNumHeavyAtoms() if target is not None else None
+    regions = target_regions(target)
     for reference in references:
         fit, reasons = lab_fit(reference, context)
         ranking_features = reference.ranking_features or features(reference, target_smiles)
+        ranking_features = {
+            **ranking_features,
+            "target_scaffold_relevance": scaffold_relevance(reference, target, regions),
+        }
+        ranking_features["score"] = reference_score(
+            reference,
+            target,
+            ranking_features["target_scaffold_relevance"],
+            _connection_environment_distance(
+                reference, target, ranking_features["target_scaffold_relevance"]["witness_id"]
+            ),
+            profile,
+            fit,
+            context,
+        )
         issues = condition_issues(reference.record.conditions)
         if issues:
             # 冻结参考可能来自旧版本；补充当前异常解释时不修改旧快照中的事实字典。
@@ -196,75 +192,13 @@ def rank_references(
         )
 
     def key(ref):
-        """为单个参考生成可传递且稳定的排序元组。
-
-        先排方法与证据，再在明确偏好下比较已知信息组及温度偏离 25°C/时长；实验适配模式增加能力分组。未知条件不填成容易操作，最终使用参考 ID 固定并列顺序。
-        """
-        joint = ref.coverage.get("joint_witness") or {}
-        coverage = joint.get("atom_coverage", 0)
-        # 用同一见证的共享重原子同时衡量两侧覆盖，避免“大分子包含目标小片段”获得虚高优先级。
-        balanced_coverage = (
-            2
-            * coverage
-            * target_heavy_atoms
-            / (target_heavy_atoms + parse(ref.material.smiles).GetNumHeavyAtoms())
-            if target_heavy_atoms
-            else coverage
-        )
-        evidence = (
-            0
-            if ref.obtainment_hit
-            else 1
-            if any(c.support == "source_reported" for c in ref.claims)
-            else 2
-        )
-        # 缺失条件不获得低温或容易操作的奖励。
-        # 先固定信息可用分组，再用排序键比较，避免成对比较出现循环次序。
-        conditions = ref.record.conditions
-        issues = condition_issues(conditions)
-        availability = (
-            conditions.temperature_min_c is not None
-            and conditions.temperature_max_c is not None
-            and "temperature" not in issues,
-            conditions.duration_seconds is not None and "duration" not in issues,
-        )
-        process: tuple = ()
-        if profile == "process_reference":
-            # 只在同等已知字段分组中比较条件数值。
-            # 未知温度/时间不能按零值或容易操作处理。
-            burden = (
-                max(abs(conditions.temperature_min_c - 25), abs(conditions.temperature_max_c - 25))
-                if availability[0]
-                else 0,
-                conditions.duration_seconds if availability[1] else 0,
-            )
-            process = (
-                sum(not known for known in availability),
-                tuple(not known for known in availability),
-                burden,
-            )
-        base = (
-            _priority(ref),
-            _connection_environment_distance(ref, target),
-            evidence,
-            -balanced_coverage,
-            -joint.get("atom_coverage", 0),
-            *process,
-            -ref.similarity,
-            ref.id,
-        )
-        if profile != "reference_first" and context is not None:
-            return ({"pass": 0, "unknown": 1, "not_applicable": 1, "fail": 2}[ref.lab_fit],) + base
-        return base
+        """按多维加权总分降序排序；总分完全相同才使用稳定ID，不逐项硬比较。"""
+        return (-ref.ranking_features["score"]["total"], ref.id)
 
     ordered = sorted(enriched, key=key)
-    selected, used = [], set()
-    # 完整目标的已报告获得记录全局保留；即使只是脱保护，也优先展示。
-    exact = next((r for r in ordered if r.target_requirements_satisfied and r.obtainment_hit), None)
-    if exact:
-        selected.append(exact)
-        used.add(exact.id)
-    # 三层查询只是召回入口，不能让分层配额把更相关的参考挤到较弱候选之后。
+    selected: list[Reference] = []
+    used: set[str] = set()
+    # 仅用资格门槛过滤后按总分截取，不按层级或标签再次改写得分顺序。
     for ref in ordered:
         if (
             ref.id not in used

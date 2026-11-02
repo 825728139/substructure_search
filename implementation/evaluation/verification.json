@@ -1,9 +1,9 @@
 {
   "schema_version": "1",
   "date": "2026-11-02",
-  "implementation_hash": "64f47eaed4c5eb60227430da6913e6d6b3bd41ab305d11838cbaac657b62ace6",
+  "implementation_hash": "26521dd49ca19ae35d6e522f07f1eb10cd57e8897eefe1d461401e71f89b7f69",
   "rule_hash": "bc63918000f93f457c96a284027dac856865574b7beb15a2e9159cd5d18f5ea9",
-  "dependency_lock_sha256": "94edceef4db5d2551feaf1a293d08c97c72a7b9753fdce36ada741fcb1f197dc",
+  "dependency_lock_sha256": "92209b33038b5cb9efd2f56e6c4aa57a09abd59892b37c97fd5ce1812d0b3109",
   "environment": {
     "python": "3.12.12",
     "rdkit": "2026.3.2",
@@ -13,11 +13,12 @@
     "pytest": "9.2.0",
     "ruff": "0.17.3",
     "mypy": "1.20.2",
-    "node": "v26.8.1"
+    "node": "v26.8.1",
+    "pyyaml": "6.0.3"
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 583,
+    "tests_passed": 607,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -1697,5 +1698,59 @@
     "source_scope": "bounded_candidates_not_full_corpus_recall",
     "unknown_centers_preserved_in_full_results": true,
     "quality_scope": "single_reviewed_target_not_general_expert_validation"
+  },
+  "yaml_scoring_delivery": {
+    "date": "2026-11-02",
+    "implementation_hash": "26521dd49ca19ae35d6e522f07f1eb10cd57e8897eefe1d461401e71f89b7f69",
+    "configuration": "src/reaction_reference/resources/ranking_weights.yaml",
+    "configuration_hash": "57fca7ae8ad18353e6f62ff48159abdf560ab8014f219400b7ae0dfc05e28fb0",
+    "score_version": "target-method-score-1",
+    "tests_passed": 607,
+    "chinese_comment_modules": 120,
+    "chinese_comment_functions": 690,
+    "wheel_contains_same_yaml": true,
+    "source_atom_order_preserved_for_search_and_rerank": true,
+    "browser_default_v3_cases": [
+      {
+        "target": "amide",
+        "records": [
+          "2174992",
+          "669207",
+          "1119512",
+          "4793635"
+        ],
+        "scores": [
+          89.49743589743589,
+          86.64880952380952,
+          82.65714285714286,
+          80.730179028133
+        ],
+        "stop_reasons": [
+          "task_budget",
+          "usage_task_budget"
+        ],
+        "configuration_hash": "57fca7ae8ad18353e6f62ff48159abdf560ab8014f219400b7ae0dfc05e28fb0",
+        "errors": []
+      },
+      {
+        "target": "bridge",
+        "records": [
+          "9392974",
+          "9033888",
+          "62248"
+        ],
+        "scores": [
+          50.494344608879494,
+          50.49351241553704,
+          20.595071595071595
+        ],
+        "stop_reasons": [
+          "task_budget"
+        ],
+        "configuration_hash": "57fca7ae8ad18353e6f62ff48159abdf560ab8014f219400b7ae0dfc05e28fb0",
+        "errors": []
+      }
+    ],
+    "scope": "heuristic_weights_not_independent_expert_calibration; bounded_default_queries_not_full_corpus_recall"
   }
 }

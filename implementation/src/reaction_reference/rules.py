@@ -43,14 +43,14 @@ class RuleSet(Model):
 
 @lru_cache(maxsize=1)
 def code_fingerprint():
-    """对包内 Python、规则/示例 JSON 和 HTML 的路径与原始内容计算 SHA-256。
+    """对包内 Python、规则/示例 JSON、YAML 和 HTML 的路径与原始内容计算 SHA-256。
 
     结果按进程缓存；注释和 docstring 也会改变摘要，因此注释交接后需重新生成当前验证记录，不能沿用旧代码哈希。
     """
     root = Path(str(files("reaction_reference")))
     checksum = hashlib.sha256()
     for path in sorted(root.rglob("*")):
-        if path.is_file() and path.suffix in (".py", ".json", ".jsonl", ".html"):
+        if path.is_file() and path.suffix in (".py", ".json", ".jsonl", ".yaml", ".yml", ".html"):
             checksum.update(str(path.relative_to(root)).encode())
             checksum.update(hashlib.sha256(path.read_bytes()).digest())
     return checksum.hexdigest()

@@ -93,7 +93,8 @@ def search(request, source, *, run_id=None, on_progress=None):
             request.ranking_profile,
             request.lab_context,
             max(3, request.budget.max_display - min(3, len(proposals))),
-            target_smiles,
+            # 评分会按见证索引定位母核，必须沿用原始输入原子序，不能改用规范SMILES。
+            request.target.value,
         )
         ids = set(display)
         chosen = [r for r in ranked if r.id in ids]

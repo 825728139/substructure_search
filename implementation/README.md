@@ -182,3 +182,5 @@ python scripts/check_deployment.py --base-url http://127.0.0.1:8000 --output /tm
 项目采用本地检查和手动部署，不配置持续集成。部署检查脚本按需运行，用于确认目标环境的依赖和接口可用。
 
 保护基/互变异构体自动展开、任意可变路径 Markush、金属配位处理、共同中间体主动补查、供应/危害外部资料接入、化学可行性和条件预测尚未实现，均有明确能力状态。现有材料身份关系只是已返回记录之间的线索。模板回放成功不证明选择性、实验可行性或条件可照搬。完整范围见 [STATUS](docs/STATUS.md)；产品和化学设计见[上层实现计划](../implementation_plan.md)。
+
+评分审核与调参见[评分说明](docs/SCORING.md)和[带中文化学注释的YAML](src/reaction_reference/resources/ranking_weights.yaml)。

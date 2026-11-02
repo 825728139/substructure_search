@@ -133,8 +133,8 @@
 |---|---|
 | [search](../src/reaction_reference/application/search.py#L43) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
 | [search.package](../src/reaction_reference/application/search.py#L86) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L267) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L277) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search.publish](../src/reaction_reference/application/search.py#L268) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L278) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -273,12 +273,11 @@
 
 | 函数 | 职责 |
 |---|---|
-| [lab_fit](../src/reaction_reference/ranking/engine.py#L7) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
-| [_priority](../src/reaction_reference/ranking/engine.py#L90) | 返回参考的方法/证据优先级，数值越小越优先。 |
-| [_connection_environment_distance](../src/reaction_reference/ranking/engine.py#L115) | 比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。 |
-| [_recommendation_exclusion](../src/reaction_reference/ranking/engine.py#L132) | 返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L152) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L198) | 为单个参考生成可传递且稳定的排序元组。 |
+| [lab_fit](../src/reaction_reference/ranking/engine.py#L10) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
+| [_connection_environment_distance](../src/reaction_reference/ranking/engine.py#L93) | 比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。 |
+| [_recommendation_exclusion](../src/reaction_reference/ranking/engine.py#L112) | 返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L132) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L194) | 按多维加权总分降序排序；总分完全相同才使用稳定ID，不逐项硬比较。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -287,6 +286,28 @@
 | [_feature](../src/reaction_reference/ranking/features.py#L9) | 把一个特征值封装为状态、支持依据和限制的统一字典。 |
 | [condition_issues](../src/reaction_reference/ranking/features.py#L17) | 标记来源中的倒置温度范围和负时长；保留原始数值供核查，正常低温和零时长有效。 |
 | [features](../src/reaction_reference/ranking/features.py#L31) | 为具体 Reference 提取九方向解释信息，返回特征字典。 |
+
+## src/reaction_reference/ranking/policy.py
+
+| 函数 | 职责 |
+|---|---|
+| [_UniqueLoader.construct_mapping](../src/reaction_reference/ranking/policy.py#L18) | 只接受字符串配置键，并逐项检查当前映射是否有重复键。 |
+| [ScoringPolicy.check_dimensions](../src/reaction_reference/ranking/policy.py#L50) | 检查分项完整、基础分合计100、尺度正数及操作分占比合计1。 |
+| [validate_scoring_policy](../src/reaction_reference/ranking/policy.py#L96) | 安全解析并校验YAML，返回可计算字典及原始配置摘要，异常直接交给调用方报告。 |
+
+## src/reaction_reference/ranking/scaffold.py
+
+| 函数 | 职责 |
+|---|---|
+| [target_regions](../src/reaction_reference/ranking/scaffold.py#L9) | 划分完整环系、无环功能锚点骨架及连接端功能单元，返回原目标索引。 |
+| [scaffold_relevance](../src/reaction_reference/ranking/scaffold.py#L86) | 用同一方法见证计算母核覆盖、目标覆盖和中心位置，避免跨见证拼接虚高评分。 |
+
+## src/reaction_reference/ranking/scoring.py
+
+| 函数 | 职责 |
+|---|---|
+| [scoring_policy](../src/reaction_reference/ranking/scoring.py#L12) | 读取随包评分权重；它是工程初始配置，不是拟合后的成功率模型。 |
+| [reference_score](../src/reaction_reference/ranking/scoring.py#L19) | 汇总单候选分项为加权总分；所有常规维度归一到0至1，未知证据不冒充阳性。 |
 
 ## src/reaction_reference/reaction_analysis/analyze.py
 
@@ -322,7 +343,7 @@
 
 | 函数 | 职责 |
 |---|---|
-| [code_fingerprint](../src/reaction_reference/rules.py#L45) | 对包内 Python、规则/示例 JSON 和 HTML 的路径与原始内容计算 SHA-256。 |
+| [code_fingerprint](../src/reaction_reference/rules.py#L45) | 对包内 Python、规则/示例 JSON、YAML 和 HTML 的路径与原始内容计算 SHA-256。 |
 | [load_rules](../src/reaction_reference/rules.py#L59) | 读取随包 rules.json，严格校验契约并编译官能团及双向回放规则。 |
 | [capabilities](../src/reaction_reference/rules.py#L95) | 返回与当前规则版本绑定的查询形式、来源、分析能力和未支持清单。 |
 
@@ -467,12 +488,12 @@
 |---|---|
 | [test_method_projection_and_structure_clue_have_separate_recommendation_eligibility](../tests/test_core_candidate_iteration.py#L15) | 图方法可列入推荐但不获得实验标志；没有目标中心投影的桥环线索保留在候选池。 |
 | [test_display_follows_rank_instead_of_query_layer_quota](../tests/test_core_candidate_iteration.py#L34) | 真实成环先例不能因分片入口被整体层侧链改造挤掉，展示应保持实际排序。 |
-| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L55) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
-| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L70) | 记录真实来源取页参数，不模拟核验和返回数据。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L100) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
-| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L122) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
-| [test_priority_pages_are_bounded_and_other_families_still_run](../tests/test_core_candidate_iteration.py#L149) | 来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。 |
-| [test_priority_pages_are_bounded_and_other_families_still_run.page](../tests/test_core_candidate_iteration.py#L174) | 给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。 |
+| [test_source_small_pages_give_other_families_a_turn](../tests/test_core_candidate_iteration.py#L59) | 在线小页策略让后续家族进入预算；显式固定样本穷尽仍使用请求页大小。 |
+| [test_source_small_pages_give_other_families_a_turn.record_page](../tests/test_core_candidate_iteration.py#L74) | 记录真实来源取页参数，不模拟核验和返回数据。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search](../tests/test_core_candidate_iteration.py#L104) | 分片近邻无命中或查询失败时仍执行独立子结构流，不能将相似初选当成硬过滤。 |
+| [test_fragment_empty_or_failed_near_pool_keeps_independent_search.page](../tests/test_core_candidate_iteration.py#L126) | 仅模拟有界初选缺失，独立阶段仍用真实材料和完整匹配。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run](../tests/test_core_candidate_iteration.py#L153) | 来源即使持续请求优先续页也最多连续三页；固定样本穷尽模式保持普通轮转。 |
+| [test_priority_pages_are_bounded_and_other_families_still_run.page](../tests/test_core_candidate_iteration.py#L178) | 给真实分页附加持续优先提示，验证编排器自身也具有公平调度上限。 |
 
 ## tests/test_data_boundaries.py
 
@@ -943,6 +964,29 @@
 | [test_large_final_message_survives_worker_exit](../tests/test_runtime_integrity.py#L596) | 完整的大结果必须成功落盘，不能把正常进程退出误判为缺失结果。 |
 | [test_closed_manager_rejects_even_an_existing_idempotency_key](../tests/test_runtime_integrity.py#L605) | 关闭后的提交入口不能因幂等缓存命中而绕过生命周期检查。 |
 
+## tests/test_scaffold_scoring.py
+
+| 函数 | 职责 |
+|---|---|
+| [bridge_examples](../tests/test_scaffold_scoring.py#L19) | 读取真实复杂桥环目标的三条方法，保留反应结构与全部一致见证。 |
+| [test_bridge_formation_beats_exact_ethyl_ester_tail_environment](../tests/test_scaffold_scoring.py#L29) | 母核构建覆盖胜过小片段的零环境差异，不依赖候选输入顺序。 |
+| [test_score_is_sum_of_visible_components_and_query_labels_do_not_change_it](../tests/test_scaffold_scoring.py#L47) | 分数可以逐项复算；更换召回层标签不能凭空改变同一结构方法的价值。 |
+| [test_weights_can_trade_off_instead_of_hard_priority](../tests/test_scaffold_scoring.py#L69) | 仅提高环境分权重会改变结果，证明框架按总分而非隐藏的母核优先级排序。 |
+| [test_benzamide_connection_is_head_not_core_internal](../tests/test_scaffold_scoring.py#L80) | 苯甲酰胺的C—N键属于直接连接官能团，应判为支链头部而非母核内部。 |
+| [test_acyclic_target_has_real_functional_or_chain_core](../tests/test_scaffold_scoring.py#L95) | 无环目标也有功能锚点骨架，索引属于实际目标，不把缺少环当作没有母核。 |
+| [test_ethyl_ester_tail_does_not_become_branch_head](../tests/test_scaffold_scoring.py#L104) | 即使酯直接连接苯环，O—乙基的远端成键也不能冒充母核与支链头部成键。 |
+| [test_search_and_frozen_rerank_use_original_target_atom_order](../tests/test_scaffold_scoring.py#L112) | 复杂桥环输入规范化后原子序不同，初检和冻结重排都必须沿用见证的原输入编号。 |
+
+## tests/test_scoring_policy.py
+
+| 函数 | 职责 |
+|---|---|
+| [policy_text](../tests/test_scoring_policy.py#L13) | 读取实际随包分发的配置，不用测试专用权重替代交付文件。 |
+| [test_default_policy_has_complete_comments_and_traceable_hash](../tests/test_scoring_policy.py#L18) | 配置包含化学依据、默认总分100及摘要，注释变化也可区分配置内容。 |
+| [test_invalid_policy_fails_instead_of_silent_fallback](../tests/test_scoring_policy.py#L47) | 拒绝常见调分错误，不能静默用旧值或把错别字当成有效配置。 |
+| [test_duplicate_or_executable_yaml_is_rejected](../tests/test_scoring_policy.py#L76) | 重复键和可执行对象标签必须报错，不能覆盖审核值或执行配置内容。 |
+| [test_core_and_center_parameters_are_read_from_yaml](../tests/test_scoring_policy.py#L84) | 修改配置能改变母核拓扑权重，参数确实进入计算而非只作为展示文档。 |
+
 ## tests/test_serialization_integrity.py
 
 | 函数 | 职责 |
@@ -955,13 +999,13 @@
 | 函数 | 职责 |
 |---|---|
 | [test_sdk_process_and_frozen_rerank](../tests/test_service.py#L17) | 确认 SDK 在独立进程检索后可对冻结候选重排，重排不能调用来源配置或重查。 |
-| [test_rerank_preserves_target_context_when_feature_cache_is_absent](../tests/test_service.py#L38) | 可选排序特征缓存缺失时仍须使用资料包目标；已有特征和来源事实保持原样。 |
-| [test_single_coordinator_lock](../tests/test_service.py#L84) | 确认同运行目录只允许一个协调器，关闭后另一实例才可接管。 |
-| [test_api_lifecycle_auth_idempotency_and_cursor](../tests/test_service.py#L92) | 确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。 |
-| [test_cancel_stops_job_and_is_terminal](../tests/test_service.py#L155) | 确认取消返回已落盘的实际终态，迟到完成不能再修改状态。 |
-| [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L164) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
-| [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L178) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
-| [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L198) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
+| [test_rerank_preserves_target_context_when_feature_cache_is_absent](../tests/test_service.py#L38) | 缓存缺失时仍使用资料包目标；已有事实保持原样，偏好变化时重新计算派生评分。 |
+| [test_single_coordinator_lock](../tests/test_service.py#L93) | 确认同运行目录只允许一个协调器，关闭后另一实例才可接管。 |
+| [test_api_lifecycle_auth_idempotency_and_cursor](../tests/test_service.py#L101) | 确认真实 API 的认证、幂等、任务、固定快照分页、SVG/导出及严格重排输入。 |
+| [test_cancel_stops_job_and_is_terminal](../tests/test_service.py#L164) | 确认取消返回已落盘的实际终态，迟到完成不能再修改状态。 |
+| [test_supervisor_start_failure_does_not_leave_running](../tests/test_service.py#L173) | 确认监督器启动异常会落为 failed，不把作业永远留在 running。 |
+| [test_restart_preserves_snapshot_and_fails_interrupted](../tests/test_service.py#L187) | 确认重启标记遗留运行失败并拒绝终态改写，不伪造恢复旧来源会话。 |
+| [test_hard_timeout_is_terminal_and_subprocess_stops](../tests/test_service.py#L207) | 确认极短硬预算结束子进程并保持 timed_out 终态。 |
 
 ## tests/test_snapshot_finalization_failure.py
 

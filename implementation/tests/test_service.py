@@ -38,7 +38,7 @@ def test_sdk_process_and_frozen_rerank(settings, request_factory, monkeypatch):
 def test_rerank_preserves_target_context_when_feature_cache_is_absent(
     settings, source, request_factory, cached
 ):
-    """可选排序特征缓存缺失时仍须使用资料包目标；已有特征和来源事实保持原样。"""
+    """缓存缺失时仍使用资料包目标；已有事实保持原样，偏好变化时重新计算派生评分。"""
     request = request_factory(options={"include_proposals": False}, budget={"max_tasks": 100})
     original = search(request, source)
     references = (
@@ -77,7 +77,16 @@ def test_rerank_preserves_target_context_when_feature_cache_is_absent(
             assert reference.record == by_id[reference.id].record
             assert reference.witnesses == by_id[reference.id].witnesses
             if cached:
-                assert reference.ranking_features == by_id[reference.id].ranking_features
+                previous = by_id[reference.id].ranking_features
+                assert {k: v for k, v in reference.ranking_features.items() if k != "score"} == {
+                    k: v for k, v in previous.items() if k != "score"
+                }
+                score = reference.ranking_features["score"]
+                assert "process_preference" in score["components"]
+                assert score["config_sha256"] == previous["score"]["config_sha256"]
+                assert score["total"] == pytest.approx(
+                    previous["score"]["total"] + score["components"]["process_preference"]["points"]
+                )
         assert client.manager.store.package(state.run_id) == original
 
 
