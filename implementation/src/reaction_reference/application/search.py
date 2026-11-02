@@ -32,6 +32,10 @@ from reaction_reference.evidence.claims import evidence_for, summary_items
 from reaction_reference.evidence.relations import material_relations
 from reaction_reference.ranking.engine import rank_references
 from reaction_reference.reaction_analysis.analyze import analyze_reaction, project_changes
+from reaction_reference.reaction_analysis.region_support import (
+    has_region_method,
+    projection_strength,
+)
 from reaction_reference.retrieval.planner import (
     initial_families,
     progressive_followups,
@@ -428,13 +432,11 @@ def search(request, source, *, run_id=None, on_progress=None):
                     )
                     old_projection = previous.coverage.get("projected_changes", {})
                     old_strength = (
-                        bool(old_projection.get("formed_target_bonds")),
-                        bool(old_projection.get("changed_target_atoms")),
+                        projection_strength(old_projection),
                         previous.coverage.get("method_witness_atom_coverage", 0),
                     )
                     new_strength = (
-                        bool(new_projection["formed_target_bonds"]),
-                        bool(new_projection["changed_target_atoms"]),
+                        projection_strength(new_projection),
                         new_best.target_atom_coverage,
                     )
                     updates: dict = {}
@@ -452,7 +454,9 @@ def search(request, source, *, run_id=None, on_progress=None):
                             )
                             if not new_projection["formed_target_bonds"]:
                                 new_kind = (
-                                    "modification"
+                                    "local_method"
+                                    if has_region_method(new_projection)
+                                    else "modification"
                                     if new_projection["changed_target_atoms"]
                                     else "structure_clue"
                                 )
@@ -527,6 +531,8 @@ def search(request, source, *, run_id=None, on_progress=None):
                     contribution = (
                         "connection_method" if best.target_atom_coverage == 1 else "local_method"
                     )
+                elif has_region_method(projected):
+                    contribution = "local_method"
                 elif projected["changed_target_atoms"]:
                     contribution = "modification"
                 else:

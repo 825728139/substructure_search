@@ -131,10 +131,10 @@
 
 | 函数 | 职责 |
 |---|---|
-| [search](../src/reaction_reference/application/search.py#L43) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
-| [search.package](../src/reaction_reference/application/search.py#L86) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
-| [search.publish](../src/reaction_reference/application/search.py#L268) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
-| [search.retain_proposal](../src/reaction_reference/application/search.py#L278) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
+| [search](../src/reaction_reference/application/search.py#L47) | 执行一次目标导向的参考检索，返回 ReferencePackage，并可发布阶段快照。 |
+| [search.package](../src/reaction_reference/application/search.py#L90) | 将当前累计状态排序、汇总并封装为一个新的结果快照。 |
+| [search.publish](../src/reaction_reference/application/search.py#L272) | 按需向 on_progress 发布当前资料包；force=True 时跳过约 0.5 秒的节流。 |
+| [search.retain_proposal](../src/reaction_reference/application/search.py#L282) | 立即保留已验证且唯一的建议并发布进度，返回是否还有全局建议名额。 |
 
 ## src/reaction_reference/bootstrap.py
 
@@ -152,6 +152,12 @@
 | [_predicates](../src/reaction_reference/chemistry/markush.py#L74) | 检查某一次固定核心映射下的全部 R 条件，返回 bool。 |
 | [match_family](../src/reaction_reference/chemistry/markush.py#L147) | 在一个具体来源分子上核验家族并返回 MatchResult 与一致的匹配见证。 |
 | [coverage_summary](../src/reaction_reference/chemistry/markush.py#L298) | 汇总已得到的见证，分别返回最佳单见证联合覆盖和跨见证位点并集。 |
+
+## src/reaction_reference/chemistry/regions.py
+
+| 函数 | 职责 |
+|---|---|
+| [structural_regions](../src/reaction_reference/chemistry/regions.py#L8) | 按完整环系或无环功能锚点路径划分母核，保留直接连接头部及完整环系边界。 |
 
 ## src/reaction_reference/chemistry/structures.py
 
@@ -273,11 +279,11 @@
 
 | 函数 | 职责 |
 |---|---|
-| [lab_fit](../src/reaction_reference/ranking/engine.py#L10) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
-| [_connection_environment_distance](../src/reaction_reference/ranking/engine.py#L93) | 比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。 |
-| [_recommendation_exclusion](../src/reaction_reference/ranking/engine.py#L112) | 返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。 |
-| [rank_references](../src/reaction_reference/ranking/engine.py#L132) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
-| [rank_references.key](../src/reaction_reference/ranking/engine.py#L194) | 按多维加权总分降序排序；总分完全相同才使用稳定ID，不逐项硬比较。 |
+| [lab_fit](../src/reaction_reference/ranking/engine.py#L11) | 将参考条件与 LabContext 的温度、压力、设备和排除材料要求比较。 |
+| [_connection_environment_distance](../src/reaction_reference/ranking/engine.py#L94) | 比较最佳覆盖见证中非芳香原子的氢数与连接数，优先保留目标连接端取代环境。 |
+| [_recommendation_exclusion](../src/reaction_reference/ranking/engine.py#L113) | 返回主推荐排除原因；保留候选与原始分析供审查，不把未知反应中心当作已证明无关。 |
+| [rank_references](../src/reaction_reference/ranking/engine.py#L137) | 返回（全部已评估参考的排序副本、选中展示的参考 ID 列表）。 |
+| [rank_references.key](../src/reaction_reference/ranking/engine.py#L199) | 按多维加权总分降序排序；总分完全相同才使用稳定ID，不逐项硬比较。 |
 
 ## src/reaction_reference/ranking/features.py
 
@@ -292,34 +298,42 @@
 | 函数 | 职责 |
 |---|---|
 | [_UniqueLoader.construct_mapping](../src/reaction_reference/ranking/policy.py#L18) | 只接受字符串配置键，并逐项检查当前映射是否有重复键。 |
-| [ScoringPolicy.check_dimensions](../src/reaction_reference/ranking/policy.py#L50) | 检查分项完整、基础分合计100、尺度正数及操作分占比合计1。 |
-| [validate_scoring_policy](../src/reaction_reference/ranking/policy.py#L96) | 安全解析并校验YAML，返回可计算字典及原始配置摘要，异常直接交给调用方报告。 |
+| [ScoringPolicy.check_dimensions](../src/reaction_reference/ranking/policy.py#L51) | 检查分项完整、基础分合计100、尺度正数及操作分占比合计1。 |
+| [validate_scoring_policy](../src/reaction_reference/ranking/policy.py#L115) | 安全解析并校验YAML，返回可计算字典及原始配置摘要，异常直接交给调用方报告。 |
 
 ## src/reaction_reference/ranking/scaffold.py
 
 | 函数 | 职责 |
 |---|---|
-| [target_regions](../src/reaction_reference/ranking/scaffold.py#L9) | 划分完整环系、无环功能锚点骨架及连接端功能单元，返回原目标索引。 |
-| [scaffold_relevance](../src/reaction_reference/ranking/scaffold.py#L86) | 用同一方法见证计算母核覆盖、目标覆盖和中心位置，避免跨见证拼接虚高评分。 |
+| [target_regions](../src/reaction_reference/ranking/scaffold.py#L8) | 划分完整环系、无环功能锚点骨架及连接端功能单元，返回原目标索引。 |
+| [scaffold_relevance](../src/reaction_reference/ranking/scaffold.py#L37) | 用同一方法见证计算母核覆盖、目标覆盖和中心位置，避免跨见证拼接虚高评分。 |
 
 ## src/reaction_reference/ranking/scoring.py
 
 | 函数 | 职责 |
 |---|---|
-| [scoring_policy](../src/reaction_reference/ranking/scoring.py#L12) | 读取随包评分权重；它是工程初始配置，不是拟合后的成功率模型。 |
-| [reference_score](../src/reaction_reference/ranking/scoring.py#L19) | 汇总单候选分项为加权总分；所有常规维度归一到0至1，未知证据不冒充阳性。 |
+| [scoring_policy](../src/reaction_reference/ranking/scoring.py#L13) | 读取随包评分权重；它是工程初始配置，不是拟合后的成功率模型。 |
+| [reference_score](../src/reaction_reference/ranking/scoring.py#L20) | 汇总单候选分项为加权总分；所有常规维度归一到0至1，未知证据不冒充阳性。 |
 
 ## src/reaction_reference/reaction_analysis/analyze.py
 
 | 函数 | 职责 |
 |---|---|
-| [_bonds](../src/reaction_reference/reaction_analysis/analyze.py#L11) | 返回以排序后的正映射号对为键、键型字符串为值的字典。 |
-| [_atoms](../src/reaction_reference/reaction_analysis/analyze.py#L25) | 建立正原子映射号到 Atom 的查找表，忽略 map=0 的原子。 |
-| [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L30) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
-| [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L95) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
-| [_declared_components](../src/reaction_reference/reaction_analysis/analyze.py#L103) | 按份数展开声明材料的连通组分，仅供映射端点身份对账。 |
-| [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L119) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
-| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L323) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+| [_bonds](../src/reaction_reference/reaction_analysis/analyze.py#L12) | 返回以排序后的正映射号对为键、键型字符串为值的字典。 |
+| [_atoms](../src/reaction_reference/reaction_analysis/analyze.py#L26) | 建立正原子映射号到 Atom 的查找表，忽略 map=0 的原子。 |
+| [_resonance_pairs](../src/reaction_reference/reaction_analysis/analyze.py#L31) | 识别已限定的硝基/羧酸根末端氧共振交换，返回可作为表示变化处理的键对。 |
+| [_cycle_rank](../src/reaction_reference/reaction_analysis/analyze.py#L96) | 计算分子图的独立环数 E−V+C，用于环变化诊断。 |
+| [_declared_components](../src/reaction_reference/reaction_analysis/analyze.py#L104) | 按份数展开声明材料的连通组分，仅供映射端点身份对账。 |
+| [analyze_reaction](../src/reaction_reference/reaction_analysis/analyze.py#L120) | 分析一个 ReactionRecord 的映射端点，返回 ReactionAnalysis。 |
+| [project_changes](../src/reaction_reference/reaction_analysis/analyze.py#L324) | 把来源产物上的实际变化，通过一个 Witness 投影到目标原子编号。 |
+
+## src/reaction_reference/reaction_analysis/region_support.py
+
+| 函数 | 职责 |
+|---|---|
+| [region_consensus](../src/reaction_reference/reaction_analysis/region_support.py#L6) | 仅在全部对应枚举完成且每种成键解释均落在同一具体母核/头部区域时确认区域。 |
+| [has_region_method](../src/reaction_reference/reaction_analysis/region_support.py#L35) | 判断投影是否具备完整枚举的区域级成键共识，供贡献分类、过滤和评分统一使用。 |
+| [projection_strength](../src/reaction_reference/reaction_analysis/region_support.py#L47) | 比较同材料不同见证的方法支持强度：精确成键、区域成键、原子变化、普通线索。 |
 
 ## src/reaction_reference/retrieval/planner.py
 
@@ -756,6 +770,20 @@
 | [test_health_reports_isolated_recovery_issues](../tests/test_recovery_isolation.py#L185) | 服务就绪响应应披露被隔离的旧任务，不能静默掩盖本地损坏。 |
 | [test_real_storage_io_failure_still_blocks_startup](../tests/test_recovery_isolation.py#L201) | 真实权限或存储 I/O 错误不能当作单条数据损坏忽略，应明确阻止不可靠启动。 |
 | [test_real_storage_io_failure_still_blocks_startup.unreadable](../tests/test_recovery_isolation.py#L206) | 模拟文件系统拒绝读取。 |
+
+## tests/test_region_projection.py
+
+| 函数 | 职责 |
+|---|---|
+| [bridge_case](../tests/test_region_projection.py#L20) | 加载此前被排除的真实桥环先例，保留当时完整材料、来源和具体匹配见证。 |
+| [test_real_bridge_retains_region_without_fabricating_exact_target_bond](../tests/test_region_projection.py#L29) | 真实C—C闭环在两个等价目标位置之间有歧义，区域确认不能变成两根确定新键。 |
+| [test_region_consensus_requires_every_complete_alternative_in_same_region](../tests/test_region_projection.py#L72) | 不同母核、远端尾部、某个解释无成键、枚举不完整都不能获得区域共识。 |
+| [test_ambiguous_head_region_does_not_become_core_internal](../tests/test_region_projection.py#L86) | 直接连接官能团内部的不唯一位置可确认头部区域，不能冒充母核内部成键。 |
+| [test_projection_cap_never_certifies_region_from_sampled_mappings](../tests/test_region_projection.py#L96) | 超过128个对应时，已看过的部分即使都在母核内也不能冒充完整共识。 |
+| [test_projection_cap_never_certifies_region_from_sampled_mappings.many_matches](../tests/test_region_projection.py#L103) | 重复合法对应模拟129个候选，仅用于检验枚举上限守卫。 |
+| [test_multiple_identical_product_instances_do_not_claim_complete_region_consensus](../tests/test_region_projection.py#L117) | 存在多个同身份产物时，不能只看其中一个实例就声称所有对应都支持同一区域。 |
+| [test_full_search_promotes_region_method_and_merges_later_witness](../tests/test_region_projection.py#L133) | 同材料后续查询得到区域共识时应升级方法贡献，不能永远保留首次未知标签。 |
+| [test_full_search_promotes_region_method_and_merges_later_witness.first_unknown](../tests/test_region_projection.py#L149) | 首次只给未知，第二个实际查询仍执行正式投影，验证后续合并升级路径。 |
 
 ## tests/test_replay_limits.py
 

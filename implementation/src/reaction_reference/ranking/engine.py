@@ -5,6 +5,7 @@ from reaction_reference.domain.models import Reference
 from reaction_reference.ranking.features import condition_issues, features
 from reaction_reference.ranking.scaffold import scaffold_relevance, target_regions
 from reaction_reference.ranking.scoring import reference_score
+from reaction_reference.reaction_analysis.region_support import has_region_method
 
 
 def lab_fit(reference, context):
@@ -120,7 +121,11 @@ def _recommendation_exclusion(reference):
     if reference.target_requirements_satisfied:
         return None
     projected = reference.coverage.get("projected_changes", {})
-    if projected.get("formed_target_bonds") or projected.get("changed_target_atoms"):
+    if (
+        projected.get("formed_target_bonds")
+        or projected.get("changed_target_atoms")
+        or has_region_method(projected)
+    ):
         return None
     return (
         "reaction_center_outside_target"

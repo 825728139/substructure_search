@@ -6,6 +6,7 @@ from rdkit import Chem
 
 from reaction_reference.chemistry.structures import canonical, parse
 from reaction_reference.domain.models import BondChange, ReactionAnalysis
+from reaction_reference.reaction_analysis.region_support import region_consensus
 
 
 def _bonds(mol):
@@ -377,9 +378,21 @@ def project_changes(record, material, witness, analysis, *, target):
         return {"formed_target_bonds": [], "changed_target_atoms": [], "support": "unknown"}
     stable = len(set(conclusions)) == 1 and len(embeddings) <= 128 and len(options) == 1
     # 局部对应有歧义时，不把某根目标键武断标记为已由该反应形成。
-    return {
+    result = {
         "formed_target_bonds": list(conclusions[0][0]) if stable else [],
         "changed_target_atoms": list(conclusions[0][1]) if stable else [],
         "support": "single_mapping_inference" if stable else "ambiguous_product_mapping",
         "mapping_alternatives_checked": len(conclusions),
     }
+    if not stable:
+        # 候选对应保持为互斥解释，不能把它们并成已形成的多根目标键。
+        result["projection_alternatives"] = [
+            {"formed_target_bonds": list(formed), "changed_target_atoms": list(atoms)}
+            for formed, atoms in sorted(set(conclusions))
+        ]
+        result["region_consensus"] = region_consensus(
+            conclusions,
+            target,
+            enumeration_complete=len(embeddings) <= 128 and len(options) == 1,
+        )
+    return result

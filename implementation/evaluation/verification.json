@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "date": "2026-11-02",
-  "implementation_hash": "26521dd49ca19ae35d6e522f07f1eb10cd57e8897eefe1d461401e71f89b7f69",
+  "implementation_hash": "7718937779e502aa84ff68ef39b427209c3d77944a59dd1f36d687bb535fccf1",
   "rule_hash": "bc63918000f93f457c96a284027dac856865574b7beb15a2e9159cd5d18f5ea9",
   "dependency_lock_sha256": "92209b33038b5cb9efd2f56e6c4aa57a09abd59892b37c97fd5ce1812d0b3109",
   "environment": {
@@ -18,7 +18,7 @@
   },
   "project_check": {
     "passed": true,
-    "tests_passed": 607,
+    "tests_passed": 616,
     "ruff": true,
     "mypy": true,
     "contract_drift": false,
@@ -1752,5 +1752,82 @@
       }
     ],
     "scope": "heuristic_weights_not_independent_expert_calibration; bounded_default_queries_not_full_corpus_recall"
+  },
+  "ambiguous_region_method_fix": {
+    "date": "2026-11-02",
+    "implementation_hash": "7718937779e502aa84ff68ef39b427209c3d77944a59dd1f36d687bb535fccf1",
+    "tests_passed": 616,
+    "configuration_hash": "1d92a618000a14212c6c11af0b2410220df65d6fac741aed49150eaa4b2f4005",
+    "score_version": "target-method-score-2",
+    "source_6766761": {
+      "precise_target_bonds": [],
+      "mapping_alternatives_checked": 8,
+      "distinct_single_bond_alternatives": [
+        [
+          14,
+          15
+        ],
+        [
+          14,
+          17
+        ]
+      ],
+      "consensus": "same_core_region",
+      "obtainment_evidence_not_upgraded": true
+    },
+    "guards": [
+      "every_alternative_requires_target_formation",
+      "one_specific_core_or_head_region",
+      "complete_correspondence_enumeration",
+      "single_matching_product_instance"
+    ],
+    "browser_default_cases": [
+      {
+        "target": "amide",
+        "records": [
+          "2174992",
+          "669207",
+          "1119512",
+          "4793635"
+        ],
+        "scores": [
+          89.49743589743589,
+          86.64880952380952,
+          82.65714285714286,
+          80.89684569479967
+        ],
+        "stop_reasons": [
+          "task_budget",
+          "usage_task_budget"
+        ],
+        "configuration_hash": "1d92a618000a14212c6c11af0b2410220df65d6fac741aed49150eaa4b2f4005",
+        "errors": []
+      },
+      {
+        "target": "bridge",
+        "records": [
+          "3153963",
+          "9392974",
+          "9033888",
+          "1901418",
+          "6766761",
+          "62248"
+        ],
+        "scores": [
+          58.61373685172135,
+          52.305479210711766,
+          52.30464701736931,
+          45.561943529525486,
+          44.8138125440451,
+          23.413253413253415
+        ],
+        "stop_reasons": [
+          "task_budget"
+        ],
+        "configuration_hash": "1d92a618000a14212c6c11af0b2410220df65d6fac741aed49150eaa4b2f4005",
+        "errors": []
+      }
+    ],
+    "scope": "bounded_default_retrieval_not_full_corpus_recall; region_consensus_not_precise_bond_or_synthesis_feasibility"
   }
 }

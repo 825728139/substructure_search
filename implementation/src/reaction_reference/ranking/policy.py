@@ -37,6 +37,7 @@ class ScoringPolicy(Model):
     core_definition: dict[str, Nonnegative]
     center_values: dict[str, UnitValue]
     method_values: dict[str, UnitValue]
+    mapping_values: dict[str, UnitValue]
     evidence_values: dict[str, UnitValue]
     environment_distance_scale: Annotated[float, Field(gt=0)]
     environment_unknown_value: UnitValue
@@ -59,10 +60,28 @@ class ScoringPolicy(Model):
                 "method_contribution",
                 "source_evidence",
                 "similarity",
+                "mapping_certainty",
             },
             "core_definition": {"ring_base_weight", "ring_cycle_weight", "acyclic_atom_weight"},
-            "center_values": {"core_internal", "core_branch_head", "branch_remote_or_unresolved"},
-            "method_values": {"formed_target_bond", "changed_target_atom", "unresolved"},
+            "center_values": {
+                "core_internal",
+                "core_branch_head",
+                "branch_remote_or_unresolved",
+                "core_internal_region_consensus",
+                "core_branch_head_region_consensus",
+            },
+            "method_values": {
+                "formed_target_bond",
+                "region_confirmed_bond",
+                "changed_target_atom",
+                "unresolved",
+            },
+            "mapping_values": {
+                "precise_target_position",
+                "region_consensus",
+                "ambiguous",
+                "unknown",
+            },
             "evidence_values": {"reported_obtained", "source_reported_claim", "unknown"},
             "process_values": {
                 "reference_temperature_c",

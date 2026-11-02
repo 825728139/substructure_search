@@ -1,9 +1,8 @@
 """目标母核与反应位置的排序特征；仅描述图上贡献，不预测反应可行性。"""
 
-from rdkit import Chem
-
+from reaction_reference.chemistry.regions import structural_regions
 from reaction_reference.ranking.scoring import scoring_policy
-from reaction_reference.rules import load_rules
+from reaction_reference.reaction_analysis.region_support import has_region_method
 
 
 def target_regions(target):
@@ -15,72 +14,24 @@ def target_regions(target):
     """
     if target is None:
         return {"core_weights": {}, "head_bonds": set(), "core_bonds": set()}
+    regions = structural_regions(target)
     policy = scoring_policy()["core_definition"]
-    rules, _ = load_rules()
-    units = [
-        set(match)
-        for rule in rules["functional_groups"]
-        for match in target.GetSubstructMatches(Chem.MolFromSmarts(rule["smarts"]))
-    ]
-    systems: list[set[int]] = []
-    for ring in target.GetRingInfo().AtomRings():
-        merged = set(ring)
-        while any(merged & other for other in systems):
-            for other in systems[:]:
-                if merged & other:
-                    merged |= other
-                    systems.remove(other)
-        systems.append(merged)
     weights = {}
-    for system in systems:
+    for system in regions["core_regions"]:
         edges = sum(
             b.GetBeginAtomIdx() in system and b.GetEndAtomIdx() in system for b in target.GetBonds()
         )
-        for atom in system:
-            weights[atom] = policy["ring_base_weight"] + policy["ring_cycle_weight"] * (
-                edges - len(system) + 1
-            )
-    if not weights:
-        anchors = (
-            set().union(*units)
-            if units
-            else {a.GetIdx() for a in target.GetAtoms() if a.GetAtomicNum() > 1}
+        weight = (
+            policy["ring_base_weight"] + policy["ring_cycle_weight"] * (edges - len(system) + 1)
+            if regions["ring_based"]
+            else policy["acyclic_atom_weight"]
         )
-        ordered = sorted(anchors)
-        core = set(anchors)
-        for other in ordered[1:]:
-            core.update(Chem.GetShortestPath(target, ordered[0], other))
-        weights = dict.fromkeys(core, policy["acyclic_atom_weight"])
-    core_atoms = set(weights)
-    core_bonds = set()
-    head_bonds: set[tuple[int, int]] = set()
-    for bond in target.GetBonds():
-        pair = {bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()}
-        if pair <= core_atoms:
-            core_bonds.add(tuple(sorted(pair)))
-        elif len(pair & core_atoms) == 1:
-            head = set(pair)
-            outside = pair - core_atoms
-            # 只扩展直接含首个支链原子的功能单元，避免醚等重叠模式串联到远端。
-            for unit in units:
-                root = target.GetAtomWithIdx(next(iter(outside)))
-                if unit & outside and (
-                    root.GetAtomicNum() != 6
-                    or root.GetHybridization() != Chem.HybridizationType.SP3
-                ):
-                    # 酯的烷氧基碳、醚的远端烷基不算连接头部，不能奖励O—乙基尾部成键。
-                    head |= {
-                        i
-                        for i in unit
-                        if target.GetAtomWithIdx(i).GetAtomicNum() != 6
-                        or target.GetAtomWithIdx(i).GetHybridization() != Chem.HybridizationType.SP3
-                    }
-            head_bonds.update(
-                tuple(sorted((b.GetBeginAtomIdx(), b.GetEndAtomIdx())))
-                for b in target.GetBonds()
-                if {b.GetBeginAtomIdx(), b.GetEndAtomIdx()} <= head
-            )
-    return {"core_weights": weights, "head_bonds": head_bonds, "core_bonds": core_bonds}
+        weights.update(dict.fromkeys(system, weight))
+    return {
+        "core_weights": weights,
+        "head_bonds": regions["head_bonds"],
+        "core_bonds": regions["core_bonds"],
+    }
 
 
 def scaffold_relevance(reference, target, regions):
@@ -123,6 +74,9 @@ def scaffold_relevance(reference, target, regions):
         location = "core_branch_head"
     else:
         location = "branch_remote_or_unresolved"
+    if has_region_method(projection):
+        # 区域级支持不能伪装成唯一原子位置，使用单独可审核的分值。
+        location = projection["region_consensus"]["kind"] + "_region_consensus"
     bonus = center_values[location]
     return {
         "state": "known" if witness else "unknown",

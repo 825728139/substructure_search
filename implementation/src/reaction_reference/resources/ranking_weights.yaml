@@ -5,18 +5,18 @@
 # 注意：配方尚未经独立化学专家集校准；调分后须同时比较多个目标，不能只看一个例子。
 # 同一条反应不因被多个查询命中而重复加分；使用同一个具体匹配见证计算母核与整体覆盖。
 # 修改后重启服务再检索或重新排序，避免同一任务中途更换规则。
-version: target-method-score-1
+version: target-method-score-2
 status: heuristic_not_expert_calibrated
 
 weights:
   # 母核覆盖：覆盖目标环系/无环功能锚点骨架的程度；桥环/稠环原子会得到拓扑加权。
   # 原因：普通乙酯、甲基等小片段容易大量命中，不能因此压过母核构建线索。
   # 提高本项会更偏好包含母核的先例，但可能降低纯支链方法的展示机会。
-  core_coverage: 30
+  core_coverage: 28
 
   # 整体覆盖：当前同一见证覆盖的目标重原子数 / 目标总重原子数。
   # 目的：在母核条件相近时，提高较完整结构先例的价值；不能把多个先例的覆盖拼成一个。
-  target_coverage: 18
+  target_coverage: 17
 
   # 中心位置：按下方center_values，把母核内部、支链头部与远端尾部分开计分。
   # 原因：反应中心“落在目标上”还不够，母核构建与母核—支链连接更值得参考。
@@ -43,6 +43,10 @@ weights:
   # 指纹相似度只作弱信号；化学方法价值不能由全分子相似度替代。
   similarity: 2
 
+  # 映射确定性与合成相关性分开：区域一致但精确位置不唯一时仍有价值，不应直接清零。
+  # 仅按全部对应的图分析结论计分；有限枚举未完成时不能冒充区域共识。
+  mapping_certainty: 3
+
 core_definition:
   # 环原子权重 = ring_base_weight + ring_cycle_weight × 所属完整环系独立环数。
   # 共享原子的环合并；独立环数 = 环系内部键数 - 环系原子数 + 1。
@@ -58,13 +62,24 @@ center_values:
   # 直接母核—支链边界及其相连功能单元；例如苯甲酰胺的酰基C—N键。
   # 酯的O—乙基、醚的远端烷基不纳入连接头部，避免“尾部成键”冒充核心连接。
   core_branch_head: 0.8
+  # 所有合法对应都落在同一母核内，但不能确定具体哪根键；低于精确定位的内部成键。
+  core_internal_region_consensus: 0.8
+  # 同一直接连接头部区域内的对应歧义；同样不输出确定成键位置。
+  core_branch_head_region_consensus: 0.6
   # 远端尾部只从其他维度取得分数；位置未知也不获得正向中心奖励。
   branch_remote_or_unresolved: 0.0
 
 method_values:
   formed_target_bond: 1.0
+  region_confirmed_bond: 0.8
   changed_target_atom: 0.6
   unresolved: 0.0
+
+mapping_values:
+  precise_target_position: 1.0
+  region_consensus: 0.7
+  ambiguous: 0.2
+  unknown: 0.0
 
 evidence_values:
   reported_obtained: 1.0
@@ -100,6 +115,6 @@ lab_values:
   not_applicable: 0.25
   fail: 0.0
 
-# 不由本文件控制的资格门槛：目标外反应、输入使用线索与中心未解决候选保留在完整资料包，
+# 不由本文件控制的资格门槛：明确目标外反应、输入使用线索及无区域支持的未解决候选保留在完整资料包，
 # 不占当前方法主推荐位；完整目标产物可保留，但未确认来源获得时不触发上面的100分奖励。
 # 调大某项权重不能绕过匹配核验、来源质量门槛或把未验证方法变成已验证方法。

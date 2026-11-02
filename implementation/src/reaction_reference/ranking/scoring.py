@@ -6,6 +6,7 @@ from importlib.resources import files
 from reaction_reference.chemistry.structures import parse
 from reaction_reference.ranking.features import condition_issues
 from reaction_reference.ranking.policy import validate_scoring_policy
+from reaction_reference.reaction_analysis.region_support import has_region_method
 
 
 @lru_cache(maxsize=1)
@@ -31,6 +32,8 @@ def reference_score(reference, target, spatial, environment_distance, profile, f
     method = (
         policy["method_values"]["formed_target_bond"]
         if projection.get("formed_target_bonds")
+        else policy["method_values"]["region_confirmed_bond"]
+        if has_region_method(projection)
         else policy["method_values"]["changed_target_atom"]
         if projection.get("changed_target_atoms")
         else policy["method_values"]["unresolved"]
@@ -41,6 +44,15 @@ def reference_score(reference, target, spatial, environment_distance, profile, f
         else policy["evidence_values"]["source_reported_claim"]
         if any(c.support == "source_reported" for c in reference.claims)
         else policy["evidence_values"]["unknown"]
+    )
+    certainty = (
+        "precise_target_position"
+        if projection.get("support") == "single_mapping_inference"
+        else "region_consensus"
+        if has_region_method(projection)
+        else "ambiguous"
+        if projection.get("support") == "ambiguous_product_mapping"
+        else "unknown"
     )
     values = {
         "core_coverage": spatial["weighted_core_coverage"],
@@ -53,6 +65,7 @@ def reference_score(reference, target, spatial, environment_distance, profile, f
         "method_contribution": method,
         "source_evidence": evidence,
         "similarity": reference.similarity,
+        "mapping_certainty": policy["mapping_values"][certainty],
     }
     components = {
         name: {
